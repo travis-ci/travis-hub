@@ -1,12 +1,7 @@
 source :rubygems
 
 gem 'travis-core', '~> 0.0.1'
-gem 'jruby-openssl'
-gem 'activerecord-jdbcpostgresql-adapter'
+gem 'hot_bunnies', '~> 1.2.2'
 
-# group :test do
-#   gem 'rspec',             '~> 2.7.0'
-#   gem 'database_cleaner',  '~> 0.6.7'
-#   gem 'mocha',             '~> 0.10.0'
-#   gem 'webmock',           '~> 1.7.7'
-# end
+gem 'activerecord-jdbcpostgresql-adapter'
+gem 'jruby-openssl'
