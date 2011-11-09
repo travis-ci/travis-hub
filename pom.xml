@@ -41,9 +41,7 @@
                             <goal>jruby</goal>
                         </goals>
                         <configuration>
-                            <args>
-                                -e ENV['GEM_HOME']=File.join(Dir.pwd,'.gems');ENV['GEM_PATH']=File.join(Dir.pwd,'.gems');ENV['BUNDLE_GEMFILE']=File.join(Dir.pwd,'Jemfile');require'rubygems';require'bundler';require'bundler/cli';cli=Bundler::CLI.new;cli.install;
-                            </args>
+                            <args>-S sh script/jruby -S bundle install --gemfile=JemfileTest</args>
                         </configuration>
                     </execution>
                 </executions>
