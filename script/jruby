@@ -1,10 +1,11 @@
 #!/bin/sh
 
-APPDIR=`pwd`
-REPO="$APPDIR"/.m2/repository
+if [ -z "$APPDIR" ]
+then
+    APPDIR=`pwd`
+fi
 
-echo "APPDIR      : $APPDIR"
-echo "REPO        : $REPO"
+REPO="$APPDIR"/.m2/repository
 
 export CLASSPATH=$CLASSPATH_PREFIX:$APPDIR/etc:$REPO/org/jruby/jruby-complete/1.6.5/jruby-complete-1.6.5.jar
 export GEM_HOME=$APPDIR/vendor/bundle
@@ -13,27 +14,15 @@ export PATH=$APPDIR/.gems/bin:$APPDIR/vendor/bundle/bin:$PATH
 export BUNDLE_GEMFILE=$APPDIR/Jemfile
 export JRUBY_OPTS=--1.9
 
-# echo "APPDIR      : $APPDIR"
-# echo "REPO        : $REPO"
-# echo "CLASSPATH   : $CLASSPATH"
-# echo "GEM_PATH    : $GEM_PATH"
-# echo "PATH        : $PATH"
+echo "APPDIR      : $APPDIR"
+echo "REPO        : $REPO"
+echo "CLASSPATH   : $CLASSPATH"
+echo "GEM_PATH    : $GEM_PATH"
+echo "PATH        : $PATH"
 # echo "bundler_env : $bundler_env"
 
 max_mem=500m
 max_stack=2048k
-
-# echo "ls .gems/bin"
-# echo `ls .gems/bin`
-# echo "ls .gems/gems"
-# echo `ls .gems/gems`
-# echo "ls vendor/bundle/bin"
-# echo `ls vendor/bundle/bin`
-# echo "ls vendor/bundle/gems"
-# echo `ls vendor/bundle/gems`
-# echo "env"
-# echo `env`
-# echo `cat .bundle/config`
 
 java $JAVA_OPTS                                             \
   -Dfile.encoding=UTF-8 -Xmx$max_mem -Xss$max_stack         \

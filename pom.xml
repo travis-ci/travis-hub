@@ -46,19 +46,23 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <version>1.1.1</version>
                 <executions>
-                  <execution><!-- Run our version calculation script -->
-                    <id>bundle install</id>
-                    <phase>process-resources</phase>
-                    <goals>
-                        <goal>exec</goal>
-                    </goals>
-                    <configuration>
-                        <executable>${basedir}/script/jruby</executable>
-                        <arguments>
-                          <argument>-S bundle install --gemfile=JemfileTest</argument>
-                        </arguments>
-                    </configuration>
-                  </execution>
+                    <execution><!-- Run our version calculation script -->
+                        <id>bundle install</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>script/jruby</executable>
+                            <arguments>
+                                <argument>-S bundle install --gemfile=JemfileTest</argument>
+                            </arguments>
+                            <environmentVariables>
+                                <key>APPDIR</key> 
+                                <value>/app/tmp/repo.git/.cache</value>
+                            </environmentVariables>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
