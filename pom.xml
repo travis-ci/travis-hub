@@ -41,7 +41,7 @@
                             <goal>jruby</goal>
                         </goals>
                         <configuration>
-                            <args><![CDATA[ -S sh script/jruby -S bundle install --gemfile=JemfileTest ]]></args>
+                            <args>-S script/jruby -S bundle install --gemfile=JemfileTest</args>
                         </configuration>
                     </execution>
                 </executions>
