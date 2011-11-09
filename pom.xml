@@ -53,7 +53,10 @@
                         <goal>exec</goal>
                     </goals>
                     <configuration>
-                        <executable>script/jruby -S bundle install --gemfile=JemfileTest</executable>
+                        <executable>script/jruby</executable>
+                        <arguments>
+                          <argument>-S bundle install --gemfile=JemfileTest</argument>
+                        </arguments>
                     </configuration>
                   </execution>
                 </executions>
