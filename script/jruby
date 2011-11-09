@@ -6,7 +6,7 @@ REPO="$APPDIR"/.m2/repository
 export CLASSPATH=$CLASSPATH_PREFIX:$APPDIR/etc:$REPO/org/jruby/jruby-complete/1.6.5/jruby-complete-1.6.5.jar
 export GEM_HOME=$APPDIR/vendor/bundle
 export GEM_PATH=$APPDIR/.gems:$APPDIR/vendor/bundle
-export PATH=$APPDIR/.gem/bin:$APPDIR/vendor/bundle/bin:$PATH
+export PATH=$APPDIR/.gems/bin:$APPDIR/vendor/bundle/bin:$PATH
 export BUNDLE_GEMFILE=$APPDIR/Jemfile
 export JRUBY_OPTS=--1.9
 
