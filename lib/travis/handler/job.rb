@@ -1,5 +1,5 @@
 module Travis
-  class Hub
+  class Handler
     class Job < Handler
       def handle
         case event.to_sym

@@ -6,10 +6,6 @@ require 'benchmark'
 
 module Travis
   class Hub
-    autoload :Handler, 'travis/hub/handler'
-    autoload :Job,     'travis/hub/job'
-    autoload :Worker,  'travis/hub/worker'
-
     include Logging
 
     REPORTING_KEY = 'reporting.jobs'
@@ -78,9 +74,9 @@ module Travis
       def handler_for(event, payload)
         case event.to_s
         when /^job/
-          Job.new(event, payload)
+          Handler::Job.new(event, payload)
         when /^worker/
-          Worker.new(event, payload)
+          Handler::Worker.new(event, payload)
         else
           raise "Unknown message type: #{event.inspect}"
         end
