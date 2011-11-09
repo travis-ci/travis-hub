@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "APPDIR      : $APPDIR"
+
 if [ -z "$APPDIR" ]
 then
     APPDIR=`pwd`
