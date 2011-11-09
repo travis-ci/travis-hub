@@ -1,5 +1,5 @@
 rvm: jruby
-gemfile: Jemfile
+gemfile: Gemfile.test
 notifications:
   irc: "irc.freenode.org#travis"
 
