@@ -54,7 +54,7 @@
                         <executable>${basedir}/script/jruby -S bundle install --gemfile=JemfileTest</executable>
                     </configuration>
                   </execution>
-                <executions>
+                </executions>
             <plugin>
         </plugins>
     </build>
