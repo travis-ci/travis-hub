@@ -1,7 +1,6 @@
 source :rubygems
 
-gem 'travis-core', :path => 'vendor/gems/travis-core'
-
+gem 'travis-core', '~> 0.0.1'
 gem 'jruby-openssl'
 gem 'activerecord-jdbcpostgresql-adapter'
 
