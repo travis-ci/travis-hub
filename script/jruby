@@ -1,21 +1,32 @@
 #!/bin/sh
 
 APPDIR=`pwd`
-REPO="$APPDIR"/.m2/repository
+JRUBY_VERSION="1.6.5"
 
-export CLASSPATH=$CLASSPATH_PREFIX:$APPDIR/etc:$REPO/org/jruby/jruby-complete/1.6.5/jruby-complete-1.6.5.jar
+export CLASSPATH=$CLASSPATH_PREFIX:$APPDIR/etc
 export GEM_HOME=$APPDIR/vendor/bundle
 export GEM_PATH=$APPDIR/.gems:$APPDIR/vendor/bundle
-export PATH=$APPDIR/.gem/bin:$APPDIR/vendor/bundle/bin:$PATH
+export PATH=$APPDIR/.gems/bin:$APPDIR/vendor/bundle/bin:$PATH
 export BUNDLE_GEMFILE=$APPDIR/Jemfile
-export JRUBY_OPTS=--1.9
+#export JRUBY_OPTS=--1.9
 
-# echo "APPDIR      : $APPDIR"
-# echo "REPO        : $REPO"
-# echo "CLASSPATH   : $CLASSPATH"
-# echo "GEM_PATH    : $GEM_PATH"
-# echo "PATH        : $PATH"
-# echo "bundler_env : $bundler_env"
+# Download a JRuby if needed
+if [ ! -d jruby-${JRUBY_VERSION} ]; then
+  curl -o jruby-bin-${JRUBY_VERSION}.tar.gz "http://jruby.org.s3.amazonaws.com/downloads/${JRUBY_VERSION}/jruby-bin-${JRUBY_VERSION}.tar.gz"
+  tar -xzf jruby-bin-${JRUBY_VERSION}.tar.gz
+  rm jruby-bin-${JRUBY_VERSION}.tar.gz
+fi
+
+# Add JRuby to the path
+export PATH=${APPDIR}/jruby-${JRUBY_VERSION}/bin:$PATH
+
+# Install Bundler if needed
+if ! jruby -S gem list | grep bundler > /dev/null; then
+  jruby -S gem install bundler --pre --no-ri --no-rdoc --install-dir .gems
+fi
+
+# Install gems
+bundle install --gemfile=Jemfile
 
 max_mem=500m
 max_stack=2048k
@@ -32,12 +43,10 @@ max_stack=2048k
 # echo `env`
 # echo `cat .bundle/config`
 
-java $JAVA_OPTS                                             \
-  -Dfile.encoding=UTF-8 -Xmx$max_mem -Xss$max_stack         \
-  -Djruby.memory.max=$max_mem -Djruby.stack.max=$max_stack  \
-  -Dsun.java.command=org.jruby.Main                         \
-  -Djruby.compat.version=1.9                                \
-  -classpath "$CLASSPATH"                                   \
-  -Dbasedir="$APPDIR"                                       \
-  org.jruby.Main                                            \
+jruby                                                           \
+  -J-Dfile.encoding=UTF-8 -J-Xmx$max_mem -J-Xss$max_stack       \
+  -J-Djruby.memory.max=$max_mem -J-Djruby.stack.max=$max_stack  \
+  -J-Dsun.java.command=org.jruby.Main                           \
+  -J-classpath "$CLASSPATH"                                     \
+  -J-Dbasedir="$APPDIR"                                         \
   "$@"
