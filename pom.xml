@@ -19,6 +19,7 @@
         <dependency>
             <artifactId>exec-maven-plugin</artifactId>
             <groupId>org.codehaus.mojo</groupId>
+            <version>1.1.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -43,6 +44,7 @@
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
+                <version>1.1.1</version>
                 <executions>
                   <execution><!-- Run our version calculation script -->
                     <id>bundle install</id>
