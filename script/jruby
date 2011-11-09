@@ -15,6 +15,7 @@ export GEM_PATH=$APPDIR/.gems:$APPDIR/vendor/bundle
 export PATH=$APPDIR/.gems/bin:$APPDIR/vendor/bundle/bin:$PATH
 export BUNDLE_GEMFILE=$APPDIR/Jemfile
 export JRUBY_OPTS=--1.9
+unset GIT_DIR
 
 echo "APPDIR      : $APPDIR"
 echo "REPO        : $REPO"
