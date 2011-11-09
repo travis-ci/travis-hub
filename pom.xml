@@ -16,6 +16,10 @@
             <artifactId>jruby-rake-plugin</artifactId>
             <version>1.6.5</version>
         </dependency>
+        <dependency>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -34,18 +38,24 @@
                             <args>-S gem install bundler --pre --no-ri --no-rdoc --install-dir .gems</args>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>bundle-install</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>jruby</goal>
-                        </goals>
-                        <configuration>
-                            <args>-S script/jruby -S bundle install --gemfile=JemfileTest</args>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                  <execution><!-- Run our version calculation script -->
+                    <id>bundle install</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <executable>${basedir}/script/jruby -S bundle install --gemfile=JemfileTest</executable>
+                    </configuration>
+                  </execution>
+                <executions>
+            <plugin>
         </plugins>
     </build>
 </project>
