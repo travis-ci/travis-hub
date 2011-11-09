@@ -1,13 +1,13 @@
 #!/bin/sh
 
-echo "APPDIR      : $APPDIR"
+APPDIR=`pwd`
 
-if [ -z "$APPDIR" ]
+echo "REPO      : $REPO"
+
+if [ -z "$REPO" ]
 then
-    APPDIR=`pwd`
+    REPO="$APPDIR"/.m2/repository
 fi
-
-REPO="$APPDIR"/.m2/repository
 
 export CLASSPATH=$CLASSPATH_PREFIX:$APPDIR/etc:$REPO/org/jruby/jruby-complete/1.6.5/jruby-complete-1.6.5.jar
 export GEM_HOME=$APPDIR/vendor/bundle
