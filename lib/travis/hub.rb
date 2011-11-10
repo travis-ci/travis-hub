@@ -44,7 +44,7 @@ module Travis
     end
 
     def subscribe
-      amqp.subscribe(:ack => true, &method(:receive))
+      Travis::Amqp.subscribe(:ack => true, &method(:receive))
     end
 
     def receive(message, payload)
