@@ -57,7 +57,7 @@
                                 <REPO>/app/tmp/repo.git/.cache/.m2/repository</REPO>
                             </environmentVariables>
                             <executable>script/jruby</executable>
-                            <commandlineArgs>-S bundle install --gemfile=Jemfile</commandlineArgs>
+                            <commandlineArgs>-S bundle install --gemfile=Jemfile --without development test</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>
