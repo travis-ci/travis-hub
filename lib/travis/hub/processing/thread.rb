@@ -1,6 +1,6 @@
 module Travis
-  module Hub
-    class Processing
+  class Hub
+    module Processing
       class Thread
         def start
           yield
@@ -16,5 +16,3 @@ module Travis
     end
   end
 end
-
-

@@ -1,5 +1,5 @@
 module Travis
-  module Hub
+  class Hub
     module Processing
       autoload :Eventmachine, 'travis/hub/processing/eventmachine'
       autoload :Thread,       'travis/hub/processing/thread'
@@ -22,4 +22,3 @@ module Travis
     end
   end
 end
-

@@ -1,8 +1,8 @@
 require 'eventmachine'
 
 module Travis
-  module Hub
-    class Processing
+  class Hub
+    module Processing
       class EventMachine
         def start(&block)
           ::EventMachine.start(&block)
@@ -15,5 +15,3 @@ module Travis
     end
   end
 end
-
-
