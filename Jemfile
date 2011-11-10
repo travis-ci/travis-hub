@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'travis-core', :git => 'git://github.com/travis-ci/travis-core.git' # '~> 0.0.1'
+gem 'travis-core', :git => 'git://github.com/travis-ci/travis-core.git'
 gem 'hot_bunnies', '~> 1.2.2'
 
 gem 'activerecord-jdbcpostgresql-adapter'
