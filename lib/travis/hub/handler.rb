@@ -19,7 +19,7 @@ module Travis
         end
       end
 
-      attr_reader :event, :payload
+      attr_accessor :event, :payload
 
       def initialize(event, payload)
         @event = event

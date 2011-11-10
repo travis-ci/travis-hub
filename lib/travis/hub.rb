@@ -1,12 +1,10 @@
 require 'travis'
-require 'amqp'
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
 
 module Travis
   class Hub
-    autoload :Amqp,       'travis/hub/amqp'
     autoload :Handler,    'travis/hub/handler'
     autoload :Processing, 'travis/hub/processing'
 
@@ -43,7 +41,6 @@ module Travis
 
     def initialize
       @config = Travis.config.amqp
-      @queue  = Amqp.queue
     end
 
     def subscribe
