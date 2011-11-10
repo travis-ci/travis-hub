@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Travis::Handler::Worker do
-  let(:handler) { Travis::Handler::Worker.new(:event, Hashr.new(payload)) }
+describe Travis::Hub::Handler::Worker do
+  let(:handler) { Travis::Hub::Handler::Worker.new(:event, Hashr.new(payload)) }
   let(:worker)  { handler.send(:worker) }
   let(:payload) { { :name => 'worker-1', :host => 'ruby-1.worker.travis-ci.org' } }
 
@@ -9,7 +9,7 @@ describe Travis::Handler::Worker do
     handler.stubs(:worker).returns(worker)
   end
 
-  describe 'handle' do
+  describe '#handle' do
     it 'pings the worker on worker:ping' do
       worker.expects(:ping!)
       handler.event = :'worker:ping'

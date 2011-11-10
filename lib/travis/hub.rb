@@ -6,6 +6,10 @@ require 'benchmark'
 
 module Travis
   class Hub
+    autoload :Amqp,       'travis/hub/amqp'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Processing, 'travis/hub/processing'
+
     include Logging
 
     REPORTING_KEY = 'reporting.jobs'
@@ -13,8 +17,7 @@ module Travis
     class << self
       def start
         Database.connect
-
-        EM.run do
+        Processing.start do
           prune_workers
           # cleanup_jobs
           subscribe
@@ -27,12 +30,12 @@ module Travis
 
       def prune_workers
         interval = Travis.config.workers.prune.interval
-        EM.add_periodic_timer(interval, &::Worker.method(:prune))
+        Processing.run_periodically(interval, &::Worker.method(:prune))
       end
 
       def cleanup_jobs
         interval = Travis.config.jobs.retry.interval
-        EM.add_periodic_timer(interval, &::Job.method(:cleanup))
+        Processing.run_periodically(interval, &::Job.method(:cleanup))
       end
     end
 
@@ -40,10 +43,11 @@ module Travis
 
     def initialize
       @config = Travis.config.amqp
+      @queue  = Amqp.queue
     end
 
     def subscribe
-      queue.subscribe(:ack => true, &method(:receive))
+      amqp.subscribe(:ack => true, &method(:receive))
     end
 
     def receive(message, payload)
@@ -51,7 +55,7 @@ module Travis
 
       event   = message.type
       payload = decode(payload)
-      handler = handler_for(event, payload)
+      handler = Handler.for(event, payload)
 
       benchmark_and_cache do
         handler.handle
@@ -64,23 +68,7 @@ module Travis
       # message.reject(:requeue => false) # how to decide whether to requeue the message?
     end
 
-    def heartbeat(message, payload)
-      log notice("Heartbeat: #{payload.inspect}")
-      Worker.heartbeat
-    end
-
     protected
-
-      def handler_for(event, payload)
-        case event.to_s
-        when /^job/
-          Handler::Job.new(event, payload)
-        when /^worker/
-          Handler::Worker.new(event, payload)
-        else
-          raise "Unknown message type: #{event.inspect}"
-        end
-      end
 
       def benchmark_and_cache
         timing = Benchmark.realtime do
@@ -91,18 +79,6 @@ module Travis
 
       def decode(payload)
         MultiJson.decode(payload)
-      end
-
-      def connection
-        @connection ||= AMQP.start(config)
-      end
-
-      def channel
-        @channel ||=  AMQP::Channel.new(connection).prefetch(config.prefetch)
-      end
-
-      def queue
-        @queue ||= channel.queue(REPORTING_KEY, :durable => true, :exclusive => false)
       end
   end
 end
