@@ -22,7 +22,7 @@ unset GIT_DIR
 # echo "PATH        : $PATH"
 # echo "bundler_env : $bundler_env"
 
-max_mem=500m
+max_mem=384m
 max_stack=2048k
 
 java $JAVA_OPTS                                             \
