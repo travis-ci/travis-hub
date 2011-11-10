@@ -8,7 +8,7 @@ end
 require 'support/payloads'
 require 'support/matchers'
 
-require 'travis_hub'
+require 'travis/hub'
 require 'travis/logging'
 require 'stringio'
 require 'mocha'

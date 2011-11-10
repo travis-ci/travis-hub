@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'travis_hub'
+require 'travis/hub'
 
 $stdout.sync = true
 
