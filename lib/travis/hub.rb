@@ -48,9 +48,9 @@ module Travis
     end
 
     def receive(message, payload)
-      log notice("Handling event #{message.type.inspect} with payload : #{payload.inspect}")
+      log notice("Handling event #{message.properties.type.inspect} with payload : #{payload.inspect}")
 
-      event   = message.type
+      event   = message.properties.type
       payload = decode(payload)
       handler = Handler.for(event, payload)
 
