@@ -26,6 +26,8 @@ max_mem=384m
 max_stack=2048k
 
 java $JAVA_OPTS                                             \
+  -XX:+HeapDumpOnOutOfMemoryError \
+  -XX:HeapDumpPath=/tmp/dump.hprof \
   -Dfile.encoding=UTF-8 -Xmx$max_mem -Xss$max_stack         \
   -Djruby.memory.max=$max_mem -Djruby.stack.max=$max_stack  \
   -Dsun.java.command=org.jruby.Main                         \
