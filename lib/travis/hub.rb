@@ -44,6 +44,7 @@ module Travis
     end
 
     def subscribe
+      log 'Subscribing to amqp ...'
       Travis::Amqp.subscribe(:ack => true, &method(:receive))
     end
 
