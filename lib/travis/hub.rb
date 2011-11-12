@@ -6,7 +6,6 @@ require 'benchmark'
 module Travis
   class Hub
     autoload :Handler,    'travis/hub/handler'
-    autoload :Processing, 'travis/hub/processing'
 
     include Logging
 
@@ -15,11 +14,9 @@ module Travis
     class << self
       def start
         Database.connect
-        Processing.start do
-          prune_workers
-          # cleanup_jobs
-          subscribe
-        end
+        prune_workers
+        # cleanup_jobs
+        subscribe
       end
 
       def subscribe
@@ -27,14 +24,21 @@ module Travis
       end
 
       def prune_workers
-        interval = Travis.config.workers.prune.interval
-        Processing.run_periodically(interval, &::Worker.method(:prune))
+        run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
       end
 
       def cleanup_jobs
-        interval = Travis.config.jobs.retry.interval
-        Processing.run_periodically(interval, &::Job.method(:cleanup))
+        run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
       end
+
+      protected
+
+        def run_periodically(interval, &block)
+          Thread.new do
+            block.call
+            sleep(interval)
+          end
+        end
     end
 
     attr_reader :config
