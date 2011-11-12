@@ -35,8 +35,10 @@ module Travis
 
         def run_periodically(interval, &block)
           Thread.new do
-            block.call
-            sleep(interval)
+            loop do
+              block.call
+              sleep(interval)
+            end
           end
         end
     end
