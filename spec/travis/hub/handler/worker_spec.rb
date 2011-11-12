@@ -1,17 +1,18 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Worker do
-  let(:handler) { Travis::Hub::Handler::Worker.new(:event, Hashr.new(payload)) }
-  let(:worker)  { handler.send(:worker) }
-  let(:payload) { { :name => 'worker-1', :host => 'ruby-1.worker.travis-ci.org' } }
+  let(:handler) { @handler ||= Travis::Hub::Handler::Worker.new(:event, Hashr.new(payload)) }
+  let(:worker)  { stub('worker', :update_attributes! => nil) }
+  let(:payload) { { :name => 'worker-1', :host => 'ruby-1.worker.travis-ci.org', :state => :working } }
 
   before :each do
+    Time.now.tap { |now| Time.stubs(:now).returns(now) }
     handler.stubs(:worker).returns(worker)
   end
 
   describe '#handle' do
-    it 'pings the worker on worker:ping' do
-      worker.expects(:ping!)
+    it 'updates the worker state and last_seen_at attributes' do
+      worker.expects(:update_attributes!).with(:state => :working, :last_seen_at => Time.now)
       handler.event = :'worker:ping'
       handler.handle
     end

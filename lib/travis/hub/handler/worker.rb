@@ -10,7 +10,7 @@ module Travis
         def handle
           case event.to_sym
           when :'worker:ping'
-            worker.ping!
+            worker.update_attributes!(:state => payload.state, :last_seen_at => Time.now)
           else
             worker.set_state(event.to_s.split(':').last)
           end
@@ -19,7 +19,7 @@ module Travis
         protected
 
           def worker
-            @worker ||= ::Worker.find_or_create_by_name_and_host(:name => payload.name, :host => payload.host, :state => payload.state)
+            @worker ||= ::Worker.find_or_create_by_name_and_host(:name => payload.name, :host => payload.host)
           end
       end
     end
