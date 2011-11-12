@@ -12,7 +12,8 @@ describe Travis::Hub::Handler::Worker do
 
   describe '#handle' do
     it 'updates the worker state and last_seen_at attributes' do
-      worker.expects(:update_attributes!).with(:state => :working, :last_seen_at => Time.now)
+      worker.expects(:ping!)
+      worker.expects(:set_state).with(:working)
       handler.event = :'worker:ping'
       handler.handle
     end

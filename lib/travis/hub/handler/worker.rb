@@ -10,7 +10,8 @@ module Travis
         def handle
           case event.to_sym
           when :'worker:ping'
-            worker.update_attributes!(:state => payload.state, :last_seen_at => Time.now)
+            worker.ping!
+            worker.set_state(payload.state) if payload.state?
           else
             worker.set_state(event.to_s.split(':').last)
           end

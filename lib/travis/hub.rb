@@ -5,7 +5,7 @@ require 'benchmark'
 
 module Travis
   class Hub
-    autoload :Handler,    'travis/hub/handler'
+    autoload :Handler, 'travis/hub/handler'
 
     include Logging
 
@@ -34,6 +34,7 @@ module Travis
       protected
 
         def run_periodically(interval, &block)
+          # TODO use http://download.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#scheduleWithFixedDelay
           Thread.new do
             loop do
               block.call
