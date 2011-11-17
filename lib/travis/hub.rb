@@ -56,7 +56,7 @@ module Travis
     end
 
     def receive(message, payload)
-      log notice("Handling event #{message.properties.type.inspect} with payload : #{payload.inspect}")
+      log notice("Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload).inspect}")
 
       event   = message.properties.type
       payload = decode(payload)
