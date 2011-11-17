@@ -14,8 +14,12 @@ module Travis
     class << self
       def start
         Database.connect
+        Travis::Mailer.setup
+        ActionMailer::Base.smtp_settings = Travis.config.smtp
+
         prune_workers
         # cleanup_jobs
+
         subscribe
       end
 
