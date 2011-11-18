@@ -2,6 +2,7 @@ require 'travis'
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'postmark-rails'
 
 module Travis
   class Hub
@@ -15,7 +16,10 @@ module Travis
       def start
         Database.connect
         Travis::Mailer.setup
-        ActionMailer::Base.smtp_settings = Travis.config.smtp
+
+        mailer = ActionMailer::Base
+        mailer.delivery_method   = :postmark
+        mailer.postmark_settings = { :api_key => Travis.config.smtp.user_name }
 
         prune_workers
         # cleanup_jobs
