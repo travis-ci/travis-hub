@@ -60,11 +60,10 @@ module Travis
     def receive(message, payload)
       notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload).inspect}"
 
-      event   = message.properties.type
-      payload = decode(payload)
-      handler = Handler.for(event, payload)
-
       benchmark_and_cache do
+        event   = message.properties.type
+        payload = decode(payload)
+        handler = Handler.for(event, payload)
         handler.handle
       end
 
