@@ -36,7 +36,7 @@ module Travis
       protected
 
         def run_periodically(interval, &block)
-          # TODO use http://download.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#scheduleWithFixedDelay
+          # TODO use http://download.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#scheduleWithFixedDelay ?
           Thread.new do
             loop do
               block.call
@@ -54,7 +54,7 @@ module Travis
 
     def subscribe
       log 'Subscribing to amqp ...'
-      Travis::Amqp.subscribe(:ack => true, &method(:receive))
+      Travis::Amqp.subscribe(:ack => true, &method(:receive)) # , :arguments => { :shard => 1 }
     end
 
     def receive(message, payload)
