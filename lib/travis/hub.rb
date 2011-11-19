@@ -58,7 +58,7 @@ module Travis
     end
 
     def receive(message, payload)
-      log notice("Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload).inspect}")
+      notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload).inspect}"
 
       event   = message.properties.type
       payload = decode(payload)
@@ -81,7 +81,7 @@ module Travis
         timing = Benchmark.realtime do
           ActiveRecord::Base.cache { yield }
         end
-        log notice("Completed in #{timing.round(4)} seconds")
+        notice "Completed in #{timing.round(4)} seconds"
       end
 
       def decode(payload)
