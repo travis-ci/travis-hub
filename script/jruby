@@ -23,7 +23,7 @@ unset GIT_DIR
 # echo "bundler_env : $bundler_env"
 
 max_mem=384m
-max_stack=2048k
+max_stack=512k
 
 java $JAVA_OPTS                                             \
   -classpath "$CLASSPATH"                                   \
