@@ -6,7 +6,6 @@ describe Travis::Hub::Handler::Worker do
   let(:payload) { { :name => 'worker-1', :host => 'ruby-1.worker.travis-ci.org', :state => :working } }
 
   before :each do
-    Time.now.tap { |now| Time.stubs(:now).returns(now) }
     handler.stubs(:worker).returns(worker)
   end
 
@@ -49,7 +48,7 @@ describe Travis::Hub::Handler::Worker do
   #     end
   #
   #     it 'sets the last_seen_at attribute' do
-  #       worker.last_seen_at.should == Time.now
+  #       worker.last_seen_at.should == Time.now.utc
   #     end
   #   end
   # end
