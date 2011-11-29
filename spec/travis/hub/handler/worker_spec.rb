@@ -3,26 +3,17 @@ require 'spec_helper'
 describe Travis::Hub::Handler::Worker do
   let(:handler) { @handler ||= Travis::Hub::Handler::Worker.new(:event, Hashr.new(payload)) }
   let(:worker)  { stub('worker', :update_attributes! => nil) }
-  let(:payload) { {
-    :travis-development-1 => { :name => 'travis-development-1', :host => 'Svens-MacBook-Pro-2.local', :state => 'ready' },
-    :travis-development-2 => { :name => 'travis-development-2', :host => 'Svens-MacBook-Pro-2.local', :state => 'ready' }
-  } }
+  let(:payload) { { 'travis-test-1' => { 'name' => 'travis-test-1', 'host' => 'host', 'state' => 'ready' } } }
 
   before :each do
-    handler.stubs(:worker).returns(worker)
+    handler.stubs(:worker_by).returns(worker)
   end
 
   describe 'handle' do
     it 'updates the worker states and last_seen_at attributes' do
       worker.expects(:ping!)
-      worker.expects(:set_state).with(:working)
-      handler.event = :'worker:ping'
-      handler.handle
-    end
-
-    it 'sets the worker states on worker:started' do
-      worker.expects(:set_state).with('started')
-      handler.event = :'worker:started'
+      worker.expects(:set_state).with('ready')
+      handler.event = :'worker:status'
       handler.handle
     end
   end

@@ -13,7 +13,7 @@ module Travis
             payload.each do |name, report|
               if worker = worker_by(name, report.host)
                 worker.ping!
-                worker.set_state(payload.state) if payload.state?
+                worker.set_state(report.state) if report.state?
               else
                 ::Worker.create!(:name => report.name, :host => report.host, :last_seen_at => Time.now.utc, :state => report.state)
               end
