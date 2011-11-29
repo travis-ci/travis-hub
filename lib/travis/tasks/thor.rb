@@ -1,6 +1,5 @@
 require 'bundler/setup'
 require 'travis/hub'
-require 'newrelic_rpm'
 
 $stdout.sync = true
 
@@ -16,6 +15,7 @@ module Travis
 
         begin
           puts "Starting New Relic with env:#{options[:env]}"
+          require 'newrelic_rpm'
           NewRelic::Agent.manual_start(:env => options['env'])
         rescue Exception => e
           puts 'New Relic Agent refused to start!'
