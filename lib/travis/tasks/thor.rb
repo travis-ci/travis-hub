@@ -15,6 +15,7 @@ module Travis
 
         Travis::Hub.start
 
+        puts "Starting New Relic with env:#{options[:env]}"
         NewRelic::Agent.manual_start(:env => options['env'])
       end
     end
