@@ -12,7 +12,10 @@ module Travis
       method_option :env, :aliases => '-e', :default => ENV['RAILS_ENV'] || ENV['ENV'] || 'development'
       def start
         ENV['ENV'] = options['env']
+
         Travis::Hub.start
+
+        NewRelic::Agent.manual_start
       end
     end
   end
