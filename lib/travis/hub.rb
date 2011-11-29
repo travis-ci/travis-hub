@@ -16,12 +16,11 @@ module Travis
         Database.connect
         Travis::Mailer.setup
 
-        prune_workers
+        start_newrelic
 
+        prune_workers
         # cleanup_jobs
         subscribe
-
-        puts 'start finished'
       end
 
       def subscribe
@@ -29,12 +28,23 @@ module Travis
       end
 
       def prune_workers
-        puts 'start puning'
         run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
       end
 
       def cleanup_jobs
         run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
+      end
+
+      def start_newrelic
+        begin
+          puts "Starting New Relic with env:#{ENV['ENV']}"
+          require 'newrelic_rpm'
+          NewRelic::Agent.manual_start(:env => ENV['ENV'])
+        rescue Exception => e
+          puts 'New Relic Agent refused to start!'
+          puts e.message
+          puts e.backtrace
+        end
       end
 
       protected

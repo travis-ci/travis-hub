@@ -13,7 +13,6 @@ module Travis
       def start
         ENV['ENV'] = options['env']
         Travis::Hub.start
-        puts 'started'
       end
     end
   end
