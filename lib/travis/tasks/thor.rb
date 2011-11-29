@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'travis/hub'
+require 'newrelic_rpm'
 
 $stdout.sync = true
 
