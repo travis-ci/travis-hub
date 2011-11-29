@@ -17,8 +17,11 @@ module Travis
         Travis::Mailer.setup
 
         prune_workers
+
         # cleanup_jobs
         subscribe
+
+        puts 'start finished'
       end
 
       def subscribe
@@ -26,6 +29,7 @@ module Travis
       end
 
       def prune_workers
+        puts 'start puning'
         run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
       end
 

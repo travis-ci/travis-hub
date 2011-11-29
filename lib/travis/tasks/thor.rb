@@ -12,18 +12,8 @@ module Travis
       method_option :env, :aliases => '-e', :default => ENV['RAILS_ENV'] || ENV['ENV'] || 'development'
       def start
         ENV['ENV'] = options['env']
-
-        begin
-          puts "Starting New Relic with env:#{options[:env]}"
-          require 'newrelic_rpm'
-          NewRelic::Agent.manual_start(:env => options['env'])
-        rescue Exception => e
-          puts 'New Relic Agent refused to start!'
-          puts e.message
-          puts e.backtrace
-        end
-
         Travis::Hub.start
+        puts 'started'
       end
     end
   end
