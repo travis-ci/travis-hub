@@ -9,18 +9,26 @@ module Travis
 
         def handle
           case event.to_sym
-          when :'worker:ping'
-            worker.ping!
-            worker.set_state(payload.state) if payload.state?
-          else
-            worker.set_state(event.to_s.split(':').last)
+          when :'worker:status'
+            payload.each do |name, report|
+              if worker = worker_by(name, report.host)
+                worker.ping!
+                worker.set_state(payload.state) if payload.state?
+              else
+                ::Worker.create!(:name => report.name, :host => report.host, :last_seen_at => Time.now.utc, :state => report.state)
+              end
+            end
           end
         end
 
         protected
 
-          def worker
-            @worker ||= ::Worker.find_or_create_by_name_and_host(:name => payload.name, :host => payload.host)
+          def worker_by(name, host)
+            workers[[host, name].join(':')].try(:first)
+          end
+
+          def workers
+            @workers ||= ::Worker.all.group_by(&:full_name)
           end
       end
     end

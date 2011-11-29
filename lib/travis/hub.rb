@@ -36,7 +36,6 @@ module Travis
       protected
 
         def run_periodically(interval, &block)
-          # TODO use http://download.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#scheduleWithFixedDelay ?
           Thread.new do
             loop do
               block.call
@@ -54,11 +53,11 @@ module Travis
 
     def subscribe
       log 'Subscribing to amqp ...'
-      Travis::Amqp.subscribe(:ack => true, &method(:receive)) # , :arguments => { :shard => 1 }
+      Travis::Amqp.subscribe(:ack => true, &method(:receive))
     end
 
     def receive(message, payload)
-      notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload).inspect}"
+      notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
 
       benchmark_and_cache do
         event   = message.properties.type
