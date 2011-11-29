@@ -22,7 +22,7 @@ describe Travis::Hub::Handler do
 
     describe 'given an event namespaced worker:*' do
       events = %w(
-        worker:ping
+        worker:status
         worker:start
         worker:finish
       )
