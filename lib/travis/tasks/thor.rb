@@ -13,10 +13,10 @@ module Travis
       def start
         ENV['ENV'] = options['env']
 
-        Travis::Hub.start
-
         puts "Starting New Relic with env:#{options[:env]}"
         NewRelic::Agent.manual_start(:env => options['env'])
+
+        Travis::Hub.start
       end
     end
   end
