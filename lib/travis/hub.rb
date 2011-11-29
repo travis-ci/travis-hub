@@ -6,6 +6,7 @@ require 'benchmark'
 module Travis
   class Hub
     autoload :Handler, 'travis/hub/handler'
+    autoload :Hub,     'travis/hub/hub'
 
     include Logging
 
@@ -16,7 +17,7 @@ module Travis
         Database.connect
         Travis::Mailer.setup
 
-        start_newrelic
+        NewRelic.monitor
 
         prune_workers
         # cleanup_jobs
@@ -33,18 +34,6 @@ module Travis
 
       def cleanup_jobs
         run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
-      end
-
-      def start_newrelic
-        begin
-          puts "Starting New Relic with env:#{ENV['ENV']}"
-          require 'newrelic_rpm'
-          NewRelic::Agent.manual_start(:env => ENV['ENV'])
-        rescue Exception => e
-          puts 'New Relic Agent refused to start!'
-          puts e.message
-          puts e.backtrace
-        end
       end
 
       protected
@@ -67,7 +56,7 @@ module Travis
 
     def subscribe
       log 'Subscribing to amqp ...'
-      Travis::Amqp.subscribe(:ack => true, &method(:receive))
+      Travis::Amqp.subscribe(:ack => true) { |message, payload| receive(message,payload) }
     end
 
     def receive(message, payload)
