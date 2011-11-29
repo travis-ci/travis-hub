@@ -13,8 +13,14 @@ module Travis
       def start
         ENV['ENV'] = options['env']
 
-        puts "Starting New Relic with env:#{options[:env]}"
-        NewRelic::Agent.manual_start(:env => options['env'])
+        begin
+          puts "Starting New Relic with env:#{options[:env]}"
+          NewRelic::Agent.manual_start(:env => options['env'])
+        rescue Exception => e
+          puts 'New Relic Agent refused to start!'
+          puts e.message
+          puts e.backtrace
+        end
 
         Travis::Hub.start
       end
