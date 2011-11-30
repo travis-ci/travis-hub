@@ -9,7 +9,7 @@ require 'support/payloads'
 require 'support/matchers'
 
 require 'travis/hub'
-require 'travis/logging'
+require 'travis/support'
 require 'stringio'
 require 'mocha'
 
