@@ -3,6 +3,16 @@ require 'multi_json'
 require 'hashr'
 require 'benchmark'
 
+require 'core_ext/module/async'
+
+Work.class_eval do
+  def initialize(&work)
+    super(work)
+    @work = work
+    @done, @lock = false, new_cond
+  end
+end
+
 module Travis
   class Hub
     autoload :Handler,    'travis/hub/handler'
