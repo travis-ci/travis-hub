@@ -7,7 +7,7 @@ module Travis
             :message => message,
             :payload => payload
           }
-          perform_action_with_newrelic_trace(:category => :controller, :name => :receive, :params => params) do
+          perform_action_with_newrelic_trace(:category => :controller, :name => 'receive', :params => params) do
             super
           end
         end
