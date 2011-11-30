@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 2237f439b709588660dec0fe34b6dd438a9ee24e
+  revision: 2a624c018a1d2365c64158878c04fe150db4fae0
   specs:
     travis-core (0.0.1)
       actionmailer_inline_css (~> 1.3.0)
@@ -64,9 +64,9 @@ GEM
       activesupport (= 3.1.3)
       arel (~> 2.2.1)
       tzinfo (~> 0.3.29)
-    activerecord-jdbc-adapter (1.2.1)
-    activerecord-jdbcpostgresql-adapter (1.2.1)
-      activerecord-jdbc-adapter (~> 1.2.1)
+    activerecord-jdbc-adapter (1.2.0)
+    activerecord-jdbcpostgresql-adapter (1.2.0)
+      activerecord-jdbc-adapter (~> 1.2.0)
       jdbc-postgres (~> 9.0.0)
     activeresource (3.1.3)
       activemodel (= 3.1.3)
@@ -215,7 +215,8 @@ PLATFORMS
   java
 
 DEPENDENCIES
-  activerecord-jdbcpostgresql-adapter (~> 1.2.0)
+  activerecord-jdbc-adapter (= 1.2.0)
+  activerecord-jdbcpostgresql-adapter (= 1.2.0)
   database_cleaner (~> 0.6.7)
   hot_bunnies (~> 1.3.3)
   jruby-openssl (~> 0.7.4)
