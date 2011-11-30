@@ -5,8 +5,7 @@ module Travis
         def handle
           case event.to_sym
           when :'worker:status'
-            payload = [payload] unless payload.is_a?(Hash)
-            payload.each { |report| handle_report(report) }
+            (payload.is_a?(Hash) ? [payload] : payload).each { |report| handle_report(report) }
           end
         end
 
