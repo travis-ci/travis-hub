@@ -5,18 +5,20 @@ module Travis
         def handle
           case event.to_sym
           when :'worker:status'
-            payload.each do |report|
-              if worker = worker_by(report.name, report.host)
-                worker.ping!
-                worker.set_state(report.state) if report.state?
-              else
-                ::Worker.create!(:name => report.name, :host => report.host, :last_seen_at => Time.now.utc, :state => report.state)
-              end
-            end
+            payload = [payload] unless payload.is_a?(Hash)
+            payload.each { |report| handle_report(report) }
           end
         end
 
         protected
+
+          def handle_report(report)
+            if worker = worker_by(report.name, report.host)
+              worker.ping(report)
+            else
+              ::Worker.create!(:name => report.name, :host => report.host, :last_seen_at => Time.now.utc, :state => report.state)
+            end
+          end
 
           def worker_by(name, host)
             workers[[host, name].join(':')].try(:first)
