@@ -16,7 +16,7 @@ module Travis
       puts "Starting New Relic with env:#{ENV['ENV']}"
       require 'newrelic_rpm'
 
-      class Travis::Hub
+      Travis::Hub.class_eval do
         include NewRelic::Agent::Instrumentation::ControllerInstrumentation
         include Travis::Hub::NewRelic
       end
