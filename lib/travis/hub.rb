@@ -3,6 +3,7 @@ require 'multi_json'
 require 'hashr'
 require 'benchmark'
 require 'core_ext/module/include'
+require 'travis/support'
 
 module Travis
   class Hub
@@ -47,19 +48,18 @@ module Travis
     end
 
     include do
-      attr_reader :config
-
       def initialize
-        @config = Travis.config.amqp
+        Travis::Amqp.config = Travis.config.amqp
       end
 
       def subscribe
-        log 'Subscribing to amqp ...'
-        Travis::Amqp.subscribe(:ack => true, &method(:receive))
+        info 'Subscribing to amqp ...'
+        Travis::Amqp::Consumer.reporting.subscribe(:ack => true, &method(:receive))
+        Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
       end
 
       def receive(message, payload)
-        notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
+        info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
 
         benchmark_and_cache do
           event   = message.properties.type
@@ -81,7 +81,7 @@ module Travis
           timing = Benchmark.realtime do
             ActiveRecord::Base.cache { yield }
           end
-          notice "Completed in #{timing.round(4)} seconds"
+          info "Completed in #{timing.round(4)} seconds"
         end
 
         def decode(payload)
