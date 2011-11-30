@@ -11,8 +11,6 @@ module Travis
 
     include Logging
 
-    REPORTING_KEY = 'reporting.jobs'
-
     class << self
       def start
         Database.connect
@@ -54,7 +52,7 @@ module Travis
 
       def subscribe
         info 'Subscribing to amqp ...'
-        Travis::Amqp::Consumer.reporting.subscribe(:ack => true, &method(:receive))
+        Travis::Amqp::Consumer.jobs.subscribe(:ack => true, &method(:receive))
         Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
       end
 
