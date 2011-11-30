@@ -2,16 +2,11 @@ module Travis
   class Hub
     class Handler
       class Worker < Handler
-        def initialize(event, payload)
-          @event = event
-          @payload = Hashr.new(payload)
-        end
-
         def handle
           case event.to_sym
           when :'worker:status'
-            payload.each do |name, report|
-              if worker = worker_by(name, report.host)
+            payload.each do |report|
+              if worker = worker_by(report.name, report.host)
                 worker.ping!
                 worker.set_state(report.state) if report.state?
               else

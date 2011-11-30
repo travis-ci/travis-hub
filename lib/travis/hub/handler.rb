@@ -23,7 +23,14 @@ module Travis
 
       def initialize(event, payload)
         @event = event
-        @payload = Hashr.new(payload)
+        @payload = case payload
+          when Hash
+            Hashr.new(payload)
+          when Array
+            payload.map { |hash| Hashr.new(hash) }
+          else
+            payload
+        end
       end
     end
   end

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Worker do
-  let(:handler) { @handler ||= Travis::Hub::Handler::Worker.new(:event, Hashr.new(payload)) }
+  let(:handler) { @handler ||= Travis::Hub::Handler::Worker.new(:event, payload) }
   let(:worker)  { stub('worker', :update_attributes! => nil) }
-  let(:payload) { { 'travis-test-1' => { 'name' => 'travis-test-1', 'host' => 'host', 'state' => 'ready' } } }
+  let(:payload) { [{ 'name' => 'travis-test-1', 'host' => 'host', 'state' => 'ready' }] }
 
   before :each do
     handler.stubs(:worker_by).returns(worker)
