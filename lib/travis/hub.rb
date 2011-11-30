@@ -2,6 +2,7 @@ require 'travis'
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'core_ext/module/include'
 
 module Travis
   class Hub
@@ -48,45 +49,47 @@ module Travis
         end
     end
 
-    attr_reader :config
+    include do
+      attr_reader :config
 
-    def initialize
-      @config = Travis.config.amqp
-    end
-
-    def subscribe
-      log 'Subscribing to amqp ...'
-      Travis::Amqp.subscribe(:ack => true, &method(:receive))
-    end
-
-    def receive(message, payload)
-      notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
-
-      benchmark_and_cache do
-        event   = message.properties.type
-        payload = decode(payload)
-        handler = Handler.for(event, payload)
-        handler.handle
+      def initialize
+        @config = Travis.config.amqp
       end
 
-      message.ack
-    rescue Exception => e
-      puts e.message, e.backtrace
-      message.ack
-      # message.reject(:requeue => false) # how to decide whether to requeue the message?
-    end
+      def subscribe
+        log 'Subscribing to amqp ...'
+        Travis::Amqp.subscribe(:ack => true, &method(:receive))
+      end
 
-    protected
+      def receive(message, payload)
+        notice "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
 
-      def benchmark_and_cache
-        timing = Benchmark.realtime do
-          ActiveRecord::Base.cache { yield }
+        benchmark_and_cache do
+          event   = message.properties.type
+          payload = decode(payload)
+          handler = Handler.for(event, payload)
+          handler.handle
         end
-        notice "Completed in #{timing.round(4)} seconds"
+
+        message.ack
+      rescue Exception => e
+        puts e.message, e.backtrace
+        message.ack
+        # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
 
-      def decode(payload)
-        MultiJson.decode(payload)
-      end
+      protected
+
+        def benchmark_and_cache
+          timing = Benchmark.realtime do
+            ActiveRecord::Base.cache { yield }
+          end
+          notice "Completed in #{timing.round(4)} seconds"
+        end
+
+        def decode(payload)
+          MultiJson.decode(payload)
+        end
+    end
   end
 end
