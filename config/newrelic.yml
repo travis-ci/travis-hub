@@ -16,7 +16,7 @@ staging:
     stack_trace_threshold: 0.5
     transaction_threshold: apdex_f
   capture_params: false
-  log_level: debug
+  log_level: info
 
 production:
   error_collector:
@@ -35,4 +35,4 @@ production:
     stack_trace_threshold: 0.5
     transaction_threshold: apdex_f
   capture_params: false
-  log_level: debug
+  log_level: info
