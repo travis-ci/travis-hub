@@ -17,7 +17,7 @@ module Travis
         Database.connect
         Travis::Mailer.setup
 
-        NewRelic.monitor
+        Monitoring.start
 
         prune_workers
         # cleanup_jobs

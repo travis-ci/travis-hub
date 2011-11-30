@@ -1,6 +1,6 @@
 module Travis
   class Hub
-    module NewRelic
+    module Monitoring
       module HubInstrumentation
         def receive(message, payload)
           params = {
@@ -13,13 +13,13 @@ module Travis
         end
       end
 
-      def self.monitor
+      def self.start
         puts "Starting New Relic with env:#{ENV['ENV']}"
         require 'newrelic_rpm'
 
         Travis::Hub.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          include Travis::Hub::NewRelic::HubInstrumentation
+          include Travis::Hub::Monitoring::HubInstrumentation
         end
 
         NewRelic::Agent.manual_start(:env => ENV['ENV'])
