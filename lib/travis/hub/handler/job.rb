@@ -14,7 +14,7 @@ module Travis
         protected
 
           def job
-            @job ||= ::Job.find(payload.id)
+            @job ||= ::Job.find(payload[:id])
           end
 
           def handle_update
@@ -22,7 +22,7 @@ module Travis
           end
 
           def handle_log_update
-            ::Job::Test.append_log!(payload.id, payload.log)
+            ::Job::Test.append_log!(payload[:id], payload.log)
           end
       end
     end
