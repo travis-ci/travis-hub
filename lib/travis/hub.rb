@@ -5,8 +5,8 @@ require 'benchmark'
 
 module Travis
   class Hub
-    autoload :Handler,  'travis/hub/handler'
-    autoload :NewRelic, 'travis/hub/new_relic'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Monitoring, 'travis/hub/monitoring'
 
     include Logging
 
