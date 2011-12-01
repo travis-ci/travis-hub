@@ -15,7 +15,7 @@ module Travis
             if worker = worker_by(report.name, report.host)
               worker.ping(report)
             else
-              ::Worker.create!(:name => report.name, :host => report.host, :last_seen_at => Time.now.utc, :state => report.state)
+              ::Worker.create!(report.merge(:last_seen_at => Time.now.utc).to_hash)
             end
           end
 
