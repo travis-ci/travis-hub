@@ -16,6 +16,8 @@ module Travis
         Database.connect
         Travis::Mailer.setup
 
+        setup_airbrake
+
         prune_workers
         # cleanup_jobs
         subscribe
@@ -41,6 +43,12 @@ module Travis
               block.call
               sleep(interval)
             end
+          end
+        end
+
+        def setup_airbrake
+          Airbrake.configure do |config|
+            config.api_key = Travis.config.hoptoad.key
           end
         end
     end
@@ -69,6 +77,7 @@ module Travis
         message.ack
       rescue Exception => e
         puts e.message, e.backtrace
+        notify_airbrake(e)
         message.ack
         # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
