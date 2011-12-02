@@ -1,13 +1,13 @@
+require 'newrelic_rpm'
+require 'travis/notifications'
+
 module Travis
   class Hub
     module Monitoring
       def self.start
-        puts "Starting New Relic with env:#{ENV['ENV']}"
-        require 'newrelic_rpm'
+        puts "Starting New Relic with env: #{Travis.config.env}"
 
-        #
         # Add controller instrumentation to the AMQP message handlers
-        #
         Travis::Hub::Handler::Job.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:handle_log_update)
@@ -19,11 +19,7 @@ module Travis
           add_transaction_tracer(:handle)
         end
 
-
-        #
         # Add task instrumentation to the background jobs
-        #
-        require 'travis/notifications'
         Travis::Notifications::Pusher.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:push, :category => :task)
@@ -49,19 +45,10 @@ module Travis
           add_transaction_tracer(:send_webhook_notifications, :category => :task)
         end
 
-        # [:Pusher, :Email, :Irc, :Campfire, :Webhook].each do |service|
-        #   Travis::Notifications.const_get(service).class_eval do
-        #     include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-        #     add_transaction_tracer(:notify, :category => :task)
-        #   end
-        # end
+        NewRelic::Agent.manual_start(:env => Travis.config.env)
 
-
-        NewRelic::Agent.manual_start(:env => ENV['ENV'])
       rescue Exception => e
-        puts 'New Relic Agent refused to start!'
-        puts e.message
-        puts e.backtrace
+        puts 'New Relic Agent refused to start!', e.message, e.backtrace
       end
     end
   end

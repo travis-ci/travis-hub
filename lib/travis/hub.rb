@@ -14,17 +14,9 @@ module Travis
 
     class << self
       def start
-        Database.connect
-        Travis::Mailer.setup
-
-        Monitoring.start
-
+        setup
         prune_workers
         # cleanup_jobs
-        subscribe
-      end
-
-      def subscribe
         new.subscribe
       end
 
@@ -37,6 +29,12 @@ module Travis
       end
 
       protected
+
+        def setup
+          Database.connect
+          Travis::Mailer.setup
+          Monitoring.start
+        end
 
         def run_periodically(interval, &block)
           Thread.new do
