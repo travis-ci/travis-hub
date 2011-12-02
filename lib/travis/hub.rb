@@ -13,15 +13,10 @@ module Travis
 
     class << self
       def start
-        Database.connect
-        Travis::Mailer.setup
-
+        setup
         prune_workers
         # cleanup_jobs
         subscribe
-      end
-
-      def subscribe
         new.subscribe
       end
 
@@ -34,6 +29,12 @@ module Travis
       end
 
       protected
+
+        def setup
+          Database.connect
+          Travis::Mailer.setup
+          Airbrake.configure { |config| config.api_key = Travis.config.hoptoad.key }
+        end
 
         def run_periodically(interval, &block)
           Thread.new do
@@ -69,11 +70,18 @@ module Travis
         message.ack
       rescue Exception => e
         puts e.message, e.backtrace
+        notify_airbrake(e)
         message.ack
         # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
 
       protected
+
+        def notify_airbrake(exception)
+          unless ['test', 'development'].include?(Travis.config.env)
+            Airbrake.notify(exception)
+          end
+        end
 
         def benchmark_and_cache
           timing = Benchmark.realtime do

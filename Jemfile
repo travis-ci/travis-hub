@@ -11,6 +11,8 @@ gem 'activerecord-jdbc-adapter', '1.2.0'
 # TODO remove this once pusher > 0.8.4 has been released. should be in travis-core's gemspec
 gem 'pusher', :git => 'https://github.com/juno/pusher-gem.git', :ref => 'd025ccb'
 
+gem 'airbrake'
+
 group :test do
   gem 'rspec',             '~> 2.7.0'
   gem 'database_cleaner',  '~> 0.6.7'
