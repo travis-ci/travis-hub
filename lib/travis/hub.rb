@@ -84,6 +84,12 @@ module Travis
 
       protected
 
+        def notify_airbrake(exception)
+          unless ['test', 'development'].include?(Travis.config.env)
+            Airbrake.notify(exception)
+          end
+        end
+
         def benchmark_and_cache
           timing = Benchmark.realtime do
             ActiveRecord::Base.cache { yield }
