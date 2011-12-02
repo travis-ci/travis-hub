@@ -7,7 +7,8 @@ require 'travis/support'
 
 module Travis
   class Hub
-    autoload :Handler, 'travis/hub/handler'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Monitoring, 'travis/hub/monitoring'
 
     include Logging
 
@@ -31,9 +32,10 @@ module Travis
       protected
 
         def setup
+          Airbrake.configure { |config| config.api_key = Travis.config.hoptoad.key }
           Database.connect
           Travis::Mailer.setup
-          Airbrake.configure { |config| config.api_key = Travis.config.hoptoad.key }
+          Monitoring.start
         end
 
         def run_periodically(interval, &block)
