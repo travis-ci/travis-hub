@@ -86,7 +86,12 @@ module Travis
         end
 
         def with(*methods, &block)
-          methods.each { |method| send(method, &block) }
+          if methods.size > 1
+            head = methods.shift
+            with(*methods) { send(head, &block) }
+          else
+            send(methods.first, &block)
+          end
         end
 
         def benchmarking(&block)
