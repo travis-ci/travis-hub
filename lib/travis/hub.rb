@@ -13,17 +13,10 @@ module Travis
 
     class << self
       def start
-        Database.connect
-        Travis::Mailer.setup
-
-        setup_airbrake
-
+        setup
         prune_workers
         # cleanup_jobs
         subscribe
-      end
-
-      def subscribe
         new.subscribe
       end
 
@@ -37,18 +30,18 @@ module Travis
 
       protected
 
+        def setup
+          Database.connect
+          Travis::Mailer.setup
+          Airbrake.configure { |config| config.api_key = Travis.config.hoptoad.key }
+        end
+
         def run_periodically(interval, &block)
           Thread.new do
             loop do
               block.call
               sleep(interval)
             end
-          end
-        end
-
-        def setup_airbrake
-          Airbrake.configure do |config|
-            config.api_key = Travis.config.hoptoad.key
           end
         end
     end
