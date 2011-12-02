@@ -1,8 +1,9 @@
-require 'travis'
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
 require 'core_ext/module/include'
+require 'airbrake'
+require 'travis'
 require 'travis/support'
 
 module Travis
@@ -17,7 +18,6 @@ module Travis
         setup
         prune_workers
         # cleanup_jobs
-        subscribe
         new.subscribe
       end
 
@@ -32,7 +32,7 @@ module Travis
       protected
 
         def setup
-          Airbrake.configure { |config| config.api_key = Travis.config.hoptoad.key }
+          Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
           Monitoring.start
@@ -60,9 +60,9 @@ module Travis
       end
 
       def receive(message, payload)
-        info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 80 ? "#{payload[0..80]} ..." : payload)}"
+        info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
-        benchmark_and_cache do
+        with(:benchmarking, :caching) do
           event   = message.properties.type
           payload = decode(payload)
           handler = Handler.for(event, payload)
@@ -85,11 +85,17 @@ module Travis
           end
         end
 
-        def benchmark_and_cache
-          timing = Benchmark.realtime do
-            ActiveRecord::Base.cache { yield }
-          end
+        def with(*methods, &block)
+          methods.each { |method| send(method, &block) }
+        end
+
+        def benchmarking(&block)
+          timing = Benchmark.realtime(&block)
           info "Completed in #{timing.round(4)} seconds"
+        end
+
+        def caching(&block)
+          ActiveRecord::Base.cache(&block)
         end
 
         def decode(payload)
