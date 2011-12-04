@@ -5,6 +5,7 @@ require 'core_ext/module/include'
 require 'airbrake'
 require 'travis'
 require 'travis/support'
+require 'travis/hub/async'
 
 module Travis
   class Hub
