@@ -42,7 +42,7 @@ module Travis
 
         Travis::Notifications::Webhook.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:send_webhook_notifications, :category => :task)
+          add_transaction_tracer(:send_webhook, :category => :task)
         end
 
         NewRelic::Agent.manual_start(:env => Travis.config.env)
