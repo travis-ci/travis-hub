@@ -1,11 +1,13 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 16920113a49c7425aeb4a7552572e6da2d7b9229
+  revision: 40b0821c34e2b5326656e9cffa0c70f2fd6f28a5
+  ref: girl_friday
   specs:
     travis-core (0.0.1)
       actionmailer_inline_css (~> 1.4.0)
       data_migrations (~> 0.0.1)
       devise (~> 1.5.0)
+      girl_friday
       hashr (~> 0.0.19)
       hpricot (~> 0.8.4)
       oa-oauth (~> 0.3.2)

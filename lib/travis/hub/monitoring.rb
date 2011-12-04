@@ -20,27 +20,27 @@ module Travis
         end
 
         # Add task instrumentation to the background jobs
-        Travis::Notifications::Pusher.class_eval do
+        Travis::Notifications::Handler::Pusher.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:push, :category => :task)
         end
 
-        Travis::Notifications::Email.class_eval do
+        Travis::Notifications::Handler::Email.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:send_emails, :category => :task)
         end
 
-        Travis::Notifications::Irc.class_eval do
+        Travis::Notifications::Handler::Irc.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:send_irc_notifications, :category => :task)
         end
 
-        Travis::Notifications::Campfire.class_eval do
+        Travis::Notifications::Handler::Campfire.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:send_webhook_notifications, :category => :task)
         end
 
-        Travis::Notifications::Webhook.class_eval do
+        Travis::Notifications::Handler::Webhook.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:send_webhook, :category => :task)
         end
