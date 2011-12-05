@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 4687c6241d810342e34f77d001e3f8468e04a06c
+  revision: adb15a3fd824b87a57072dfedc8766b06735d58d
   ref: girl_friday
   specs:
     travis-core (0.0.1)
@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: a8e60bf16ea0ecd08e7e5fa6bc40750de48013ff
+  revision: 5100a69915bbea2fe1543648def7fb614102eb0a
   specs:
     travis-support (0.0.1)
 
