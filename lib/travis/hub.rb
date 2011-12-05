@@ -7,6 +7,8 @@ require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
 
+$stdout.sync = true
+
 module Travis
   class Hub
     autoload :Handler,    'travis/hub/handler'
