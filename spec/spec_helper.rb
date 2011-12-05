@@ -21,6 +21,6 @@ RSpec.configure do |c|
   c.after :each do
     Travis.config.notifications.clear
     Travis::Notifications.instance_variable_set(:@subscriptions, nil)
-    Travis::Notifications::Pusher.send(:protected, :queue_for, :payload_for)
+    Travis::Notifications::Handler::Pusher.send(:protected, :queue_for, :payload_for)
   end
 end
