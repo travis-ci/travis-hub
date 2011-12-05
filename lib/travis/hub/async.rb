@@ -10,3 +10,10 @@ Async.class_eval do
     end
   }
 end
+
+unless ENV['ENV'] == 'test'
+  %w(Archive Email Irc Pusher Webhook).each do |name|
+    handler = Travis::Notifications::Handler.const_get(name)
+    handler.async :notify
+  end
+end
