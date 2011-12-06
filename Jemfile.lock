@@ -227,7 +227,6 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (= 1.2.0)
   airbrake
   database_cleaner (~> 0.6.7)
-  girl_friday
   hot_bunnies (~> 1.3.3)
   jruby-openssl (~> 0.7.4)
   mocha (~> 0.10.0)
