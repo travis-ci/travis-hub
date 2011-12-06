@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: adb15a3fd824b87a57072dfedc8766b06735d58d
-  ref: girl_friday
+  revision: 7814b07b249148e830a204fe2f06db1df7b6b2b6
   specs:
     travis-core (0.0.1)
       actionmailer_inline_css (~> 1.4.0)
