@@ -66,10 +66,11 @@ module Travis
         info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
         with(:benchmarking, :caching) do
-          event   = message.properties.type
-          payload = decode(payload)
-          handler = Handler.for(event, payload)
-          handler.handle
+          if payload = decode(payload)
+            event = message.properties.type
+            handler = Handler.for(event, payload)
+            handler.handle
+          end
         end
 
         message.ack
@@ -108,6 +109,8 @@ module Travis
 
         def decode(payload)
           MultiJson.decode(payload)
+        rescue
+          nil
         end
     end
   end
