@@ -23,7 +23,7 @@ echo "GEM_PATH    : $GEM_PATH"
 echo "PATH        : $PATH"
 echo "bundler_env : $bundler_env"
 
-max_mem=384m
+max_mem=256m
 max_stack=512k
 
 java $JAVA_OPTS                                             \
