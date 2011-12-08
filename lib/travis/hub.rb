@@ -75,8 +75,8 @@ module Travis
         message.ack
       rescue Exception => e
         puts e.message, e.backtrace
-        notify_airbrake(e)
         message.ack
+        notify_airbrake(e)
         # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
 
