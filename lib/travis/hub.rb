@@ -2,7 +2,7 @@ require 'multi_json'
 require 'hashr'
 require 'benchmark'
 require 'core_ext/module/include'
-require 'airbrake'
+# require 'airbrake'
 require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
@@ -35,7 +35,7 @@ module Travis
       protected
 
         def setup
-          Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
+          # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
           # Monitoring.start
@@ -77,19 +77,11 @@ module Travis
       rescue Exception => e
         puts e.message, e.backtrace
         message.ack
-        notify_airbrake(e)
+        # notify_airbrake(e)
         # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
 
       protected
-
-        def notify_airbrake(exception)
-          unless ['test', 'development'].include?(Travis.config.env)
-            Airbrake.notify(exception)
-          end
-        rescue Exception => e
-          puts e.message, e.backtrace
-        end
 
         def with(*methods, &block)
           if methods.size > 1
@@ -114,6 +106,14 @@ module Travis
         rescue
           nil
         end
+
+        # def notify_airbrake(exception)
+        #   unless ['test', 'development'].include?(Travis.config.env)
+        #     Airbrake.notify(exception)
+        #   end
+        # rescue Exception => e
+        #   puts e.message, e.backtrace
+        # end
     end
   end
 end
