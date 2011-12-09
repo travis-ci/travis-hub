@@ -38,7 +38,7 @@ module Travis
           Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
-          Monitoring.start
+          # Monitoring.start
         end
 
         def run_periodically(interval, &block)
@@ -76,8 +76,8 @@ module Travis
         message.ack
       rescue Exception => e
         puts e.message, e.backtrace
-        notify_airbrake(e)
         message.ack
+        notify_airbrake(e)
         # message.reject(:requeue => false) # how to decide whether to requeue the message?
       end
 
