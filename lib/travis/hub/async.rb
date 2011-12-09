@@ -1,14 +1,15 @@
+require 'core_ext/module/include'
 require 'core_ext/module/async'
 
 Async.class_eval do
   include Travis::Logging
 
-  include Module.new {
+  include do
     def run(&block)
       super
       info "Async queue size: #{@queue.size}"
     end
-  }
+  end
 end
 
 unless ENV['ENV'] == 'test'
