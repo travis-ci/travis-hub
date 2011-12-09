@@ -87,6 +87,8 @@ module Travis
           unless ['test', 'development'].include?(Travis.config.env)
             Airbrake.notify(exception)
           end
+        rescue Exception => e
+          puts e.message, e.backtrace
         end
 
         def with(*methods, &block)
