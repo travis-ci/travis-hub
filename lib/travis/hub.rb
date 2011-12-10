@@ -6,6 +6,7 @@ require 'core_ext/module/include'
 require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
+require 'travis/hub/instrumentation'
 
 $stdout.sync = true
 
