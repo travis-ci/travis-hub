@@ -4,7 +4,7 @@ require 'travis/hub'
 $stdout.sync = true
 
 module Travis
-  module Tasks
+  module Cli
     class Thor < ::Thor
       namespace 'travis:hub'
 
