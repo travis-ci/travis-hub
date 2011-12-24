@@ -31,12 +31,83 @@ We use the "Jemfile trick" to deploy Hub to Heroku. Other than that, it is just 
 locally during development, it is only used during deployment.
 
 
+## Configuration
+
+Hub uses multiple services that require configuration. It loads configuration from `config/travis.yml` and keeps
+configs for all environments (development, test, production) in one file under different keys:
+
+    development:
+      # development configuration goes here
+
+    test:
+      # test configuration goes here
+
+    staging:
+      # staging configuration goes here
+
+    production:
+      # production configuration goes here
+
+Find a sample travis.yml file under config/travis.example.yml, copy it and edit it to match your system.
+
+
 ## Disabling Features
 
 Quite often during development you want to disable things like email delivery and [Pusher](http://pusher.com/) notifications.
-Hub lets you do that.
+Hub lets you do that by removing certain listeners in the configuration file:
 
-TBD
+    development:
+      domain: travis-ci.local
+      notifications:
+        - worker
+        - pusher
+        - email
+        - irc
+        - webhook
+        - campfire
+        - archive
+
+To disable Pusher, email and IRC notifications, just remove several lines like this:
+
+
+    development:
+      domain: travis-ci.local
+      notifications:
+        - worker
+        - webhook
+        - campfire
+        - archive
+
+### Worker listener
+
+This is the only listener that is not optional. It processes build configuration messages and
+publishes one or more build requests (think matrix rows) to workers. In real world scenarios this
+listener cannot be left out.
+
+### Pusher listener
+
+Propagates messages to browsers using Pusher. Often disabled during development.
+
+### Email listener
+
+Delivers email notifications. Usually disabled during development.
+
+### IRC listener
+
+Delivers IRC notifications. Usually disabled during development.
+
+### Web Hooks listener
+
+Delivers Web hooks notifications, à la GitHub hooks. Usually disabled during development.
+
+### Campfire listener
+
+Delivers Campfire notifications. Usually disabled during development.
+
+### Archive listener
+
+Proactively archives build logs & other information to a separate data store.
+Usually disabled during development.
 
 
 ## License & copyright information ##
