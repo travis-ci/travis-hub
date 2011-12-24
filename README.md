@@ -25,6 +25,12 @@ Hub uses [travis-core](https://github.com/travis-ci/travis-core) and [travis-sup
 rapidly, so keep your eye on those two.
 
 
+### PostgreSQL
+
+Primary database used by travis-ci.org is PostgreSQL and Hub uses it extensively. While we use 9.0 in production, 8.4 and 9.1 will work
+just as well.
+
+
 ### Jemfile?
 
 We use the "Jemfile trick" to deploy Hub to Heroku. Other than that, it is just a gemfile. You also don't have to use Maven
