@@ -98,7 +98,7 @@ Delivers IRC notifications. Usually disabled during development.
 
 ### Web Hooks listener
 
-Delivers Web hooks notifications, à la GitHub hooks. Usually disabled during development.
+Delivers Web hooks notifications, a la GitHub hooks. Usually disabled during development.
 
 ### Campfire listener
 
@@ -115,5 +115,3 @@ Usually disabled during development.
 See LICENSE file.
 
 Copyright (c) 2011 [Travis CI development team](https://github.com/travis-ci).
-
-
