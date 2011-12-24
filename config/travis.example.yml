@@ -62,10 +62,6 @@ development:
     password:
   notifications:
     - worker
-  pusher:
-    app_id: 12345
-    key: sdf98sdyf9sdf798sd7f
-    secret: 982398s9a8y9d8fy878
 
 test:
   domain: test.travis-ci.local
