@@ -60,6 +60,12 @@ development:
     database: travis_development
     username: travis
     password:
+  amqp:
+    host: localhost
+    port: 5672
+    username: travis_hub
+    password: travis_hub_password
+    vhost: travis.development
   notifications:
     - worker
 

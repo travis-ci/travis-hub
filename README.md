@@ -7,11 +7,19 @@ bakes you a pizza and walks your dog.
 
 ## Dependencies
 
-### Messaging Broker
+### RabbitMQ
 
 Travis Hub communicates with other applications using [RabbitMQ](http://rabbitmq.com) (via [Hot Bunnies](https://github.com/ruby-amqp/hot_bunnies)).
 Please refer to [amqp gem's Getting Started guide](http://rubyamqp.info/articles/getting_started/) to learn [how to install RabbitMQ](http://rubyamqp.info/articles/getting_started/#installing_rabbitmq) on your platform,
 we won't duplicate all that information here.
+
+After you have RabbitMQ running, use
+
+    ./script/set_rabbitmq_env_up.sh
+
+to create a separate RabbitMQ vhost (travis.development) for travis as well as one user (travis_hub) for Hub.
+You can instead use any other vhost or username but this script matches what's in the example configuration
+filee.
 
 
 ### JRuby and libraries
@@ -55,6 +63,13 @@ configs for all environments (development, test, production) in one file under d
       # production configuration goes here
 
 Find a sample travis.yml file under config/travis.example.yml, copy it and edit it to match your system.
+
+
+## Running Hub
+
+To run Hub in the foreground, use
+
+    bundle exec thor travis:hub:start
 
 
 ## Disabling Features
