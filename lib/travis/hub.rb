@@ -59,7 +59,21 @@ module Travis
 
       def subscribe
         info 'Subscribing to amqp ...'
-        Travis::Amqp::Consumer.jobs.subscribe(:ack => true, &method(:receive))
+
+        subscribe_to_reporting
+        subscribe_to_worker_status
+      end
+
+      def subscribe_to_reporting
+        queue_names  = Travis.config.queues.map { |queue| queue[:queue] }
+        queue_names += ['builds.common', 'builds.configure']
+
+        queue_names.uniq.each do |name|
+          Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
+        end
+      end
+
+      def subscribe_to_worker_status
         Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
       end
 
