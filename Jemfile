@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git', :branch => 'moarexchanges'
+gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git'
 gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git'
 
 gem 'hot_bunnies',         '~> 1.3.3'
