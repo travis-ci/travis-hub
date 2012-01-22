@@ -8,9 +8,6 @@ gem 'jruby-openssl',       '~> 0.7.4'
 gem 'activerecord-jdbcpostgresql-adapter', '1.2.0' # see https://github.com/bmabey/database_cleaner/pull/83
 gem 'activerecord-jdbc-adapter', '1.2.0'
 
-# TODO remove this once pusher > 0.8.4 has been released. should be in travis-core's gemspec
-gem 'pusher', :git => 'https://github.com/juno/pusher-gem.git', :ref => 'd025ccb'
-
 gem 'airbrake'
 
 gem 'newrelic_rpm',        '3.3.1.beta1'
