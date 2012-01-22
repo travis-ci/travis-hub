@@ -1,0 +1,27 @@
+erlang.worker.travis-ci.org:
+  name: TTY
+  url: http://www.tty.nl
+nodejs1.worker.travis-ci.org:
+  name: Shopify
+  url: http://www.shopify.com
+php1.worker.travis-ci.org:
+  name: ServerGrove
+  url: http://servergrove.com
+rails1.worker.travis-ci.org:
+  name: Engine Yard
+  url: http://www.engineyard.com
+rails2.worker.travis-ci.org:
+  name: Engine Yard
+  url: http://www.engineyard.com
+ruby1.worker.travis-ci.org:
+  name: EnterpriseRails
+  url: http://www.enterprise-rails.com
+ruby2.worker.travis-ci.org:
+  name: EnterpriseRails
+  url: http://www.enterprise-rails.com
+ruby3.worker.travis-ci.org:
+  name: Railslove
+  url: http://railslove.de
+spree.worker.travis-ci.org:
+  name: Spree
+  url: http://spreecommerce.com
