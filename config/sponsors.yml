@@ -25,3 +25,7 @@ ruby3.worker.travis-ci.org:
 spree.worker.travis-ci.org:
   name: Spree
   url: http://spreecommerce.com
+staging.worker.travis-ci.org:
+  name: EnterpriseRails
+  url: http://www.enterprise-rails.com
+
