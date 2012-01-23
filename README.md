@@ -27,22 +27,27 @@ filee.
 Travis Hub is JRuby-based. Make sure you have Sun or OpenJDK 6, install JRuby via RVM (or any other way) and then do
 
     gem install bundler
-    bundle install --gemfile Jemfile
+    bundle install
 
 Hub uses [travis-core](https://github.com/travis-ci/travis-core) and [travis-support](https://github.com/travis-ci/travis-support) that evolve
 rapidly, so keep your eye on those two.
+
+
+### Deploying on Heroku
+
+Heroku supports JRuby but only as a _labs_ feature. Add the following to have Heroku use JRuby when compiling and deploying the slug/dyno.
+
+    gem install heroku
+
+    heroku plugins:install https://github.com/heroku/heroku-labs.git
+    heroku labs:enable user_env_compile
+    heroku config:add RUBY_VERSION='jruby-1.6.5.1'
 
 
 ### PostgreSQL
 
 Primary database used by travis-ci.org is PostgreSQL and Hub uses it extensively. While we use 9.0 in production, 8.4 and 9.1 will work
 just as well.
-
-
-### Jemfile?
-
-We use the "Jemfile trick" to deploy Hub to Heroku. Other than that, it is just a gemfile. You also don't have to use Maven
-locally during development, it is only used during deployment.
 
 
 ## Configuration
