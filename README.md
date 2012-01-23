@@ -42,6 +42,7 @@ Heroku supports JRuby but only as a _labs_ feature. Add the following to have He
     heroku plugins:install https://github.com/heroku/heroku-labs.git
     heroku labs:enable user_env_compile
     heroku config:add RUBY_VERSION='jruby-1.6.5.1'
+    heroku config:add JAVA_OPTS="-Xmx384m -Xss512k -XX:+UseCompressedOops -Dfile.encoding=UTF-8"
 
 
 ### PostgreSQL
