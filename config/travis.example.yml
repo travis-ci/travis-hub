@@ -39,7 +39,7 @@ production:
     port: 5672
     username: cute.bunny
     password: t0p.s3kr3t
-    vhost: travis.production
+    vhost: travisci.production
   pusher:
     app_id: 12345
     key: sdf98sdyf9sdf798sd7f
@@ -57,15 +57,15 @@ production:
 development:
   database:
     host: localhost
-    database: travis_development
-    username: travis
+    database: travisci_development
+    username: travisci
     password:
   amqp:
     host: localhost
     port: 5672
-    username: travis_hub
-    password: travis_hub_password
-    vhost: travis.development
+    username: travisci_hub
+    password: travisci_hub_password
+    vhost: travisci.development
   notifications:
     - worker
 
