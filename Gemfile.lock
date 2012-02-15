@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 1227459ebc7183842824f24cd0ace99019b752f6
+  revision: c6a43b86eaa4c11b9128527ba24e949a860a050b
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.1.2)
@@ -103,7 +103,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
     multi_xml (0.4.1)
-    multipart-post (1.1.4)
+    multipart-post (1.1.5)
     newrelic_rpm (3.3.1.beta1)
     oa-core (0.3.2)
     oa-oauth (0.3.2)
