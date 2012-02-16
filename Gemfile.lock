@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 4bf74ebe0102fbb7c198f614ce1c1e968d24deac
+  revision: 8cc3ff9b13b1f4c77ecaa53769ab264f5db8d6ca
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.1.2)
@@ -183,7 +183,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.31)
-    warden (1.1.0)
+    warden (1.1.1)
       rack (>= 1.0)
     webmock (1.7.10)
       addressable (~> 2.2, > 2.2.5)
