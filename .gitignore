@@ -2,3 +2,4 @@ config/travis.yml
 play/*
 .gems/*
 *.class
+.rbenv-version
