@@ -1,7 +1,7 @@
 source :rubygems
 
-gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git'
-gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git'
+gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git', :ref => 'rails-3.2'
+gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git', :ref => 'rails-3.2'
 
 gem 'hot_bunnies',         '~> 1.3.4'
 gem 'jruby-openssl',       '~> 0.7.4'
