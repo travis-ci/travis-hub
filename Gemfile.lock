@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 095143c19154a0ba2e2cd604cddaf92a5946367e
+  revision: 26209e1b49ede851f1895365da7fbf9b5ec130d9
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.1.2)
@@ -8,7 +8,6 @@ GIT
       data_migrations (~> 0.0.1)
       devise (~> 1.5.0)
       hashr (~> 0.0.19)
-      hpricot (~> 0.8.4)
       oa-oauth (~> 0.3.2)
       octokit (~> 0.6.5)
       omniauth
