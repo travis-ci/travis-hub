@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: ffad42bf5268ee3c729f7f04495a970130155f5b
+  revision: 30d08767ed44be28f7601e89165b61d2be5de313
   ref: rails-3.2
   specs:
     travis-core (0.0.1)
