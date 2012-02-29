@@ -1,6 +1,7 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'metriks'
 require 'core_ext/module/include'
 # require 'airbrake'
 require 'travis'
@@ -39,6 +40,7 @@ module Travis
           # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
+          Travis.logger.level = :info
           # Monitoring.start
         end
 
