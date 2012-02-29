@@ -1,6 +1,7 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'metriks'
 require 'core_ext/module/include'
 # require 'airbrake'
 require 'travis'
@@ -40,6 +41,7 @@ module Travis
           Database.connect
           Travis::Mailer.setup
           Monitoring.start
+          Travis.logger.level = :info
         end
 
         def run_periodically(interval, &block)

@@ -1,9 +1,7 @@
 source :rubygems
 
-gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git', :ref => 'rails-3.2'
-gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git', :ref => 'rails-3.2'
-
-gem 'metriks',        :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
+gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git'
+gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git'
 
 gem 'hot_bunnies',         '~> 1.3.4'
 gem 'jruby-openssl',       '~> 0.7.4'
@@ -12,6 +10,7 @@ gem 'activerecord-jdbcpostgresql-adapter', '1.2.2'
 gem 'activerecord-jdbc-adapter',           '1.2.2'
 
 gem 'airbrake'
+gem 'metriks',        :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
 
 gem 'newrelic_rpm',        '~> 3.3.2'
 
