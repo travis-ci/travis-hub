@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 26209e1b49ede851f1895365da7fbf9b5ec130d9
+  revision: 92af6d16b27067a4e904f649a3b8e941b0af4e79
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.1.2)
@@ -61,7 +61,7 @@ GEM
     airbrake (3.0.9)
       activesupport
       builder
-    arel (2.2.1)
+    arel (2.2.3)
     bcrypt-ruby (3.0.1-java)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
