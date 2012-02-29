@@ -9,6 +9,7 @@ gem 'activerecord-jdbcpostgresql-adapter', '1.2.0' # see https://github.com/bmab
 gem 'activerecord-jdbc-adapter', '1.2.0'
 
 gem 'airbrake'
+gem 'metriks',  :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
 
 gem 'newrelic_rpm',        '3.3.1.beta1'
 

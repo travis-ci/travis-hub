@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/mattmatt/metriks.git
+  revision: 23482212ec6676bfde20dae70760f80778bf6e77
+  ref: source
+  specs:
+    metriks (0.8.0)
+      atomic (~> 1.0)
+      hitimes (~> 1.1)
+
+GIT
   remote: git://github.com/travis-ci/travis-core.git
   revision: 30d08767ed44be28f7601e89165b61d2be5de313
   ref: rails-3.2
@@ -63,6 +72,7 @@ GEM
       activesupport
       builder
     arel (3.0.2)
+    atomic (1.0.0-java)
     bcrypt-ruby (3.0.1-java)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
@@ -86,6 +96,7 @@ GEM
     hashie (1.2.0)
     hashr (0.0.19)
     hike (1.2.1)
+    hitimes (1.1.1-java)
     hot_bunnies (1.3.5-java)
     i18n (0.6.0)
     jdbc-postgres (9.0.801)
@@ -99,7 +110,7 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     mime-types (1.17.2)
-    mocha (0.10.4)
+    mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
     multi_xml (0.4.1)
@@ -197,6 +208,7 @@ DEPENDENCIES
   database_cleaner (~> 0.6.7)
   hot_bunnies (~> 1.3.4)
   jruby-openssl (~> 0.7.4)
+  metriks!
   mocha (~> 0.10.0)
   newrelic_rpm (= 3.3.1.beta1)
   rspec (~> 2.7.0)
