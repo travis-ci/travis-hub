@@ -40,7 +40,7 @@ module Travis
           # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
-          Travis.logger.level = :info
+          Travis.logger.level = Logger::INFO
           # Monitoring.start
         end
 
