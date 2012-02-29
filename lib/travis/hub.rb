@@ -41,7 +41,7 @@ module Travis
           Database.connect
           Travis::Mailer.setup
           Monitoring.start
-          Travis.logger.level = :info
+          Travis.logger.level = Logger::INFO
         end
 
         def run_periodically(interval, &block)
