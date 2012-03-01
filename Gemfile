@@ -10,11 +10,11 @@ gem 'activerecord-jdbc-adapter', '1.2.0'
 
 gem 'airbrake'
 
-gem 'newrelic_rpm',        '3.3.1.beta1'
+gem 'newrelic_rpm',        '3.3.2'
 
 group :test do
   gem 'rspec',             '~> 2.7.0'
-  gem 'database_cleaner',  '~> 0.6.7'
+  gem 'database_cleaner',  '~> 0.7.1'
   gem 'mocha',             '~> 0.10.0'
-  gem 'webmock',           '~> 1.7.7'
+  gem 'webmock',           '~> 1.8.0'
 end
