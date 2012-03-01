@@ -39,7 +39,7 @@ module Travis
           # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
-          # Monitoring.start
+          Monitoring.start
         end
 
         def run_periodically(interval, &block)
