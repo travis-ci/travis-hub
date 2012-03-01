@@ -3,6 +3,8 @@ source :rubygems
 gem 'travis-support', :git => 'git://github.com/travis-ci/travis-support.git'
 gem 'travis-core',    :git => 'git://github.com/travis-ci/travis-core.git'
 
+gem 'metriks',        :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
+
 gem 'hot_bunnies',         '~> 1.3.4'
 gem 'jruby-openssl',       '~> 0.7.4'
 gem 'activerecord-jdbcpostgresql-adapter', '1.2.0' # see https://github.com/bmabey/database_cleaner/pull/83
