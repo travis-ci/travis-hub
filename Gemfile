@@ -12,7 +12,7 @@ gem 'activerecord-jdbc-adapter', '1.2.0'
 
 gem 'airbrake'
 
-gem 'newrelic_rpm',        '3.3.2'
+gem 'newrelic_rpm',        '~> 3.3.2'
 
 group :test do
   gem 'rspec',             '~> 2.7.0'

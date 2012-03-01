@@ -208,7 +208,7 @@ DEPENDENCIES
   jruby-openssl (~> 0.7.4)
   metriks!
   mocha (~> 0.10.0)
-  newrelic_rpm (= 3.3.2)
+  newrelic_rpm (~> 3.3.2)
   rspec (~> 2.7.0)
   travis-core!
   travis-support!
