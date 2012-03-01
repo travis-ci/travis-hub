@@ -37,7 +37,7 @@ module Travis
 
         Travis::Notifications::Handler::Campfire.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:send_webhook_notifications, :category => :task)
+          add_transaction_tracer(:send_campfire, :category => :task)
         end
 
         Travis::Notifications::Handler::Webhook.class_eval do
