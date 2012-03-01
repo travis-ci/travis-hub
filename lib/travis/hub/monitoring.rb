@@ -1,4 +1,4 @@
-# require 'newrelic_rpm'
+require 'newrelic_rpm'
 require 'travis/notifications'
 
 module Travis
