@@ -7,8 +7,9 @@ gem 'metriks',        :git => 'git://github.com/mattmatt/metriks.git', :ref => '
 
 gem 'hot_bunnies',         '~> 1.3.4'
 gem 'jruby-openssl',       '~> 0.7.4'
-gem 'activerecord-jdbcpostgresql-adapter', '1.2.0' # see https://github.com/bmabey/database_cleaner/pull/83
-gem 'activerecord-jdbc-adapter', '1.2.0'
+
+gem 'activerecord-jdbcpostgresql-adapter', '1.2.2'
+gem 'activerecord-jdbc-adapter',           '1.2.2'
 
 gem 'airbrake'
 
