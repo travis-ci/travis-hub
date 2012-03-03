@@ -63,12 +63,12 @@ module Travis
         dependent = DependencyDetection.dependency_by_name(:active_record)
 
         executes = dependent.instance_variable_get(:'@executes')
-        puts "[Monitoring] Removing #{executes.size} executes blocks"
+        puts "[Monitoring] Removing #{executes.size} :active_record executes blocks"
 
         dependent.instance_variable_set(:'@executes', [])
 
         executes = dependent.instance_variable_get(:'@executes')
-        puts "[Monitoring] #{executes.size} blocks remaining"
+        puts "[Monitoring] #{executes.size} :active_record blocks remaining"
 
         dependent.executes do
           ActiveRecord::ConnectionAdapters::AbstractAdapter.module_eval do
