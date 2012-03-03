@@ -80,7 +80,7 @@ module Travis
       end
 
       def receive(message, payload)
-        info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+        info "[#{Thread.id}] Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
         with(:benchmarking, :caching) do
           if payload = decode(payload)
@@ -111,7 +111,7 @@ module Travis
 
         def benchmarking(&block)
           timing = Benchmark.realtime(&block)
-          info "Completed in #{timing.round(4)} seconds"
+          info "[#{Thread.id}] Completed in #{timing.round(4)} seconds"
         end
 
         def caching(&block)
