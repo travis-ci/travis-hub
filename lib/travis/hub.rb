@@ -1,6 +1,7 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'metriks'
 require 'core_ext/module/include'
 # require 'airbrake'
 require 'travis'
@@ -39,7 +40,8 @@ module Travis
           # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
-          # Monitoring.start
+          Monitoring.start
+          Travis.logger.level = Logger::INFO
         end
 
         def run_periodically(interval, &block)
@@ -78,7 +80,7 @@ module Travis
       end
 
       def receive(message, payload)
-        info "Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+        info "[#{Thread.current.object_id}] Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
         with(:benchmarking, :caching) do
           if payload = decode(payload)
@@ -109,7 +111,7 @@ module Travis
 
         def benchmarking(&block)
           timing = Benchmark.realtime(&block)
-          info "Completed in #{timing.round(4)} seconds"
+          info "[#{Thread.current.object_id}] Completed in #{timing.round(4)} seconds"
         end
 
         def caching(&block)
