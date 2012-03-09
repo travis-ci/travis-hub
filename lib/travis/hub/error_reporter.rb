@@ -25,6 +25,10 @@ module Travis
           puts "Error handling error: #{e.message}"
         end
       end
+
+      def self.enqueue(error)
+        queue.push(error)
+      end
     end
   end
 end

@@ -25,4 +25,10 @@ describe Travis::Hub::ErrorReporter do
       reporter.pop
     }.to_not raise_error
   end
+
+  it "should allow pushing an error on the queue" do
+    error = StandardError.new
+    Travis::Hub::ErrorReporter.enqueue(error)
+    reporter.queue.pop.should == error
+  end
 end
