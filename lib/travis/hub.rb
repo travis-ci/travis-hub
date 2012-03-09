@@ -22,9 +22,7 @@ module Travis
     class << self
       def start
         setup
-        start_error_reporter
         prune_workers
-        Hubble.setup
         new.subscribe
       end
 
@@ -42,6 +40,8 @@ module Travis
           Database.connect
           Travis::Mailer.setup
           Monitoring.start
+          Hubble.setup
+          Travis::Hub::ErrorReporter.new.run
           Travis.logger.level = Logger::INFO
         end
 
@@ -125,7 +125,7 @@ module Travis
         end
 
         def notify_error(exception)
-          Hubble.report(e)
+          Travis::Hub::ErrorReporter.enqueue(exception)
         end
     end
   end
