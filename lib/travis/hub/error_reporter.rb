@@ -21,6 +21,7 @@ module Travis
         begin
           error = queue.pop
           Hubble.report(error)
+          Travis.logger.error("Hub error: #{error.message}")
         rescue => e
           puts "Error handling error: #{e.message}"
         end
