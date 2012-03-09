@@ -3,11 +3,12 @@ require 'hashr'
 require 'benchmark'
 require 'metriks'
 require 'core_ext/module/include'
-# require 'airbrake'
+require 'hubble'
 require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
 require 'travis/hub/instrumentation'
+require 'travis/hub/error_reporter'
 
 $stdout.sync = true
 
@@ -21,8 +22,9 @@ module Travis
     class << self
       def start
         setup
+        start_error_reporter
         prune_workers
-        # cleanup_jobs
+        Hubble.setup
         new.subscribe
       end
 
@@ -37,7 +39,6 @@ module Travis
       protected
 
         def setup
-          # Airbrake.configure { |config| config.api_key = Travis.config.airbrake.key }
           Database.connect
           Travis::Mailer.setup
           Monitoring.start
@@ -94,8 +95,7 @@ module Travis
       rescue Exception => e
         puts e.message, e.backtrace
         message.ack
-        # notify_airbrake(e)
-        # message.reject(:requeue => false) # how to decide whether to requeue the message?
+        notify_error(e)
       end
 
       protected
@@ -124,13 +124,9 @@ module Travis
           nil
         end
 
-        # def notify_airbrake(exception)
-        #   unless ['test', 'development'].include?(Travis.config.env)
-        #     Airbrake.notify(exception)
-        #   end
-        # rescue Exception => e
-        #   puts e.message, e.backtrace
-        # end
+        def notify_error(exception)
+          Hubble.report(e)
+        end
     end
   end
 end

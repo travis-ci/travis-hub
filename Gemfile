@@ -12,6 +12,7 @@ gem 'activerecord-jdbc-adapter',           '1.2.2'
 gem 'airbrake'
 gem 'metriks',              :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
 
+gem 'hubble',               :git => 'git://github.com/mattmatt/hubble.git'
 
 gem 'newrelic_rpm',         '~> 3.3.2'
 
