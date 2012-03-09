@@ -16,7 +16,7 @@ describe Travis::Hub::ErrorReporter do
   it "should report an error when something is on the queue" do
     Hubble.expects(:report)
     reporter.queue.push(StandardError.new)
-    reporter.run
+    reporter.pop
   end
 
   it "should not raise an error when pop fails" do
