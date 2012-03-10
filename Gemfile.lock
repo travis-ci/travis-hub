@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 5cc93a703ddf9275bbcfa66c808a7afdd55b9ab0
+  revision: a073badfd7018e532e502792a065924cf68539b0
   specs:
     travis-support (0.0.1)
 
@@ -192,7 +192,7 @@ GEM
     tzinfo (0.3.32)
     warden (1.1.1)
       rack (>= 1.0)
-    webmock (1.8.0)
+    webmock (1.8.2)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
 
