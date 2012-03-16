@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: d102cb42557cef23194290601e688a38ef5b3a61
+  revision: 79ee112964d3a05db2fb2ee0ba26da2feac794f1
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
@@ -120,7 +120,7 @@ GEM
     multi_json (1.0.4)
     multi_xml (0.4.2)
     multipart-post (1.1.5)
-    newrelic_rpm (3.3.2)
+    newrelic_rpm (3.3.2.1)
     oa-core (0.3.2)
     oa-oauth (0.3.2)
       faraday (~> 0.7.3)
@@ -199,7 +199,7 @@ GEM
     tzinfo (0.3.32)
     warden (1.1.1)
       rack (>= 1.0)
-    webmock (1.8.2)
+    webmock (1.8.3)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
 
