@@ -8,8 +8,9 @@ GIT
       hitimes (~> 1.1)
 
 GIT
-  remote: git://github.com/travis-ci/travis-core.git
-  revision: 79ee112964d3a05db2fb2ee0ba26da2feac794f1
+  remote: git://github.com/travis-ci/travis-core
+  revision: f2bd72b4e18fbef3993fe84c60e7d9a2c27ebb9f
+  ref: magnum
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
@@ -29,12 +30,13 @@ GIT
       thor (~> 0.14.6)
 
 GIT
-  remote: git://github.com/travis-ci/travis-support.git
-  revision: a073badfd7018e532e502792a065924cf68539b0
+  remote: git://github.com/travis-ci/travis-support
+  revision: 474686c452d21a46e503b537ef052405dad76649
   specs:
     travis-support (0.0.1)
 
 GEM
+  remote: http://rubygems.org/
   specs:
     actionmailer (3.2.2)
       actionpack (= 3.2.2)
