@@ -1,3 +1,5 @@
+source :rubygems
+
 # see https://gist.github.com/2063855
 base ||= 'git://github.com/travis-ci'
 type = base[0, 2] == '..' ? :path : :git
