@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 91ea57bae6e3b638b16bfcba7958f711e99e58c4
+  revision: 79ee112964d3a05db2fb2ee0ba26da2feac794f1
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
@@ -35,7 +35,6 @@ GIT
     travis-support (0.0.1)
 
 GEM
-  remote: http://rubygems.org/
   specs:
     actionmailer (3.2.2)
       actionpack (= 3.2.2)
@@ -102,7 +101,7 @@ GEM
     jruby-openssl (0.7.6.1)
       bouncy-castle-java (>= 1.5.0146.1)
     json (1.6.5-java)
-    mail (2.4.3)
+    mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -111,7 +110,7 @@ GEM
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
-    multi_xml (0.4.1)
+    multi_xml (0.4.2)
     multipart-post (1.1.5)
     newrelic_rpm (3.3.2)
     oa-core (0.3.2)
