@@ -16,8 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 4de144dd7968369d6d6884ad18d2645e96888cc3
-  ref: magnum
+  revision: 40c0960d1d04b2f082d87bdf600d53c094c59b2c
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
