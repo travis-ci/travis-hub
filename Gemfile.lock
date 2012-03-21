@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 474686c452d21a46e503b537ef052405dad76649
+  revision: 6023cb08b40d334804c06702293e7c74e0adf4d4
   specs:
     travis-support (0.0.1)
 
@@ -202,8 +202,6 @@ GEM
       rack (>= 1.0)
     webmock (1.8.4)
       addressable (>= 2.2.7)
-      addressable (>= 2.2.7)
-      crack (>= 0.1.7)
       crack (>= 0.1.7)
 
 PLATFORMS
