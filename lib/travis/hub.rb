@@ -42,7 +42,7 @@ module Travis
           Monitoring.start if File.exists?('config/newrelic.yml')
           Hubble.setup
           Travis::Hub::ErrorReporter.new.run
-          Travis.logger.level = Logger::INFO
+          Travis::Amqp.config = Travis.config.amqp
         end
 
         def run_periodically(interval, &block)
@@ -56,10 +56,6 @@ module Travis
     end
 
     include do
-      def initialize
-        Travis::Amqp.config = Travis.config.amqp
-      end
-
       def subscribe
         info 'Subscribing to amqp ...'
 
