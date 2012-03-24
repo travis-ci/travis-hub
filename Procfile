@@ -1,1 +1,1 @@
-hub: thor travis:hub:start -e production
+hub: thor travis:hub:start
