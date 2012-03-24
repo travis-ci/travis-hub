@@ -1,3 +1,4 @@
+.Gemfile*
 config/travis.yml
 play/*
 .gems/*
