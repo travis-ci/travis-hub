@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 5e5ba0cce94f54407ecd89b6f8b7449c4b39a54c
+  revision: 3b253e5e9e4f2aa24d841eca6429329fa7e872ce
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
@@ -80,7 +80,7 @@ GEM
     arel (3.0.2)
     atomic (1.0.0)
     atomic (1.0.0-java)
-    backports (2.3.0)
+    backports (2.4.0)
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
     bouncy-castle-java (1.5.0146.1)
@@ -152,7 +152,7 @@ GEM
     omniauth (1.0.3)
       hashie (~> 1.2)
       rack
-    orm_adapter (0.0.6)
+    orm_adapter (0.0.7)
     polyglot (0.3.3)
     postmark (0.9.10)
     postmark-rails (0.4.1)
