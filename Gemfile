@@ -4,7 +4,7 @@ source :rubygems
 base ||= 'git://github.com/travis-ci'
 type = base[0, 2] == '..' ? :path : :git
 
-gem 'travis-core',     type => "#{base}/travis-core", :require => 'travis/engine'
+gem 'travis-core',     type => "#{base}/travis-core", :require => 'travis/engine', :ref => 'rollout'
 gem 'travis-support',  type => "#{base}/travis-support"
 
 gem 'hot_bunnies',          '~> 1.3.4'
@@ -17,6 +17,7 @@ gem 'gh'
 gem 'metriks',              :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
 gem 'hubble',               :git => 'git://github.com/mattmatt/hubble.git'
 gem 'newrelic_rpm',         '~> 3.3.2'
+gem 'rollout'
 
 group :test do
   gem 'rspec',              '~> 2.7.0'

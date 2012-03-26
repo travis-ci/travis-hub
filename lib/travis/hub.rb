@@ -39,6 +39,7 @@ module Travis
         def setup
           Database.connect
           Travis::Mailer.setup
+          Travis::Features.start
           Monitoring.start if File.exists?('config/newrelic.yml')
           Hubble.setup
           Travis::Hub::ErrorReporter.new.run
