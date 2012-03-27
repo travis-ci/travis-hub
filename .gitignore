@@ -4,3 +4,4 @@ play/*
 .gems/*
 *.class
 .rbenv-version
+.rbenv-gemsets
