@@ -1,5 +1,10 @@
 source :rubygems
 
+# see https://github.com/jruby/jruby/commit/71bcb3941dcfe0e0d0217921b06ec66a421f2288
+if defined?(JRUBY_VERSION) and defined?(YAML::Yecht)
+  ::Syck = YAML::Yecht
+end
+
 # see https://gist.github.com/2063855
 base ||= 'git://github.com/travis-ci'
 type = base[0, 2] == '..' ? :path : :git
