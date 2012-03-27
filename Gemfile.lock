@@ -23,8 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 54be18005bde63382bcc67b6e4cc12a781c6917e
-  ref: rollout
+  revision: 6bb867e5cff47d5adbc559157cec262a2acda2dd
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
@@ -83,6 +82,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (3.0.2)
+    atomic (1.0.0)
     atomic (1.0.0-java)
     backports (2.5.0)
     bcrypt-ruby (3.0.1-java)
@@ -112,6 +112,7 @@ GEM
     hashie (1.2.0)
     hashr (0.0.19)
     hike (1.2.1)
+    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.3.5-java)
     i18n (0.6.0)
@@ -119,6 +120,7 @@ GEM
     journey (1.0.3)
     jruby-openssl (0.7.6.1)
       bouncy-castle-java (>= 1.5.0146.1)
+    json (1.6.5)
     json (1.6.5-java)
     mail (2.4.4)
       i18n (>= 0.4.0)
