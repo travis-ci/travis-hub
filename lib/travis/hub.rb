@@ -2,6 +2,7 @@ require 'multi_json'
 require 'hashr'
 require 'benchmark'
 require 'metriks'
+require 'metriks/reporter/logger'
 require 'core_ext/module/include'
 require 'hubble'
 require 'travis'
@@ -37,13 +38,18 @@ module Travis
       protected
 
         def setup
+          start_monitoring
           Database.connect
           Travis::Mailer.setup
           Travis::Features.start
-          Monitoring.start if File.exists?('config/newrelic.yml')
+          Travis::Amqp.config = Travis.config.amqp
+        end
+
+        def start_monitoring
           Hubble.setup
           Travis::Hub::ErrorReporter.new.run
-          Travis::Amqp.config = Travis.config.amqp
+          Metriks::Reporter::Logger.new.start
+          Monitoring.start if File.exists?('config/newrelic.yml')
         end
 
         def run_periodically(interval, &block)
