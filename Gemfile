@@ -7,8 +7,6 @@ gem 'gh'
 gem 'metriks',            :git => 'git://github.com/mattmatt/metriks.git', :ref => 'source'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble.git'
 gem 'newrelic_rpm',       '~> 3.3.2'
-gem 'redis',              '~> 2.2.0'
-gem 'rollout',            :git => 'git://github.com/jamesgolick/rollout', :ref => 'v1.1.0'
 
 platform :jruby do
   gem 'hot_bunnies',      '~> 1.3.4'
