@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/jamesgolick/rollout
+  revision: 3e7312cc018061b1ac6a8aeb9f11bbd0331da889
+  ref: v1.1.0
+  specs:
+    rollout (1.1.0)
+
+GIT
   remote: git://github.com/mattmatt/hubble.git
   revision: 5220415d5542a2868d54f7be9f35fc1d66126b8e
   specs:
@@ -183,7 +190,6 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redis (2.2.2)
-    rollout (1.1.0)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
@@ -229,6 +235,7 @@ DEPENDENCIES
   metriks!
   mocha (~> 0.10.0)
   newrelic_rpm (~> 3.3.2)
+  rollout!
   rspec (~> 2.7.0)
   travis-core!
   travis-support!

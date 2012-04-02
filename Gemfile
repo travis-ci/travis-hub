@@ -8,6 +8,9 @@ gem 'metriks',            :git => 'git://github.com/mattmatt/metriks.git', :ref 
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble.git'
 gem 'newrelic_rpm',       '~> 3.3.2'
 
+# can be removed as soon as we're on jruby 1.6.7 everywhere
+gem 'rollout',            :git => 'git://github.com/jamesgolick/rollout', :ref => 'v1.1.0'
+
 platform :jruby do
   gem 'hot_bunnies',      '~> 1.3.4'
   gem 'jruby-openssl',    '~> 0.7.4'
