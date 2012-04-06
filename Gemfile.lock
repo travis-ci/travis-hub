@@ -23,14 +23,14 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: f4e9581781e04d878eb6ee1cd858c80247362525
+  revision: 93387cf008b3eddaa0d7830bc68c4d1713924fba
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.1)
       activerecord (~> 3.2.1)
       data_migrations (~> 0.0.1)
       devise (~> 1.5.0)
-      gh (~> 0.0.1)
+      gh
       hashr (~> 0.0.19)
       oa-oauth (~> 0.3.2)
       octokit (~> 0.6.5)
@@ -47,7 +47,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 6023cb08b40d334804c06702293e7c74e0adf4d4
+  revision: 107ad8ce2e683211a9980382d70627610c0fb01c
   specs:
     travis-support (0.0.1)
 
@@ -108,12 +108,12 @@ GEM
       rack (~> 1.1)
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
-    gh (0.0.1)
+    gh (0.1.2)
       backports (~> 2.3)
       faraday (~> 0.7)
       multi_json (~> 1.0)
     hashie (1.2.0)
-    hashr (0.0.19)
+    hashr (0.0.20)
     hike (1.2.1)
     hitimes (1.1.1)
     hitimes (1.1.1-java)
@@ -216,7 +216,7 @@ GEM
     tzinfo (0.3.32)
     warden (1.1.1)
       rack (>= 1.0)
-    webmock (1.8.4)
+    webmock (1.8.6)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
 
