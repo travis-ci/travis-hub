@@ -17,7 +17,7 @@ After you have RabbitMQ running, use
 
     ./script/set_rabbitmq_env_up.sh
 
-to create a separate RabbitMQ vhost (travis.development) for travis as well as one user (travis_hub) for Hub.
+to create a separate RabbitMQ vhost (travis.development) for travis as well as one user (`travis_hub`) for Hub.
 You can instead use any other vhost or username but this script matches what's in the example configuration
 filee.
 
