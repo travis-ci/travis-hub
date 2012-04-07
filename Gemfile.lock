@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: ac636afa290f4b908709095d04198874b194e9e5
+  revision: 2803e416fcc73e9bdd39f764eb446c2f118c8259
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: e43f43209c6b45f58e8dee4dc4ae2949a645b479
+  revision: 9f18805837314321d75ac24ca90705fcdb91b855
   specs:
     travis-support (0.0.1)
 
@@ -99,12 +99,12 @@ GEM
       rack (~> 1.1)
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
-    gh (0.2.1)
+    gh (0.2.2)
       backports (~> 2.3)
       faraday (~> 0.7)
       multi_json (~> 1.0)
     hashie (1.2.0)
-    hashr (0.0.20)
+    hashr (0.0.21)
     hike (1.2.1)
     hitimes (1.1.1)
     hitimes (1.1.1-java)
