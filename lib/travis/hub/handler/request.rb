@@ -6,14 +6,14 @@ module Travis
       class Request < Handler
         def handle
           if authenticated?
-            Request.create_from(scm_payload, token)
+            ::Request.create_from(scm_payload, token)
           end
         end
 
         protected
 
           def authenticated?
-            Token.find_by_token(token).user.login == login
+            ::Token.find_by_token(token).user.login == login
           end
 
           def login
@@ -25,7 +25,7 @@ module Travis
           end
 
           def scm_payload
-            MultiJson.decode(payload[:credentials][:request])
+            MultiJson.decode(payload[:request])
           end
       end
     end
