@@ -6,7 +6,6 @@ RSpec.configure do |c|
 end
 
 require 'support/payloads'
-require 'support/matchers'
 
 require 'travis/hub'
 require 'travis/support'
