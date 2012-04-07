@@ -3,8 +3,9 @@ require 'hashr'
 module Travis
   class Hub
     class Handler
-      autoload :Job,    'travis/hub/handler/job'
-      autoload :Worker, 'travis/hub/handler/worker'
+      autoload :Job,     'travis/hub/handler/job'
+      autoload :Request, 'travis/hub/handler/request'
+      autoload :Worker,  'travis/hub/handler/worker'
 
       class << self
         def for(event, payload)
@@ -13,6 +14,8 @@ module Travis
             Handler::Job.new(event, payload)
           when /^worker/
             Handler::Worker.new(event, payload)
+          when /^request/
+            Handler::Request.new(event, payload)
           else
             raise "Unknown message type: #{event.inspect}"
           end
