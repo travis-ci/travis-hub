@@ -72,8 +72,9 @@ module Travis
       end
 
       def subscribe_to_build_requests
-        info "Subscribing to builds.requests"
-        Travis::Amqp::Consumer.new('builds.requests').subscribe(:ack => true, &method(:receive))
+        queue = "builds.requests"
+        info "Subscribing to #{queue}"
+        Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
       end
 
       def subscribe_to_reporting
@@ -130,8 +131,9 @@ module Travis
 
         def decode(payload)
           MultiJson.decode(payload)
-        rescue
-          nil
+        rescue StandardError => e
+          debug "[decode error] payload could not be decoded : #{payload}"
+          debug e.inspect
         end
 
         def notify_error(exception)
