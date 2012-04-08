@@ -13,7 +13,7 @@ describe Travis::Hub::Handler::Request do
       :request => GITHUB_PAYLOADS['gem-release']
     }
   end
-  let(:github_request) { MultiJson.decode(payload[:request]) }
+  let(:github_request) { GITHUB_PAYLOADS['gem-release'] }
 
   describe '#handle' do
     describe 'authorized' do

@@ -7,6 +7,7 @@ module Travis
         def handle
           if authenticated?
             debug "Creating Request with payload #{scm_payload.inspect}"
+            puts scm_payload.inspect
             ::Request.create_from(scm_payload, token)
           end
         end
@@ -27,7 +28,7 @@ module Travis
           end
 
           def scm_payload
-            MultiJson.decode(payload[:request])
+            payload[:request]
           end
       end
     end
