@@ -71,10 +71,12 @@ module Travis
       end
 
       def subscribe_to_reporting
-        queue_names  = Travis.config.queues.map { |queue| queue[:queue] }
-        queue_names += ['builds.common', 'builds.configure', 'builds.requests']
+        queue_names  = ['builds.requests', 'builds.configure', 'builds.common']
+        queue_names += Travis.config.queues.map { |queue| queue[:queue] }
+
 
         queue_names.uniq.each do |name|
+          info "Subscribing to #{name}"
           Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
         end
       end
