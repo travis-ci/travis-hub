@@ -6,6 +6,7 @@ module Travis
       class Request < Handler
         def handle
           if authenticated?
+            debug "Creating Request with payload #{scm_payload.inspect}"
             ::Request.create_from(scm_payload, token)
           end
         end
@@ -13,6 +14,7 @@ module Travis
         protected
 
           def authenticated?
+            debug "Authenticating #{login} with token #{token}"
             ::Token.find_by_token(token).user.login == login
           end
 
