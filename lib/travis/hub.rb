@@ -134,6 +134,7 @@ module Travis
         rescue StandardError => e
           debug "[decode error] payload could not be decoded : #{payload}"
           debug e.inspect
+          nil
         end
 
         def notify_error(exception)
