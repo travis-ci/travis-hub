@@ -132,8 +132,8 @@ module Travis
         def decode(payload)
           MultiJson.decode(payload)
         rescue StandardError => e
-          debug "[decode error] payload could not be decoded : #{payload}"
-          debug e.inspect
+          debug "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+          debug "[#{Thread.current.object_id}] [decode error] #{e.inspect}"
           nil
         end
 
