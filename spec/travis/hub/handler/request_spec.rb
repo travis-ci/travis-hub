@@ -25,6 +25,39 @@ describe Travis::Hub::Handler::Request do
       it "creates a valid request" do
         handler.handle
       end
+
+      it "increments a counter when a request build message is received" do
+        expect {
+          handler.handle
+        }.to change {
+          Metriks.meter('travis.hub.build_requests.received').count
+        }
+      end
+
+      it "increments a counter when a request build message is authenticated" do
+        expect {
+          handler.handle
+        }.to change {
+          Metriks.meter('travis.hub.build_requests.received.authenticated').count
+        }
+      end
+
+      it "increments a counter when a request build message is created" do
+        expect {
+          handler.handle
+        }.to change {
+          Metriks.meter('travis.hub.build_requests.received.created').count
+        }
+      end
+
+      it "increments a counter when a request build message raises an exception" do
+        Request.stubs(:create_from).raises(StandardError)
+        expect {
+          handler.handle rescue nil
+        }.to change {
+          Metriks.meter('travis.hub.build_requests.received.failed').count
+        }
+      end
     end
 
     describe 'not authorized' do
@@ -38,6 +71,22 @@ describe Travis::Hub::Handler::Request do
       it "rejects the request" do
         Request.expects(:create_from).never
         handler.handle
+      end
+
+      it "increments a counter when a request build message is received" do
+        expect {
+          handler.handle
+        }.to change {
+          Metriks.meter('travis.hub.build_requests.received').count
+        }
+      end
+
+      it "does not increment a counter when a request build message is not authenticated" do
+        expect {
+          handler.handle
+        }.not_to change {
+          Metriks.meter('travis.hub.build_requests.authenticated').count
+        }
       end
     end
   end
