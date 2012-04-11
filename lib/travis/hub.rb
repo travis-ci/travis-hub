@@ -66,15 +66,23 @@ module Travis
       def subscribe
         info 'Subscribing to amqp ...'
 
+        subscribe_to_build_requests
         subscribe_to_reporting
         subscribe_to_worker_status
       end
 
+      def subscribe_to_build_requests
+        queue = "builds.requests"
+        info "Subscribing to #{queue}"
+        Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
+      end
+
       def subscribe_to_reporting
-        queue_names  = Travis.config.queues.map { |queue| queue[:queue] }
-        queue_names += ['builds.common', 'builds.configure']
+        queue_names  = ['builds.configure', 'builds.common']
+        queue_names += Travis.config.queues.map { |queue| queue[:queue] }
 
         queue_names.uniq.each do |name|
+          info "Subscribing to #{name}"
           Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
         end
       end
@@ -123,7 +131,8 @@ module Travis
 
         def decode(payload)
           MultiJson.decode(payload)
-        rescue
+        rescue StandardError => e
+          error "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{e.inspect}"
           nil
         end
 
