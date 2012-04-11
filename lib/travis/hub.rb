@@ -71,15 +71,16 @@ module Travis
       def subscribe
         info 'Subscribing to amqp ...'
 
-        subscribe_to_build_requests
+        subscribe_to_build_requests_and_configure_builds
         subscribe_to_reporting
         subscribe_to_worker_status
       end
 
-      def subscribe_to_build_requests
-        queue = "builds.requests"
-        info "Subscribing to #{queue}"
-        Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
+      def subscribe_to_build_requests_and_configure_builds
+        ["builds.requests", "builds.configure"].each do |queue|
+          info "Subscribing to #{queue}"
+          Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
+        end
       end
 
       def subscribe_to_reporting
