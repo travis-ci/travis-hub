@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: a25f590b31b4b7af92a3ffcfc13d5bf05c0653b4
+  revision: a938b67c5f5a44940494b258b84775b0429315df
   specs:
     gh (0.3.0)
       backports (~> 2.3)
@@ -23,7 +23,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 52fb894cd0d4d211b921e58e111a9ccc7f932800
+  revision: ca993a5a7cc022aa7a7f645b8dbd94c6796267e1
+  branch: configure_build_task
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -31,7 +32,6 @@ GIT
       data_migrations (~> 0.0.1)
       gh
       hashr (~> 0.0.19)
-      metriks (~> 0.9.7)
       octokit (~> 0.6.5)
       postmark-rails (~> 0.4.1)
       pusher (~> 0.9.2)
@@ -82,9 +82,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (3.0.2)
-    atomic (1.0.0)
-    atomic (1.0.0-java)
-    avl_tree (1.1.2)
     backports (2.5.1)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
@@ -104,8 +101,6 @@ GEM
     hashie (1.2.0)
     hashr (0.0.21)
     hike (1.2.1)
-    hitimes (1.1.1)
-    hitimes (1.1.1-java)
     hot_bunnies (1.3.7-java)
     i18n (0.6.0)
     jdbc-postgres (9.1.901)
@@ -119,16 +114,12 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     metaclass (0.0.1)
-    metriks (0.9.7.3)
-      atomic (~> 1.0)
-      avl_tree (~> 1.1.2)
-      hitimes (~> 1.1)
     mime-types (1.18)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
     multipart-post (1.1.5)
-    newrelic_rpm (3.3.3)
+    newrelic_rpm (3.3.4.1)
     octokit (0.6.5)
       addressable (~> 2.2.6)
       faraday (~> 0.7.4)
@@ -177,10 +168,10 @@ GEM
     ruby-hmac (0.4.0)
     signature (0.1.2)
       ruby-hmac
-    simple_states (0.1.0.pre2)
+    simple_states (0.1.0.pre3)
       activesupport
       hashr (~> 0.0.10)
-    sprockets (2.1.2)
+    sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)

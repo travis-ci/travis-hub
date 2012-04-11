@@ -3,9 +3,10 @@ require 'hashr'
 module Travis
   class Hub
     class Handler
-      autoload :Job,     'travis/hub/handler/job'
-      autoload :Request, 'travis/hub/handler/request'
-      autoload :Worker,  'travis/hub/handler/worker'
+      autoload :Configure, 'travis/hub/handler/configure'
+      autoload :Job,       'travis/hub/handler/job'
+      autoload :Request,   'travis/hub/handler/request'
+      autoload :Worker,    'travis/hub/handler/worker'
 
       include Logging
 
@@ -18,6 +19,8 @@ module Travis
             Handler::Worker.new(event, payload)
           when /^request/
             Handler::Request.new(event, payload)
+          when /^configure/
+            Handler::Configure.new(event, payload)
           else
             raise "Unknown message type: #{event.inspect}"
           end
