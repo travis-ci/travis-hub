@@ -6,14 +6,14 @@ GIT
     rollout (1.1.0)
 
 GIT
-  remote: git://github.com/mattmatt/hubble.git
+  remote: git://github.com/mattmatt/hubble
   revision: 5220415d5542a2868d54f7be9f35fc1d66126b8e
   specs:
     hubble (0.1.2)
       json (~> 1.6.5)
 
 GIT
-  remote: git://github.com/mattmatt/metriks.git
+  remote: git://github.com/mattmatt/metriks
   revision: 23482212ec6676bfde20dae70760f80778bf6e77
   ref: source
   specs:
@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: ac636afa290f4b908709095d04198874b194e9e5
+  revision: 2803e416fcc73e9bdd39f764eb446c2f118c8259
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: e43f43209c6b45f58e8dee4dc4ae2949a645b479
+  revision: 9f18805837314321d75ac24ca90705fcdb91b855
   specs:
     travis-support (0.0.1)
 
@@ -81,7 +81,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (3.0.2)
-    atomic (1.0.0)
     atomic (1.0.0-java)
     backports (2.5.1)
     bouncy-castle-java (1.5.0146.1)
@@ -99,14 +98,13 @@ GEM
       rack (~> 1.1)
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
-    gh (0.2.1)
+    gh (0.2.2)
       backports (~> 2.3)
       faraday (~> 0.7)
       multi_json (~> 1.0)
     hashie (1.2.0)
-    hashr (0.0.20)
+    hashr (0.0.21)
     hike (1.2.1)
-    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.3.7-java)
     i18n (0.6.0)
@@ -114,7 +112,6 @@ GEM
     journey (1.0.3)
     jruby-openssl (0.7.6.1)
       bouncy-castle-java (>= 1.5.0146.1)
-    json (1.6.6)
     json (1.6.6-java)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -194,7 +191,6 @@ GEM
 
 PLATFORMS
   java
-  ruby
 
 DEPENDENCIES
   activerecord-jdbc-adapter (= 1.2.2)
