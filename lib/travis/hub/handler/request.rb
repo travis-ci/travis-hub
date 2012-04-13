@@ -11,6 +11,8 @@ module Travis
             debug "Creating Request with payload #{request.inspect}"
             ::Request.create_from(type, request, token)
             track_event(:created)
+          else
+            debug "Could not authenticate #{login} with #{token}"
           end
         rescue StandardError => e
           track_event(:failed)
