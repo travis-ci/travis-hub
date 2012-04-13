@@ -22,6 +22,15 @@ GIT
       hitimes (~> 1.1)
 
 GIT
+  remote: git://github.com/rkh/gh
+  revision: 20675e1e035535ece7797462e6187fa7e44c2ff0
+  specs:
+    gh (0.2.4)
+      backports (~> 2.3)
+      faraday (~> 0.7)
+      multi_json (~> 1.0)
+
+GIT
   remote: git://github.com/travis-ci/travis-core
   revision: bc836d867dd27e16548148d27ca508af15e14851
   branch: pull-requests
@@ -100,10 +109,6 @@ GEM
       rack (~> 1.1)
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
-    gh (0.2.4)
-      backports (~> 2.3)
-      faraday (~> 0.7)
-      multi_json (~> 1.0)
     hashie (1.2.0)
     hashr (0.0.21)
     hike (1.2.1)
@@ -201,7 +206,7 @@ DEPENDENCIES
   activerecord-jdbc-adapter (= 1.2.2)
   activerecord-jdbcpostgresql-adapter (= 1.2.2)
   database_cleaner (~> 0.7.1)
-  gh
+  gh!
   hot_bunnies (~> 1.3.4)
   hubble!
   jruby-openssl (~> 0.7.4)
