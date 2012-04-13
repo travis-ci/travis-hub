@@ -21,7 +21,8 @@ module Travis
 
           def authenticated?
             debug "Authenticating #{login} with token #{token}"
-            ::Token.find_by_token(token).user.login == login
+            return unless token = ::Token.find_by_token(token)
+            token.user.login == login
           end
 
           def login
