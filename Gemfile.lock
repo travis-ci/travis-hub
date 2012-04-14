@@ -23,7 +23,8 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: 976e170debbb414541f86058f1a917113040f937
+  revision: 519b583c9271e57ea3076bf23b62a691bda3ce6a
+  branch: printf-debugging
   specs:
     gh (0.2.4)
       backports (~> 2.3)
