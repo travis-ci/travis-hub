@@ -23,16 +23,16 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: 20675e1e035535ece7797462e6187fa7e44c2ff0
+  revision: 07554357c7fc368ce77bc71ee77cc48799310bbe
   specs:
-    gh (0.2.4)
+    gh (0.3.0)
       backports (~> 2.3)
       faraday (~> 0.7)
       multi_json (~> 1.0)
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: bc836d867dd27e16548148d27ca508af15e14851
+  revision: 533a59b19cf0a0ca92507534b66ce0e5c35400b8
   branch: pull-requests
   specs:
     travis-core (0.0.1)
