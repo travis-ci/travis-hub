@@ -4,21 +4,12 @@ describe Travis::Hub::Handler::Request do
   let(:handler) { Travis::Hub::Handler::Request.new(:request, Hashr.new(payload)) }
   let(:user)    { stub('user', :login => 'user') }
   let(:token)   { stub('token', :user => user) }
-  let(:payload) do
-    {
-      :credentials => {
-        :login => "user",
-        :token => "12345"
-      },
-      :request => GITHUB_PAYLOADS['gem-release']
-    }
-  end
-  let(:github_request) { GITHUB_PAYLOADS['gem-release'] }
+  let(:payload) { { :type => 'push', :credentials => { :login => "user", :token => "12345" }, :request => GITHUB_PAYLOADS['gem-release'] } }
 
   describe '#handle' do
     describe 'authorized' do
       before do
-        Request.stubs(:create_from).with(github_request, '12345').returns(true)
+        Request.stubs(:create_from).with('push', GITHUB_PAYLOADS['gem-release'], '12345').returns(true)
         Token.stubs(:find_by_token).with('12345').returns(token)
       end
 
