@@ -3,7 +3,7 @@ source :rubygems
 gem 'travis-core',        :git => "git://github.com/travis-ci/travis-core", :require => 'travis/engine', :branch => 'pull-requests'
 gem 'travis-support',     :git => "git://github.com/travis-ci/travis-support"
 
-gem 'gh',                 :git => 'git://github.com/rkh/gh', :branch => 'printf-debugging'
+gem 'gh',                 :git => 'git://github.com/rkh/gh'
 gem 'metriks',            :git => 'git://github.com/mattmatt/metriks', :ref => 'source'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'
 gem 'newrelic_rpm',       '~> 3.3.2'
