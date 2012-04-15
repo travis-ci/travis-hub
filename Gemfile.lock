@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 64d6720247fd952853f8a9263660d6a3da7ea2ef
+  revision: 5851f2e09b9878b86f3f30eb2d16a60b61cac751
   branch: pull-requests
   specs:
     travis-core (0.0.1)
@@ -91,7 +91,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (3.0.2)
-    atomic (1.0.0)
     atomic (1.0.0-java)
     backports (2.5.1)
     bouncy-castle-java (1.5.0146.1)
@@ -112,7 +111,6 @@ GEM
     hashie (1.2.0)
     hashr (0.0.21)
     hike (1.2.1)
-    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.3.7-java)
     i18n (0.6.0)
@@ -120,7 +118,6 @@ GEM
     journey (1.0.3)
     jruby-openssl (0.7.6.1)
       bouncy-castle-java (>= 1.5.0146.1)
-    json (1.6.6)
     json (1.6.6-java)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -200,7 +197,6 @@ GEM
 
 PLATFORMS
   java
-  ruby
 
 DEPENDENCIES
   activerecord-jdbc-adapter (= 1.2.2)
