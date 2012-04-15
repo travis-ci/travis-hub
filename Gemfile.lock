@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: df02142b063bea7d4e11a06790ce97951691bf32
+  revision: a44b8ced78b0635ffeb6b352cd4cb7332ef094b0
   branch: pull-requests
   specs:
     travis-core (0.0.1)
