@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: d69ae314db9d844ec71e112367eb3cd133d56073
+  revision: 97710ff79db4acc053422803eb3e57181302fd99
   specs:
     gh (0.3.0)
       backports (~> 2.3)
@@ -54,7 +54,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 71a04733264d051ff4475abda40ed74b32788263
+  revision: d978ec91ffb454b4e2529a2f967a15e883e8a6b6
   specs:
     travis-support (0.0.1)
 
