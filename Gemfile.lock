@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 976bb3c96fb522ec4fc41e084903ed809fd7191c
+  revision: 4f6033199a11b85540f2adef26fef5fa03b2de03
   branch: pull-requests
   specs:
     travis-core (0.0.1)
@@ -54,7 +54,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: f1d0925b84689d923b16e38c698abfe88a70ce8d
+  revision: 71a04733264d051ff4475abda40ed74b32788263
   specs:
     travis-support (0.0.1)
 
