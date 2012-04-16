@@ -38,6 +38,11 @@ module Travis
       protected
 
         def setup
+          # TODO ask @rkh about this :)
+          GH::DefaultStack.options[:ssl] = {
+            :ca_path => Travis.config.ssl.ca_file,
+            :ca_file => Travis.config.ssl.ca_file
+          }
           start_monitoring
           Database.connect
           Travis::Mailer.setup

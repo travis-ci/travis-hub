@@ -8,9 +8,11 @@ module Travis
           track_event
           if authenticated?
             track_event(:authenticated)
-            debug "Creating Request with payload #{scm_payload.inspect}"
-            ::Request.create_from(scm_payload, token)
+            debug "Creating Request with payload #{request.inspect}"
+            ::Request.create_from(type, request, token)
             track_event(:created)
+          else
+            debug "Could not authenticate #{login} with #{token}"
           end
         rescue StandardError => e
           track_event(:failed)
@@ -21,18 +23,23 @@ module Travis
 
           def authenticated?
             debug "Authenticating #{login} with token #{token}"
-            ::Token.find_by_token(token).user.login == login
+            token = ::Token.find_by_token(self.token)
+            token and token.user.login == login
           end
 
           def login
             payload[:credentials][:login]
           end
 
+          def type
+            payload[:type]
+          end
+
           def token
             payload[:credentials][:token]
           end
 
-          def scm_payload
+          def request
             payload[:request]
           end
 
