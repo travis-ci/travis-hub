@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: 353d18d32e16e69642f5e1584905344e47ba026b
+  revision: a25f590b31b4b7af92a3ffcfc13d5bf05c0653b4
   specs:
     gh (0.3.0)
       backports (~> 2.3)
