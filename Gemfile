@@ -7,8 +7,12 @@ gem 'gh',                 :git => 'git://github.com/rkh/gh'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'
 gem 'newrelic_rpm',       '~> 3.3.2'
 
-gem 'hot_bunnies',      '~> 1.3.4'
-gem 'jruby-openssl',    '~> 0.7.4'
+# can't be removed yet, even though we're on jruby 1.6.7 everywhere
+# this is due to Invalid gemspec errors
+gem 'rollout',            :git => 'git://github.com/jamesgolick/rollout', :ref => 'v1.1.0'
+
+gem 'hot_bunnies',        '~> 1.3.4'
+gem 'jruby-openssl',      '~> 0.7.4'
 
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.2'
 
