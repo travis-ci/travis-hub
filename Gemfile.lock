@@ -174,7 +174,7 @@ GEM
     ruby-hmac (0.4.0)
     signature (0.1.2)
       ruby-hmac
-    simple_states (0.1.0.pre3)
+    simple_states (0.1.1)
       activesupport
       hashr (~> 0.0.10)
     sprockets (2.1.3)
