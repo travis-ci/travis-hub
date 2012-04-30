@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 0fd1407ea3308c5b56b83368825f6f2b8191d84f
+  revision: b241e3cae75b68809e905d7c4b5b6de585a9361e
   branch: remove-rabl
   specs:
     travis-core (0.0.1)
