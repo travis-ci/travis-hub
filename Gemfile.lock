@@ -82,7 +82,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (3.0.2)
-    atomic (1.0.1)
     atomic (1.0.1-java)
     avl_tree (1.1.2)
     backports (2.5.1)
@@ -104,7 +103,6 @@ GEM
     hashie (1.2.0)
     hashr (0.0.21)
     hike (1.2.1)
-    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.3.7-java)
     i18n (0.6.0)
@@ -112,7 +110,6 @@ GEM
     journey (1.0.3)
     jruby-openssl (0.7.6.1)
       bouncy-castle-java (>= 1.5.0146.1)
-    json (1.6.7)
     json (1.6.7-java)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -193,11 +190,9 @@ GEM
 
 PLATFORMS
   java
-  ruby
 
 DEPENDENCIES
-  activerecord-jdbc-adapter (= 1.2.2)
-  activerecord-jdbcpostgresql-adapter (= 1.2.2)
+  activerecord-jdbcpostgresql-adapter (~> 1.2.2)
   database_cleaner (~> 0.7.1)
   gh!
   hot_bunnies (~> 1.3.4)
