@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 55d4a359566b1ca7a109aae86fb61dd48f5973ab
+  revision: e1c6b3eb9c1dda7bd5a3e172f7616d6ee546dd1f
   branch: asset-host
   specs:
     travis-core (0.0.1)
@@ -46,15 +46,9 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: d978ec91ffb454b4e2529a2f967a15e883e8a6b6
+  revision: 58ccfbd9706f0247fb54e617dbfedc28eef798f2
   specs:
     travis-support (0.0.1)
-
-GIT
-  remote: https://github.com/travis-ci/travis-assets
-  revision: 31ac0ba1304997927714ef7fc750add8aaa37faf
-  specs:
-    travis-assets (0.0.1)
 
 GEM
   remote: http://rubygems.org/
@@ -216,7 +210,6 @@ DEPENDENCIES
   newrelic_rpm (~> 3.3.2)
   rollout!
   rspec (~> 2.7.0)
-  travis-assets!
   travis-core!
   travis-support!
   webmock (~> 1.8.0)

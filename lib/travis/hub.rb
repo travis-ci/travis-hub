@@ -1,12 +1,14 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'hubble'
 require 'metriks'
 require 'metriks/reporter/logger'
+
 require 'core_ext/module/include'
-require 'hubble'
+require 'core_ext/kernel/run_periodically'
+
 require 'travis'
-require 'travis/assets'
 require 'travis/support'
 require 'travis/hub/async'
 require 'travis/hub/instrumentation'
@@ -28,22 +30,17 @@ module Travis
         new.subscribe
       end
 
-      def prune_workers
-        run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
-      end
-
-      def cleanup_jobs
-        run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
-      end
-
       protected
 
         def setup
+          Travis.config.update_periodically
+
           # TODO ask @rkh about this :)
           GH::DefaultStack.options[:ssl] = {
             :ca_path => Travis.config.ssl.ca_file,
             :ca_file => Travis.config.ssl.ca_file
           }
+
           start_monitoring
           Database.connect
           Travis::Mailer.setup
@@ -58,13 +55,12 @@ module Travis
           Monitoring.start if File.exists?('config/newrelic.yml')
         end
 
-        def run_periodically(interval, &block)
-          Thread.new do
-            loop do
-              block.call
-              sleep(interval)
-            end
-          end
+        def prune_workers
+          run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
+        end
+
+        def cleanup_jobs
+          run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
         end
     end
 
