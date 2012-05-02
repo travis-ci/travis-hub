@@ -13,6 +13,7 @@ gem 'rollout',            :git => 'git://github.com/jamesgolick/rollout', :ref =
 
 gem 'hot_bunnies',        '~> 1.3.4'
 gem 'jruby-openssl',      '~> 0.7.4'
+gem 'ruby-debug'
 
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.2'
 
