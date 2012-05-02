@@ -50,6 +50,12 @@ GIT
   specs:
     travis-support (0.0.1)
 
+GIT
+  remote: https://github.com/travis-ci/travis-assets
+  revision: 31ac0ba1304997927714ef7fc750add8aaa37faf
+  specs:
+    travis-assets (0.0.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -89,7 +95,6 @@ GEM
     backports (2.5.1)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
-    columnize (0.3.6)
     crack (0.3.1)
     data_migrations (0.0.1)
       activerecord
@@ -116,8 +121,6 @@ GEM
       bouncy-castle-java (>= 1.5.0146.1)
     json (1.6.7)
     json (1.6.7-java)
-    linecache (0.46)
-      rbx-require-relative (> 0.0.4)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -167,7 +170,6 @@ GEM
       rdoc (~> 3.4)
       thor (~> 0.14.6)
     rake (0.9.2.2)
-    rbx-require-relative (0.0.9)
     rdoc (3.12)
       json (~> 1.4)
     redis (2.2.2)
@@ -179,12 +181,6 @@ GEM
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.7.0)
-    ruby-debug (0.10.4)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.4.0)
-    ruby-debug-base (0.10.4)
-      linecache (>= 0.3)
-    ruby-debug-base (0.10.4-java)
     ruby-hmac (0.4.0)
     signature (0.1.2)
       ruby-hmac
@@ -220,7 +216,7 @@ DEPENDENCIES
   newrelic_rpm (~> 3.3.2)
   rollout!
   rspec (~> 2.7.0)
-  ruby-debug
+  travis-assets!
   travis-core!
   travis-support!
   webmock (~> 1.8.0)

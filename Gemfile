@@ -4,6 +4,9 @@ gem 'travis-core',        :git => "git://github.com/travis-ci/travis-core", :req
 # gem 'travis-core',        :path => "~/Development/projects/travis/travis-core", :branch => 'asset-host'
 gem 'travis-support',     :git => "git://github.com/travis-ci/travis-support"
 
+# TODO figure out a better way to distribute the assets version and remove this
+gem 'travis-assets', :git => 'https://github.com/travis-ci/travis-assets'
+
 gem 'gh',                 :git => 'git://github.com/rkh/gh'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'
 gem 'newrelic_rpm',       '~> 3.3.2'
@@ -14,7 +17,6 @@ gem 'rollout',            :git => 'git://github.com/jamesgolick/rollout', :ref =
 
 gem 'hot_bunnies',        '~> 1.3.4'
 gem 'jruby-openssl',      '~> 0.7.4'
-gem 'ruby-debug'
 
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.2'
 
