@@ -51,7 +51,7 @@ module Travis
         end
 
         def start_monitoring
-          Hubble.setup
+          Hubble.setup if ENV['HUBBLE_ENV']
           Travis::Hub::ErrorReporter.new.run
           Metriks::Reporter::Logger.new.start
           Monitoring.start if File.exists?('config/newrelic.yml')

@@ -1,6 +1,7 @@
 source :rubygems
 
-gem 'travis-core',        :git => "git://github.com/travis-ci/travis-core", :require => 'travis/engine', :branch => 'asset-host'
+# gem 'travis-core',        :git => "git://github.com/travis-ci/travis-core", :require => 'travis/engine', :branch => 'asset-host'
+gem 'travis-core',        :path => "~/Development/projects/travis/travis-core", :branch => 'asset-host'
 gem 'travis-support',     :git => "git://github.com/travis-ci/travis-support"
 
 gem 'gh',                 :git => 'git://github.com/rkh/gh'
