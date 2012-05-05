@@ -23,8 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 1997dd92c23b6ee441f72cba3975f4340d5d3371
-  branch: asset-host
+  revision: 1907d433d7eaa4f16170fe96af527c8de5109f6e
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -120,7 +119,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     metaclass (0.0.1)
-    metriks (0.9.8.1)
+    metriks (0.9.8.3)
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
       hitimes (~> 1.1)
