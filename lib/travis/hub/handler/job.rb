@@ -18,6 +18,8 @@ module Travis
           end
 
           def handle_update
+            # TODO hot compat, remove after migration to result columns
+            payload[:result] = payload.delete(:status) if payload.key?(:status)
             job.update_attributes(payload.to_hash)
           end
 
