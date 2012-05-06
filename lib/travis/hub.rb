@@ -81,7 +81,7 @@ module Travis
       end
 
       def subscribe_to_reporting
-        queue_names  = ['builds.configure', 'builds.common']
+        queue_names  = ['builds.common']
         queue_names += Travis.config.queues.map { |queue| queue[:queue] }
 
         queue_names.uniq.each do |name|
