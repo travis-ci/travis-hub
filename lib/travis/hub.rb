@@ -110,8 +110,7 @@ module Travis
       rescue Exception => e
         puts e.message, e.backtrace
         message.ack
-        # notify_error(Hub::Exception.new(event, payload, e))
-        notify_error(e)
+        notify_error(Hub::Exception.new(event, payload, e))
       end
 
       protected
