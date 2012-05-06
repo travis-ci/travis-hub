@@ -12,14 +12,15 @@ require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
 require 'travis/hub/instrumentation'
-require 'travis/hub/error_reporter'
 
 $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler,    'travis/hub/handler'
-    autoload :Monitoring, 'travis/hub/monitoring'
+    autoload :Handler,       'travis/hub/handler'
+    autoload :ErrorReporter, 'travis/hub/error_reporter'
+    autoload :Exception,     'travis/hub/exception'
+    autoload :Monitoring,    'travis/hub/monitoring'
 
     include Logging
 
@@ -95,11 +96,11 @@ module Travis
       end
 
       def receive(message, payload)
-        debug "[#{Thread.current.object_id}] Handling event #{message.properties.type.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+        event = message.properties.type
+        debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
         with(:benchmarking, :caching) do
           if payload = decode(payload)
-            event = message.properties.type
             handler = Handler.for(event, payload)
             handler.handle
           end
@@ -109,7 +110,7 @@ module Travis
       rescue Exception => e
         puts e.message, e.backtrace
         message.ack
-        notify_error(e)
+        notify_error(Hub::Exception.new(event, payload, e))
       end
 
       protected
