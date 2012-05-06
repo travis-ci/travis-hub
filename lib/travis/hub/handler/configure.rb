@@ -3,6 +3,8 @@ require 'metriks'
 module Travis
   class Hub
     class Handler
+      # Handles configure messages which are queued after a Request has
+      # been accepted and created.
       class Configure < Handler
         def initialize(event, payload)
           super
