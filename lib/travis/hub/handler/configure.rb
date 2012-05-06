@@ -8,7 +8,8 @@ module Travis
       class Configure < Handler
         def initialize(event, payload)
           super
-          self.payload.job = payload.build unless payload.job?
+          # TODO remove once payloads have a job key
+          self.payload.job = self.payload.build unless self.payload.job?
         end
 
         def handle
