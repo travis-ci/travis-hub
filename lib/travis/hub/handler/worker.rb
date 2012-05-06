@@ -1,6 +1,7 @@
 module Travis
   class Hub
     class Handler
+      # Handles worker status events which are sent by the worker heartbeat.
       class Worker < Handler
         def handle
           case event.to_sym

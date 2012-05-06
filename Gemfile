@@ -1,7 +1,7 @@
 source :rubygems
 
-gem 'travis-core',        :git => "git://github.com/travis-ci/travis-core", :require => 'travis/engine'
-gem 'travis-support',     :git => "git://github.com/travis-ci/travis-support"
+gem 'travis-core',        :git => 'git://github.com/travis-ci/travis-core', :require => 'travis/engine', :branch => 'refactoring-sven'
+gem 'travis-support',     :git => 'git://github.com/travis-ci/travis-support'
 
 gem 'gh',                 :git => 'git://github.com/rkh/gh'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'
