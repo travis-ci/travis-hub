@@ -23,8 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 9928fb8a7c2db64de6532eb9c7c65003e7031e01
-  branch: refactoring-sven
+  revision: 68c7610f93e8f87c6af29eb82b333c7dfcae0c95
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
