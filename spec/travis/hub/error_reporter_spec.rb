@@ -3,6 +3,10 @@ require 'spec_helper'
 describe Travis::Hub::ErrorReporter do
   let(:reporter) { Travis::Hub::ErrorReporter.new }
 
+  before :each do
+    Travis::Hub::ErrorReporter.queue = Queue.new
+  end
+
   it "setup a queue" do
     reporter.queue.should be_instance_of(Queue)
   end
