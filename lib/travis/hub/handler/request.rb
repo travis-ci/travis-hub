@@ -4,6 +4,8 @@ module Travis
   class Hub
     class Handler
       class Request < Handler
+        # Handles request messages which are created by the listener
+        # when a github event comes in.
         def handle
           track_event
           if authenticated?

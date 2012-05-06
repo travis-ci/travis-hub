@@ -1,6 +1,8 @@
 module Travis
   class Hub
     class Handler
+      # Handles updates from test jobs running on the worker, i.e. events
+      # like job:test:started, job:test:log and job:test:finished
       class Job < Handler
         def handle
           case event.to_sym
@@ -18,6 +20,8 @@ module Travis
           end
 
           def handle_update
+            # TODO hot compat, remove after migration to result columns
+            payload[:result] = payload.delete(:status) if payload.key?(:status)
             job.update_attributes(payload.to_hash)
           end
 

@@ -1,10 +1,13 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
+require 'hubble'
 require 'metriks'
 require 'metriks/reporter/logger'
+
 require 'core_ext/module/include'
-require 'hubble'
+require 'core_ext/kernel/run_periodically'
+
 require 'travis'
 require 'travis/support'
 require 'travis/hub/async'
@@ -27,22 +30,17 @@ module Travis
         new.subscribe
       end
 
-      def prune_workers
-        run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
-      end
-
-      def cleanup_jobs
-        run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
-      end
-
       protected
 
         def setup
+          Travis.config.update_periodically
+
           # TODO ask @rkh about this :)
           GH::DefaultStack.options[:ssl] = {
             :ca_path => Travis.config.ssl.ca_file,
             :ca_file => Travis.config.ssl.ca_file
           }
+
           start_monitoring
           Database.connect
           Travis::Mailer.setup
@@ -51,19 +49,18 @@ module Travis
         end
 
         def start_monitoring
-          Hubble.setup
+          Hubble.setup if ENV['HUBBLE_ENV']
           Travis::Hub::ErrorReporter.new.run
           Metriks::Reporter::Logger.new.start
           Monitoring.start if File.exists?('config/newrelic.yml')
         end
 
-        def run_periodically(interval, &block)
-          Thread.new do
-            loop do
-              block.call
-              sleep(interval)
-            end
-          end
+        def prune_workers
+          run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
+        end
+
+        def cleanup_jobs
+          run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
         end
     end
 
@@ -84,7 +81,7 @@ module Travis
       end
 
       def subscribe_to_reporting
-        queue_names  = ['builds.configure', 'builds.common']
+        queue_names  = ['builds.common']
         queue_names += Travis.config.queues.map { |queue| queue[:queue] }
 
         queue_names.uniq.each do |name|
