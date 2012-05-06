@@ -1,6 +1,6 @@
 module Travis
   class Hub
-    class Exception
+    class Exception < StandardError
 
       attr_reader :event, :payload, :exception
 
