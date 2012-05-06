@@ -18,8 +18,8 @@ $stdout.sync = true
 module Travis
   class Hub
     autoload :Handler,       'travis/hub/handler'
+    autoload :Error,         'travis/hub/error'
     autoload :ErrorReporter, 'travis/hub/error_reporter'
-    autoload :Exception,     'travis/hub/exception'
     autoload :Monitoring,    'travis/hub/monitoring'
 
     include Logging
@@ -110,7 +110,7 @@ module Travis
       rescue Exception => e
         puts e.message, e.backtrace
         message.ack
-        notify_error(Hub::Exception.new(event, payload, e))
+        notify_error(Hub::Error.new(message.properties, payload, e))
       end
 
       protected
@@ -130,7 +130,7 @@ module Travis
         end
 
         def caching(&block)
-          ActiveRecord::Base.cache(&block)
+          defined?(ActiveRecord) ? ActiveRecord::Base.cache(&block) : block.call
         end
 
         def decode(payload)

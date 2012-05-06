@@ -12,7 +12,7 @@ describe Travis::Hub::ErrorReporter do
     reporter.run
     reporter.thread.join
   end
-  
+
   it "should report an error when something is on the queue" do
     Hubble.expects(:report)
     reporter.queue.push(StandardError.new)
@@ -21,9 +21,7 @@ describe Travis::Hub::ErrorReporter do
 
   it "should not raise an error when pop fails" do
     reporter.queue.expects(:pop).raises(StandardError.new)
-    expect {
-      reporter.pop
-    }.to_not raise_error
+    expect { reporter.pop }.to_not raise_error
   end
 
   it "should allow pushing an error on the queue" do
