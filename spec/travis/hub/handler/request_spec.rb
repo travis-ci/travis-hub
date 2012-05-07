@@ -21,7 +21,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle
         }.to change {
-          Metriks.meter('travis.hub.build_requests.received').count
+          Metriks.meter('travis.hub.build_requests.push.received').count
         }
       end
 
@@ -29,7 +29,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle
         }.to change {
-          Metriks.meter('travis.hub.build_requests.received.authenticated').count
+          Metriks.meter('travis.hub.build_requests.push.received.authenticated').count
         }
       end
 
@@ -37,7 +37,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle
         }.to change {
-          Metriks.meter('travis.hub.build_requests.received.created').count
+          Metriks.meter('travis.hub.build_requests.push.received.created').count
         }
       end
 
@@ -46,7 +46,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle rescue nil
         }.to change {
-          Metriks.meter('travis.hub.build_requests.received.failed').count
+          Metriks.meter('travis.hub.build_requests.push.received.failed').count
         }
       end
 
@@ -73,7 +73,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle
         }.to change {
-          Metriks.meter('travis.hub.build_requests.received').count
+          Metriks.meter('travis.hub.build_requests.push.received').count
         }
       end
 
@@ -81,7 +81,7 @@ describe Travis::Hub::Handler::Request do
         expect {
           handler.handle
         }.not_to change {
-          Metriks.meter('travis.hub.build_requests.authenticated').count
+          Metriks.meter('travis.hub.build_requests.push.authenticated').count
         }
       end
 

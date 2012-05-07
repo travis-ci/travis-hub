@@ -47,7 +47,7 @@ module Travis
           end
 
           def track_event(name = nil)
-            meter_name = 'travis.hub.build_requests.received'
+            meter_name = "travis.hub.build_requests.#{type}.received"
             meter_name = "#{meter_name}.#{name.to_s}" if name
             Metriks.meter(meter_name).mark
           end
