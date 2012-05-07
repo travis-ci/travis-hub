@@ -13,6 +13,7 @@ module Travis
         end
 
         def handle
+          info "[handler/configure] repository=#{payload['repository']['slug']}"
           track_event(:received)
           configure(result)
           track_event(:completed)

@@ -7,6 +7,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
+          info "[handler/request] type=#{type} repository=#{request["repository"]["html_url"]}"
           track_event
           if authenticated?
             track_event(:authenticated)
@@ -14,7 +15,7 @@ module Travis
             ::Request.create_from(type, request, token)
             track_event(:created)
           else
-            debug "Could not authenticate #{login} with #{token}"
+            warn "[handler/request] Could not authenticate #{login} with #{token}"
           end
         rescue StandardError => e
           track_event(:failed)

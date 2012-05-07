@@ -49,6 +49,11 @@ describe Travis::Hub::Handler::Request do
           Metriks.meter('travis.hub.build_requests.received.failed').count
         }
       end
+
+      it "logs an info message" do
+        handler.expects(:info)
+        handler.handle
+      end
     end
 
     describe 'not authorized' do
@@ -78,6 +83,11 @@ describe Travis::Hub::Handler::Request do
         }.not_to change {
           Metriks.meter('travis.hub.build_requests.authenticated').count
         }
+      end
+
+      it "logs a warning" do
+        handler.expects(:warn)
+        handler.handle
       end
     end
   end
