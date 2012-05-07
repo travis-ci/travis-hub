@@ -12,7 +12,7 @@ module Travis
 
       class << self
         def for(event, payload)
-          case extract_event_type(event, payload)
+          case event_type(event, payload)
           when /^request/
             Handler::Request.new(event, payload)
           when /^configure/
@@ -26,8 +26,18 @@ module Travis
           end
         end
 
-        def extract_event_type(event, payload)
-          (event || payload["type"]).to_s
+        def event_type(event, payload)
+          (event || extract_event_from_payload(payload)).to_s
+        end
+
+        def extract_event_from_payload(payload)
+          warn "Had to extract event from payload: #{payload.inspect}"
+          case payload["type"]
+          when "pull_request", "push":
+            "request"
+          else
+            payload["type"]
+          end
         end
       end
 
