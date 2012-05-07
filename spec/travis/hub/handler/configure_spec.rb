@@ -38,6 +38,11 @@ describe Travis::Hub::Handler::Configure do
         job.expects(:update_attributes).with(result)
         subject.handle
       end
+
+      it "logs an info message" do
+        subject.expects(:info)
+        subject.handle
+      end
     end
 
     describe 'failed configure' do

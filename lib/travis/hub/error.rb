@@ -10,7 +10,7 @@ module Travis
       end
 
       def message
-        "env: #{Travis.env}\nmessage: #{event.inspect}\npayload: #{payload.inspect}\n\n#{exception.message}"
+        exception.message
       end
 
       def backtrace

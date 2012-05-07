@@ -33,5 +33,23 @@ describe Travis::Hub::Handler do
         end
       end
     end
+
+    describe "given a configure job" do
+      it "should create a Configure handler" do
+        Travis::Hub::Handler.for('configure', {}).should be_instance_of(Travis::Hub::Handler::Configure)
+      end
+    end
+
+    describe "without an event name" do
+      it "should fetch the type from the payload" do
+        Travis::Hub::Handler.for(nil, {'type' => 'configure'}).should be_instance_of(Travis::Hub::Handler::Configure)
+      end
+
+      describe "for pull and push requests" do
+        it "should fetch a Request handler for pull requests" do
+          Travis::Hub::Handler.for(nil, {'type' => 'pull_request'}).should be_instance_of(Travis::Hub::Handler::Request)
+        end
+      end
+    end
   end
 end

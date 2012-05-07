@@ -4,7 +4,7 @@ require 'benchmark'
 require 'hubble'
 require 'metriks'
 require 'metriks/reporter/logger'
-
+require 'active_support/core_ext/float/rounding.rb'
 require 'core_ext/module/include'
 require 'core_ext/kernel/run_periodically'
 
