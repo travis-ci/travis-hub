@@ -34,6 +34,7 @@ module Travis
         metadata = {}
         metadata["payload"] = error.payload if error.respond_to?(:payload)
         metadata["event"] = error.event if error.respond_to?(:event)
+        metadata["env"] = Travis.env
         metadata
       end
 

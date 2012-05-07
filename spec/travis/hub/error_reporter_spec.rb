@@ -44,4 +44,11 @@ describe Travis::Hub::ErrorReporter do
     reported["payload"].should == {'type' => "pull_request"}.inspect
     reported["event"].should == 'configure'
   end
+
+  it "should add the travis environment to hubble" do
+    exception = StandardError.new
+    reporter.handle(exception)
+    reported = Hubble.backend.reports.first
+    reported["env"].should == Travis.env
+  end
 end
