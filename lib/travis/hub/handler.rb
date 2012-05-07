@@ -12,7 +12,7 @@ module Travis
 
       class << self
         def for(event, payload)
-          case event.to_s
+          case extract_event_type(event, payload)
           when /^request/
             Handler::Request.new(event, payload)
           when /^configure/
@@ -24,6 +24,10 @@ module Travis
           else
             raise "Unknown message type: #{event.inspect}"
           end
+        end
+
+        def extract_event_type(event, payload)
+          (event || payload["type"]).to_s
         end
       end
 
