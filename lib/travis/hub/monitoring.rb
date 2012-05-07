@@ -5,13 +5,23 @@ module Travis
   class Hub
     module Monitoring
       def self.start
-        puts "Starting New Relic with env: #{Travis.config.env}"
+        puts "Starting New Relic with env: #{Travis.env}"
 
         # Add controller instrumentation to the AMQP message handlers
+        Travis::Hub::Handler::Configure.class_eval do
+          include NewRelic::Agent::Instrumentation::ControllerInstrumentation
+          add_transaction_tracer(:handle)
+        end
+
         Travis::Hub::Handler::Job.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
           add_transaction_tracer(:handle_log_update)
           add_transaction_tracer(:handle_update)
+        end
+
+        Travis::Hub::Handler::Request.class_eval do
+          include NewRelic::Agent::Instrumentation::ControllerInstrumentation
+          add_transaction_tracer(:handle)
         end
 
         Travis::Hub::Handler::Worker.class_eval do
