@@ -19,12 +19,15 @@ module Travis
 
       def pop
         begin
-          error = queue.pop
-          Hubble.report(error)
-          Travis.logger.error("Hub error: #{error.message}")
+          handle(queue.pop)
         rescue => e
           puts "Error handling error: #{e.message}"
         end
+      end
+
+      def handle(error)
+        Hubble.report(error)
+        Travis.logger.error("Hub error: #{error.message}")
       end
 
       def self.enqueue(error)
