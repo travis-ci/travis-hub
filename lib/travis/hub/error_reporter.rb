@@ -26,8 +26,15 @@ module Travis
       end
 
       def handle(error)
-        Hubble.report(error)
+        Hubble.report(error, error_metadata(error))
         Travis.logger.error("Hub error: #{error.message}")
+      end
+
+      def error_metadata(error)
+        metadata = {}
+        metadata["payload"] = error.payload if error.respond_to?(:payload)
+        metadata["event"] = error.event if error.respond_to?(:event)
+        metadata
       end
 
       def self.enqueue(error)
