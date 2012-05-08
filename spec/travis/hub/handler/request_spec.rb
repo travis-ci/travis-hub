@@ -10,7 +10,7 @@ describe Travis::Hub::Handler::Request do
     describe 'authorized' do
       before do
         Request.stubs(:create_from).with('push', GITHUB_PAYLOADS['gem-release'], '12345').returns(true)
-        Token.stubs(:find_by_token).with('12345').returns(token)
+        User.expects(:authenticate_by_token).with('user', '12345').returns(user)
       end
 
       it "creates a valid request" do
@@ -18,36 +18,20 @@ describe Travis::Hub::Handler::Request do
       end
 
       it "increments a counter when a request build message is received" do
-        expect {
-          handler.handle
-        }.to change {
-          Metriks.meter('travis.hub.build_requests.push.received').count
-        }
+        expect { handler.handle }.to change { Metriks.meter('travis.hub.build_requests.push.received').count }
       end
 
       it "increments a counter when a request build message is authenticated" do
-        expect {
-          handler.handle
-        }.to change {
-          Metriks.meter('travis.hub.build_requests.push.received.authenticated').count
-        }
+        expect { handler.handle }.to change { Metriks.meter('travis.hub.build_requests.push.received.authenticated').count }
       end
 
       it "increments a counter when a request build message is created" do
-        expect {
-          handler.handle
-        }.to change {
-          Metriks.meter('travis.hub.build_requests.push.received.created').count
-        }
+        expect { handler.handle }.to change { Metriks.meter('travis.hub.build_requests.push.received.created').count }
       end
 
       it "increments a counter when a request build message raises an exception" do
         Request.stubs(:create_from).raises(StandardError)
-        expect {
-          handler.handle rescue nil
-        }.to change {
-          Metriks.meter('travis.hub.build_requests.push.received.failed').count
-        }
+        expect { handler.handle rescue nil }.to change { Metriks.meter('travis.hub.build_requests.push.received.failed').count }
       end
 
       it "logs an info message" do
@@ -61,7 +45,7 @@ describe Travis::Hub::Handler::Request do
       let(:token) { stub('token', :user => user) }
 
       before do
-        Token.stubs(:find_by_token).with('12345').returns(token)
+        User.expects(:authenticate_by_token).with('user', '12345').returns(nil)
       end
 
       it "rejects the request" do
@@ -70,19 +54,11 @@ describe Travis::Hub::Handler::Request do
       end
 
       it "increments a counter when a request build message is received" do
-        expect {
-          handler.handle
-        }.to change {
-          Metriks.meter('travis.hub.build_requests.push.received').count
-        }
+        expect { handler.handle }.to change { Metriks.meter('travis.hub.build_requests.push.received').count }
       end
 
       it "does not increment a counter when a request build message is not authenticated" do
-        expect {
-          handler.handle
-        }.not_to change {
-          Metriks.meter('travis.hub.build_requests.push.authenticated').count
-        }
+        expect { handler.handle }.not_to change { Metriks.meter('travis.hub.build_requests.push.authenticated').count }
       end
 
       it "logs a warning" do

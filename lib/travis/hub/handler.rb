@@ -32,11 +32,11 @@ module Travis
 
         def extract_event_from_payload(payload)
           warn "Had to extract event from payload: #{payload.inspect}"
-          case payload["type"]
-          when "pull_request", "push":
-            "request"
+          case payload['type']
+          when 'pull_request', 'push'
+            'request'
           else
-            payload["type"]
+            payload['type']
           end
         end
       end
