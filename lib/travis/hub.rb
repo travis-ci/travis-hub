@@ -10,8 +10,8 @@ require 'core_ext/kernel/run_periodically'
 
 require 'travis'
 require 'travis/support'
-require 'travis/hub/async'
 require 'travis/hub/instrumentation'
+require 'travis/hub/async'
 
 $stdout.sync = true
 
