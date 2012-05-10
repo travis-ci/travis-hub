@@ -75,7 +75,8 @@ module Travis
       end
 
       def subscribe_to_build_requests_and_configure_builds
-        ["builds.requests", "builds.configure"].each do |queue|
+        # TODO remove the reporting queue once workers have stopped picking up configure jobs
+        ['builds.requests', 'builds.configure', 'reporting.jobs.builds.configure'].each do |queue|
           info "Subscribing to #{queue}"
           Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
         end
