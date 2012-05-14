@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 2a09ee714c635e1676226719f2eb70a5db46bf73
+  revision: 2419fcf987c5886051fda372336eebda8e97e2f0
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -106,7 +106,7 @@ GEM
     guard (1.0.2)
       ffi (>= 0.5.0)
       thor (~> 0.14.6)
-    guard-rspec (0.7.0)
+    guard-rspec (0.7.2)
       guard (>= 0.10.0)
     hashie (1.2.0)
     hashr (0.0.21)
@@ -194,7 +194,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
-    webmock (1.8.6)
+    webmock (1.8.7)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
 
