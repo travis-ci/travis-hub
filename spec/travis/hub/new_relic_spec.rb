@@ -28,7 +28,7 @@ describe Travis::Hub::NewRelic do
     let(:target) { InstrumentableMock }
 
     it 'includes a module that defines the given methods' do
-      methods = target.included_modules.first.instance_methods(false)
+      methods = target.included_modules.first.instance_methods(false).map(&:to_sym)
       methods.should include(:handle)
     end
   end
@@ -48,7 +48,7 @@ describe Travis::Hub::NewRelic do
 
     it 'notifies new relic with the expected payload' do
       instrumentable.handle
-      new_relic.args.should == [{ :name => :handle, :category => :task }]
+      new_relic.args.should == [{ :class_name => 'InstrumentableMock', :name => 'handle', :category => :task }]
     end
   end
 end
