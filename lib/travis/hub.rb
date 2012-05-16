@@ -10,6 +10,8 @@ require 'core_ext/kernel/run_periodically'
 
 require 'travis'
 require 'travis/support'
+
+# Order of inclusion matters: async must be included last
 require 'travis/hub/instrumentation'
 require 'travis/hub/async'
 
@@ -20,7 +22,7 @@ module Travis
     autoload :Handler,       'travis/hub/handler'
     autoload :Error,         'travis/hub/error'
     autoload :ErrorReporter, 'travis/hub/error_reporter'
-    autoload :Monitoring,    'travis/hub/monitoring'
+    autoload :NewRelic,      'travis/hub/new_relic'
 
     include Logging
 
@@ -53,7 +55,7 @@ module Travis
           Hubble.setup if ENV['HUBBLE_ENV']
           Travis::Hub::ErrorReporter.new.run
           Metriks::Reporter::Logger.new.start
-          Monitoring.start if File.exists?('config/newrelic.yml')
+          NewRelic.start if File.exists?('config/newrelic.yml')
         end
 
         def prune_workers
