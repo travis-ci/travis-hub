@@ -10,23 +10,23 @@ module Travis
         # Add controller instrumentation to the AMQP message handlers
         Travis::Hub::Handler::Configure.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:handle)
+          add_transaction_tracer(:handle, :request => nil)
         end
 
         Travis::Hub::Handler::Job.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:handle_log_update)
-          add_transaction_tracer(:handle_update)
+          add_transaction_tracer(:handle_log_update, :request => nil)
+          add_transaction_tracer(:handle_update, :request => nil)
         end
 
         Travis::Hub::Handler::Request.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:handle)
+          add_transaction_tracer(:handle, :request => nil)
         end
 
         Travis::Hub::Handler::Worker.class_eval do
           include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-          add_transaction_tracer(:handle)
+          add_transaction_tracer(:handle, :request => nil)
         end
 
         # Add task instrumentation to the background jobs
