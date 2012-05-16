@@ -9,16 +9,17 @@ module Travis
           include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
         end
 
-        def new_relic
-          @new_relic ||= NewRelicProxy.new
-        end
-
         def add_transaction_tracer(*names)
           options = names.last.is_a?(Hash) ? names.pop : {}
+
           include do
+            def new_relic
+              @new_relic ||= NewRelicProxy.new
+            end
+
             names.each do |name|
               define_method(name) do |*args, &block|
-                new_relic.perform_action_with_newrelic_trace(options.merge(:name => name)) do
+                new_relic.perform_action_with_newrelic_trace(options.merge(:class_name => self.class.name, :name => name.to_s)) do
                   super(*args, &block)
                 end
               end
@@ -65,7 +66,7 @@ module Travis
         end
 
         Travis::Notifications::Handler::Irc.class_eval do
-          include NewRelic::Agent::Instrumentation::ControllerInstrumentation
+          extend Instrumentation
           add_transaction_tracer :send_irc_notifications, :category => :task
         end
 
@@ -84,7 +85,7 @@ module Travis
           add_transaction_tracer :send_webhook, :category => :task
         end
 
-        NewRelic::Agent.manual_start(:env => Travis.env)
+        ::NewRelic::Agent.manual_start(:env => Travis.env)
 
       rescue Exception => e
         puts 'New Relic Agent refused to start!', e.message, e.backtrace
