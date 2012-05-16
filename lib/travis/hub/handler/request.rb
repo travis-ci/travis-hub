@@ -7,7 +7,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          info "[handler/request] type=#{type} repository=#{request['repository']['html_url']}"
+          info "[handler/request] type=#{type} repository=#{_request['repository']['html_url']}"
           track_event
           if authenticate
             track_event(:authenticated)
@@ -28,8 +28,8 @@ module Travis
           end
 
           def create_request
-            debug "Creating Request with payload #{request.inspect}"
-            ::Request.create_from(type, request, token)
+            debug "Creating Request with payload #{_request.inspect}"
+            ::Request.create_from(type, _request, token)
             track_event(:created)
           end
 
@@ -45,7 +45,7 @@ module Travis
             payload[:credentials][:token]
           end
 
-          def request
+          def _request
             payload[:request]
           end
 
