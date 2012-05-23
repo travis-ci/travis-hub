@@ -2,7 +2,7 @@ require 'active_support/notifications'
 require 'metriks'
 
 module Travis
-  module Hub
+  class Hub
     class Metrics
       delegate :subscribe, :to => ActionSupport::Notifications
 

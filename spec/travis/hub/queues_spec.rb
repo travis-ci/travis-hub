@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Travis::Hub do
-  let(:hub)     { Travis::Hub.new }
+describe Travis::Hub::Queues do
+  let(:hub)     { Travis::Hub::Queues.new }
   let(:payload) { '{ "foo": "bar" }' }
   let(:message) { stub('message', :ack => nil, :properties => stub('properties', :type => 'request') ) } # TODO what are the real event types?
   let(:handler) { stub('handler', :handle => nil) }
