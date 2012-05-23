@@ -23,6 +23,7 @@ module Travis
     autoload :Error,         'travis/hub/error'
     autoload :ErrorReporter, 'travis/hub/error_reporter'
     autoload :NewRelic,      'travis/hub/new_relic'
+    autoload :Metrics,       'travis/hub/metrics'
 
     include Logging
 
@@ -38,7 +39,6 @@ module Travis
         def setup
           Travis.config.update_periodically
 
-          # TODO ask @rkh about this :)
           GH::DefaultStack.options[:ssl] = {
             :ca_path => Travis.config.ssl.ca_file,
             :ca_file => Travis.config.ssl.ca_file
@@ -54,6 +54,7 @@ module Travis
         def start_monitoring
           Hubble.setup if ENV['HUBBLE_ENV']
           Travis::Hub::ErrorReporter.new.run
+          Travis::Hub::Metrics.setup_subscriptions
           Metriks::Reporter::Logger.new.start
           NewRelic.start if File.exists?('config/newrelic.yml')
         end
