@@ -13,8 +13,8 @@ Async.class_eval do
 end
 
 unless ENV['ENV'] == 'test'
-  %w(Archive Email Irc Pusher Webhook).each do |name|
-    handler = Travis::Notifications::Handler.const_get(name)
+  Travis.config.notifications.each do |name|
+    handler = Travis::Notifications::Handler.const_get(name.camelize)
     handler.async :notify
   end
 end
