@@ -14,7 +14,7 @@ end
 
 unless ENV['ENV'] == 'test'
   Travis.config.notifications.each do |name|
-    handler = Travis::Notifications::Handler.const_get(name.camelize)
+    handler = Travis::Event::Handler.const_get(name.camelize)
     handler.async :notify
   end
 end

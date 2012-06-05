@@ -20,6 +20,6 @@ RSpec.configure do |c|
 
   c.after :each do
     Travis.config.notifications.clear
-    Travis::Notifications.instance_variable_set(:@subscriptions, nil)
+    Travis::Event.instance_variable_set(:@subscriptions, nil)
   end
 end

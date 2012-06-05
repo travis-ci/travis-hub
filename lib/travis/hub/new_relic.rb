@@ -55,32 +55,32 @@ module Travis
 
         # Add task instrumentation to the notification handlers
         # These will be categorized as "background tasks" on new relic.
-        Travis::Notifications::Handler::Archive.class_eval do
+        Travis::Event::Handler::Archive.class_eval do
           extend Instrumentation
           add_transaction_tracer :archive, :category => :task
         end
 
-        Travis::Notifications::Handler::Email.class_eval do
+        Travis::Event::Handler::Email.class_eval do
           extend Instrumentation
           add_transaction_tracer :send_emails, :category => :task
         end
 
-        Travis::Notifications::Handler::Irc.class_eval do
+        Travis::Event::Handler::Irc.class_eval do
           extend Instrumentation
           add_transaction_tracer :send_irc_notifications, :category => :task
         end
 
-        Travis::Notifications::Handler::Campfire.class_eval do
+        Travis::Event::Handler::Campfire.class_eval do
           extend Instrumentation
           add_transaction_tracer :send_campfire, :category => :task
         end
 
-        Travis::Notifications::Handler::Pusher.class_eval do
+        Travis::Event::Handler::Pusher.class_eval do
           extend Instrumentation
           add_transaction_tracer :send_emails, :category => :task
         end
 
-        Travis::Notifications::Handler::Webhook.class_eval do
+        Travis::Event::Handler::Webhook.class_eval do
           extend Instrumentation
           add_transaction_tracer :send_webhook, :category => :task
         end
