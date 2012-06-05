@@ -1,5 +1,5 @@
 require 'newrelic_rpm'
-require 'travis/notifications'
+require 'travis/event'
 
 module Travis
   class Hub
