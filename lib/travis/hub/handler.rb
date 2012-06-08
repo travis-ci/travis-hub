@@ -9,6 +9,7 @@ module Travis
       autoload :Worker,    'travis/hub/handler/worker'
 
       include Logging
+      extend  Instrumentation, NewRelic
 
       class << self
         def handle(event, payload)
@@ -23,7 +24,7 @@ module Travis
             Handler::Configure.new(event, payload)
           when /^job/
             Handler::Job.new(event, payload)
-          when /^worker/
+          when /^worker:status/
             Handler::Worker.new(event, payload)
           else
             raise "Unknown message type: #{event.inspect}"

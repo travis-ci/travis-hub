@@ -1,12 +1,9 @@
 require 'multi_json'
 require 'hashr'
 require 'benchmark'
-require 'hubble'
-require 'metriks'
-require 'metriks/reporter/logger'
 require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
-require 'core_ext/module/include'
+require 'core_ext/hash/compact'
 
 require 'travis'
 require 'travis/support'
@@ -15,9 +12,8 @@ $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler,  'travis/hub/handler'
-    autoload :Error,    'travis/hub/error'
-    autoload :NewRelic, 'travis/hub/new_relic'
+    autoload :Handler, 'travis/hub/handler'
+    autoload :Error,   'travis/hub/error'
 
     include Logging
 
@@ -35,19 +31,24 @@ module Travis
           Travis.config.update_periodically
 
           Travis::Exceptions::Reporter.start
+          Travis::Instrumentation.setup
+
           Travis::Database.connect
           Travis::Mailer.setup
           Travis::Features.start
           Travis::Amqp.config = Travis.config.amqp
 
           # TODO ask @rkh about this :)
-          GH::DefaultStack.options[:ssl] = {
-            :ca_path => Travis.config.ssl.ca_file,
-            :ca_file => Travis.config.ssl.ca_file
-          }
+          GH::DefaultStack.options[:ssl] = Travis.config.ssl.compact
 
-          Metriks::Reporter::Logger.new.start
-          # NewRelic.start if File.exists?('config/newrelic.yml')
+          NewRelic.start if File.exists?('config/newrelic.yml')
+
+          # unless Travis.env == 'production'
+          #   require 'active_support/notifications'
+          #   ActiveSupport::Notifications.subscribe(/\\.travis$/) do |event, started_at, finished_at, hash, *args|
+          #     Travis.logger.debug "[event: #{event}] #{args.inspect}" unless event =~ /worker/
+          #   end
+          # end
         end
 
         def prune_workers
@@ -62,14 +63,13 @@ module Travis
     def subscribe
       info 'Subscribing to amqp ...'
 
-      ['builds.requests', 'builds.configure'].each do |queue|
+      queues = ['builds.requests', 'builds.configure']
+      queues.each do |queue|
         info "Subscribing to #{queue}"
         Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
       end
 
-      queues = ['builds.common']
-      queues += Travis.config.queues.map { |queue| queue[:queue] }
-
+      queues = ['builds.common'] + Travis.config.queues.map { |queue| queue[:queue] }
       queues.uniq.each do |name|
         info "Subscribing to #{name}"
         Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))

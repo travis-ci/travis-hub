@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: 1c91d4f5eeef7f217296b362c7f99ad860f086d1
+  revision: 692362fcbdec85ad98c43f91e2aed17ae21ebb29
   specs:
     gh (0.6.1)
       addressable
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 15bc4d3101beaae982dbe12e2487c2d957d9e2c8
+  revision: f006738e7d5ececeac3e1ecac72c2930c93bb211
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -46,7 +46,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 6f48b4fe41d6c9e5e5294ba84e56f3a98d932071
+  revision: 005bfcbafc0e4d8885e23adb2ec0979dc3e1fe27
   specs:
     travis-support (0.0.1)
 
@@ -117,7 +117,7 @@ GEM
       bouncy-castle-java (>= 1.5.0146.1)
     json (1.6.7)
     json (1.6.7-java)
-    listen (0.4.3)
+    listen (0.4.4)
       rb-fchange (~> 0.0.5)
       rb-fsevent (~> 0.9.1)
       rb-inotify (~> 0.8.8)
