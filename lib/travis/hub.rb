@@ -4,25 +4,20 @@ require 'benchmark'
 require 'hubble'
 require 'metriks'
 require 'metriks/reporter/logger'
-require 'active_support/core_ext/float/rounding.rb'
-require 'core_ext/module/include'
+require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
+require 'core_ext/module/include'
 
 require 'travis'
 require 'travis/support'
-
-# Order of inclusion matters: async must be included last
-require 'travis/hub/instrumentation'
-require 'travis/hub/async'
 
 $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler,       'travis/hub/handler'
-    autoload :Error,         'travis/hub/error'
-    autoload :ErrorReporter, 'travis/hub/error_reporter'
-    autoload :NewRelic,      'travis/hub/new_relic'
+    autoload :Handler,  'travis/hub/handler'
+    autoload :Error,    'travis/hub/error'
+    autoload :NewRelic, 'travis/hub/new_relic'
 
     include Logging
 
@@ -36,7 +31,14 @@ module Travis
       protected
 
         def setup
+          Travis::Async.enabled = true
           Travis.config.update_periodically
+
+          Travis::Exceptions::Reporter.start
+          Travis::Database.connect
+          Travis::Mailer.setup
+          Travis::Features.start
+          Travis::Amqp.config = Travis.config.amqp
 
           # TODO ask @rkh about this :)
           GH::DefaultStack.options[:ssl] = {
@@ -44,18 +46,8 @@ module Travis
             :ca_file => Travis.config.ssl.ca_file
           }
 
-          start_monitoring
-          Database.connect
-          Travis::Mailer.setup
-          Travis::Features.start
-          Travis::Amqp.config = Travis.config.amqp
-        end
-
-        def start_monitoring
-          Hubble.setup if ENV['HUBBLE_ENV']
-          Travis::Hub::ErrorReporter.new.run
           Metriks::Reporter::Logger.new.start
-          NewRelic.start if File.exists?('config/newrelic.yml')
+          # NewRelic.start if File.exists?('config/newrelic.yml')
         end
 
         def prune_workers
@@ -67,85 +59,65 @@ module Travis
         end
     end
 
-    include do
-      def subscribe
-        info 'Subscribing to amqp ...'
+    def subscribe
+      info 'Subscribing to amqp ...'
 
-        subscribe_to_build_requests_and_configure_builds
-        subscribe_to_reporting
-        subscribe_to_worker_status
+      ['builds.requests', 'builds.configure'].each do |queue|
+        info "Subscribing to #{queue}"
+        Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
       end
 
-      def subscribe_to_build_requests_and_configure_builds
-        # TODO remove the reporting queue once workers have stopped picking up configure jobs
-        ['builds.requests', 'builds.configure', 'reporting.jobs.builds.configure'].each do |queue|
-          info "Subscribing to #{queue}"
-          Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
-        end
+      queues = ['builds.common']
+      queues += Travis.config.queues.map { |queue| queue[:queue] }
+
+      queues.uniq.each do |name|
+        info "Subscribing to #{name}"
+        Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
       end
 
-      def subscribe_to_reporting
-        queue_names  = ['builds.common']
-        queue_names += Travis.config.queues.map { |queue| queue[:queue] }
-
-        queue_names.uniq.each do |name|
-          info "Subscribing to #{name}"
-          Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
-        end
-      end
-
-      def subscribe_to_worker_status
-        Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
-      end
-
-      def receive(message, payload)
-        event = message.properties.type
-        debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
-
-        with(:benchmarking, :caching) do
-          if payload = decode(payload)
-            handler = Handler.for(event, payload)
-            handler.handle
-          end
-        end
-
-        message.ack
-      rescue Exception => e
-        puts e.message, e.backtrace
-        message.ack
-        notify_error(Hub::Error.new(event, payload, e))
-      end
-
-      protected
-
-        def with(*methods, &block)
-          if methods.size > 1
-            head = methods.shift
-            with(*methods) { send(head, &block) }
-          else
-            send(methods.first, &block)
-          end
-        end
-
-        def benchmarking(&block)
-          timing = Benchmark.realtime(&block)
-          debug "[#{Thread.current.object_id}] Completed in #{timing.round(4)} seconds"
-        end
-
-        def caching(&block)
-          defined?(ActiveRecord) ? ActiveRecord::Base.cache(&block) : block.call
-        end
-
-        def decode(payload)
-          MultiJson.decode(payload)
-        rescue StandardError => e
-          error "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{e.inspect}"
-          nil
-        end
-
-        def notify_error(exception)
-          Travis::Hub::ErrorReporter.enqueue(exception)
-        end
+      Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
     end
+
+    def receive(message, payload)
+      event = message.properties.type
+      debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+
+      with(:benchmarking, :caching) do
+        Handler.handle(event, payload) if payload = decode(payload)
+      end
+
+      message.ack
+    rescue Exception => e
+      puts e.message, e.backtrace
+      message.ack
+      Travis::Exceptions.handle(Hub::Error.new(event, payload, e))
+    end
+
+    protected
+
+      def with(*methods, &block)
+        if methods.size > 1
+          head = methods.shift
+          with(*methods) { send(head, &block) }
+        else
+          send(methods.first, &block)
+        end
+      end
+
+      def benchmarking(&block)
+        timing = Benchmark.realtime(&block)
+        debug "[#{Thread.current.object_id}] Completed in #{timing.round(4)} seconds"
+      end
+
+      def caching(&block)
+        defined?(ActiveRecord) ? ActiveRecord::Base.cache(&block) : block.call
+      end
+
+      def decode(payload)
+        MultiJson.decode(payload)
+      rescue StandardError => e
+        error "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{e.inspect}"
+        nil
+      end
   end
 end

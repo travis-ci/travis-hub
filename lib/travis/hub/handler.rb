@@ -11,6 +11,10 @@ module Travis
       include Logging
 
       class << self
+        def handle(event, payload)
+          self.for(event, payload).handle
+        end
+
         def for(event, payload)
           case event_type(event, payload)
           when /^request/

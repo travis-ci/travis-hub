@@ -55,7 +55,7 @@ describe Travis::Hub do
       end
 
       it 'notifies the error reporter' do
-        Travis::Hub::ErrorReporter.expects(:enqueue).with do |exception|
+        Travis::Exceptions::Reporter.expects(:enqueue).with do |exception|
           $stdout = STDOUT
           exception.should be_instance_of(Travis::Hub::Error)
           exception.message.should =~ /message/
