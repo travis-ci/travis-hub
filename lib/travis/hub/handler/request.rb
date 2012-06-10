@@ -27,8 +27,8 @@ module Travis
           # instrument :authenticate, :scope => :type
 
           def create
-            debug "Creating Request with payload #{request.inspect}"
-            ::Request.create_from(type, request, token)
+            debug "Creating Request with payload #{payload.inspect}"
+            ::Request.create_from(type, payload, token)
           end
           # TODO ask mathias
           # instrument :create, :scope => :type
@@ -45,8 +45,8 @@ module Travis
             payload[:credentials][:token]
           end
 
-          def request
-            payload[:request]
+          def payload
+            payload[:request] || payload[:payload] # TODO hot compat. remove :request once listener pushes :payload
           end
       end
     end
