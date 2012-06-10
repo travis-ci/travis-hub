@@ -7,7 +7,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          info "[handler/request] type=#{type} repository=#{request['repository']['html_url']}"
+          info "[handler/request] type=#{type} repository=#{github_payload['repository']['html_url']}"
           if authenticate
             create
           else
@@ -17,21 +17,19 @@ module Travis
         instrument :handle, :scope => :type
         new_relic :handle
 
-        protected
+        private
 
           def authenticate
             debug "Authenticating #{login} with token #{token}"
             Thread.current[:current_user] = User.authenticate_by_token(login, token)
           end
-          # TODO ask mathias
-          # instrument :authenticate, :scope => :type
+          instrument :authenticate, :scope => :type
 
           def create
             debug "Creating Request with payload #{payload.inspect}"
-            ::Request.create_from(type, payload, token)
+            ::Request.create_from(type, github_payload, token)
           end
-          # TODO ask mathias
-          # instrument :create, :scope => :type
+          instrument :create, :scope => :type
 
           def login
             payload[:credentials][:login]
@@ -45,7 +43,7 @@ module Travis
             payload[:credentials][:token]
           end
 
-          def payload
+          def github_payload
             payload[:request] || payload[:payload] # TODO hot compat. remove :request once listener pushes :payload
           end
       end

@@ -38,7 +38,6 @@ module Travis
           Travis::Features.start
           Travis::Amqp.config = Travis.config.amqp
 
-          # TODO ask @rkh about this :)
           GH::DefaultStack.options[:ssl] = Travis.config.ssl.compact
 
           NewRelic.start if File.exists?('config/newrelic.yml')
@@ -63,7 +62,7 @@ module Travis
     def subscribe
       info 'Subscribing to amqp ...'
 
-      queues = ['builds.requests', 'builds.configure']
+      queues = ['builds.requests']
       queues.each do |queue|
         info "Subscribing to #{queue}"
         Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))

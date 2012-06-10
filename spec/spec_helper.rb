@@ -1,9 +1,8 @@
 ENV["RAILS_ENV"] ||= 'test'
 
-require 'support/payloads'
-
 require 'travis/hub'
 require 'travis/support'
+require 'support/payloads'
 require 'stringio'
 require 'mocha'
 
