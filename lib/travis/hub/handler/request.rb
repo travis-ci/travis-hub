@@ -8,7 +8,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          info "[handler/request] type=#{type} repository=#{github_payload['repository']['html_url']}"
+          info "[handler/request] type=#{type} repository=#{github_payload['repository']['url']}"
           if authenticate
             create
           else
@@ -28,9 +28,7 @@ module Travis
 
           def create
             debug "Creating Request with payload #{payload.inspect}"
-            Timeout::timeout(60) do
-              ::Request.create_from(type, github_payload, token)
-            end
+            ::Request.create_from(type, github_payload, token)
           end
           instrument :create, :scope => :type
 

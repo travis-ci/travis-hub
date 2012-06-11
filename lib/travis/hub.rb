@@ -81,12 +81,12 @@ module Travis
       event = message.properties.type
       debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
-      with(:benchmarking, :caching) do
-        Handler.handle(event, payload) if payload = decode(payload)
+      Timeout::timeout(60) do
+        with(:benchmarking, :caching) do
+          Handler.handle(event, payload) if payload = decode(payload)
+        end
       end
 
-    ensure
-      message.ack
     rescue Exception => e
       begin
         puts e.message, e.backtrace
@@ -94,6 +94,9 @@ module Travis
       rescue Exception => e
         puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
       end
+
+    ensure
+      message.ack
     end
 
     protected
