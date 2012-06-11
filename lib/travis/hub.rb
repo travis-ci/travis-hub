@@ -87,9 +87,13 @@ module Travis
 
       message.ack
     rescue Exception => e
-      puts e.message, e.backtrace
-      message.ack
-      Travis::Exceptions.handle(Hub::Error.new(event, payload, e))
+      begin
+        puts e.message, e.backtrace
+        message.ack
+        Travis::Exceptions.handle(Hub::Error.new(event, payload, e))
+      rescue Exception => e
+        puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
+      end
     end
 
     protected
