@@ -85,11 +85,11 @@ module Travis
         Handler.handle(event, payload) if payload = decode(payload)
       end
 
+    ensure
       message.ack
     rescue Exception => e
       begin
         puts e.message, e.backtrace
-        message.ack
         Travis::Exceptions.handle(Hub::Error.new(event, payload, e))
       rescue Exception => e
         puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
