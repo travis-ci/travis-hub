@@ -1,4 +1,5 @@
 require 'metriks'
+require 'timeout'
 
 module Travis
   class Hub
@@ -27,7 +28,9 @@ module Travis
 
           def create
             debug "Creating Request with payload #{payload.inspect}"
-            ::Request.create_from(type, github_payload, token)
+            Timeout::timeout(60) do
+              ::Request.create_from(type, github_payload, token)
+            end
           end
           instrument :create, :scope => :type
 
