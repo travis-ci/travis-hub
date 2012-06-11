@@ -8,7 +8,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          info "[handler/request] type=#{type} repository=#{github_payload['repository']}"
+          info "[handler/request] type=#{type} repository=#{github_payload}"
           if authenticate
             create
           else
