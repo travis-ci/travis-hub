@@ -28,7 +28,7 @@ module Travis
 
           def create
             debug "Creating Request with payload #{payload.inspect}"
-            ::Request.create_from(type, github_payload, token)
+            ::Request.receive(type, github_payload, token)
           end
           instrument :create, :scope => :type
 
