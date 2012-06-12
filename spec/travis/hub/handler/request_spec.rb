@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 
 RSpec::Matchers.define :meter do |meter|
   match do |action|
@@ -7,67 +8,42 @@ RSpec::Matchers.define :meter do |meter|
 end
 
 describe Travis::Hub::Handler::Request do
-  let(:payload) { { :type => 'push', :credentials => { :login => "user", :token => "12345" }, :request => GITHUB_PAYLOADS['gem-release'] } }
+  include Travis::Testing::Stubs
+
+  let(:data)    { JSON.parse(GITHUB_PAYLOADS['gem-release']) }
+  let(:payload) { { :type => 'push', :credentials => { :login => 'svenfuchs', :token => '12345' }, :payload => data } }
   let(:handler) { Travis::Hub::Handler::Request.new(:request, Hashr.new(payload)) }
-  let(:user)    { stub('user', :login => 'user') }
 
   subject { proc { handler.handle } }
 
+  before :each do
+    Request.stubs(:receive)
+  end
+
   describe 'handle' do
+    it 'tries to authenticates the user' do
+      User.expects(:authenticate_by_token).with('svenfuchs', '12345').returns(nil)
+      subject.call
+    end
+
     describe 'given the request can be authorized' do
-      before do
-        User.expects(:authenticate_by_token).with('user', '12345').returns(user)
-        Request.stubs(:create_from).with('push', GITHUB_PAYLOADS['gem-release'], '12345').returns(true)
+      before :each do
+        User.stubs(:authenticate_by_token).returns(user)
       end
 
-      it "creates a valid request" do
-        subject.call
-      end
-
-      # it "increments a counter when a request build message is received" do
-      #   subject.should meter('travis.hub.handler.request.push.handle')
-      # end
-
-      # it "increments a counter when a request build message is authenticated" do
-      #   subject.should meter('travis.hub.build_requests.push.received.authenticated')
-      # end
-
-      # it "increments a counter when a request build message is created" do
-      #   subject.should meter('travis.hub.build_requests.push.received.created')
-      # end
-
-      # it "increments a counter when a request build message raises an exception" do
-      #   Request.stubs(:create_from).raises(StandardError)
-      #   proc { handler.handle rescue nil }.should meter('travis.hub.handler.request.push.handle.failed')
-      # end
-
-      it "logs an info message" do
-        handler.expects(:info)
+      it "creates the request" do
+        Request.expects(:receive).with('push', Hashr.new(data), '12345').returns(true)
         subject.call
       end
     end
 
     describe 'given the request can not be authorized' do
       before do
-        User.expects(:authenticate_by_token).with('user', '12345').returns(nil)
-        Request.stubs(:create_from).never
+        User.stubs(:authenticate_by_token).returns(nil)
       end
 
       it "rejects the request" do
-        Request.expects(:create_from).never
-        subject.call
-      end
-
-      # it "increments a counter when a request build message is received" do
-      #   subject.should meter('travis.hub.build_requests.push.received')
-      # end
-
-      # it "does not increment a counter when a request build message is not authenticated" do
-      #   subject.should_not meter('travis.hub.build_requests.push.authenticated')
-      # end
-
-      it "logs a warning" do
-        handler.expects(:warn)
+        Request.expects(:receive).never
         subject.call
       end
     end

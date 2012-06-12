@@ -32,6 +32,8 @@ module Travis
           end
           instrument :log
           new_relic :log
+
+          Travis::Hub::Instrument::Handler::Job.attach_to(self)
       end
     end
   end

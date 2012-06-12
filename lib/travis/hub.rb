@@ -12,8 +12,9 @@ $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler, 'travis/hub/handler'
-    autoload :Error,   'travis/hub/error'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Instrument, 'travis/hub/instrument'
+    autoload :Error,      'travis/hub/error'
 
     include Logging
 

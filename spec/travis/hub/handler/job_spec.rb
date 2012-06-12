@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Job do
-  let(:handler) { Travis::Hub::Handler::Job.new(:event, Hashr.new(payload)) }
   let(:job)     { stub('job', :update_attributes => nil) }
   let(:payload) { Hashr.new }
+  let(:handler) { Travis::Hub::Handler::Job.new(:event, Hashr.new(payload)) }
 
   before :each do
     handler.stubs(:job).returns(job)
