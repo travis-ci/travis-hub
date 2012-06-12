@@ -1,4 +1,6 @@
-rvm: jruby
+rvm:
+  - jruby
+  - jruby-head
 notifications:
   irc: "irc.freenode.org#travis"
 
