@@ -4,10 +4,10 @@ module Travis
       module Handler
         class Request < Travis::Notification::Instrument
           def handle
-            url = target.github_payload[:repository][:url] rescue '?'
+            url = target.data['repository']['url'] rescue '?'
             publish(
               :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{url}">),
-              :payload => target.github_payload,
+              :data => target.data,
               :type => target.type
             )
           end
@@ -22,7 +22,7 @@ module Travis
         class Job < Travis::Notification::Instrument
           def update
             publish(
-              :msg => %(#{target.class.name}#update for #<Job id="#{target.payload[:id]}">),
+              :msg => %(#{target.class.name}#update for #<Job id="#{target.payload['id']}">),
               :event => target.event,
               :payload => target.payload
             )
@@ -30,7 +30,7 @@ module Travis
 
           def log
             publish(
-              :msg => %(#{target.class.name}#log for #<Job id="#{target.payload[:id]}">),
+              :msg => %(#{target.class.name}#log for #<Job id="#{target.payload['id']}">),
               :event => target.event,
               :payload => target.payload
             )

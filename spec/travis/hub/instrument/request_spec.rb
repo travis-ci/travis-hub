@@ -4,9 +4,9 @@ require 'json'
 describe Travis::Hub::Instrument::Handler::Request do
   include Travis::Testing::Stubs
 
-  let(:payload)   { { :type => 'push', :credentials => { :login => 'svenfuchs', :token => '12345' }, :payload => JSON.parse(GITHUB_PAYLOADS['gem-release']) } }
+  let(:payload)   { { 'type' => 'push', 'credentials' => { 'login' => 'svenfuchs', 'token' => '12345' }, 'payload' => GITHUB_PAYLOADS['gem-release'] } }
   let(:publisher) { Travis::Notification::Publisher::Memory.new }
-  let(:handler)   { Travis::Hub::Handler::Request.new(:request, Hashr.new(payload)) }
+  let(:handler)   { Travis::Hub::Handler::Request.new('request', payload) }
 
   before :each do
     Travis::Notification.publishers.replace([publisher])
@@ -20,7 +20,7 @@ describe Travis::Hub::Instrument::Handler::Request do
       :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release">),
       :result => { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } },
       :type => 'push',
-      :payload => Hashr.new(payload[:payload]),
+      :data => JSON.parse(payload['payload']),
       :uuid => Travis.uuid
     }
   end

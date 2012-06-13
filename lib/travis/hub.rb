@@ -1,5 +1,4 @@
 require 'multi_json'
-require 'hashr'
 require 'benchmark'
 require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'

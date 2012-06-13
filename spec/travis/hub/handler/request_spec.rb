@@ -10,9 +10,8 @@ end
 describe Travis::Hub::Handler::Request do
   include Travis::Testing::Stubs
 
-  let(:data)    { JSON.parse(GITHUB_PAYLOADS['gem-release']) }
-  let(:payload) { { :type => 'push', :credentials => { :login => 'svenfuchs', :token => '12345' }, :payload => data } }
-  let(:handler) { Travis::Hub::Handler::Request.new(:request, Hashr.new(payload)) }
+  let(:payload) { { 'type' => 'push', 'credentials' => { 'login' => 'svenfuchs', 'token' => '12345' }, 'payload' => GITHUB_PAYLOADS['gem-release'] } }
+  let(:handler) { Travis::Hub::Handler::Request.new('request', payload) }
 
   subject { proc { handler.handle } }
 
@@ -32,7 +31,7 @@ describe Travis::Hub::Handler::Request do
       end
 
       it "creates the request" do
-        Request.expects(:receive).with('push', Hashr.new(data), '12345').returns(true)
+        Request.expects(:receive).with('push', JSON.parse(payload['payload']), '12345').returns(true)
         subject.call
       end
     end

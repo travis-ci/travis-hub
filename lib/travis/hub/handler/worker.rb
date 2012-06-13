@@ -13,10 +13,10 @@ module Travis
         protected
 
           def handle_report(report)
-            if worker = worker_by(report.name, report.host)
+            if worker = worker_by(report['name'], report['host'])
               worker.ping(report)
             else
-              ::Worker.create!(report.merge(:last_seen_at => Time.now.utc).to_hash)
+              ::Worker.create!(report.merge('last_seen_at' => Time.now.utc))
             end
           end
 
