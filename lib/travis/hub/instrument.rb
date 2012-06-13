@@ -4,8 +4,9 @@ module Travis
       module Handler
         class Request < Travis::Notification::Instrument
           def handle
+            url = target.github_payload[:repository][:url] rescue '?'
             publish(
-              :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{target.github_payload[:repository][:url]}">),
+              :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{url}">),
               :payload => target.github_payload,
               :type => target.type
             )

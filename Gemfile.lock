@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: ec166e0d1924f0a557f0c79b22da9247c91415d3
+  revision: 14c21869bfbd5e03246edd1ba6e200ea3e14844e
   branch: improve-instrumentation
   specs:
     travis-core (0.0.1)
