@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 76e599d9b1c1d98b1651a27b30ab36370e431dc8
+  revision: 06a968330b413b376f5e20b7494dc4aa4e5e7592
   branch: improve-instrumentation
   specs:
     travis-core (0.0.1)
@@ -47,7 +47,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 03e7269a7623a1c59904d0e958f8dcafc20cd091
+  revision: ce994bf5ba614e1736897bd9566ee84f1bf2ac18
   specs:
     travis-support (0.0.1)
 
