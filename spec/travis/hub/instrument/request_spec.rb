@@ -17,7 +17,7 @@ describe Travis::Hub::Instrument::Handler::Request do
 
   it 'publishes a payload on handle' do
     publisher.events.last.should == {
-      :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release">),
+      :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release"),
       :result => { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } },
       :type => 'push',
       :data => JSON.parse(payload['payload']),

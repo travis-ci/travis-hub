@@ -6,7 +6,7 @@ module Travis
           def handle
             url = target.data['repository']['url'] rescue '?'
             publish(
-              :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{url}">),
+              :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{url}"),
               :data => target.data,
               :type => target.type
             )

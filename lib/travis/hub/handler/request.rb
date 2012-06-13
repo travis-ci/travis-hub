@@ -29,7 +29,7 @@ module Travis
         private
 
           def authenticate
-            Thread.current[:current_user] = User.authenticate_by_token(*credentials.values_at('login', 'token'))
+            Thread.current[:current_user] = User.authenticate_by(credentials)
           end
           instrument :authenticate, :scope => :type
 
