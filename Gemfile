@@ -1,9 +1,7 @@
 source :rubygems
 
-# gem 'travis-core',        :git => 'git://github.com/travis-ci/travis-core'
-# gem 'travis-support',     :git => 'git://github.com/travis-ci/travis-support'
-gem 'travis-core',        :path => '~/Development/projects/travis/travis-core'
-gem 'travis-support',     :path => '~/Development/projects/travis/travis-support'
+gem 'travis-core',        :git => 'git://github.com/travis-ci/travis-core', :branch => 'improve-instrumentation'
+gem 'travis-support',     :git => 'git://github.com/travis-ci/travis-support'
 
 gem 'gh',                 :git => 'git://github.com/rkh/gh'
 gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'

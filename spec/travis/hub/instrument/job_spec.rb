@@ -23,7 +23,8 @@ describe Travis::Hub::Instrument::Handler::Job do
       :msg => 'Travis::Hub::Handler::Job#update for #<Job id="1">',
       :event => :'job:test:started',
       :payload => payload,
-      :result => nil
+      :result => nil,
+      :uuid => Travis.uuid
     }
   end
 
@@ -35,7 +36,8 @@ describe Travis::Hub::Instrument::Handler::Job do
       :msg => 'Travis::Hub::Handler::Job#log for #<Job id="1">',
       :event => :'job:test:log',
       :payload => payload,
-      :result => nil
+      :result => nil,
+      :uuid => Travis.uuid
     }
   end
 end

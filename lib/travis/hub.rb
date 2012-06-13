@@ -80,11 +80,15 @@ module Travis
 
     def receive(message, payload)
       event = message.properties.type
+      # TODO move to instrumentation or remove?
       debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+
+      payload = decode(payload)
+      Travis.uuid = payload.delete('uuid')
 
       Timeout::timeout(60) do
         with(:benchmarking, :caching) do
-          Handler.handle(event, payload) if payload = decode(payload)
+          Handler.handle(event, payload) if payload
         end
       end
 

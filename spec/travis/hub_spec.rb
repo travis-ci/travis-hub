@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Travis::Hub do
   let(:hub)     { Travis::Hub.new }
-  let(:payload) { '{ "foo": "bar" }' }
+  let(:payload) { '{ "foo": "bar", "uuid": "2d931510-d99f-494a-8c67-87feb05e1594" }' }
   let(:message) { stub('message', :ack => nil, :properties => stub('properties', :type => 'request') ) } # TODO what are the real event types?
   let(:handler) { stub('handler', :handle => nil) }
 
@@ -17,6 +17,11 @@ describe Travis::Hub do
   end
 
   describe 'receive' do
+    it 'sets the given uuid to the current thread' do
+      hub.send(:receive, message, payload)
+      Thread.current[:uuid].should == '2d931510-d99f-494a-8c67-87feb05e1594'
+    end
+
     describe 'with no exception being raised' do
       it 'gets a handler for the event type and payload' do
         Travis::Hub::Handler.expects(:for).with('request', { 'foo' => 'bar' }).returns(handler)

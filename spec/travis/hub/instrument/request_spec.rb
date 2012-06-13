@@ -20,14 +20,16 @@ describe Travis::Hub::Instrument::Handler::Request do
       :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release">),
       :result => { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } },
       :type => 'push',
-      :payload => Hashr.new(payload[:payload])
+      :payload => Hashr.new(payload[:payload]),
+      :uuid => Travis.uuid
     }
   end
 
   it 'publishes a payload on authenticate' do
     publisher.events.first.should == {
       :msg => %(Travis::Hub::Handler::Request#authenticate success),
-      :result => { 'user' => { 'id' => 1, 'login' => 'svenfuchs' } }
+      :result => { 'user' => { 'id' => 1, 'login' => 'svenfuchs' } },
+      :uuid => Travis.uuid
     }
   end
 end
