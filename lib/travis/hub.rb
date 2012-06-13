@@ -32,7 +32,7 @@ module Travis
           Travis.config.update_periodically
 
           Travis::Exceptions::Reporter.start
-          Travis::Instrumentation.setup
+          Travis::Notification.setup
 
           Travis::Database.connect
           Travis::Mailer.setup
