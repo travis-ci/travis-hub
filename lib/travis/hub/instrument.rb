@@ -13,7 +13,7 @@ module Travis
 
           def authenticate
             publish(
-              :msg => %(#{target.class.name}#authenticate #{result ? 'success' : 'failed'}),
+              :msg => %(#{target.class.name}#authenticate #{result ? 'success' : 'failed'})
             )
           end
         end
