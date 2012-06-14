@@ -17,11 +17,11 @@ module Travis
         private
 
           def type
-            payload[:type]
+            payload['type']
           end
 
           def user_id
-            payload[:user_id]
+            payload['user_id']
           end
       end
     end
