@@ -38,7 +38,7 @@ module Travis
           Travis::Features.start
           Travis::Amqp.config = Travis.config.amqp
 
-          GH::DefaultStack.options[:ssl] = Travis.config.ssl.compact
+          GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
           NewRelic.start if File.exists?('config/newrelic.yml')
 
