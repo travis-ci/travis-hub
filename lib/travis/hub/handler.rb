@@ -23,6 +23,8 @@ module Travis
             Handler::Job.new(event, payload)
           when /^worker/
             Handler::Worker.new(event, payload)
+          when /^sync/
+            Handler::Sync.new(event, payload)
           else
             raise "Unknown message type: #{event.inspect}"
           end

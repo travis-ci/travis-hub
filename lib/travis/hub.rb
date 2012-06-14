@@ -62,7 +62,7 @@ module Travis
     def subscribe
       info 'Subscribing to amqp ...'
 
-      queues = ['builds.requests']
+      queues = ['builds.requests', 'sync.user']
       queues.each do |queue|
         info "Subscribing to #{queue}"
         Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
