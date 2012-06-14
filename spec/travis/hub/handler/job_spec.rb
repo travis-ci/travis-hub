@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Job do
-  let(:handler) { Travis::Hub::Handler::Job.new(:event, Hashr.new(payload)) }
   let(:job)     { stub('job', :update_attributes => nil) }
-  let(:payload) { Hashr.new }
+  let(:payload) { {} }
+  let(:handler) { Travis::Hub::Handler::Job.new(nil, payload) }
 
   before :each do
     handler.stubs(:job).returns(job)
@@ -12,13 +12,13 @@ describe Travis::Hub::Handler::Job do
   describe '#handle' do
     it 'updates job attributes on job:test:started' do
       job.expects(:update_attributes).with(payload)
-      handler.event = :'job:test:started'
+      handler.event = 'job:test:started'
       handler.handle
     end
 
     it 'appends the log on job:test:log' do
       ::Job::Test.expects(:append_log!)
-      handler.event = :'job:test:log'
+      handler.event = 'job:test:log'
       handler.handle
     end
   end

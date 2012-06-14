@@ -1,5 +1,4 @@
 require 'multi_json'
-require 'hashr'
 require 'benchmark'
 require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
@@ -12,8 +11,9 @@ $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler, 'travis/hub/handler'
-    autoload :Error,   'travis/hub/error'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Instrument, 'travis/hub/instrument'
+    autoload :Error,      'travis/hub/error'
 
     include Logging
 
@@ -31,7 +31,7 @@ module Travis
           Travis.config.update_periodically
 
           Travis::Exceptions::Reporter.start
-          Travis::Instrumentation.setup
+          Travis::Notification.setup
 
           Travis::Database.connect
           Travis::Mailer.setup
@@ -79,11 +79,15 @@ module Travis
 
     def receive(message, payload)
       event = message.properties.type
+      # TODO move to instrumentation or remove?
       debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
+
+      payload = decode(payload)
+      Travis.uuid = payload.delete('uuid')
 
       Timeout::timeout(60) do
         with(:benchmarking, :caching) do
-          Handler.handle(event, payload) if payload = decode(payload)
+          Handler.handle(event, payload) if payload
         end
       end
 
