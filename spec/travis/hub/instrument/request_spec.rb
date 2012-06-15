@@ -11,7 +11,7 @@ describe Travis::Hub::Instrument::Handler::Request do
   before :each do
     Travis::Notification.publishers.replace([publisher])
     Request.stubs(:receive).returns(repository)
-    User.stubs(:authenticate_by_token).returns(user)
+    User.stubs(:authenticate_by).returns(user)
     handler.handle
   end
 
