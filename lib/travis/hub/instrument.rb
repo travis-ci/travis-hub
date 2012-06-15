@@ -19,6 +19,15 @@ module Travis
           end
         end
 
+        class Sync < Travis::Notification::Instrument
+          def handle
+            publish(
+              :msg => %(#{target.class.name}#handle for user_id="#{target.user_id}"),
+              :user_id => target.user_id
+            )
+          end
+        end
+
         class Job < Travis::Notification::Instrument
           def update
             publish(

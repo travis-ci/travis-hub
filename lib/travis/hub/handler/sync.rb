@@ -8,21 +8,17 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          info "[handler/sync] type=#{type} user_id=#{user_id}"
+          info "[handler/sync] user_id=#{user_id}"
           ::User.find(user_id).sync
         end
-        instrument :handle, :scope => :type
+        instrument :handle
         new_relic :handle
 
-        private
+        def user_id
+          payload['user_id']
+        end
 
-          def type
-            payload['type']
-          end
-
-          def user_id
-            payload['user_id']
-          end
+        Travis::Hub::Instrument::Handler::Sync.attach_to(self)
       end
     end
   end
