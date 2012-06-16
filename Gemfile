@@ -24,3 +24,8 @@ group :test do
   gem 'guard'
   gem 'guard-rspec'
 end
+
+group :development, :test do
+  gem 'micro_migrations', :git => 'git://gist.github.com/2087829.git'
+  gem 'data_migrations',  '~> 0.0.1'
+end

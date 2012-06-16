@@ -3,6 +3,7 @@ module Travis
     class Handler
       autoload :Job,     'travis/hub/handler/job'
       autoload :Request, 'travis/hub/handler/request'
+      autoload :Sync,    'travis/hub/handler/sync'
       autoload :Worker,  'travis/hub/handler/worker'
 
       include Logging
@@ -21,6 +22,8 @@ module Travis
             Handler::Job.new(event, payload)
           when /^worker/
             Handler::Worker.new(event, payload)
+          when /^sync/
+            Handler::Sync.new(event, payload)
           else
             raise "Unknown message type: #{event.inspect}"
           end

@@ -1,5 +1,4 @@
 require 'metriks'
-require 'timeout'
 
 module Travis
   class Hub

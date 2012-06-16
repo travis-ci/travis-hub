@@ -21,13 +21,13 @@ describe Travis::Hub::Handler::Request do
 
   describe 'handle' do
     it 'tries to authenticates the user' do
-      User.expects(:authenticate_by_token).with('svenfuchs', '12345').returns(nil)
+      User.expects(:authenticate_by).with('login' => 'svenfuchs', 'token' => '12345').returns(nil)
       subject.call
     end
 
     describe 'given the request can be authorized' do
       before :each do
-        User.stubs(:authenticate_by_token).returns(user)
+        User.stubs(:authenticate_by).returns(user)
       end
 
       it "creates the request" do
@@ -38,7 +38,7 @@ describe Travis::Hub::Handler::Request do
 
     describe 'given the request can not be authorized' do
       before do
-        User.stubs(:authenticate_by_token).returns(nil)
+        User.stubs(:authenticate_by).returns(nil)
       end
 
       it "rejects the request" do
