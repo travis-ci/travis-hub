@@ -16,21 +16,19 @@ describe Travis::Hub::Instrument::Handler::Request do
   end
 
   it 'publishes a payload on handle' do
-    publisher.events.last.should == {
+    event = publisher.events.last
+    event[:result].should == { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } }
+    event[:payload].should == {
       :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release"),
-      :result => { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } },
       :type => 'push',
-      :data => JSON.parse(payload['payload']),
-      :uuid => Travis.uuid
+      :data => JSON.parse(payload['payload'])
     }
   end
 
   it 'publishes a payload on authenticate' do
-    publisher.events.first.should == {
-      :msg => %(Travis::Hub::Handler::Request#authenticate success),
-      :result => { 'user' => { 'id' => 1, 'login' => 'svenfuchs' } },
-      :uuid => Travis.uuid
-    }
+    event = publisher.events.first
+    event[:result].should == { 'user' => { 'id' => 1, 'login' => 'svenfuchs' } }
+    event[:payload][:msg] == %(Travis::Hub::Handler::Request#authenticate success)
   end
 end
 

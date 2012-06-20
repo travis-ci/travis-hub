@@ -7,6 +7,7 @@ describe Travis::Hub::Instrument::Handler::Sync do
   let(:payload)   { { 'user_id' => 1 } }
   let(:publisher) { Travis::Notification::Publisher::Memory.new }
   let(:handler)   { Travis::Hub::Handler::Sync.new('sync', payload) }
+  let(:event)     { publisher.events.last }
 
   before :each do
     Travis::Notification.publishers.replace([publisher])
@@ -17,11 +18,10 @@ describe Travis::Hub::Instrument::Handler::Sync do
   end
 
   it 'publishes a payload on handle' do
-    publisher.events.last.should == {
+    event[:result].should be_true
+    event[:payload].should == {
       :msg => %(Travis::Hub::Handler::Sync#handle for user_id="1"),
-      :user_id => 1,
-      :result => true,
-      :uuid => Travis.uuid
+      :user_id => 1
     }
   end
 end
