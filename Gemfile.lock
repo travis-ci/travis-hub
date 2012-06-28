@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: 0e818555c2c2b6121382722bcfd1caf9e9d1c4ff
+  revision: 9daa2794b8ac826006194c733597f9870c69cc75
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -104,6 +104,7 @@ GEM
     erubis (2.7.0)
     faraday (0.8.1)
       multipart-post (~> 1.1)
+    ffi (1.0.11)
     ffi (1.0.11-java)
     guard (1.2.1)
       listen (>= 0.4.2)
