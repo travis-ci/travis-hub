@@ -4,7 +4,7 @@ gem 'travis-core',        :git => 'git://github.com/travis-ci/travis-core'
 gem 'travis-support',     :git => 'git://github.com/travis-ci/travis-support'
 
 gem 'gh',                 :git => 'git://github.com/rkh/gh'
-gem 'hubble',             :git => 'git://github.com/mattmatt/hubble'
+gem 'hubble',             :git => 'git://github.com/roidrage/hubble'
 gem 'newrelic_rpm',       '~> 3.3.2'
 
 # can't be removed yet, even though we're on jruby 1.6.7 everywhere
