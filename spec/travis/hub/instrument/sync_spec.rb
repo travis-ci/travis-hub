@@ -18,10 +18,10 @@ describe Travis::Hub::Instrument::Handler::Sync do
   end
 
   it 'publishes a payload on handle' do
-    event[:result].should be_true
     event[:payload].should == {
       :msg => %(Travis::Hub::Handler::Sync#handle for user_id="1"),
-      :user_id => 1
+      :user_id => 1,
+      :result => true
     }
   end
 end
