@@ -17,7 +17,6 @@ describe Travis::Hub::Instrument::Handler::Request do
 
   it 'publishes a payload on handle' do
     event = publisher.events.last
-    event[:result].should == { 'repository' => { 'id' => 1, 'slug' => 'svenfuchs/minimal' } }
     event[:payload].should == {
       :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release"),
       :type => 'push',
@@ -27,7 +26,7 @@ describe Travis::Hub::Instrument::Handler::Request do
 
   it 'publishes a payload on authenticate' do
     event = publisher.events.first
-    event[:result].should == { 'user' => { 'id' => 1, 'login' => 'svenfuchs' } }
+    event[:payload][:user].should == { :id => 1, :login => 'svenfuchs' }
     event[:payload][:msg] == %(Travis::Hub::Handler::Request#authenticate success)
   end
 end

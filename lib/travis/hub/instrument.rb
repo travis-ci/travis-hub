@@ -1,6 +1,6 @@
 module Travis
   class Hub
-    module Instrument
+    class Instrument
       module Handler
         class Request < Travis::Notification::Instrument
           def handle
@@ -13,8 +13,9 @@ module Travis
           end
 
           def authenticate
+            user = { :id => result.id, :login => result.login } if result
             publish(
-              :msg => %(#{target.class.name}#authenticate #{result ? 'success' : 'failed'})
+              :user => user, :msg => %(#{target.class.name}#authenticate #{result ? 'success' : 'failed'})
             )
           end
         end
@@ -22,6 +23,7 @@ module Travis
         class Sync < Travis::Notification::Instrument
           def handle
             publish(
+              :result => !!result,
               :msg => %(#{target.class.name}#handle for user_id="#{target.user_id}"),
               :user_id => target.user_id
             )
