@@ -32,8 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: d41e5d8ee190d6bbba000198b9dfd87f9537ef19
-  branch: fix-metriks
+  revision: f7fc748990ad477a83fd02980547d51c0ea290a0
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -54,8 +53,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: c1bfccc3e1aea2e0eaeef15f95e6d06b512f0a64
-  branch: fix-metriks
+  revision: ad079609a4089f243bb500c4df98350478ad292e
   specs:
     travis-support (0.0.1)
 
