@@ -53,7 +53,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: ad079609a4089f243bb500c4df98350478ad292e
+  revision: 193acbc858154b0d86a0ee41d932ca0083933731
   specs:
     travis-support (0.0.1)
 
@@ -90,6 +90,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.8)
     arel (3.0.2)
+    atomic (1.0.1)
     atomic (1.0.1-java)
     avl_tree (1.1.3)
     backports (2.6.1)
@@ -113,6 +114,7 @@ GEM
       guard (>= 1.1)
     hashr (0.0.21)
     hike (1.2.1)
+    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.3.8-java)
     i18n (0.6.0)
@@ -120,6 +122,7 @@ GEM
     journey (1.0.4)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
+    json (1.6.7)
     json (1.6.7-java)
     listen (0.4.7)
       rb-fchange (~> 0.0.5)
