@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Travis::Hub::Handler::Worker do
   let(:worker)  { stub('worker', :update_attributes! => nil) }
-  let(:payload) { [{ :name => 'travis-test-1', :host => 'host', :state => 'ready' }] }
+  let(:payload) { { 'workers' => [{ :name => 'travis-test-1', :host => 'host', :state => 'ready' }] } }
   let(:handler) { Travis::Hub::Handler::Worker.new('worker:status', payload) }
 
   before :each do
@@ -11,7 +11,7 @@ describe Travis::Hub::Handler::Worker do
 
   describe 'handle' do
     it 'updates the worker states and last_seen_at attributes' do
-      worker.expects(:ping).with(payload.first)
+      worker.expects(:ping).with(payload['workers'].first)
       handler.handle
     end
   end
