@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: a4f252e9f4cd717dab330e0f4acb4e4fbec82e5d
+  revision: f01ff0648f35f42ac1844b821930c15974fd9f40
   specs:
     gh (0.7.3)
       addressable
@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: e14d9d007e18b8fb115cb6caf04d4ba5f980442f
+  revision: c04929a7fb634f109bbb9ac07b2f7ff94932ad67
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
