@@ -27,14 +27,15 @@ describe Travis::Hub::Instrument::Handler::Job do
     }
   end
 
-  it 'publishes a payload on log' do
-    handler.event = 'job:test:log'
-    handler.handle
+  # disabled for now cuz it's too spammy
+  # it 'publishes a payload on log' do
+  #   handler.event = 'job:test:log'
+  #   handler.handle
 
-    event[:payload].should == {
-      :msg => 'Travis::Hub::Handler::Job#log for #<Job id="1">',
-      :event => 'job:test:log',
-      :payload => payload
-    }
-  end
+  #   event[:payload].should == {
+  #     :msg => 'Travis::Hub::Handler::Job#log for #<Job id="1">',
+  #     :event => 'job:test:log',
+  #     :payload => payload
+  #   }
+  # end
 end
