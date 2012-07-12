@@ -4,7 +4,9 @@ module Travis
       # Handles worker status events which are sent by the worker heartbeat.
       class Worker < Handler
         def handle
-          reports = payload['workers']
+          # TODO hot compat, remove the next line once all workers send the new payload
+          reports = payload.is_a?(Hash) ? payload['workers'] || payload : payload
+          # reports = payload['workers']
           reports = [reports] if reports.is_a?(Hash)
           reports.each { |report| handle_report(report) }
         end
