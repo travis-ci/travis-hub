@@ -41,13 +41,6 @@ module Travis
           GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
           NewRelic.start if File.exists?('config/newrelic.yml')
-
-          # unless Travis.env == 'production'
-          #   require 'active_support/notifications'
-          #   ActiveSupport::Notifications.subscribe(/\\.travis$/) do |event, started_at, finished_at, hash, *args|
-          #     Travis.logger.debug "[event: #{event}] #{args.inspect}" unless event =~ /worker/
-          #   end
-          # end
         end
 
         def prune_workers
