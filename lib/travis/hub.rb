@@ -3,6 +3,7 @@ require 'benchmark'
 require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
 require 'core_ext/hash/compact'
+require 'core_ext/module/with'
 
 require 'travis'
 require 'travis/support'
@@ -78,10 +79,8 @@ module Travis
       payload = decode(payload)
       Travis.uuid = payload.delete('uuid')
 
-      Timeout::timeout(60) do
-        with(:benchmarking, :caching) do
-          Handler.handle(event, payload) if payload
-        end
+      with(:timeout, :benchmarking, :caching) do
+        Handler.handle(event, payload) if payload
       end
 
     rescue Exception => e
@@ -98,13 +97,8 @@ module Travis
 
     protected
 
-      def with(*methods, &block)
-        if methods.size > 1
-          head = methods.shift
-          with(*methods) { send(head, &block) }
-        else
-          send(methods.first, &block)
-        end
+      def timeout(&block)
+        Timeout::timeout(60, &block)
       end
 
       def benchmarking(&block)
