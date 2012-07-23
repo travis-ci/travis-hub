@@ -116,5 +116,14 @@ module Travis
         error "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{e.inspect}"
         nil
       end
+
+      def with(*methods, &block)
+        if methods.size > 1
+          head = methods.shift
+          with(*methods) { send(head, &block) }
+        else
+          send(methods.first, &block)
+        end
+      end
   end
 end
