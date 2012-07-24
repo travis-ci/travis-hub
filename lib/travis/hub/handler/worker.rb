@@ -16,19 +16,19 @@ module Travis
         protected
 
           def handle_report(report)
-            if worker = worker_by(report['name'], report['host'])
-              worker.ping(report)
-            else
-              ::Worker.create!(report.merge('last_seen_at' => Time.now.utc))
-            end
+            worker = worker_by(report['name'], report['host'])
+            worker ||= ::Worker.create!(report)
+            worker.ping(report)
           end
 
           def worker_by(name, host)
-            workers[[host, name].join(':')].try(:first)
+            workers[[host, name].join(':')]
           end
 
           def workers
-            @workers ||= ::Worker.all.group_by(&:full_name)
+            @workers ||= ::Worker.all.inject({}) do |workers, worker|
+              workers[worker.full_name] = worker
+            end
           end
       end
     end
