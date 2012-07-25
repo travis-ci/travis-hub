@@ -27,7 +27,7 @@ module Travis
 
           def workers
             @workers ||= ::Worker.all.inject({}) do |workers, worker|
-              workers[worker.full_name] = worker
+              workers.merge(worker.full_name => worker)
             end
           end
       end
