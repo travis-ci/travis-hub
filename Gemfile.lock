@@ -32,7 +32,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: f206bbe6d41212bc43142d5f588600fe30d851f8
+  revision: fe2839c61007e6aaa761c3c73b40de13298524fa
+  branch: sf-refactor-worker-heartbeat
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -104,8 +105,7 @@ GEM
     erubis (2.7.0)
     faraday (0.8.1)
       multipart-post (~> 1.1)
-    ffi (1.1.0)
-    ffi (1.1.0-java)
+    ffi (1.1.1-java)
     guard (1.2.3)
       listen (>= 0.4.2)
       thor (>= 0.14.6)

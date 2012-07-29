@@ -21,6 +21,7 @@ module Travis
       def start
         setup
         prune_workers
+        enqueue_jobs
         new.subscribe
       end
 
@@ -47,9 +48,13 @@ module Travis
           run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
         end
 
-        def cleanup_jobs
-          run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
+        def enqueue_jobs
+          run_periodically(Travis.config.jobs.queue.interval) { Job::Queueing.all }
         end
+
+        # def cleanup_jobs
+        #   run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
+        # end
     end
 
     def subscribe

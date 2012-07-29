@@ -8,28 +8,10 @@ module Travis
           reports = payload.is_a?(Hash) ? payload['workers'] || payload : payload
           # reports = payload['workers']
           reports = [reports] if reports.is_a?(Hash)
-          reports.each { |report| handle_report(report) }
+          ::Worker::Status.update(reports)
         end
         instrument :handle
         new_relic :handle
-
-        protected
-
-          def handle_report(report)
-            worker = worker_by(report['name'], report['host'])
-            worker ||= ::Worker.create!(report)
-            worker.ping(report)
-          end
-
-          def worker_by(name, host)
-            workers[[host, name].join(':')]
-          end
-
-          def workers
-            @workers ||= ::Worker.all.inject({}) do |workers, worker|
-              workers.merge(worker.full_name => worker)
-            end
-          end
       end
     end
   end
