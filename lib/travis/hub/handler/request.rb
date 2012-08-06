@@ -16,11 +16,12 @@ module Travis
 
         def data
           # TODO hot compat. remove :request once listener pushes :payload
-          @data ||= MultiJson.decode(payload['request'] || payload['payload'])
+          # TODO why do we get empty requests (without 'request' or 'payload' being set)?
+          @data ||= MultiJson.decode(payload['request'] || payload['payload'] || '{}')
         end
 
         def handle
-          ::Request.receive(type, data, credentials['token']) if authenticate
+          ::Request.receive(type, data, credentials['token']) if authenticate && !data.empty?
         end
         instrument :handle, :scope => :type
         new_relic :handle
