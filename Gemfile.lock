@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh
-  revision: 907f35326579495a54c7ee2b030b6292d2e5d9ef
+  revision: 5b97ab699a45c0dd0876f4db58543d4db1692d65
   specs:
     gh (0.8.0)
       addressable
