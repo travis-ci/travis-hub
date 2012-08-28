@@ -80,7 +80,7 @@ module Travis
       # TODO move to instrumentation or remove?
       debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
-      payload = decode(payload)
+      payload = decode(payload) || raise("no payload for #{event.inspect} (#{message.inspect})")
       Travis.uuid = payload.delete('uuid')
 
       with(:timeout, :benchmarking, :caching) do
