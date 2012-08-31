@@ -49,7 +49,7 @@ module Travis
         end
 
         def enqueue_jobs
-          run_periodically(Travis.config.jobs.queue.interval) { Job::Queueing::All.new.run }
+          run_periodically(Travis.config.queue.interval) { Job::Queueing::All.new.run }
         end
 
         # def cleanup_jobs
