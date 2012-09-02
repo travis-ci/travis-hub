@@ -28,7 +28,9 @@ module Travis
           new_relic :update
 
           def log
-            ::Job::Test.append_log!(payload['id'], payload['log'])
+            # TODO hot compat, remove once workers publish to "reporting.jobs.logs" directly
+            publisher = Travis::Amqp::Publisher.jobs('logs')
+            publisher.publish(:data => payload, :uuid => Travis.uuid)
           end
           instrument :log
           new_relic :log
