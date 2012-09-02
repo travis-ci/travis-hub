@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Job do
-  let(:job)       { stub('job', :update_attributes => nil) }
-  let(:payload)   { {} }
-  let(:handler)   { Travis::Hub::Handler::Job.new(nil, payload) }
-  let(:publisher) { stub('publisher', :publish => nil) }
+  let(:job)     { stub('job', :update_attributes => nil) }
+  let(:payload) { {} }
+  let(:handler) { Travis::Hub::Handler::Job.new(nil, payload) }
 
   before :each do
     handler.stubs(:job).returns(job)
@@ -17,9 +16,8 @@ describe Travis::Hub::Handler::Job do
       handler.handle
     end
 
-    it 're-routes the message to reporting.jobs.logs' do
-      Travis::Amqp::Publisher.expects(:jobs).with('logs').returns(publisher)
-      publisher.expects(:publish).with(:data => {}, :uuid => Travis.uuid)
+    it 'appends the log on job:test:log' do
+      ::Job::Test.expects(:append_log!)
       handler.event = 'job:test:log'
       handler.handle
     end
