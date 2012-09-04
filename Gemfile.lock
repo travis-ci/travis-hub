@@ -53,8 +53,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 506eedb78c22b78d57c368912e26fbcef68a213d
-  branch: sf-reduce-amqp-channels
+  revision: caf090584c265e71eb50caa9d763ac3f7d81c33e
   specs:
     travis-support (0.0.1)
 
