@@ -33,7 +33,7 @@ module Travis
           GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
           Travis.config.update_periodically
-          Travis::Memory.report_periodically
+          Travis::Memory.new(:hub).report_periodically
 
           Travis::Exceptions::Reporter.start
           Travis::Notification.setup
