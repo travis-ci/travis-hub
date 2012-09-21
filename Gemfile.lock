@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/coder
-  revision: de04ad50347c4be4c239190c3ca4030821b232ef
+  revision: 975448fc40d9f1c6429f56ec40b62a0f485d9217
   specs:
     coder (0.0.1)
 
