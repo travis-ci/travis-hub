@@ -31,9 +31,10 @@ GIT
 
 GIT
   remote: git://github.com/roidrage/hubble
-  revision: 5220415d5542a2868d54f7be9f35fc1d66126b8e
+  revision: 8972b940a4f927927d2a4bdb250b3c98c04692a6
   specs:
     hubble (0.1.2)
+      faraday
       json (~> 1.6.5)
 
 GIT
@@ -59,7 +60,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support
-  revision: 268dc0ff74b5a559e06f637e0814af983e60919e
+  revision: a5256ba1eff4432e3a0e23edccde2820ee6fe11a
   specs:
     travis-support (0.0.1)
 
