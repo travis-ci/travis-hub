@@ -3,6 +3,7 @@ require 'benchmark'
 require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
 require 'core_ext/hash/compact'
+require 'coder'
 
 require 'travis'
 require 'travis/support'
