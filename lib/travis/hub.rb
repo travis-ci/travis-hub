@@ -29,7 +29,11 @@ module Travis
 
         def setup
           Travis::Async.enabled = true
+          Travis::Amqp.config = Travis.config.amqp
+          GH::DefaultStack.options[:ssl] = Travis.config.ssl
+
           Travis.config.update_periodically
+          Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
 
           Travis::Exceptions::Reporter.start
           Travis::Notification.setup
@@ -37,9 +41,6 @@ module Travis
           Travis::Database.connect
           Travis::Mailer.setup
           Travis::Features.start
-          Travis::Amqp.config = Travis.config.amqp
-
-          GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
           NewRelic.start if File.exists?('config/newrelic.yml')
         end
@@ -80,7 +81,7 @@ module Travis
       # TODO move to instrumentation or remove?
       debug "[#{Thread.current.object_id}] Handling event #{event.inspect} with payload : #{(payload.size > 160 ? "#{payload[0..160]} ..." : payload)}"
 
-      payload = decode(payload)
+      payload = decode(payload) || raise("no payload for #{event.inspect} (#{message.inspect})")
       Travis.uuid = payload.delete('uuid')
 
       with(:timeout, :benchmarking, :caching) do
