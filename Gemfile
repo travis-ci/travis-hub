@@ -18,6 +18,8 @@ gem 'jruby-openssl',      '~> 0.7.4'
 
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.2'
 
+gem 'coder',              :git => 'git://github.com/rkh/coder'
+
 group :test do
   gem 'rspec',            '~> 2.7.0'
   gem 'database_cleaner', '~> 0.7.1'

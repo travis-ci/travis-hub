@@ -116,7 +116,8 @@ module Travis
       end
 
       def decode(payload)
-        MultiJson.decode(payload)
+        cleaned = Coder.clean(payload)
+        MultiJson.decode(cleaned)
       rescue StandardError => e
         error "[#{Thread.current.object_id}] [decode error] payload could not be decoded with engine #{MultiJson.engine.to_s} : #{e.inspect}"
         nil

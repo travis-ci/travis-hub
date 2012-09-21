@@ -12,6 +12,12 @@ GIT
     rollout (1.1.0)
 
 GIT
+  remote: git://github.com/rkh/coder
+  revision: de04ad50347c4be4c239190c3ca4030821b232ef
+  specs:
+    coder (0.0.1)
+
+GIT
   remote: git://github.com/rkh/gh
   revision: 902165fef4e695165ba4f7af6a378c1ed76ddb87
   specs:
@@ -201,6 +207,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (~> 1.2.2)
+  coder!
   data_migrations (~> 0.0.1)
   database_cleaner (~> 0.7.1)
   gh!
