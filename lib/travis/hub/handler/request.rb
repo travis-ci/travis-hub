@@ -15,9 +15,7 @@ module Travis
         end
 
         def data
-          # TODO hot compat. remove :request once listener pushes :payload
-          # TODO why do we get empty requests (without 'request' or 'payload' being set)?
-          @data ||= MultiJson.decode(payload['request'] || payload['payload'] || '{}')
+          @data ||= MultiJson.decode(payload['payload'])
         end
 
         def handle
