@@ -19,15 +19,15 @@ module Travis
         end
 
         def handle
-          ::Request.receive(type, data, credentials['token']) if authenticate && !data.empty?
+          ::Request.receive(type, data, credentials['token']) if authenticated?
         end
         instrument :handle, :scope => :type
         new_relic :handle
 
         private
 
-          def authenticate
-            Thread.current[:current_user] = User.authenticate_by(credentials)
+          def authenticated?
+            !!User.authenticate_by(credentials)
           end
           instrument :authenticate, :scope => :type
 
