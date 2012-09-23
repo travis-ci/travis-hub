@@ -14,8 +14,10 @@ module Travis
 
           def authenticate_completed
             user = { :id => result.id, :login => result.login } if result
+            login = result ? "for #{result.login} " : ""
+            result_message = result ? 'succeeded' : 'failed'
             publish(
-              :user => user, :msg => %(#{target.class.name}#authenticate #{result ? 'success' : 'failed'})
+              :user => user, :msg => %(#{target.class.name}#authenticate #{login}#{result_message})
             )
           end
         end
