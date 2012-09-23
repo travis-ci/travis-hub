@@ -10,6 +10,7 @@ describe Travis::Hub::Instrument::Handler::Sync do
   let(:events)    { publisher.events }
 
   before :each do
+    Travis::Hub::Instrument::Handler::Sync.any_instance.stubs(:duration).returns(5)
     Travis::Notification.publishers.replace([publisher])
     user = stub(:sync => true)
     User.expects(:find).with(1).returns(user)
@@ -26,7 +27,7 @@ describe Travis::Hub::Instrument::Handler::Sync do
 
   it 'publishes a completed payload on handle' do
     events.last[:payload].should == {
-      :msg => %(Travis::Hub::Handler::Sync#handle completed for user_id="1"),
+      :msg => %(Travis::Hub::Handler::Sync#handle completed for user_id="1" in 5 seconds),
       :user_id => 1,
       :result => true
     }
