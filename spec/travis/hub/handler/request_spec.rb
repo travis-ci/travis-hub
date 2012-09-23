@@ -10,8 +10,9 @@ end
 describe Travis::Hub::Handler::Request do
   include Travis::Testing::Stubs
 
-  let(:payload) { { 'type' => 'push', 'credentials' => { 'login' => 'svenfuchs', 'token' => '12345' }, 'payload' => GITHUB_PAYLOADS['gem-release'] } }
-  let(:handler) { Travis::Hub::Handler::Request.new('request', payload) }
+  let(:user_details) { { 'login' => 'svenfuchs', 'token' => '12345' } }
+  let(:payload)      { { 'type' => 'push', 'credentials' => user_details, 'payload' => GITHUB_PAYLOADS['gem-release'] } }
+  let(:handler)      { Travis::Hub::Handler::Request.new('request', payload) }
 
   subject { proc { handler.handle } }
 
@@ -21,8 +22,7 @@ describe Travis::Hub::Handler::Request do
 
   describe 'handle' do
     it 'tries to authenticates the user' do
-      user_details = { 'login' => 'svenfuchs', 'token' => '12345' }
-      User.expects(:authenticate_by).with(user_details).returns(stubs(user_details))
+      User.expects(:authenticate_by).with(user_details).returns(mock('user', user_details))
       subject.call
     end
 
