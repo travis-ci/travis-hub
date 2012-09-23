@@ -33,7 +33,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core
-  revision: d31f158e6572096a473befb67606c39d2c23f3b4
+  revision: b2ed9fa60b04a2ee6b672cd9089bf31b17d8c54a
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -96,7 +96,7 @@ GEM
     backports (2.6.4)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.3)
-    coder (0.1.0)
+    coder (0.1.2)
     crack (0.3.1)
     data_migrations (0.0.1)
       activerecord
