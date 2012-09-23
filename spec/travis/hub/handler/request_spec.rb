@@ -22,7 +22,7 @@ describe Travis::Hub::Handler::Request do
 
   describe 'handle' do
     it 'tries to authenticates the user' do
-      User.expects(:authenticate_by).with(user_details).returns(mock('user', user_details))
+      User.expects(:authenticate_by).with(user_details).returns(stub(user_details))
       subject.call
     end
 
