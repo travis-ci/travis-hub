@@ -9,16 +9,26 @@ describe Travis::Hub::Instrument::Handler::Request do
   let(:handler)   { Travis::Hub::Handler::Request.new('request', payload) }
 
   before :each do
+    Travis::Hub::Instrument::Handler::Request.any_instance.stubs(:duration).returns(5)
     Travis::Notification.publishers.replace([publisher])
     Request.stubs(:receive).returns(repository)
     User.stubs(:authenticate_by).returns(user)
     handler.handle
   end
 
-  it 'publishes a payload on handle' do
+  it 'publishes a received payload on handle' do
+    event = publisher.events.first
+    event[:payload].should == {
+      :msg => %(Travis::Hub::Handler::Request#handle received for type=push repository="http://github.com/svenfuchs/gem-release"),
+      :type => 'push',
+      :data => JSON.parse(payload['payload'])
+    }
+  end
+
+  it 'publishes a completed payload on handle' do
     event = publisher.events.last
     event[:payload].should == {
-      :msg => %(Travis::Hub::Handler::Request#handle for type=push repository="http://github.com/svenfuchs/gem-release"),
+      :msg => %(Travis::Hub::Handler::Request#handle completed for type=push repository="http://github.com/svenfuchs/gem-release" in 5 seconds),
       :type => 'push',
       :data => JSON.parse(payload['payload'])
     }

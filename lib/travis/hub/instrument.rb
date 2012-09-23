@@ -3,10 +3,19 @@ module Travis
     class Instrument
       module Handler
         class Request < Travis::Notification::Instrument
+          def handle_received
+            url = target.data['repository']['url'] rescue '?'
+            publish(
+              :msg => %(#{target.class.name}#handle received for type=#{target.type} repository="#{url}"),
+              :data => target.data,
+              :type => target.type
+            )
+          end
+
           def handle_completed
             url = target.data['repository']['url'] rescue '?'
             publish(
-              :msg => %(#{target.class.name}#handle for type=#{target.type} repository="#{url}"),
+              :msg => %(#{target.class.name}#handle completed for type=#{target.type} repository="#{url}" in #{duration} seconds),
               :data => target.data,
               :type => target.type
             )
@@ -21,10 +30,17 @@ module Travis
         end
 
         class Sync < Travis::Notification::Instrument
+          def handle_received
+            publish(
+              :msg => %(#{target.class.name}#handle received for user_id="#{target.user_id}"),
+              :user_id => target.user_id
+            )
+          end
+
           def handle_completed
             publish(
               :result => !!result,
-              :msg => %(#{target.class.name}#handle for user_id="#{target.user_id}"),
+              :msg => %(#{target.class.name}#handle completed for user_id="#{target.user_id}" in #{duration} seconds),
               :user_id => target.user_id
             )
           end

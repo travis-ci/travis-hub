@@ -7,9 +7,10 @@ describe Travis::Hub::Instrument::Handler::Sync do
   let(:payload)   { { 'user_id' => 1 } }
   let(:publisher) { Travis::Notification::Publisher::Memory.new }
   let(:handler)   { Travis::Hub::Handler::Sync.new('sync', payload) }
-  let(:event)     { publisher.events.last }
+  let(:events)    { publisher.events }
 
   before :each do
+    Travis::Hub::Instrument::Handler::Sync.any_instance.stubs(:duration).returns(5)
     Travis::Notification.publishers.replace([publisher])
     user = stub(:sync => true)
     User.expects(:find).with(1).returns(user)
@@ -17,9 +18,16 @@ describe Travis::Hub::Instrument::Handler::Sync do
     handler.handle
   end
 
-  it 'publishes a payload on handle' do
-    event[:payload].should == {
-      :msg => %(Travis::Hub::Handler::Sync#handle for user_id="1"),
+  it 'publishes a received payload on handle' do
+    events.first[:payload].should == {
+      :msg => %(Travis::Hub::Handler::Sync#handle received for user_id="1"),
+      :user_id => 1
+    }
+  end
+
+  it 'publishes a completed payload on handle' do
+    events.last[:payload].should == {
+      :msg => %(Travis::Hub::Handler::Sync#handle completed for user_id="1" in 5 seconds),
       :user_id => 1,
       :result => true
     }
