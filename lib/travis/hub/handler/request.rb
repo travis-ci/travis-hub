@@ -27,9 +27,13 @@ module Travis
         private
 
           def authenticated?
-            !!User.authenticate_by(credentials)
+            !!authenticate
           end
-          instrument :authenticated?, :scope => :type
+
+          def authenticate
+            User.authenticate_by(credentials)
+          end
+          instrument :authenticate, :scope => :type
 
           Travis::Hub::Instrument::Handler::Request.attach_to(self)
       end
