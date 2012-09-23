@@ -21,7 +21,8 @@ describe Travis::Hub::Handler::Request do
 
   describe 'handle' do
     it 'tries to authenticates the user' do
-      User.expects(:authenticate_by).with('login' => 'svenfuchs', 'token' => '12345').returns(nil)
+      user_details = { 'login' => 'svenfuchs', 'token' => '12345' }
+      User.expects(:authenticate_by).with(user_details).returns(stubs(user_details))
       subject.call
     end
 
