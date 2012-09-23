@@ -11,7 +11,7 @@ describe Travis::Hub::Handler::Request do
   include Travis::Testing::Stubs
 
   let(:user_details) { { 'login' => 'svenfuchs', 'token' => '12345' } }
-  let(:user)         { stub(user_details) }
+  let(:user)         { stub(user_details.merge('id' => 1)) }
   let(:payload)      { { 'type' => 'push', 'credentials' => user_details, 'payload' => GITHUB_PAYLOADS['gem-release'] } }
   let(:handler)      { Travis::Hub::Handler::Request.new('request', payload) }
 
