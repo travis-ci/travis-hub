@@ -21,10 +21,17 @@ module Travis
         end
 
         class Sync < Travis::Notification::Instrument
+          def handle_received
+            publish(
+              :msg => %(#{target.class.name}#handle received for user_id="#{target.user_id}"),
+              :user_id => target.user_id
+            )
+          end
+
           def handle_completed
             publish(
               :result => !!result,
-              :msg => %(#{target.class.name}#handle for user_id="#{target.user_id}"),
+              :msg => %(#{target.class.name}#handle completed for user_id="#{target.user_id}"),
               :user_id => target.user_id
             )
           end
