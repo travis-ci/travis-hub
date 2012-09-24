@@ -1,1 +1,1 @@
-hub: thor travis:hub:start
+hub: bundle exec thor travis:hub:start

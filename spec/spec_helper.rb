@@ -1,9 +1,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 
-require 'support/payloads'
-
 require 'travis/hub'
 require 'travis/support'
+require 'support/active_record'
+require 'support/payloads'
 require 'stringio'
 require 'mocha'
 
@@ -20,7 +20,6 @@ RSpec.configure do |c|
 
   c.after :each do
     Travis.config.notifications.clear
-    Travis::Notifications.instance_variable_set(:@subscriptions, nil)
-    Travis::Notifications::Handler::Pusher.send(:protected, :queue_for, :payload_for)
+    Travis::Event.instance_variable_set(:@subscriptions, nil)
   end
 end

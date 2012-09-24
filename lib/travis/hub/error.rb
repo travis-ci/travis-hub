@@ -16,6 +16,14 @@ module Travis
       def backtrace
         exception.backtrace
       end
+
+      def class
+        exception.class
+      end
+
+      def metadata
+        { 'payload' => payload, 'event' => event }
+      end
     end
   end
 end

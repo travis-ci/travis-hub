@@ -1,4 +1,10 @@
-rvm: jruby
+rvm:
+  - jruby
+  - jruby-head
+jdk: openjdk6
+before_script:
+  - 'RAILS_ENV=test rake db:create db:schema:load --trace'
+script: ./build.sh
 notifications:
   irc: "irc.freenode.org#travis"
 

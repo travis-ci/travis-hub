@@ -1,30 +1,20 @@
 require 'multi_json'
-require 'hashr'
 require 'benchmark'
-require 'hubble'
-require 'metriks'
-require 'metriks/reporter/logger'
-require 'active_support/core_ext/float/rounding.rb'
-require 'core_ext/module/include'
+require 'active_support/core_ext/float/rounding'
 require 'core_ext/kernel/run_periodically'
+require 'core_ext/hash/compact'
 
 require 'travis'
 require 'travis/support'
-
-# Order of inclusion matters: async must be included last
-require 'travis/hub/instrumentation'
-require 'travis/hub/async'
 
 $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler,       'travis/hub/handler'
-    autoload :Error,         'travis/hub/error'
-    autoload :ErrorReporter, 'travis/hub/error_reporter'
-    autoload :NewRelic,      'travis/hub/new_relic'
-    autoload :Metrics,       'travis/hub/metrics'
-    autoload :Queues,        'travis/hub/queues'
+    autoload :Handler,    'travis/hub/handler'
+    autoload :Instrument, 'travis/hub/instrument'
+    autoload :Error,      'travis/hub/error'
+    autoload :Queues,     'travis/hub/queues'
 
     include Logging
 
@@ -32,31 +22,27 @@ module Travis
       def start
         setup
         prune_workers
+        enqueue_jobs
         Travis::Hub::Queues.subscribe
       end
 
       protected
 
         def setup
+          Travis::Async.enabled = true
+          Travis::Amqp.config = Travis.config.amqp
+          GH::DefaultStack.options[:ssl] = Travis.config.ssl
+
           Travis.config.update_periodically
+          Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
 
-          GH::DefaultStack.options[:ssl] = {
-            :ca_path => Travis.config.ssl.ca_file,
-            :ca_file => Travis.config.ssl.ca_file
-          }
+          Travis::Exceptions::Reporter.start
+          Travis::Notification.setup
 
-          start_monitoring
-          Database.connect
+          Travis::Database.connect
           Travis::Mailer.setup
           Travis::Features.start
-          Travis::Amqp.config = Travis.config.amqp
-        end
 
-        def start_monitoring
-          Hubble.setup if ENV['HUBBLE_ENV']
-          Travis::Hub::ErrorReporter.new.run
-          Travis::Hub::Metrics.setup_subscriptions
-          Metriks::Reporter::Logger.new.start
           NewRelic.start if File.exists?('config/newrelic.yml')
         end
 
@@ -64,9 +50,13 @@ module Travis
           run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
         end
 
-        def cleanup_jobs
-          run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
+        def enqueue_jobs
+          run_periodically(Travis.config.queue.interval) { Job::Queueing::All.new.run }
         end
+
+        # def cleanup_jobs
+        #   run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
+        # end
     end
   end
 end
