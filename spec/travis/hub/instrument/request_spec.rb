@@ -37,7 +37,7 @@ describe Travis::Hub::Instrument::Handler::Request do
   it 'publishes a payload on authenticate' do
     event = publisher.events[-2]
     event[:payload][:user].should == { :id => 1, :login => 'svenfuchs' }
-    event[:payload][:msg] == %(Travis::Hub::Handler::Request#authenticate success)
+    event[:payload][:msg] == %(Travis::Hub::Handler::Request#authenticate for svenfuchs succeeded)
   end
 end
 
