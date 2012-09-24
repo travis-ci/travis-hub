@@ -32,7 +32,7 @@ module Travis
             user = { :id => result.id, :login => result.login } if result
             result_message = result ? 'succeeded' : 'failed'
             publish(
-              :user => user, :msg => %(#{target.class.name}#authenticate #{result_message} for #{result.login})
+              :user => user, :msg => %(#{target.class.name}#authenticate #{result_message} for #{target.credentials['login']})
             )
           end
         end
