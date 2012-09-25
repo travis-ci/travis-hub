@@ -6,6 +6,9 @@ module Travis
       class Request < Handler
         # Handles request messages which are created by the listener
         # when a github event comes in.
+
+        class ProcessingError < StandardError; end
+
         def type
           payload['type']
         end
@@ -15,10 +18,14 @@ module Travis
         end
 
         def data
-          @data ||= MultiJson.decode(payload['payload'])
+          @data ||= payload['payload'] ? MultiJson.decode(payload['payload']) : nil
         end
 
         def handle
+          unless data
+            raise ProcessingError, "the #{type} payload was empty and could not be processed"
+          end
+
           ::Request.receive(type, data, credentials['token']) if authenticated?
         end
         instrument :handle, :scope => :type
