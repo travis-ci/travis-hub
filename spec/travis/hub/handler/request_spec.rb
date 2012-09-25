@@ -38,6 +38,14 @@ describe Travis::Hub::Handler::Request do
       end
     end
 
+    describe 'given the request payload is nil' do
+      let(:payload) { { 'type' => 'push', 'credentials' => user_details, 'payload' => nil } }
+
+      it "raises a ProcessingError" do
+        expect { subject.call }.to raise_error(Travis::Hub::Handler::Request::ProcessingError)
+      end
+    end
+
     describe 'given the request can not be authorized' do
       before do
         User.stubs(:authenticate_by).returns(nil)
