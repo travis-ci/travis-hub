@@ -2,6 +2,8 @@ rvm:
   - jruby
   - jruby-head
 jdk: openjdk6
+allow_failures:
+  - rvm: jruby-head
 services:
   - redis
 before_script:
