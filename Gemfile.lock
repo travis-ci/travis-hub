@@ -12,6 +12,12 @@ GIT
     rollout (1.1.0)
 
 GIT
+  remote: git://github.com/rkh/coder
+  revision: 8cb3ec4ed6d08c843a83b952e7a3edf41b6fa88a
+  specs:
+    coder (0.3.0)
+
+GIT
   remote: git://github.com/rkh/gh
   revision: affde20a4fecb1023f2e7031734b9386a76d22c2
   specs:
@@ -96,7 +102,6 @@ GEM
     backports (2.6.4)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.3)
-    coder (0.1.2)
     crack (0.3.1)
     data_migrations (0.0.1)
       activerecord
@@ -199,7 +204,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (~> 1.2.2)
-  coder (~> 0.1.0)
+  coder!
   data_migrations (~> 0.0.1)
   database_cleaner (~> 0.8.0)
   gh!
