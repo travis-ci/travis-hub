@@ -11,7 +11,7 @@ module Travis
       desc 'start', 'Consume AMQP messages from the worker'
       def start
         ENV['ENV'] || 'development'
-        preload_constants!
+        # preload_constants!
         Travis::Hub.start
       end
 
@@ -22,7 +22,7 @@ module Travis
           require 'travis'
 
           [Travis::Hub, Travis].each do |target|
-            target.load_constants!(:skip => [/::AssociationCollection$/])
+            target.load_constants!(:skip => [/::AssociationCollection$/], :debug => true)
           end
         end
     end
