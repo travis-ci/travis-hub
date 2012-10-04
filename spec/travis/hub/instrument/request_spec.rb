@@ -11,7 +11,7 @@ describe Travis::Hub::Instrument::Handler::Request do
   before :each do
     Travis::Hub::Instrument::Handler::Request.any_instance.stubs(:duration).returns(5)
     Travis::Notification.publishers.replace([publisher])
-    Request.stubs(:receive).returns(repository)
+    Travis::Services::Requests::Receive.any_instance.stubs(:run)
     User.stubs(:authenticate_by).returns(user)
     handler.handle
   end

@@ -9,6 +9,8 @@ module Travis
 
         class ProcessingError < StandardError; end
 
+        attr_reader :user
+
         def type
           payload['type']
         end
@@ -22,23 +24,28 @@ module Travis
         end
 
         def handle
-          unless data
-            raise ProcessingError, "the #{type} payload was empty and could not be processed"
-          end
-
-          ::Request.receive(type, data, credentials['token']) if authenticated?
+          raise(ProcessingError, "the #{type} payload was empty and could not be processed") unless data
+          receive if authenticated?
         end
         instrument :handle, :scope => :type
         new_relic :handle
 
         private
 
+          def receive
+            Services::Requests::Receive.new(user, :event_type => type, :payload => data, :token => credentials['token']).run
+          end
+
+          # def requeue
+          #   Services::Requests::Requeue.new(user, :build_id => payload['build_id'], :token => credentials['token']) .run
+          # end
+
           def authenticated?
             !!authenticate
           end
 
           def authenticate
-            User.authenticate_by(credentials)
+            @user = User.authenticate_by(credentials)
           end
           instrument :authenticate, :scope => :type
 

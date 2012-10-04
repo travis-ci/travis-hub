@@ -18,7 +18,7 @@ describe Travis::Hub::Handler::Request do
   subject { proc { handler.handle } }
 
   before :each do
-    Request.stubs(:receive)
+    Travis::Services::Requests::Receive.any_instance.stubs(:run)
   end
 
   describe 'handle' do
@@ -33,7 +33,8 @@ describe Travis::Hub::Handler::Request do
       end
 
       it "creates the request" do
-        Request.expects(:receive).with('push', JSON.parse(payload['payload']), '12345').returns(true)
+        params = { :event_type => 'push', :payload => JSON.parse(payload['payload']), :token => '12345' }
+        Travis::Services::Requests::Receive.expects(:new).with(user, params).returns(stub(:run => nil))
         subject.call
       end
     end
