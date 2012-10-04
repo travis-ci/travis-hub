@@ -5,20 +5,20 @@ GIT
     micro_migrations (0.0.1)
 
 GIT
-  remote: git://github.com/jamesgolick/rollout
+  remote: git://github.com/jamesgolick/rollout.git
   revision: 3e7312cc018061b1ac6a8aeb9f11bbd0331da889
   ref: v1.1.0
   specs:
     rollout (1.1.0)
 
 GIT
-  remote: git://github.com/rkh/coder
+  remote: git://github.com/rkh/coder.git
   revision: df0b55bbabee114724cfd712f1c98ed954e5163d
   specs:
     coder (0.3.0)
 
 GIT
-  remote: git://github.com/rkh/gh
+  remote: git://github.com/rkh/gh.git
   revision: affde20a4fecb1023f2e7031734b9386a76d22c2
   specs:
     gh (0.8.0)
@@ -30,7 +30,7 @@ GIT
       net-http-pipeline
 
 GIT
-  remote: git://github.com/roidrage/hubble
+  remote: git://github.com/roidrage/hubble.git
   revision: f5e6301ac24eabeebaf8f4485d71cdcf93b2f3f8
   specs:
     hubble (0.1.2)
@@ -38,8 +38,9 @@ GIT
       json (~> 1.6)
 
 GIT
-  remote: git://github.com/travis-ci/travis-core
-  revision: f06322858557134ee7eaf745335c551ed65c542a
+  remote: git://github.com/travis-ci/travis-core.git
+  revision: 2ff770e4c1398affa5062d84abe0a51b8d83e418
+  branch: sf-travis-api
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -59,7 +60,7 @@ GIT
       thor (~> 0.14.6)
 
 GIT
-  remote: git://github.com/travis-ci/travis-support
+  remote: git://github.com/travis-ci/travis-support.git
   revision: 06844d2db558d88be775ca1cf9cfff8ec36120fb
   specs:
     travis-support (0.0.1)
@@ -126,7 +127,7 @@ GEM
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
     json (1.7.5-java)
-    listen (0.5.2)
+    listen (0.5.3)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -145,7 +146,7 @@ GEM
     net-http-pipeline (1.0.1)
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.3)
-    postmark (0.9.12)
+    postmark (0.9.13)
       json
       rake
     postmark-rails (0.4.1)
