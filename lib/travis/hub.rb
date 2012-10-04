@@ -29,6 +29,8 @@ module Travis
       protected
 
         def setup
+          Travis::Database.connect
+
           Travis::Async.enabled = true
           Travis::Amqp.config = Travis.config.amqp
           Travis.services = Travis::Services
@@ -40,7 +42,6 @@ module Travis
           Travis::Exceptions::Reporter.start
           Travis::Notification.setup
 
-          Travis::Database.connect
           Travis::Mailer.setup
           Travis::Features.start
 
