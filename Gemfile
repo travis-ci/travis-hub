@@ -1,5 +1,6 @@
 source :rubygems
 
+# I love comments
 ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.0.preview2'
 
 gem 'travis-core',        :github => 'travis-ci/travis-core'
