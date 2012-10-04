@@ -1,8 +1,8 @@
 source :rubygems
 
-# ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.0.preview2"
+ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.0.preview2'
 
-gem 'travis-core',        :github => 'travis-ci/travis-core', :branch => 'sf-travis-api'
+gem 'travis-core',        :github => 'travis-ci/travis-core'
 gem 'travis-support',     :github => 'travis-ci/travis-support'
 
 gem 'gh',                 :github => 'rkh/gh'
