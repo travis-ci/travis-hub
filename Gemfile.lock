@@ -39,8 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: b70e26a18d4e1df9e32c6b19dd31ef128a3d5f95
-  branch: sf-repo-events
+  revision: ecbc6fd624fcb71698b4bda2458dfbd1ebb4e0aa
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
