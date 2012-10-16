@@ -44,6 +44,7 @@ module Travis
 
           Travis::Database.connect
           Travis::Mailer.setup
+          Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
 
           NewRelic.start if File.exists?('config/newrelic.yml')
         end

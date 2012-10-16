@@ -22,7 +22,7 @@ module Travis
           require 'travis'
 
           [Travis::Hub, Travis].each do |target|
-            target.load_constants!(:skip => [/::AssociationCollection$/], :debug => true)
+            target.load_constants!(:skip => [/::AssociationCollection$/], :debug => false)
           end
         end
     end
