@@ -29,6 +29,8 @@ module Travis
       protected
 
         def setup
+          Travis::Features.start
+
           Travis::Async.enabled = true
           Travis::Amqp.config = Travis.config.amqp
           Travis.services = Travis::Services
@@ -42,7 +44,6 @@ module Travis
 
           Travis::Database.connect
           Travis::Mailer.setup
-          Travis::Features.start
 
           NewRelic.start if File.exists?('config/newrelic.yml')
         end
