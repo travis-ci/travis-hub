@@ -1,5 +1,6 @@
+language: ruby
 rvm:
-  - jruby
+  - jruby-19mode
   - jruby-head
 jdk: openjdk6
 matrix:
