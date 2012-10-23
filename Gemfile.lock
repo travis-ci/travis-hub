@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 4ff353148a23de9a28496fb6c51e709333af3941
+  revision: d9bc1eb8c6ffd342186a1ae01b1912a6947f2bfc
   branch: sf-async-strategies
   specs:
     travis-support (0.0.1)
