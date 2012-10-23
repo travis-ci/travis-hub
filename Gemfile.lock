@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 71f9332d13a6faaa268691a0b09289db85bb3325
+  revision: e35f061334216333d73b0b12ae0b301b7baa21dc
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 37e9ddf0cb15d142ab0bff87f8911b903003f535
+  revision: a350d17b705e3240ff4eae7973266ba36549acaa
   specs:
     travis-support (0.0.1)
 
@@ -102,6 +102,7 @@ GEM
     backports (2.6.4)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.4)
+    coderay (1.0.8)
     crack (0.3.1)
     data_migrations (0.0.1)
       activerecord
@@ -111,8 +112,10 @@ GEM
     erubis (2.7.0)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    guard (1.4.0)
+    guard (1.5.0)
       listen (>= 0.4.2)
+      lumberjack (>= 1.0.2)
+      pry (>= 0.9.10)
       thor (>= 0.14.6)
     guard-rspec (1.2.1)
       guard (>= 1.1)
@@ -127,11 +130,13 @@ GEM
       bouncy-castle-java (>= 1.5.0146.1)
     json (1.7.5-java)
     listen (0.5.3)
+    lumberjack (1.0.2)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     metaclass (0.0.1)
+    method_source (0.8.1)
     metriks (0.9.9.1)
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
@@ -152,6 +157,11 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
+    pry (0.9.10-java)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
+      spoon (~> 0.0)
     pusher (0.9.4)
       multi_json (~> 1.0)
       signature (~> 0.1.2)
@@ -185,6 +195,8 @@ GEM
     simple_states (0.1.1)
       activesupport
       hashr (~> 0.0.10)
+    slop (3.3.3)
+    spoon (0.0.1)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
