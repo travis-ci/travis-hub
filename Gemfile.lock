@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: fd6e63f73afdb3a44612bc84c4130aed14ab6ca1
+  revision: 38ec6218d7c52e6db83e087ddedaaee017a70b19
   specs:
     travis-support (0.0.1)
 
@@ -97,6 +97,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.2)
     arel (3.0.2)
+    atomic (1.0.1)
     atomic (1.0.1-java)
     avl_tree (1.1.3)
     backports (2.6.4)
@@ -126,6 +127,7 @@ GEM
       guard (>= 1.1)
     hashr (0.0.22)
     hike (1.2.1)
+    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.4.0.pre4-java)
     i18n (0.6.1)
@@ -133,6 +135,7 @@ GEM
     journey (1.0.4)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
+    json (1.7.5)
     json (1.7.5-java)
     listen (0.5.3)
     lumberjack (1.0.2)
@@ -162,6 +165,10 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
