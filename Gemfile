@@ -2,8 +2,8 @@ source :rubygems
 
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.0'
 
-gem 'travis-core',        github: 'travis-ci/travis-core', branch: 'sf-travis-tasks'
-gem 'travis-support',     github: 'travis-ci/travis-support', branch: 'sf-async-strategies'
+gem 'travis-core',        github: 'travis-ci/travis-core'
+gem 'travis-support',     github: 'travis-ci/travis-support'
 
 gem 'gh',                 github: 'rkh/gh'
 gem 'hubble',             github: 'roidrage/hubble'

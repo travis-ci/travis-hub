@@ -39,8 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: ad3abbe79a62d8e8ebd9383468d08fd0f4d325d9
-  branch: sf-travis-tasks
+  revision: 37649787ba264c4b86a194d29ffd3901371d5167
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -61,8 +60,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: d9bc1eb8c6ffd342186a1ae01b1912a6947f2bfc
-  branch: sf-async-strategies
+  revision: fd6e63f73afdb3a44612bc84c4130aed14ab6ca1
   specs:
     travis-support (0.0.1)
 
@@ -164,10 +162,6 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
-    pry (0.9.10)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.3.1)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
