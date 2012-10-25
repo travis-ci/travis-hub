@@ -22,7 +22,7 @@ module Travis
       def start
         setup
         prune_workers
-        enqueue_jobs unless Travis::Features.feature_deactivated?(:job_queueing)
+        enqueue_jobs unless Travis::Features.feature_active?(:travis_enqueue)
 
         Travis::Hub::Queues.subscribe
       end
