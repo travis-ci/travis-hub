@@ -39,7 +39,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: e6b22cd062fd4c9d8728f4f42606b59b75dcbd93
+  revision: bffd207501ac6b0050ae58aec008c3eb73bbb404
+  branch: sf-queueing-service
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -60,7 +61,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: bf72a9367f38241fbffa5758ea219a7ecd73c080
+  revision: f78d9161369f574f12b9c0c0dbfe13b997766bdd
   specs:
     travis-support (0.0.1)
 
@@ -162,6 +163,10 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -220,7 +225,7 @@ GEM
     treetop (1.4.11)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.33)
+    tzinfo (0.3.34)
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)

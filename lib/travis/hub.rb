@@ -22,7 +22,7 @@ module Travis
       def start
         setup
         prune_workers
-        enqueue_jobs unless Travis::Features.feature_active?(:travis_enqueue)
+        enqueue_jobs
 
         Travis::Hub::Queues.subscribe
       end
@@ -55,7 +55,9 @@ module Travis
         end
 
         def enqueue_jobs
-          run_periodically(Travis.config.queue.interval) { Job::Queueing::All.new.run }
+          run_periodically(Travis.config.queue.interval) do
+            Travis::Services::Jobs::Enqueue.run unless Travis::Features.feature_active?(:travis_enqueue)
+          end
         end
 
         # def cleanup_jobs
