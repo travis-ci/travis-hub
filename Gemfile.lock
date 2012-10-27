@@ -39,8 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: bffd207501ac6b0050ae58aec008c3eb73bbb404
-  branch: sf-queueing-service
+  revision: 9085de5330c8c5ccb2a4bec11a3a656472225555
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -103,7 +102,7 @@ GEM
     backports (2.6.4)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.4)
-    celluloid (0.12.2)
+    celluloid (0.12.3)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
     coderay (1.0.8)
