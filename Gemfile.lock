@@ -39,8 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: bffd207501ac6b0050ae58aec008c3eb73bbb404
-  branch: sf-queueing-service
+  revision: 7d9ce4785851d9d63980b4ad4eb896a437884120
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -103,7 +102,7 @@ GEM
     backports (2.6.4)
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.4)
-    celluloid (0.12.2)
+    celluloid (0.12.3)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
     coderay (1.0.8)
@@ -163,10 +162,6 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
-    pry (0.9.10)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.3.1)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
