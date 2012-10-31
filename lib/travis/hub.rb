@@ -30,6 +30,8 @@ module Travis
       protected
 
         def setup
+          Travis.config.notifications.delete('metrics')
+
           Travis::Features.start
 
           Travis::Async.enabled = true
