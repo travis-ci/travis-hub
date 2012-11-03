@@ -42,6 +42,7 @@ module Travis
 
           Travis::Exceptions::Reporter.start
           Travis::Notification.setup
+          Travis::Addons.register
 
           Travis::Database.connect
           Travis::Mailer.setup
