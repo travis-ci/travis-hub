@@ -33,7 +33,7 @@ module Travis
         private
 
           def receive
-            Services::Requests::Receive.new(user, :event_type => type, :payload => data, :token => credentials['token']).run
+            Travis::Services.run(:requests, :receive, user, :event_type => type, :payload => data, :token => credentials['token'])
           end
 
           # def requeue
