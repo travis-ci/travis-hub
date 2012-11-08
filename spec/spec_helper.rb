@@ -8,6 +8,7 @@ require 'stringio'
 require 'mocha'
 
 Travis.logger = Logger.new(StringIO.new)
+Travis.services = Travis::Services
 
 include Mocha::API
 
