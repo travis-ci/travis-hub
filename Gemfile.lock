@@ -40,7 +40,6 @@ GIT
 GIT
   remote: git://github.com/travis-ci/travis-core.git
   revision: 9ea8ed14dee2f300793e668ce3c25be21a30c8e2
-  branch: sf-simplify-notifications
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
