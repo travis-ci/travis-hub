@@ -20,8 +20,11 @@ describe Travis::Hub::Instrument::Handler::Job do
     handler.event = 'job:test:started'
     handler.handle
 
-    event[:payload].should == {
-      :msg => 'Travis::Hub::Handler::Job#update for #<Job id="1">',
+    event.should publish_instrumentation_event(
+      :event => 'travis.hub.handler.job.update:completed',
+      :message => 'Travis::Hub::Handler::Job#update:completed for #<Job id="1">',
+    )
+    event[:data].should == {
       :event => 'job:test:started',
       :payload => payload
     }

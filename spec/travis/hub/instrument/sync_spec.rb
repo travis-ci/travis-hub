@@ -19,17 +19,25 @@ describe Travis::Hub::Instrument::Handler::Sync do
   end
 
   it 'publishes a received payload on handle' do
-    events.first[:payload].should == {
-      :msg => %(Travis::Hub::Handler::Sync#handle received for user_id="1"),
+    event = events.first
+    event.should publish_instrumentation_event(
+      :event => 'travis.hub.handler.sync.handle:received',
+      :message => %(Travis::Hub::Handler::Sync#handle:received for user_id="1"),
+    )
+    event[:data].should == {
       :user_id => 1
     }
   end
 
   it 'publishes a completed payload on handle' do
-    events.last[:payload].should == {
-      :msg => %(Travis::Hub::Handler::Sync#handle completed for user_id="1" in 5 seconds),
-      :user_id => 1,
+    event = events.last
+    event.should publish_instrumentation_event(
+      :event => 'travis.hub.handler.sync.handle:completed',
+      :message => %(Travis::Hub::Handler::Sync#handle:completed for user_id="1"),
       :result => true
+    )
+    event[:data].should == {
+      :user_id => 1
     }
   end
 end

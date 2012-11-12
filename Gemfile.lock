@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: e99a8df245d9c27c736f455b7f623f5902690810
+  revision: 9ea8ed14dee2f300793e668ce3c25be21a30c8e2
   branch: sf-simplify-notifications
   specs:
     travis-core (0.0.1)

@@ -6,7 +6,7 @@ module Travis
           def handle_received
             url = target.data['repository']['url'] rescue '?'
             publish(
-              :msg => %(#{target.class.name}#handle received for type=#{target.type} repository="#{url}"),
+              :msg => %(for type=#{target.type} repository="#{url}"),
               :data => target.data,
               :type => target.type
             )
@@ -15,7 +15,7 @@ module Travis
           def handle_completed
             url = target.data['repository']['url'] rescue '?'
             publish(
-              :msg => %(#{target.class.name}#handle completed for type=#{target.type} repository="#{url}" in #{duration} seconds),
+              :msg => %(for type=#{target.type} repository="#{url}"),
               :data => target.data,
               :type => target.type
             )
@@ -23,8 +23,8 @@ module Travis
 
           def authenticate_received
             publish(
-              :login => target.credentials['login'],
-              :msg => %(#{target.class.name}#authenticate received for #{target.credentials['login']})
+              :msg => %(for #{target.credentials['login']}),
+              :login => target.credentials['login']
             )
           end
 
@@ -32,7 +32,8 @@ module Travis
             user = { :id => result.id, :login => result.login } if result
             result_message = result ? 'succeeded' : 'failed'
             publish(
-              :user => user, :msg => %(#{target.class.name}#authenticate #{result_message} for #{target.credentials['login']})
+              :msg => %(#{result_message} for #{target.credentials['login']}),
+              :user => user
             )
           end
         end
@@ -40,7 +41,7 @@ module Travis
         class Sync < Travis::Notification::Instrument
           def handle_received
             publish(
-              :msg => %(#{target.class.name}#handle received for user_id="#{target.user_id}"),
+              :msg => %(for user_id="#{target.user_id}"),
               :user_id => target.user_id
             )
           end
@@ -48,7 +49,7 @@ module Travis
           def handle_completed
             publish(
               :result => !!result,
-              :msg => %(#{target.class.name}#handle completed for user_id="#{target.user_id}" in #{duration} seconds),
+              :msg => %(for user_id="#{target.user_id}"),
               :user_id => target.user_id
             )
           end
@@ -57,7 +58,7 @@ module Travis
         class Job < Travis::Notification::Instrument
           def update_completed
             publish(
-              :msg => %(#{target.class.name}#update for #<Job id="#{target.payload['id']}">),
+              :msg => %(for #<Job id="#{target.payload['id']}">),
               :event => target.event,
               :payload => target.payload
             )
@@ -65,7 +66,7 @@ module Travis
 
           def log_completed
             # publish(
-            #   :msg => %(#{target.class.name}#log for #<Job id="#{target.payload['id']}">),
+            #   :msg => %(for #<Job id="#{target.payload['id']}">),
             #   :event => target.event,
             #   :payload => target.payload
             # )
