@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 5b64ce2d39a73eda757eb47d20862220a3076ada
+  revision: 32a2cb09f36f9f9f773e9529a45e58f7305f7515
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -136,7 +136,7 @@ GEM
     hashr (0.0.22)
     hike (1.2.1)
     hitimes (1.1.1-java)
-    hot_bunnies (1.4.0.pre4-java)
+    hot_bunnies (1.4.0-java)
     i18n (0.6.1)
     jdbc-postgres (9.1.901)
     journey (1.0.4)
