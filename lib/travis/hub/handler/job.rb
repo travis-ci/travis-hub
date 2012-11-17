@@ -1,3 +1,5 @@
+require 'travis/logs/services/append'
+
 module Travis
   class Hub
     class Handler
@@ -22,7 +24,7 @@ module Travis
           def update
             # TODO hot compat, remove after migration to result columns
             payload['result'] = payload.delete('status') if payload.key?('status')
-            job.update_attributes(payload)
+            Travis.run_service(:update_job, data: payload)
           end
           instrument :update
           new_relic :update
@@ -33,7 +35,7 @@ module Travis
               publisher = Travis::Amqp::Publisher.jobs('logs')
               publisher.publish(:data => payload, :uuid => Travis.uuid)
             else
-              ::Job::Test.append_log!(payload['id'], payload['log'])
+              Travis.run_service(:append_log, data: payload)
             end
           end
           instrument :log

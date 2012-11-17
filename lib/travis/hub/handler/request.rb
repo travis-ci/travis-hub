@@ -33,13 +33,14 @@ module Travis
         private
 
           def receive
-            Travis::Services.run(:requests, :receive, user, :event_type => type, :payload => data, :token => credentials['token'])
+            Travis.run_service(:receive_request, user, :event_type => type, :payload => data, :token => credentials['token'])
           end
 
-          # def requeue
-          #   Services::Requests::Requeue.new(user, :build_id => payload['build_id'], :token => credentials['token']) .run
-          # end
+          def requeue
+            Travis.run_service(:requeue_request, user, :build_id => payload['build_id'], :token => credentials['token']) .run
+          end
 
+          # TODO move authentication to the service
           def authenticated?
             !!authenticate
           end
