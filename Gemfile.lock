@@ -69,7 +69,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 52ed2160d1f11293f61ec36ad0ae554eb299a2fb
+  revision: e0f94df6741700008e2a57a2bcafb4bae2cedafb
   branch: sf-fix-preloading
   specs:
     travis-support (0.0.1)
