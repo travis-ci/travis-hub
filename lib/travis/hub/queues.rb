@@ -26,7 +26,8 @@ module Travis
       end
 
       def subscribe_to_reporting
-        queues = ['builds.common'] + Travis.config.queues.map { |queue| queue[:queue] }
+        # TODO should be just 'builds', once we're on bluebox
+        queues = ['builds', 'builds.common'] + Travis.config.queues.map { |queue| queue[:queue] }
         queues.uniq.each do |name|
           info "Subscribing to #{name}"
           Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
