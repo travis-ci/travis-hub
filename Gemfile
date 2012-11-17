@@ -3,7 +3,7 @@ source :rubygems
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.0'
 
 gem 'travis-core',        github: 'travis-ci/travis-core', branch: 'sf-register-services'
-gem 'travis-support',     github: 'travis-ci/travis-support'
+gem 'travis-support',     github: 'travis-ci/travis-support', branch: 'sf-fix-preloading'
 gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs'
 
 gem 'gh',                 github: 'rkh/gh'
