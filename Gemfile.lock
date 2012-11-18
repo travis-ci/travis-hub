@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 1acce00bc7faf493e9a269b4e704e74f7c96651b
+  revision: 6517b0115186c117ea27aae755164be711e996b3
   branch: sf-register-services
   specs:
     travis-core (0.0.1)
@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-sidekiqs.git
-  revision: 4959bd0c3454b98cbf18a5f506f8f33a9a63689d
+  revision: 33cf6b1ed576231c1cc5368f734171b4edd4768b
   specs:
     travis-sidekiqs (0.0.1)
       sentry-raven

@@ -1,19 +1,17 @@
 require 'spec_helper'
 
 describe Travis::Hub::Handler::Job do
-  let(:job)       { stub('job', :update_attributes => nil) }
   let(:payload)   { {} }
   let(:handler)   { Travis::Hub::Handler::Job.new(nil, payload) }
   let(:publisher) { stub('publisher', :publish => nil) }
 
   before :each do
-    handler.stubs(:job).returns(job)
     Travis::Features.start
   end
 
   describe '#handle' do
     it 'updates job attributes on job:test:started' do
-      job.expects(:update_attributes).with(payload)
+      Travis.expects(:run_service).with(:update_job, data: payload)
       handler.event = 'job:test:started'
       handler.handle
     end
@@ -28,7 +26,7 @@ describe Travis::Hub::Handler::Job do
 
     it 'appends the log on job:test:log (:travis_logs disabled)' do
       Travis::Features.disable_for_all(:travis_logs)
-      ::Job::Test.expects(:append_log!)
+      Travis.expects(:run_service).with(:logs_append, data: payload)
       handler.event = 'job:test:log'
       handler.handle
     end

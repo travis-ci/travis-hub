@@ -12,8 +12,7 @@ describe Travis::Hub::Instrument::Handler::Job do
 
   before :each do
     Travis::Notification.publishers.replace([publisher])
-    Job.stubs(:find).returns(job)
-    Job::Test.stubs(:append_log!)
+    Travis.stubs(:run_service)
   end
 
   it 'publishes a payload on update' do

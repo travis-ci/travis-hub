@@ -35,7 +35,7 @@ module Travis
               publisher = Travis::Amqp::Publisher.jobs('logs')
               publisher.publish(:data => payload, :uuid => Travis.uuid)
             else
-              Travis.run_service(:append_log, data: payload)
+              Travis.run_service(:logs_append, data: payload)
             end
           end
           instrument :log

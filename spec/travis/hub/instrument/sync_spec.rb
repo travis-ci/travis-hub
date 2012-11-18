@@ -12,9 +12,7 @@ describe Travis::Hub::Instrument::Handler::Sync do
   before :each do
     Travis::Hub::Instrument::Handler::Sync.any_instance.stubs(:duration).returns(5)
     Travis::Notification.publishers.replace([publisher])
-    user = stub(:sync => true)
-    User.expects(:find).with(1).returns(user)
-    handler.stubs(:receive).returns(true)
+    Travis.stubs(:run_service).returns(true)
     handler.handle
   end
 

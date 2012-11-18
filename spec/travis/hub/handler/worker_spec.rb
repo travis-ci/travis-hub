@@ -7,7 +7,7 @@ describe Travis::Hub::Handler::Worker do
     let(:payload) { { :name => 'travis-test-1', :host => 'host', :state => 'ready' } }
 
     it 'updates the worker status' do
-      Worker::Status.expects(:update).with([payload])
+      Travis.expects(:run_service).with(:update_workers, reports: [payload])
       handler.handle
     end
   end
@@ -16,7 +16,7 @@ describe Travis::Hub::Handler::Worker do
     let(:payload) { [{ :name => 'travis-test-1', :host => 'host', :state => 'ready' }] }
 
     it 'updates the worker states and last_seen_at attributes (array payload)' do
-      Worker::Status.expects(:update).with(payload)
+      Travis.expects(:run_service).with(:update_workers, reports: payload)
       handler.handle
     end
   end
@@ -25,7 +25,7 @@ describe Travis::Hub::Handler::Worker do
     let(:payload) { { 'workers' => [{ :name => 'travis-test-1', :host => 'host', :state => 'ready' }] } }
 
     it 'updates the worker states and last_seen_at attributes' do
-      Worker::Status.expects(:update).with(payload['workers'])
+      Travis.expects(:run_service).with(:update_workers, reports: payload['workers'])
       handler.handle
     end
   end

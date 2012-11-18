@@ -46,6 +46,7 @@ module Travis
           end
 
           def authenticate
+            p credentials
             @user = User.authenticate_by(credentials)
           end
           instrument :authenticate, :scope => :type
