@@ -34,7 +34,6 @@ module Travis
 
           Travis::Async.enabled = true
           Travis::Amqp.config = Travis.config.amqp
-          Travis.services = Travis::Services
           GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
           Travis.config.update_periodically
