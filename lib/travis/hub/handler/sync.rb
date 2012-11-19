@@ -8,7 +8,7 @@ module Travis
         # Handles request messages which are created by the listener
         # when a github event comes in.
         def handle
-          Travis.run_service(:sync_user, id: user_id)
+          Travis.run_service(:github_sync_user, id: user_id)
         end
         instrument :handle
         new_relic  :handle

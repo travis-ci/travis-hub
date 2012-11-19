@@ -11,7 +11,7 @@ describe Travis::Hub::Handler::Sync do
 
   describe 'handle' do
     it 'syncs the user details with GitHub' do
-      Travis.expects(:run_service).with(:sync_user, id: 1)
+      Travis.expects(:run_service).with(:github_sync_user, id: 1)
       subject.call
     end
   end
