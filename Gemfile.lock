@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: a1c868dcd7f54fe610fe0be1a48f5cc57d600d13
+  revision: 1880f2b177968508bb961a8bfbef00fbab39981a
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.3)
@@ -171,14 +171,18 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
       spoon (~> 0.0)
-    pusher (0.11.0)
+    pusher (0.11.1)
       multi_json (~> 1.0)
-      signature (~> 0.1.4)
+      signature (~> 0.1.6)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -218,7 +222,7 @@ GEM
       multi_json (~> 1)
       redis (~> 3)
       redis-namespace
-    signature (0.1.5)
+    signature (0.1.6)
     simple_states (0.1.1)
       activesupport
       hashr (~> 0.0.10)
