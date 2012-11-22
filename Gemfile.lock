@@ -39,7 +39,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 6517b0115186c117ea27aae755164be711e996b3
+  revision: 5965cea06f8cf7adda9bfcdbd72c25e02c91aade
   branch: sf-register-services
   specs:
     travis-core (0.0.1)
@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-sidekiqs.git
-  revision: 33cf6b1ed576231c1cc5368f734171b4edd4768b
+  revision: 9bc6c0f948b518b372bb239046bbd3fe6b4fbc97
   specs:
     travis-sidekiqs (0.0.1)
       sentry-raven
@@ -69,8 +69,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: e0f94df6741700008e2a57a2bcafb4bae2cedafb
-  branch: sf-fix-preloading
+  revision: f78d9161369f574f12b9c0c0dbfe13b997766bdd
   specs:
     travis-support (0.0.1)
 
@@ -107,7 +106,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.2)
     arel (3.0.2)
-    atomic (1.0.1)
     atomic (1.0.1-java)
     avl_tree (1.1.3)
     backports (2.6.5)
@@ -138,7 +136,6 @@ GEM
     hashie (1.2.0)
     hashr (0.0.22)
     hike (1.2.1)
-    hitimes (1.1.1)
     hitimes (1.1.1-java)
     hot_bunnies (1.4.0-java)
     i18n (0.6.1)
@@ -146,9 +143,8 @@ GEM
     journey (1.0.4)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
-    json (1.7.5)
     json (1.7.5-java)
-    listen (0.5.3)
+    listen (0.6.0)
     lumberjack (1.0.2)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -181,9 +177,9 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.3.1)
       spoon (~> 0.0)
-    pusher (0.11.0)
+    pusher (0.11.1)
       multi_json (~> 1.0)
-      signature (~> 0.1.4)
+      signature (~> 0.1.6)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -223,7 +219,7 @@ GEM
       multi_json (~> 1)
       redis (~> 3)
       redis-namespace
-    signature (0.1.4)
+    signature (0.1.6)
     simple_states (0.1.1)
       activesupport
       hashr (~> 0.0.10)
