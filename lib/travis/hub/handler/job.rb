@@ -22,9 +22,7 @@ module Travis
           end
 
           def update
-            # TODO hot compat, remove after migration to result columns
-            payload['result'] = payload.delete('status') if payload.key?('status')
-            Travis.run_service(:update_job, data: payload)
+            Travis.run_service(:update_job, event: event.to_s.split(':').last, data: payload)
           end
           instrument :update
           new_relic :update
