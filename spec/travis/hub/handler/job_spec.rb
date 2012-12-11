@@ -11,7 +11,7 @@ describe Travis::Hub::Handler::Job do
 
   describe '#handle' do
     it 'updates job attributes on job:test:started' do
-      Travis.expects(:run_service).with(:update_job, data: payload)
+      Travis.expects(:run_service).with(:update_job, data: payload, event: 'started')
       handler.event = 'job:test:started'
       handler.handle
     end
