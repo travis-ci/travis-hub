@@ -12,26 +12,13 @@ module Travis
       def subscribe
         info 'Subscribing to amqp ...'
 
-        subscribe_to_build_requests_and_syncs
         subscribe_to_reporting
         subscribe_to_worker_status
       end
 
-      def subscribe_to_build_requests_and_syncs
-        queues = ['builds.requests', 'builds.requests', 'sync.user']
-        queues.each do |queue|
-          info "Subscribing to #{queue}"
-          Travis::Amqp::Consumer.new(queue).subscribe(:ack => true, &method(:receive))
-        end
-      end
-
       def subscribe_to_reporting
-        # TODO should be just 'builds', once we're on bluebox
-        queues = ['builds', 'builds.common'] + Travis.config.queues.map { |queue| queue[:queue] }
-        queues.uniq.each do |name|
-          info "Subscribing to #{name}"
-          Travis::Amqp::Consumer.jobs(name).subscribe(:ack => true, &method(:receive))
-        end
+        info "Subscribing to reporting.jobs.builds"
+        Travis::Amqp::Consumer.jobs('builds').subscribe(:ack => true, &method(:receive))
       end
 
       def subscribe_to_worker_status
