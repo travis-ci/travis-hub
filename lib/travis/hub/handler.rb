@@ -18,7 +18,7 @@ module Travis
           case event_type(event, payload)
           when /^request/
             Handler::Request.new(event, payload)
-          when /^job/
+          when /^job|state/
             Handler::Job.new(event, payload)
           when /^worker/
             Handler::Worker.new(event, payload)
