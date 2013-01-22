@@ -4,7 +4,7 @@ module Travis
       # Handles worker status events which are sent by the worker heartbeat.
       class Worker < Handler
         def handle
-          return if Travis::Features.feature_inactive?(:worker_updates)
+          return if Travis::Features.feature_deactivated?(:worker_updates)
 
           # TODO hot compat, remove the next line once all workers send the new payload
           reports = payload.is_a?(Hash) ? payload['workers'] || payload : payload
