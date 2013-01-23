@@ -10,20 +10,8 @@ module Travis
       end
 
       def subscribe
-        info 'Subscribing to amqp ...'
-
-        subscribe_to_reporting
-        subscribe_to_worker_status
-      end
-
-      def subscribe_to_reporting
         info "Subscribing to reporting.jobs.builds"
         Travis::Amqp::Consumer.jobs('builds').subscribe(:ack => true, &method(:receive))
-      end
-
-      def subscribe_to_worker_status
-        info "Subscribing to reporting.workers"
-        Travis::Amqp::Consumer.workers.subscribe(:ack => true, &method(:receive))
       end
 
       def receive(message, payload)
