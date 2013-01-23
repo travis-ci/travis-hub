@@ -1,68 +1,60 @@
 require 'multi_json'
-require 'benchmark'
-require 'active_support/core_ext/float/rounding'
-require 'core_ext/kernel/run_periodically'
-require 'core_ext/hash/compact'
 
 require 'travis'
-require 'travis/support'
+require 'core_ext/kernel/run_periodically'
 
 $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Handler,    'travis/hub/handler'
-    autoload :Instrument, 'travis/hub/instrument'
-    autoload :Error,      'travis/hub/error'
-    autoload :Queues,     'travis/hub/queues'
+    autoload :Error, 'travis/hub/error'
+    autoload :Queue, 'travis/hub/queue'
 
-    include Logging
+    extend Instrumentation
 
-    class << self
-      def start
-        setup
-        prune_workers
-        enqueue_jobs
+    def setup
+      Travis::Async.enabled = true
+      Travis::Amqp.config = Travis.config.amqp
 
-        Travis::Hub::Queues.subscribe
+      Travis::Database.connect
+      Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
+
+      Travis::Exceptions::Reporter.start
+      Travis::Notification.setup
+      Travis::Addons.register
+
+      Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
+      NewRelic.start if File.exists?('config/newrelic.yml')
+
+      # do we still need these in hub?
+      # Travis::Mailer.setup
+      # GH::DefaultStack.options[:ssl] = Travis.config.ssl
+    end
+
+    def run
+      enqueue_jobs
+      Queue.subscribe(&method(:handle))
+    end
+
+    private
+
+      def handle(event, payload)
+        ActiveRecord::Base.cache do
+          Travis.run_service(:update_job, event: event.to_s.split(':').last, data: payload)
+        end
       end
 
-      protected
-
-        def setup
-          Travis::Features.start
-
-          Travis::Async.enabled = true
-          Travis::Amqp.config = Travis.config.amqp
-          GH::DefaultStack.options[:ssl] = Travis.config.ssl
-
-          Travis.config.update_periodically
-          Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
-
-          Travis::Exceptions::Reporter.start
-          Travis::Notification.setup
-          Travis::Addons.register
-
-          Travis::Database.connect
-          Travis::Mailer.setup
-          Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
-
-          NewRelic.start if File.exists?('config/newrelic.yml')
+      def enqueue_jobs
+        run_periodically(Travis.config.queue.interval) do
+          Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
         end
+      end
 
-        def prune_workers
-          run_periodically(Travis.config.workers.prune.interval, &::Worker.method(:prune))
-        end
-
-        def enqueue_jobs
-          run_periodically(Travis.config.queue.interval) do
-            Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
-          end
-        end
-
-        # def cleanup_jobs
-        #   run_periodically(Travis.config.jobs.retry.interval, &::Job.method(:cleanup))
-        # end
-    end
+      # class Instrument < Travis::Notification::Instrument
+      #   def update_completed
+      #     publish(msg: %(for #<Job id="#{target.payload['id']}">), event: target.event, payload: target.payload)
+      #   end
+      # end
+      # Instrument.attach_to(self)
   end
 end

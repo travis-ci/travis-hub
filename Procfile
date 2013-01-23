@@ -1,1 +1,1 @@
-hub: bin/thor travis:hub:start
+hub: ./bin/hub
