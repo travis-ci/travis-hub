@@ -2,9 +2,6 @@ module Travis
   class Hub
     class Handler
       autoload :Job,     'travis/hub/handler/job'
-      autoload :Request, 'travis/hub/handler/request'
-      autoload :Sync,    'travis/hub/handler/sync'
-      autoload :Worker,  'travis/hub/handler/worker'
 
       include Logging
       extend  Instrumentation, NewRelic
