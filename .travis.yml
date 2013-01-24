@@ -1,11 +1,7 @@
 language: ruby
 rvm:
   - jruby-19mode
-  - jruby-head
-jdk: openjdk6
-matrix:
-  allow_failures:
-    - rvm: jruby-head
+jdk: openjdk7
 services:
   - redis
 before_script:
