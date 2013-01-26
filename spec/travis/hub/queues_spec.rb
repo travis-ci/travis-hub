@@ -1,47 +1,36 @@
 require 'spec_helper'
 
-describe Travis::Hub::Queues do
-  let(:hub)     { Travis::Hub::Queues.new }
+describe Travis::Hub::Queue do
+  let(:handler) { ->(*) {} }
+  let(:queue)   { Travis::Hub::Queue.new(&handler) }
   let(:payload) { '{ "foo": "bar", "uuid": "2d931510-d99f-494a-8c67-87feb05e1594" }' }
-  let(:message) { stub('message', :ack => nil, :properties => stub('properties', :type => 'request') ) } # TODO what are the real event types?
-  let(:handler) { stub('handler', :handle => nil) }
+  let(:message) { stub('message', :ack => nil, :properties => stub('properties', :type => 'job:finish') ) }
 
-  before :each do
-    Travis::Hub::Handler.stubs(:for).returns(handler)
-  end
-
-  describe 'decode' do
-    it 'decodes a json payload' do
-      hub.send(:decode, '{ "id": 1 }')['id'].should == 1
-    end
+  def receive
+    queue.send(:receive, message, payload)
   end
 
   describe 'receive' do
     it 'sets the given uuid to the current thread' do
-      hub.send(:receive, message, payload)
+      receive
       Thread.current[:uuid].should == '2d931510-d99f-494a-8c67-87feb05e1594'
     end
 
     describe 'with no exception being raised' do
-      it 'gets a handler for the event type and payload' do
-        Travis::Hub::Handler.expects(:for).with('request', { 'foo' => 'bar' }).returns(handler)
-        hub.receive(message, payload)
-      end
-
       it 'handles the event' do
-        handler.expects(:handle)
-        hub.receive(message, payload)
+        handler.expects(:call).with('job:finish', 'foo' => 'bar')
+        receive
       end
 
       it 'acknowledges the message' do
         message.expects(:ack)
-        hub.receive(message, payload)
+        receive
       end
     end
 
     describe 'with an exception being raised' do
       before :each do
-        handler.expects(:handle).raises(StandardError.new('message'))
+        handler.expects(:call).raises(StandardError.new('message'))
         $stdout = StringIO.new
       end
 
@@ -50,13 +39,13 @@ describe Travis::Hub::Queues do
       end
 
       it 'outputs the exception' do
-        hub.receive(message, payload)
+        receive
         $stdout.string.should =~ /message/
       end
 
       it 'acknowledges the message' do
         message.expects(:ack)
-        hub.receive(message, payload)
+        receive
       end
 
       it 'notifies the error reporter' do
@@ -65,8 +54,14 @@ describe Travis::Hub::Queues do
           exception.should be_instance_of(Travis::Hub::Error)
           exception.message.should =~ /message/
         end
-        hub.receive(message, payload)
+        receive
       end
+    end
+  end
+
+  describe 'decode' do
+    it 'decodes a json payload' do
+      queue.send(:decode, '{ "id": 1 }')['id'].should == 1
     end
   end
 end

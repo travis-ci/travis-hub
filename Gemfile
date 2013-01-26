@@ -21,6 +21,7 @@ gem 'sidekiq'
 gem 'hot_bunnies',        '~> 1.4.0.pre4'
 gem 'jruby-openssl',      '~> 0.7.7'
 
+# see http://www.ruby-forum.com/topic/4409725
 gem 'activerecord-jdbcpostgresql-adapter', '= 1.2.2.1'
 
 gem 'coder',              github: 'rkh/coder'

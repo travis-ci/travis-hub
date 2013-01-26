@@ -1,0 +1,18 @@
+#! /usr/bin/env ruby
+
+$stdout.sync = true
+
+$: << 'lib'
+
+require 'bundler/setup'
+require 'travis/hub'
+require 'core_ext/module/load_constants'
+
+[Travis::Hub, Travis].each do |target|
+  target.load_constants!(:skip => [/::AssociationCollection$/], debug: false)
+end
+
+app = Travis::Hub.new
+app.setup
+app.run
+
