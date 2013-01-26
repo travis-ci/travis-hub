@@ -15,6 +15,7 @@ module Travis
     def setup
       Travis::Async.enabled = true
       Travis::Amqp.config = Travis.config.amqp
+      GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
       Travis::Database.connect
       Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
@@ -28,7 +29,6 @@ module Travis
 
       # do we still need these in hub?
       # Travis::Mailer.setup
-      # GH::DefaultStack.options[:ssl] = Travis.config.ssl
     end
 
     def run
