@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 75f89faad156b65fdbfb7686a9402964b6ec342e
+  revision: 258d823c367a13db76db87d2f42942ee7af8a041
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.11)
@@ -144,7 +144,7 @@ GEM
       guard (>= 1.1)
     hashr (0.0.22)
     hike (1.2.1)
-    hitimes (1.1.1-java)
+    hitimes (1.2.0-java)
     hot_bunnies (1.4.0-java)
     i18n (0.6.1)
     jdbc-postgres (9.1.901)
@@ -164,7 +164,7 @@ GEM
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
       hitimes (~> 1.1)
-    mime-types (1.20.1)
+    mime-types (1.21)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.5.0)
@@ -180,10 +180,6 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
-    pry (0.9.11.4)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.4)
     pry (0.9.11.4-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
