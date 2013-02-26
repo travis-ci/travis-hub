@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 1a4970b11a2112b9216d2b8c63331b8de62049b1
+  revision: 0b11bc7f2943bf7ec3c382ff34af286e3d1b8533
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -112,7 +112,7 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    addressable (2.3.2)
+    addressable (2.3.3)
     arel (3.0.2)
     atomic (1.0.1-java)
     avl_tree (1.1.3)
@@ -132,7 +132,7 @@ GEM
     diff-lcs (1.1.3)
     erubis (2.7.0)
     facter (1.6.17)
-    faraday (0.8.5)
+    faraday (0.8.6)
       multipart-post (~> 1.1)
     guard (1.6.2)
       listen (>= 0.6.0)
@@ -146,7 +146,7 @@ GEM
     hike (1.2.1)
     hitimes (1.2.0-java)
     hot_bunnies (1.4.0-java)
-    i18n (0.6.1)
+    i18n (0.6.2)
     jdbc-postgres (9.1.901)
     journey (1.0.4)
     jruby-openssl (0.7.7)
@@ -160,20 +160,20 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     method_source (0.8.1)
-    metriks (0.9.9.2)
+    metriks (0.9.9.4)
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
       hitimes (~> 1.1)
     mime-types (1.21)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.5.1)
-    multipart-post (1.1.5)
+    multi_json (1.6.1)
+    multipart-post (1.2.0)
     net-http-persistent (2.8)
     net-http-pipeline (1.0.1)
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.3)
-    postmark (0.9.18)
+    postmark (0.9.19)
       json
       rake
     postmark-rails (0.4.1)
@@ -207,7 +207,7 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.0.3)
-    rdoc (3.12.1)
+    rdoc (3.12.2)
       json (~> 1.4)
     redis (3.0.2)
     redis-namespace (1.2.1)
