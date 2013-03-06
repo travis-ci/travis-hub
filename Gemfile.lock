@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: c96703987edf267d0f1bba22babd98bd47151465
+  revision: ba43621b8f7eda433f67b33b0d62971136926a2f
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -180,6 +180,10 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
+    pry (0.9.11.4)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     pry (0.9.11.4-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
