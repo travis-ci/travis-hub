@@ -82,7 +82,7 @@ GIT
     micro_migrations (0.0.1)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (3.2.12)
       actionpack (= 3.2.12)
@@ -180,10 +180,6 @@ GEM
       actionmailer
       postmark (>= 0.9.0)
       rake
-    pry (0.9.11.4)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.4)
     pry (0.9.11.4-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
