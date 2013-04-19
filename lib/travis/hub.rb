@@ -33,9 +33,7 @@ module Travis
 
     def run
       enqueue_jobs
-      3.times do
-        Queue.subscribe(&method(:handle))
-      end
+      Queue.subscribe(&method(:handle))
     end
 
     private
