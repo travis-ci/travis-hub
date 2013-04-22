@@ -80,7 +80,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: a288008629ae7eab18c529008880d364daca82ce
+  revision: 1f705a2ce4bcc42c642b337f117073abedef971b
+  branch: ps-sentry-instead-of-hubble
   specs:
     travis-support (0.0.1)
 

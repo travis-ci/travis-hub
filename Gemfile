@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.2'
 
 gem 'travis-core',        github: 'travis-ci/travis-core'
-gem 'travis-support',     github: 'travis-ci/travis-support'
+gem 'travis-support',     github: 'travis-ci/travis-support', branch: 'ps-sentry-instead-of-hubble'
 gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs', require: nil
 
 # TODO need to release the gem as soon i'm certain this change makes sense
