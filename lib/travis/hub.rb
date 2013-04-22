@@ -2,6 +2,7 @@ require 'multi_json'
 
 require 'travis'
 require 'core_ext/kernel/run_periodically'
+require 'raven'
 
 $stdout.sync = true
 
@@ -26,6 +27,10 @@ module Travis
 
       Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
       NewRelic.start if File.exists?('config/newrelic.yml')
+
+      ::Raven.configure do |config|
+        config.dsn = Travis.config.sentry.dsn
+      end
 
       # do we still need these in hub?
       # Travis::Mailer.setup

@@ -13,6 +13,8 @@ gem 'gh',                 github: 'rkh/gh'
 gem 'hubble',             github: 'roidrage/hubble'
 gem 'newrelic_rpm',       '~> 3.4.2'
 
+gem "sentry-raven", github: "getsentry/raven-ruby"
+
 # can't be removed yet, even though we're on jruby 1.6.7 everywhere
 # this is due to Invalid gemspec errors
 gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
