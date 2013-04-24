@@ -30,6 +30,8 @@ module Travis
 
       ::Raven.configure do |config|
         config.dsn = Travis.config.sentry.dsn
+        config.ssl = Travis.config.ssl
+        config.logger = Travis.logger
       end
 
       # do we still need these in hub?
