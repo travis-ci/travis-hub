@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/getsentry/raven-ruby.git
-  revision: c715d0f0b24c4eb076b1dbbfa0c1f80542f1eaf3
+  remote: git://github.com/drogus/raven-ruby.git
+  revision: da56bd0efb2c228dc18ce549f5405602fd87f86f
+  branch: override_ssl_settings
   specs:
     sentry-raven (0.4.5)
       faraday (>= 0.7.6)
@@ -153,7 +154,7 @@ GEM
       thor (>= 0.14.6)
     guard-rspec (1.2.1)
       guard (>= 1.1)
-    hashie (2.0.3)
+    hashie (2.0.4)
     hashr (0.0.22)
     hike (1.2.2)
     hitimes (1.2.1)

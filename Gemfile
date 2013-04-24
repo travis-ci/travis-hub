@@ -13,7 +13,7 @@ gem 'gh',                 github: 'rkh/gh'
 gem 'hubble',             github: 'roidrage/hubble'
 gem 'newrelic_rpm',       '~> 3.4.2'
 
-gem "sentry-raven", github: "getsentry/raven-ruby"
+gem "sentry-raven", github: "drogus/raven-ruby", branch: 'override_ssl_settings'
 
 # can't be removed yet, even though we're on jruby 1.6.7 everywhere
 # this is due to Invalid gemspec errors
