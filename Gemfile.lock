@@ -1,9 +1,8 @@
 GIT
-  remote: git://github.com/drogus/raven-ruby.git
-  revision: da56bd0efb2c228dc18ce549f5405602fd87f86f
-  branch: override_ssl_settings
+  remote: git://github.com/getsentry/raven-ruby.git
+  revision: 3f5d4063dcceca2696f7cdc12feb2399f0363b8b
   specs:
-    sentry-raven (0.4.5)
+    sentry-raven (0.4.6)
       faraday (>= 0.7.6)
       hashie
       multi_json (~> 1.0)
