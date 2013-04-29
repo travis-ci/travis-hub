@@ -1,58 +1,32 @@
+sentry: &sentry
+  dsn: https://tok:en@app.getsentry.com/app_id
+    
 production:
   domain: travis-ci.local
   notifications:
-    - worker
     - pusher
     - email
     - irc
     - webhook
     - campfire
-    - archive
-  queues:
-    - queue: builds.rails
-      slug: rails/rails
-    - queue: builds.erlang
-      language: erlang
-    - queue: builds.node_js
-      language: node_js
-    - queue: builds.php
-      language: php
-    - queue: builds.spree
-      slug: spree/spree
-    - queue: builds.spree
-      slug: spree/spree_static_content
-    - queue: builds.spree
-      slug: spree/spree_email_to_friend
-    - queue: builds.spree
-      slug: spree/spree_related_products
+    - hipchat
+    - flowdock
+    - github_commit_status
   database:
     username: some.username
     password: t0p.s3kr3t
     database: some.database
     host: db.megacorp.local
-  archive:
-    host: travis-ci.couchdbserver.local
-    username: couchdb.username
-    password: couchdb.password
   amqp:
     host: messaging.megacorp.local
     port: 5672
     username: cute.bunny
     password: t0p.s3kr3t
     vhost: travisci.production
-  pusher:
-    app_id: 12345
-    key: sdf98sdyf9sdf798sd7f
-    secret: 982398s9a8y9d8fy878
-  airbrake:
-    key: 88fsyd9fsd9888asd88777
-  smtp:
-    address: smtp.mymail.local
-    user_name: some.username
-    password: some.password
-    domain: travis-ci.local
   ssl:
     ca_file: /usr/lib/ssl/certs/ca-certificates.crt
+  sentry:
+    <<: *sentry
 
 development:
   database:
@@ -67,7 +41,7 @@ development:
     password: travisci_hub_password
     vhost: travisci.development
   notifications:
-    - worker
+    - pusher
 
 test:
   domain: test.travis-ci.local
