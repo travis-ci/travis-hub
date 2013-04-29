@@ -1,6 +1,8 @@
 require 'multi_json'
 
 require 'travis'
+require 'travis/hub/queue'
+require 'travis/hub/error'
 require 'core_ext/kernel/run_periodically'
 require 'raven'
 
@@ -8,11 +10,6 @@ $stdout.sync = true
 
 module Travis
   class Hub
-    autoload :Error, 'travis/hub/error'
-    autoload :Queue, 'travis/hub/queue'
-
-    extend Instrumentation
-
     def setup
       Travis::Async.enabled = true
       Travis::Amqp.config = Travis.config.amqp
@@ -33,9 +30,6 @@ module Travis
         config.ssl = Travis.config.ssl
         config.logger = Travis.logger
       end
-
-      # do we still need these in hub?
-      # Travis::Mailer.setup
     end
 
     def run
@@ -56,12 +50,5 @@ module Travis
           Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
         end
       end
-
-      # class Instrument < Travis::Notification::Instrument
-      #   def update_completed
-      #     publish(msg: %(for #<Job id="#{target.payload['id']}">), event: target.event, payload: target.payload)
-      #   end
-      # end
-      # Instrument.attach_to(self)
   end
 end
