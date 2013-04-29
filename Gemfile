@@ -13,18 +13,18 @@ gem 'gh',                 github: 'rkh/gh'
 gem 'hubble',             github: 'roidrage/hubble'
 gem 'newrelic_rpm',       '~> 3.4.2'
 
-gem "sentry-raven", github: "getsentry/raven-ruby"
+gem "sentry-raven",       github: "getsentry/raven-ruby"
 
 # can't be removed yet, even though we're on jruby 1.6.7 everywhere
 # this is due to Invalid gemspec errors
 gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
-gem 'hot_bunnies',        '~> 1.4.0.pre4'
-gem 'jruby-openssl',      '~> 0.7.7'
+gem 'hot_bunnies',        '~> 1.4.0'
+gem 'jruby-openssl',      '~> 0.8.8'
 
 # see http://www.ruby-forum.com/topic/4409725
-gem 'activerecord-jdbcpostgresql-adapter', '= 1.2.2.1'
+gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.9'
 
 gem 'coder',              github: 'rkh/coder'
 
