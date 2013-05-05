@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 7853a96ad203ee34828e8ab4df59d2052a608b20
+  revision: 8433c1248f8c9e247162e8d569a0851cebb7e99c
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -143,6 +143,7 @@ GEM
     facter (1.7.0)
     faraday (0.8.7)
       multipart-post (~> 1.1)
+    ffi (1.8.1)
     ffi (1.8.1-java)
     formatador (0.2.4)
     guard (1.8.0)
@@ -188,6 +189,10 @@ GEM
     net-http-pipeline (1.0.1)
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.3)
+    pry (0.9.12.1)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     pry (0.9.12.1-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
