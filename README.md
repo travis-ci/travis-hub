@@ -136,6 +136,12 @@ Delivers Campfire notifications. Usually disabled during development.
 Proactively archives build logs & other information to a separate data store.
 Usually disabled during development.
 
+## Contributing
+
+See the CONTRIBUTING.md file for information on how to contribute to travis-hub.
+Note that we're using a [central issue tracker]
+(https://github/com/travis-ci/travis-ci/issues) for all the Travis projects.
+
 
 ## License & copyright information ##
 
