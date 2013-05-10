@@ -24,12 +24,6 @@ module Travis
 
       Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
       NewRelic.start if File.exists?('config/newrelic.yml')
-
-      ::Raven.configure do |config|
-        config.dsn = Travis.config.sentry.dsn
-        config.ssl = Travis.config.ssl
-        config.logger = Travis.logger
-      end
     end
 
     def run
