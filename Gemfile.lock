@@ -23,9 +23,9 @@ GIT
 
 GIT
   remote: git://github.com/rkh/gh.git
-  revision: ff93c759591a66c9d5250cada5234d2adde95dd3
+  revision: 6eec1a730700d7e94bb288742ad23822d2d28604
   specs:
-    gh (0.11.1)
+    gh (0.11.2)
       addressable
       backports
       faraday (~> 0.8)
@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 26aa6752822b546538edce9a52cdb7054675279b
+  revision: e6bbe851c95e7afbbc5420661c8f1329d478a519
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -117,7 +117,7 @@ GEM
     arel (3.0.2)
     atomic (1.1.9-java)
     avl_tree (1.1.3)
-    backports (3.3.0)
+    backports (3.3.1)
     bouncy-castle-java (1.5.0147)
     builder (3.0.4)
     celluloid (0.12.4)
@@ -157,7 +157,7 @@ GEM
     jruby-openssl (0.8.8)
       bouncy-castle-java (>= 1.5.0147)
     json (1.8.0-java)
-    listen (1.1.2)
+    listen (1.1.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
