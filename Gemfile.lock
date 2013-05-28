@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/rkh/coder.git
-  revision: df0b55bbabee114724cfd712f1c98ed954e5163d
+  revision: f7430cea03af163441debdacd9c0fc9032402d81
   specs:
     coder (0.3.0)
 
@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: git://github.com/svenfuchs/simple_states.git
-  revision: b1d45144e6a758220d7b21f83b08dc92de0d3196
+  revision: ac077fef5532f0159261dbfaf6a624128d2eb25a
   branch: sf-set-state-early
   specs:
     simple_states (0.1.1)
@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 475973f29cd817bacec61db17a903730f4f07c51
+  revision: e3993b8f77b4c4e0bf4fe1b32a8e0b42c094510b
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
