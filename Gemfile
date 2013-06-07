@@ -8,8 +8,6 @@ gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs', require: nil
 
 gem 'dalli'
 
-# TODO need to release the gem as soon i'm certain this change makes sense
-gem 'simple_states',      github: 'svenfuchs/simple_states', branch: 'sf-set-state-early'
 gem 'gh',                 github: 'rkh/gh'
 gem "sentry-raven",       github: "getsentry/raven-ruby"
 gem 'newrelic_rpm',       '~> 3.4.2'

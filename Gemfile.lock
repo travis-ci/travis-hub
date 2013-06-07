@@ -34,15 +34,6 @@ GIT
       net-http-pipeline
 
 GIT
-  remote: git://github.com/svenfuchs/simple_states.git
-  revision: ac077fef5532f0159261dbfaf6a624128d2eb25a
-  branch: sf-set-state-early
-  specs:
-    simple_states (0.1.1)
-      activesupport
-      hashr (~> 0.0.10)
-
-GIT
   remote: git://github.com/travis-ci/travis-core.git
   revision: e3993b8f77b4c4e0bf4fe1b32a8e0b42c094510b
   specs:
@@ -136,6 +127,7 @@ GEM
     facter (1.7.1)
     faraday (0.8.7)
       multipart-post (~> 1.1)
+    ffi (1.8.1)
     ffi (1.8.1-java)
     formatador (0.2.4)
     guard (1.8.0)
@@ -149,6 +141,7 @@ GEM
     hashie (2.0.5)
     hashr (0.0.22)
     hike (1.2.2)
+    hitimes (1.2.1)
     hitimes (1.2.1-java)
     hot_bunnies (1.4.0-java)
     i18n (0.6.1)
@@ -228,6 +221,9 @@ GEM
       redis (~> 3)
       redis-namespace
     signature (0.1.7)
+    simple_states (0.1.1)
+      activesupport
+      hashr (~> 0.0.10)
     slop (3.4.5)
     spoon (0.0.4)
       ffi
@@ -269,7 +265,6 @@ DEPENDENCIES
   rspec (~> 2.7.0)
   sentry-raven!
   sidekiq
-  simple_states!
   travis-core!
   travis-sidekiqs!
   travis-support!
