@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: e3993b8f77b4c4e0bf4fe1b32a8e0b42c094510b
+  revision: 828858bb78f104960663e267d07f0fc93d94fd0a
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -51,7 +51,7 @@ GIT
       rake
       redis (~> 3.0)
       rollout (~> 1.1.0)
-      simple_states (~> 0.1.1)
+      simple_states (~> 1.0.0)
       thor (~> 0.14.6)
 
 GIT
@@ -140,8 +140,7 @@ GEM
       guard (>= 1.1)
     hashie (2.0.5)
     hashr (0.0.22)
-    hike (1.2.2)
-    hitimes (1.2.1)
+    hike (1.2.3)
     hitimes (1.2.1-java)
     hot_bunnies (1.4.0-java)
     i18n (0.6.1)
@@ -167,12 +166,16 @@ GEM
     mime-types (1.23)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.3)
+    multi_json (1.7.6)
     multipart-post (1.2.0)
     net-http-persistent (2.8)
     net-http-pipeline (1.0.1)
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.3)
+    pry (0.9.12.2)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     pry (0.9.12.2-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -221,7 +224,7 @@ GEM
       redis (~> 3)
       redis-namespace
     signature (0.1.7)
-    simple_states (0.1.1)
+    simple_states (1.0.0)
       activesupport
       hashr (~> 0.0.10)
     slop (3.4.5)
@@ -235,7 +238,7 @@ GEM
     thor (0.14.6)
     tilt (1.4.1)
     timers (1.1.0)
-    treetop (1.4.12)
+    treetop (1.4.14)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.37)
