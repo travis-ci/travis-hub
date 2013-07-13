@@ -1,11 +1,10 @@
 GIT
   remote: git://github.com/getsentry/raven-ruby.git
-  revision: 299f326b420f9d80cfeea9d4e7bfd66ac93f5ad2
+  revision: eb1a0072af1132594c574cc6a64618cf900e4810
   specs:
     sentry-raven (0.5.0)
       faraday (>= 0.7.6)
       hashie (>= 1.1.0)
-      multi_json (~> 1.0)
       uuidtools
 
 GIT
@@ -23,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 9f445fff657cd547f9177c990854b0271c94859b
+  revision: f8f12caaed106f7447ec723e21d837253025e971
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -44,7 +43,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-sidekiqs.git
-  revision: df0b0c183dfbf4a55c0925dba0df412c690db05b
+  revision: 9eb425e794258c12f452ec7f9321f5dc77f4b17e
   specs:
     travis-sidekiqs (0.0.1)
       sidekiq (~> 2.8.0)
@@ -113,7 +112,7 @@ GEM
     database_cleaner (0.8.0)
     diff-lcs (1.1.3)
     erubis (2.7.0)
-    facter (1.7.1)
+    facter (1.7.2)
     faraday (0.8.7)
       multipart-post (~> 1.1)
     ffi (1.9.0-java)
@@ -208,7 +207,7 @@ GEM
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.7.0)
-    safe_yaml (0.9.3)
+    safe_yaml (0.9.4)
     sidekiq (2.8.0)
       celluloid (~> 0.12.0)
       connection_pool (~> 1.0)
