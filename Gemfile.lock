@@ -54,12 +54,6 @@ GIT
   specs:
     travis-support (0.0.1)
 
-GIT
-  remote: https://gist.github.com/2087829.git
-  revision: c766c06b0bdbda3bd96c3f4e376249cafcbbfaaa
-  specs:
-    micro_migrations (0.0.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -93,6 +87,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.5)
     arel (3.0.2)
+    atomic (1.1.10)
     atomic (1.1.10-java)
     avl_tree (1.1.3)
     backports (3.3.3)
@@ -136,6 +131,7 @@ GEM
     hashie (2.0.5)
     hashr (0.0.22)
     hike (1.2.3)
+    hitimes (1.2.1)
     hitimes (1.2.1-java)
     hot_bunnies (1.4.0-java)
     i18n (0.6.1)
@@ -143,6 +139,7 @@ GEM
     journey (1.0.4)
     jruby-openssl (0.8.8)
       bouncy-castle-java (>= 1.5.0147)
+    json (1.8.0)
     json (1.8.0-java)
     listen (1.2.2)
       rb-fsevent (>= 0.9.3)
@@ -158,6 +155,7 @@ GEM
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
       hitimes (~> 1.1)
+    micro_migrations (0.0.1)
     mime-types (1.23)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
@@ -212,7 +210,7 @@ GEM
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.7.0)
-    safe_yaml (0.9.4)
+    safe_yaml (0.9.5)
     sidekiq (2.8.0)
       celluloid (~> 0.12.0)
       connection_pool (~> 1.0)
@@ -250,13 +248,12 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (~> 1.2.9)
   coder!
   dalli
-  data_migrations (~> 0.0.1)
   database_cleaner (~> 0.8.0)
   guard
   guard-rspec
   hot_bunnies (~> 1.4.0)
   jruby-openssl (~> 0.8.8)
-  micro_migrations!
+  micro_migrations
   mocha (~> 0.10.0)
   newrelic_rpm (~> 3.4.2)
   rollout!
