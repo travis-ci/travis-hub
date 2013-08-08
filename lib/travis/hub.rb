@@ -10,6 +10,7 @@ require 'travis/hub/solo'
 require 'travis/hub/worker'
 require 'travis/hub/dispatcher'
 require 'core_ext/kernel/run_periodically'
+require 'jruby-openssl'
 require 'raven'
 
 $stdout.sync = true
