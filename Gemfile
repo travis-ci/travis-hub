@@ -17,7 +17,7 @@ gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
 gem 'hot_bunnies',        '~> 1.4.0'
-gem 'jruby-openssl',      '~> 0.8.8'
+gem 'jruby-openssl',      '~> 0.8.8', require: false
 
 # see http://www.ruby-forum.com/topic/4409725
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2.9'
@@ -34,6 +34,5 @@ group :test do
 end
 
 group :development, :test do
-  gem 'micro_migrations', git: 'https://gist.github.com/2087829.git'
-  gem 'data_migrations',  '~> 0.0.1'
+  gem 'micro_migrations'
 end
