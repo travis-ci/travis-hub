@@ -18,7 +18,7 @@ module Travis
         Travis::Notification.setup
         Travis::Addons.register
 
-        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
+        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production' && Travis.config.metrics.report
         NewRelic.start if File.exists?('config/newrelic.yml')
       end
 
