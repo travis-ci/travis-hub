@@ -4,7 +4,6 @@ module Travis
       def setup
         Travis::Async.enabled = true
         Travis::Amqp.config = Travis.config.amqp
-        GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
         Travis::Database.connect
         if Travis.config.logs_database
