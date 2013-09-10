@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: f3c2b689fd8ff1986501259f270eba2bc705a9ad
+  revision: 8c984bee548c03d52f8090c8a39a87eb31954702
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -115,10 +115,9 @@ GEM
     facter (1.7.2)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
-    ffi (1.9.0)
     ffi (1.9.0-java)
     formatador (0.2.4)
-    gh (0.12.4)
+    gh (0.13.0)
       addressable
       backports
       faraday (~> 0.8)
@@ -161,7 +160,7 @@ GEM
     mime-types (1.25)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     multipart-post (1.2.0)
     net-http-persistent (2.9)
     net-http-pipeline (1.0.1)
