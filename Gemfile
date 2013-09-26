@@ -16,7 +16,7 @@ gem 'newrelic_rpm',       '~> 3.4.2'
 gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
-gem 'hot_bunnies',        '~> 1.4.0'
+gem 'march_hare',         '~> 2.0.0.rc2'
 gem 'jruby-openssl',      '~> 0.8.8'
 
 # see http://www.ruby-forum.com/topic/4409725
