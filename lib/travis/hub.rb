@@ -41,7 +41,11 @@ module Travis
 
       def enqueue_jobs
         run_periodically(Travis.config.queue.interval) do
-          Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
+          begin
+            Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
+          rescue => e
+            Travis.logger.log_exception(e)
+          end
         end
       end
   end
