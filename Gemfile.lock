@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: aeac15740b53ae8d19ab4a662de3669b05563ec1
+  revision: f1b763875c5b6008b3fad1af90ff7fbe460f9ee9
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.12)
@@ -95,7 +95,7 @@ GEM
     arel (3.0.2)
     atomic (1.1.14-java)
     avl_tree (1.1.3)
-    backports (3.3.4)
+    backports (3.3.5)
     bouncy-castle-java (1.5.0147)
     builder (3.0.4)
     celluloid (0.12.4)
@@ -115,6 +115,7 @@ GEM
     facter (1.7.3)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
+    ffi (1.9.0)
     ffi (1.9.0-java)
     formatador (0.2.4)
     gh (0.13.0)
@@ -160,12 +161,16 @@ GEM
     mime-types (1.25)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.8.0)
+    multi_json (1.8.2)
     multipart-post (1.2.0)
     net-http-persistent (2.9)
     net-http-pipeline (1.0.1)
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.3)
+    pry (0.9.12.2)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     pry (0.9.12.2-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -196,7 +201,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
-    redis (3.0.4)
+    redis (3.0.5)
     redis-namespace (1.3.1)
       redis (~> 3.0.0)
     rspec (2.7.0)
@@ -232,7 +237,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.37)
+    tzinfo (0.3.38)
     uuidtools (2.1.4)
     webmock (1.8.11)
       addressable (>= 2.2.7)
