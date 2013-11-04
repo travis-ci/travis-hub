@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require 'travis/hub'
+require 'travis/testing'
 require 'travis/support'
 require 'support/active_record'
 require 'support/payloads'
