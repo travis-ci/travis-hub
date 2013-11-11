@@ -1,6 +1,9 @@
 require 'multi_json'
 
 require 'travis'
+require 'travis/model'
+require 'travis/states_cache'
+require 'travis/support/amqp'
 require 'travis/hub/queue'
 require 'travis/hub/error'
 require 'core_ext/kernel/run_periodically'
