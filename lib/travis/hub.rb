@@ -19,6 +19,11 @@ module Travis
       GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
       Travis::Database.connect
+      if Travis.config.logs_database
+        Log.establish_connection 'logs_database'
+        Log::Part.establish_connection 'logs_database'
+      end
+
       Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
 
       Travis::Exceptions::Reporter.start
