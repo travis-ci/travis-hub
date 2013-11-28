@@ -6,3 +6,5 @@ log/*
 *.class
 .rbenv-version
 .rbenv-gemsets
+.bundle
+tmp
