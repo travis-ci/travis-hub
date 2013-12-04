@@ -4,7 +4,7 @@ require 'bundler/setup'
 require 'micro_migrations'
 require 'travis'
 
-ENV['SCHEMA'] = "#{Gem.loaded_specs['travis-core'].full_gem_path}/db/schema.rb"
+ENV['DB_STRUCTURE'] = "#{Gem.loaded_specs['travis-core'].full_gem_path}/db/structure.sql"
 
 desc 'Run specs'
 RSpec::Core::RakeTask.new do |t|
