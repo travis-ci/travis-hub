@@ -140,7 +140,7 @@ Usually disabled during development.
 
 See the CONTRIBUTING.md file for information on how to contribute to travis-hub.
 Note that we're using a [central issue tracker]
-(https://github/com/travis-ci/travis-ci/issues) for all the Travis projects.
+(https://github.com/travis-ci/travis-ci/issues) for all the Travis projects.
 
 
 ## License & copyright information ##
