@@ -1,6 +1,6 @@
 language: ruby
 
-rvm: jruby-1.7.6
+rvm: jruby-1.7.12
 
 jdk: openjdk7
 
