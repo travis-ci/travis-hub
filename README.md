@@ -19,7 +19,7 @@ After you have RabbitMQ running, use
 
 to create a separate RabbitMQ vhost (travis.development) for travis as well as one user (`travis_hub`) for Hub.
 You can instead use any other vhost or username but this script matches what's in the example configuration
-filee.
+file.
 
 
 ### JRuby and libraries
