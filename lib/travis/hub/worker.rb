@@ -9,6 +9,10 @@ module Travis
       def queue
         "builds.#{count}"
       end
+
+      def enqueue_jobs
+        # handled by dispatcher
+      end
     end
   end
 end
