@@ -9,7 +9,7 @@ module Travis
         new(queue, &handler).subscribe
       end
 
-      attr_reader :handler
+      attr_reader :handler, :queue
 
       def initialize(queue, &handler)
         @queue   = queue
