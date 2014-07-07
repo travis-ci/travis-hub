@@ -1,4 +1,4 @@
-#! /usr/bin/env ruby
+#!/usr/bin/env ruby
 
 $stdout.sync = true
 
@@ -7,7 +7,7 @@ $: << 'lib'
 require 'bundler/setup'
 require 'travis/hub'
 
-app = Travis::Hub.new
+app = Travis::Hub.new(ARGV[0], ARGV[1])
 app.setup
 app.run
 
