@@ -75,8 +75,19 @@ Find a sample travis.yml file under config/travis.example.yml, copy it and edit 
 
 To run Hub in the foreground, use
 
-    bundle exec thor travis:hub:start
+    bin/hub solo
 
+There are two modes: Either a single process handling everything, or a one dispatcher, multiple workers setup:
+
+    bin/hub dispatcher 2
+    bin/hub worker 1
+    bin/hub worker 2
+
+### Scaling up and down
+
+* From solo to dispatcher/worker should work without issues, since the dispatcher will read from the builds queue.
+* Scaling down dispatcher/worker works if you let the higher worker count run with a dispatcher not dispatching to all of them until the higher queues are drained.
+* Scaling up is tricky, since there might be a race condition for builds running while scaling up. Hub either needs some logic to handle this scenario (dispatch jobs with a build_id before X to Y workers, everything after to Z workers) or the dispatcher needs to be killed until the worker queues are empty.
 
 ## Disabling Features
 
