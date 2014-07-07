@@ -85,7 +85,7 @@ There are two modes: Either a single process handling everything, or a one dispa
 
 ### Scaling up and down
 
-Keep in mind that there might be race conditions for currently running builds when scaling up and down. You should turn off the dispatcher and have the hub worker queues drain before you start with a new number of workers.
+When scaling down, keep in mind to first let the queue drain before killing off workers.
 
 On Heroku, scaling works like this:
 

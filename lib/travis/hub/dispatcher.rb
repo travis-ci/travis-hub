@@ -13,7 +13,7 @@ module Travis
 
       def handle_event(event, payload)
         publisher = @publishers[key_for(payload)]
-        publisher.publish(payload, properties: { type: event })
+        publisher.publish(payload.merge('hub_count' => count), properties: { type: event })
       end
 
       def key_for(payload)

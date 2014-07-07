@@ -22,9 +22,10 @@ module Travis
         NewRelic.start if File.exists?('config/newrelic.yml')
       end
 
-      attr_accessor :count
-      def initialize(argument = nil)
-        @count = Integer(argument[/\d+/]) if argument
+      attr_accessor :count, :number
+      def initialize(count = nil, number = nil)
+        @count  = Integer count[/\d+/]  if count
+        @number = Integer number[/\d+/] if number
       end
 
       def run
