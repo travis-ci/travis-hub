@@ -89,6 +89,11 @@ There are two modes: Either a single process handling everything, or a one dispa
 * Scaling down dispatcher/worker works if you let the higher worker count run with a dispatcher not dispatching to all of them until the higher queues are drained.
 * Scaling up is tricky, since there might be a race condition for builds running while scaling up. Hub either needs some logic to handle this scenario (dispatch jobs with a build_id before X to Y workers, everything after to Z workers) or the dispatcher needs to be killed until the worker queues are empty.
 
+On Heroku, scaling works like this:
+
+    heroku config:set DYNO_COUNT=2
+    heroku ps:scale solo=0 dispatcher=1:2x worker=2:2x
+
 ## Disabling Features
 
 Quite often during development you want to disable things like email delivery and [Pusher](http://pusher.com/) notifications.
