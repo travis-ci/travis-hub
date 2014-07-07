@@ -17,8 +17,8 @@ module Travis
       end
 
       def key_for(event)
-        build_id = ::Job.find(payload.fetch('id')).build_id
-        queue_name(build_id % count)
+        source_id = ::Job.find(payload.fetch('id')).source_id
+        queue_name(source_id % count)
       end
 
       def queue_name(index)
