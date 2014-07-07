@@ -6,7 +6,7 @@ module Travis
       include Logging
 
       def self.subscribe(queue, &handler)
-        new(&handler).subscribe
+        new(queue, &handler).subscribe
       end
 
       attr_reader :handler
