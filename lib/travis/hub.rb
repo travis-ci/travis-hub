@@ -19,8 +19,8 @@ module Travis
     TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher }
     extend self
 
-    def new(type = nil, argument = nil)
-      TYPES.fetch(type || 'solo').new(argument)
+    def new(type = nil, *args)
+      TYPES.fetch(type || 'solo').new(*args)
     end
   end
 end
