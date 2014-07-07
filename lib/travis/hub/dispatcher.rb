@@ -16,7 +16,7 @@ module Travis
         publisher.publish(payload, properties: { type: event })
       end
 
-      def key_for(event)
+      def key_for(payload)
         source_id = ::Job.find(payload.fetch('id')).source_id
         queue_name(source_id % count)
       end
