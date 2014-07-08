@@ -75,8 +75,22 @@ Find a sample travis.yml file under config/travis.example.yml, copy it and edit 
 
 To run Hub in the foreground, use
 
-    bundle exec thor travis:hub:start
+    bin/hub solo
 
+There are two modes: Either a single process handling everything, or a one dispatcher, multiple workers setup:
+
+    bin/hub dispatcher 2
+    bin/hub worker 1
+    bin/hub worker 2
+
+### Scaling up and down
+
+When scaling down, keep in mind to first let the queue drain before killing off workers.
+
+On Heroku, scaling works like this:
+
+    heroku config:set DYNO_COUNT=2
+    heroku ps:scale solo=0 dispatcher=1:2x worker=2:2x
 
 ## Disabling Features
 

@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 866ae05c2348d512b0e1571136ad770fd0fb8b4b
+  revision: 269e9475e03a69038ba269fd0ab76262583cd4e8
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: a19ad9390721c75513505fd60191633789f55a42
+  revision: d37220d766a3fb218f0f8e60ab8764034f6b376f
   specs:
     travis-support (0.0.1)
 
@@ -122,7 +122,6 @@ GEM
     facter (1.7.3)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.3)
     ffi (1.9.3-java)
     formatador (0.2.4)
     gh (0.13.2)
@@ -175,10 +174,6 @@ GEM
     newrelic_rpm (3.4.2.1)
     polyglot (0.3.5)
     proxies (0.2.1)
-    pry (0.9.12.3)
-      coderay (~> 1.0)
-      method_source (~> 0.8)
-      slop (~> 3.4)
     pry (0.9.12.3-java)
       coderay (~> 1.0)
       method_source (~> 0.8)

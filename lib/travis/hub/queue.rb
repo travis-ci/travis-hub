@@ -1,22 +1,23 @@
 require 'coder'
 
 module Travis
-  class Hub
+  module Hub
     class Queue
       include Logging
 
-      def self.subscribe(&handler)
-        new(&handler).subscribe
+      def self.subscribe(queue, &handler)
+        new(queue, &handler).subscribe
       end
 
-      attr_reader :handler
+      attr_reader :handler, :queue
 
-      def initialize(&handler)
+      def initialize(queue, &handler)
+        @queue   = queue
         @handler = handler
       end
 
       def subscribe
-        Travis::Amqp::Consumer.jobs('builds').subscribe(:ack => true, &method(:receive))
+        Travis::Amqp::Consumer.jobs(queue).subscribe(:ack => true, &method(:receive))
       end
 
       private

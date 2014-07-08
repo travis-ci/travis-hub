@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Travis::Hub::Queue do
   let(:handler) { ->(*) {} }
-  let(:queue)   { Travis::Hub::Queue.new(&handler) }
+  let(:queue)   { Travis::Hub::Queue.new('builds', &handler) }
   let(:payload) { '{ "foo": "bar", "uuid": "2d931510-d99f-494a-8c67-87feb05e1594" }' }
   let(:message) { stub('message', :ack => nil, :properties => stub('properties', :type => 'job:finish') ) }
 
