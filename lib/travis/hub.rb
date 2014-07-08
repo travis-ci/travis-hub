@@ -20,7 +20,8 @@ module Travis
     extend self
 
     def new(type = nil, *args)
-      TYPES.fetch(type || 'solo').new(*args)
+      type ||= 'solo'
+      TYPES.fetch(type).new(type, *args)
     end
   end
 end

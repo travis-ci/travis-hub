@@ -12,7 +12,9 @@ module Travis
       end
 
       def handle_event(event, payload)
-        publisher = @publishers[key_for(payload)]
+        key       = key_for(payload)
+        publisher = @publishers[key]
+        Metriks.meter("hub.#{name}.delegate.#{key}").mark
         publisher.publish(payload.merge('hub_count' => count), properties: { type: event })
       end
 

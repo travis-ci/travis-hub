@@ -15,6 +15,7 @@ module Travis
         return super if payload['hub_count'] == count
 
         # we don't want this, send back to the queue
+        Metriks.meter("hub.#{name}.requeue").mark
         publisher = Travis::Amqp::Publisher.jobs('builds')
         publisher.publish(payload, properties: { type: event })
       end

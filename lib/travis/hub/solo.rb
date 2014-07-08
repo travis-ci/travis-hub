@@ -22,8 +22,9 @@ module Travis
         NewRelic.start if File.exists?('config/newrelic.yml')
       end
 
-      attr_accessor :count, :number
-      def initialize(count = nil, number = nil)
+      attr_accessor :name, :count, :number
+      def initialize(name, count = nil, number = nil)
+        @name   = name
         @count  = Integer count[/\d+/]  if count
         @number = Integer number[/\d+/] if number
       end
@@ -40,8 +41,10 @@ module Travis
         end
 
         def handle(event, payload)
-          ActiveRecord::Base.cache do
-            handle_event(event, payload)
+          Metriks.timer("hub.#{name}.handle").time do
+            ActiveRecord::Base.cache do
+              handle_event(event, payload)
+            end
           end
         end
 
@@ -51,12 +54,14 @@ module Travis
 
         def enqueue_jobs
           run_periodically(Travis.config.queue.interval) do
-            begin
-              Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
-            rescue => e
-              Travis.logger.log_exception(e)
-            end
+            Metriks.timer("hub.#{name}.enqueue_jobs") { enqueue_jobs! }
           end
+        end
+
+        def enqueue_jobs!
+          Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
+        rescue => e
+          Travis.logger.log_exception(e)
         end
     end
   end
