@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 90ace6477eea049c3a6ccf9a7302c36d772f717a
+  revision: 386007dbc9692717b1d1db72f1f90f8669e54c26
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -102,7 +102,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
-    backports (3.6.0)
+    backports (3.6.1)
     bouncy-castle-java (1.5.0147)
     builder (3.0.4)
     celluloid (0.12.4)
