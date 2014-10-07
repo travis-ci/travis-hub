@@ -120,7 +120,6 @@ GEM
     erubis (2.7.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.5)
     ffi (1.9.5-java)
     formatador (0.2.5)
     gh (0.13.2)
@@ -164,6 +163,8 @@ GEM
       atomic (~> 1.0)
       avl_tree (~> 1.1.2)
       hitimes (~> 1.1)
+    metriks-librato_metrics (1.0.2)
+      metriks (>= 0.9.9.6)
     micro_migrations (0.0.2)
       activerecord
       railties
@@ -174,13 +175,8 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    newrelic_rpm (3.4.2.1)
     polyglot (0.3.5)
     proxies (0.2.1)
-    pry (0.10.1)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
     pry (0.10.1-java)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -274,9 +270,9 @@ DEPENDENCIES
   guard-rspec
   jruby-openssl (~> 0.8.8)
   march_hare (~> 2.0.0.rc2)
+  metriks-librato_metrics
   micro_migrations
   mocha (~> 0.10.0)
-  newrelic_rpm (~> 3.4.2)
   rollout!
   rspec (~> 2.7.0)
   sentry-raven!
