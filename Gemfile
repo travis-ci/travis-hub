@@ -2,14 +2,14 @@ source 'https://rubygems.org'
 
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.12'
 
-gem 'travis-core',        github: 'travis-ci/travis-core', ref: 'master-2014-10-06'
-gem 'travis-support',     github: 'travis-ci/travis-support', ref: 'master-2014-10-06'
+gem 'travis-core',        github: 'travis-ci/travis-core', branch: 'sf-te'
+gem 'travis-support',     github: 'travis-ci/travis-support', branch: 'sf-te'
 gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs', require: nil
 
 gem 'dalli'
 
 gem 'sentry-raven',       github: 'getsentry/raven-ruby'
-gem 'newrelic_rpm',       '~> 3.4.2'
+gem 'metriks-librato_metrics'
 
 # can't be removed yet, even though we're on jruby 1.6.7 everywhere
 # this is due to Invalid gemspec errors
@@ -17,7 +17,7 @@ gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
 gem 'march_hare',         '~> 2.0.0.rc2'
-gem 'jruby-openssl',      '~> 0.8.8'
+gem 'jruby-openssl',      '~> 0.8.8', require: false
 
 # see http://www.ruby-forum.com/topic/4409725
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0'
@@ -34,6 +34,5 @@ group :test do
 end
 
 group :development, :test do
-  gem 'micro_migrations', git: 'https://gist.github.com/2087829.git'
-  gem 'data_migrations',  '~> 0.0.1'
+  gem 'micro_migrations'
 end

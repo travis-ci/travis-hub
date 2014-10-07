@@ -1,7 +1,6 @@
+sudo: false
 language: ruby
-
 rvm: jruby-1.7.12
-
 jdk: openjdk7
 
 services:

@@ -4,7 +4,6 @@ module Travis
       def setup
         Travis::Async.enabled = true
         Travis::Amqp.config = Travis.config.amqp
-        GH::DefaultStack.options[:ssl] = Travis.config.ssl
 
         Travis::Database.connect
         if Travis.config.logs_database
@@ -15,11 +14,14 @@ module Travis
         Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
 
         Travis::Exceptions::Reporter.start
+        Travis::Metrics.setup
         Travis::Notification.setup
         Travis::Addons.register
 
-        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production'
+        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production' && Travis.config.metrics.report
         NewRelic.start if File.exists?('config/newrelic.yml')
+
+        declare_exchanges_and_queues
       end
 
       attr_accessor :name, :count, :number
@@ -62,6 +64,12 @@ module Travis
           Travis.run_service(:enqueue_jobs) unless Travis::Features.feature_active?(:travis_enqueue)
         rescue => e
           Travis.logger.log_exception(e)
+        end
+
+        def declare_exchanges_and_queues
+          channel = Travis::Amqp.connection.create_channel
+          channel.exchange 'reporting', durable: true, auto_delete: false, type: :topic
+          channel.queue 'builds.linux', durable: true, exclusive: false
         end
     end
   end
