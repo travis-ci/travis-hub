@@ -4,7 +4,6 @@ Travis Hub collects build logs, state changes and other information from Travis 
 in the database, propagates messages to browsers via [Pusher](http://pusher.com), detects finished builds, delivers email and IRC notifications,
 bakes you a pizza and walks your dog.
 
-
 ## Dependencies
 
 ### RabbitMQ
@@ -26,7 +25,6 @@ file.
 
 Travis Hub is JRuby-based. Make sure you have Sun or OpenJDK 6, install JRuby via RVM (or any other way) and then do
 
-    gem install bundler
     bundle install
 
 Hub uses [travis-core](https://github.com/travis-ci/travis-core) and [travis-support](https://github.com/travis-ci/travis-support) that evolve
@@ -35,20 +33,17 @@ rapidly, so keep your eye on those two.
 
 ### Deploying on Heroku
 
-Heroku supports JRuby but only as a _labs_ feature. Add the following to have Heroku use JRuby when compiling and deploying the slug/dyno.
+Heroku will detect the JRuby version from the `Gemfile`.  The following `JAVA_OPTS` may be set for a typical deployment:
 
-    gem install heroku
-
-    heroku plugins:install https://github.com/heroku/heroku-labs.git
-    heroku labs:enable user_env_compile
-    heroku config:add RUBY_VERSION='jruby-1.6.5.1'
-    heroku config:add JAVA_OPTS="-Xmx384m -Xss512k -XX:+UseCompressedOops -Dfile.encoding=UTF-8"
-
+    heroku config:add JAVA_OPTS="-Xmx768m -Xss512k -XX:+UseCompressedOops -Dfile.encoding=UTF-8"
 
 ### PostgreSQL
 
 Primary database used by travis-ci.org is PostgreSQL and Hub uses it extensively. While we use 9.0 in production, 8.4 and 9.1 will work
 just as well.
+
+The schema required by hub lives over in [travis-core](https://github.com/travis-ci/travis-core) and can be created by running migrations in
+that project.
 
 
 ## Configuration
@@ -162,4 +157,3 @@ Note that we're using a [central issue tracker]
 See LICENSE file.
 
 Copyright (c) 2011-2013 [Travis CI development team](https://github.com/travis-ci).
-
