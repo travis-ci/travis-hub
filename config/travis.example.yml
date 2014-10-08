@@ -31,7 +31,7 @@ production:
 development:
   database:
     host: localhost
-    database: travisci_development
+    database: travis_development
     username: travisci
     password:
   amqp:

@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3', engine: 'jruby', engine_version: '1.7.12'
+ruby '1.9.3', engine: 'jruby',
+  engine_version: File.read(
+    File.expand_path('../.ruby-version', __FILE__)
+  ).strip.split('-').last
 
 gem 'travis-core',        github: 'travis-ci/travis-core'
 gem 'travis-support',     github: 'travis-ci/travis-support'
