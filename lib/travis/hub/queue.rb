@@ -17,7 +17,7 @@ module Travis
       end
 
       def subscribe
-        Travis::Amqp::Consumer.jobs(queue).subscribe(:ack => true, &method(:receive))
+        Travis::Amqp::Consumer.jobs(queue).subscribe(ack: true, &method(:receive))
       end
 
       private
@@ -25,19 +25,19 @@ module Travis
         def receive(message, payload)
           failsafe(message, payload) do
             event = message.properties.type
-            payload = decode(payload) || raise("no payload for #{event.inspect} (#{message.inspect})")
+            payload = decode(payload) || fail("no payload for #{event.inspect} (#{message.inspect})")
             Travis.uuid = payload.delete('uuid')
             handler.call(event, payload)
           end
         end
 
         def failsafe(message, payload, options = {}, &block)
-          Timeout::timeout(options[:timeout] || 60, &block)
-        rescue Exception => e
+          Timeout.timeout(options[:timeout] || 60, &block)
+        rescue => e
           begin
             puts e.message, e.backtrace
             Travis::Exceptions.handle(Hub::Error.new(message.properties.type, payload, e))
-          rescue Exception => e
+          rescue => e
             puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
           end
         ensure
@@ -48,7 +48,8 @@ module Travis
           cleaned = Coder.clean(payload)
           MultiJson.decode(cleaned)
         rescue StandardError => e
-          error "[decode error] payload could not be decoded with engine #{MultiJson.engine.to_s}: #{e.inspect} #{payload.inspect}"
+          error '[decode error] payload could not be decoded with engine ' \
+                "#{MultiJson.engine}: #{e.inspect} #{payload.inspect}"
           nil
         end
     end

@@ -5,7 +5,7 @@ require 'database_cleaner'
 
 FileUtils.mkdir_p('log')
 
-# TODO why not make this use Travis::Database.connect ?
+# TODO: why not make this use Travis::Database.connect ?
 config = Travis.config.database.dup
 config.merge!('adapter' => 'jdbcpostgresql', 'username' => ENV['USER']) if RUBY_PLATFORM == 'java'
 
@@ -32,4 +32,3 @@ module Support
     end
   end
 end
-

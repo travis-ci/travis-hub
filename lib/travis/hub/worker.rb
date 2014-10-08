@@ -2,8 +2,8 @@ module Travis
   module Hub
     class Worker < Solo
       def setup
-        raise ArgumentError, 'missing worker count' unless count
-        raise ArgumentError, 'missing worker number' unless number
+        fail ArgumentError, 'missing worker count' unless count
+        fail ArgumentError, 'missing worker number' unless number
         super
       end
 

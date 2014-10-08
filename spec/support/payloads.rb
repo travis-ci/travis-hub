@@ -1,5 +1,5 @@
 GITHUB_PAYLOADS = {
-  "gem-release" => %({
+  'gem-release' => %({
     "repository": {
       "url": "http://github.com/svenfuchs/gem-release",
       "name": "gem-release",

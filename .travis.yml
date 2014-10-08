@@ -3,6 +3,17 @@ language: ruby
 rvm: jruby-1.7.12
 jdk: openjdk7
 
+env:
+  global:
+  - COVERAGE=1
+  matrix:
+  - RAKE_TASK=spec
+  - RAKE_TASK=rubocop
+
+matrix:
+  allow_failures:
+  - env: RAKE_TASK=rubocop
+
 services:
   - redis
 
