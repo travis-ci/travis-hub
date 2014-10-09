@@ -8,3 +8,4 @@ log/*
 .rbenv-gemsets
 .bundle
 tmp
+/coverage

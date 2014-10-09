@@ -1,0 +1,17 @@
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 15
+
+Style/Documentation:
+  Enabled: false
+
+Style/IndentationConsistency:
+  Enabled: false
+
+Style/ModuleFunction:
+  Enabled: false
+
+Style/RegexpLiteral:
+  MaxSlashes: 0

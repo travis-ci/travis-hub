@@ -2,7 +2,7 @@ module Travis
   module Hub
     class Dispatcher < Solo
       def setup
-        raise ArgumentError, 'missing worker count' unless count
+        fail ArgumentError, 'missing worker count' unless count
         super
         @publishers = {}
         count.times do |index|

@@ -2,7 +2,7 @@
 
 $stdout.sync = true
 
-$: << 'lib'
+$LOAD_PATH << 'lib'
 
 require 'bundler/setup'
 require 'travis/hub'
@@ -10,4 +10,3 @@ require 'travis/hub'
 app = Travis::Hub.new(ARGV[0], ARGV[1], ARGV[2])
 app.setup
 app.run
-

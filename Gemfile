@@ -1,9 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3', engine: 'jruby',
-  engine_version: File.read(
-    File.expand_path('../.ruby-version', __FILE__)
-  ).strip.split('-').last
+ruby '1.9.3', engine: 'jruby', engine_version: File.read('.ruby-version').strip.split('-').last
 
 gem 'travis-core',        github: 'travis-ci/travis-core'
 gem 'travis-support',     github: 'travis-ci/travis-support'
@@ -28,12 +25,14 @@ gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0'
 gem 'coder',              github: 'rkh/coder'
 
 group :test do
-  gem 'rspec',            '~> 2.7.0'
   gem 'database_cleaner', '~> 0.8.0'
-  gem 'mocha',            '~> 0.10.0'
-  gem 'webmock',          '~> 1.8.0'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'mocha',            '~> 0.10.0'
+  gem 'rspec',            '~> 2.7.0'
+  gem 'rubocop',          require: false
+  gem 'simplecov',        require: false
+  gem 'webmock',          '~> 1.8.0'
 end
 
 group :development, :test do

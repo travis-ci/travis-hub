@@ -1,4 +1,6 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV['RAILS_ENV'] ||= 'test'
+
+require 'simplecov' if ENV['RAILS_ENV'] == 'test' && ENV['COVERAGE']
 
 require 'travis/hub'
 require 'travis/testing'
@@ -18,8 +20,8 @@ RSpec.configure do |c|
   c.mock_with :mocha
 
   c.before(:each) do
-     Time.now.utc.tap { |now| Time.stubs(:now).returns(now) }
-   end
+    Time.now.utc.tap { |now| Time.stubs(:now).returns(now) }
+  end
 
   c.after :each do
     Travis.config.notifications.clear
