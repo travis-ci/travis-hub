@@ -23,7 +23,7 @@ addons:
 before_script:
   - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
 
-script: ./build.sh
+script: ./build.sh $RAKE_TASK
 
 notifications:
   irc: "irc.freenode.org#travis"

@@ -19,7 +19,6 @@ module Travis
         Travis::Addons.register
 
         Travis::Memory.new(:hub).report_periodically if Travis.env == 'production' && Travis.config.metrics.report
-        NewRelic.start if File.exist?('config/newrelic.yml')
 
         declare_exchanges_and_queues
       end
@@ -33,10 +32,14 @@ module Travis
 
       def run
         enqueue_jobs
-        Queue.subscribe(queue, &method(:handle))
+        subscribe_to_queue
       end
 
       private
+
+        def subscribe_to_queue
+          Queue.subscribe(queue, &method(:handle))
+        end
 
         def queue
           'builds'

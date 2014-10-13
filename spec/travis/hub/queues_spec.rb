@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Travis::Hub::Queue do
   let(:handler) { ->(*) {} }
   let(:queue)   { Travis::Hub::Queue.new('builds', &handler) }
