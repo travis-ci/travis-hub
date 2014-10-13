@@ -4,6 +4,7 @@ play/*
 log/*
 .gems/*
 *.class
+.ruby-version
 .rbenv-version
 .rbenv-gemsets
 .bundle
