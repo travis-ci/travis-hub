@@ -1,6 +1,6 @@
 sudo: false
 language: ruby
-rvm: jruby-1.7.12
+rvm: jruby-1.7.16
 jdk: openjdk7
 
 env:
