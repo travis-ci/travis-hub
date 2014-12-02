@@ -1,6 +1,8 @@
 sudo: false
 language: ruby
-rvm: jruby-1.7.16
+rvm:
+  - jruby-1.7.16
+  - jruby-head
 jdk: openjdk7
 
 env:
@@ -27,3 +29,6 @@ script: ./build.sh $RAKE_TASK
 
 notifications:
   irc: "irc.freenode.org#travis"
+matrix:
+  allow_failures:
+    - rvm: jruby-head
