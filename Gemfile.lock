@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: a0aa1e2f79d45a4c59c1046a5435fe598eda2d2a
+  revision: dade7634fda96ea004e59ba4a55103c4d5cbf652
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -127,7 +127,7 @@ GEM
     ffi (1.9.6)
     ffi (1.9.6-java)
     formatador (0.2.5)
-    gh (0.13.2)
+    gh (0.14.0)
       addressable
       backports
       faraday (~> 0.8)
