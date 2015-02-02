@@ -17,7 +17,12 @@ env:
 
 matrix:
   allow_failures:
-  - env: RAKE_TASK=rubocop
+  - rvm: jruby-head
+    env: RAKE_TASK=rubocop
+  - rvm: jruby-1.7.16
+    env: RAKE_TASK=rubocop
+  - rvm: jruby-head
+    env: RAKE_TASK=spec
   fast_finish: true
 
 services:
@@ -33,6 +38,4 @@ script: ./build.sh $RAKE_TASK
 
 notifications:
   irc: "irc.freenode.org#travis"
-matrix:
-  allow_failures:
-    - rvm: jruby-head
+
