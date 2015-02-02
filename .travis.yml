@@ -5,6 +5,9 @@ rvm:
   - jruby-head
 jdk: openjdk7
 
+cache:
+  - bundler
+
 env:
   global:
   - COVERAGE=1
