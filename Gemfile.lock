@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/getsentry/raven-ruby.git
-  revision: dfb5930301b703d1125b4996342f9607f8a98c27
+  revision: 9c708710b370fc2c0ecf68b4d8e100c4064f9df0
   specs:
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: dade7634fda96ea004e59ba4a55103c4d5cbf652
+  revision: eca2944956418e33f869c104d75899fa7162beb8
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -31,7 +31,7 @@ GIT
       hashr (~> 0.0.19)
       metriks (~> 0.9.7)
       multi_json
-      pusher (~> 0.12.0)
+      pusher (~> 0.14.0)
       railties (~> 3.2.19)
       rake
       redis (~> 3.0)
@@ -79,10 +79,10 @@ GEM
       activesupport (= 3.2.21)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activerecord-jdbc-adapter (1.3.13)
+    activerecord-jdbc-adapter (1.3.14)
       activerecord (>= 2.2)
-    activerecord-jdbcpostgresql-adapter (1.3.13)
-      activerecord-jdbc-adapter (~> 1.3.13)
+    activerecord-jdbcpostgresql-adapter (1.3.14)
+      activerecord-jdbc-adapter (~> 1.3.14)
       jdbc-postgres (>= 9.1)
     activesupport (3.2.21)
       i18n (~> 0.6, >= 0.6.4)
@@ -92,8 +92,8 @@ GEM
     ast (2.0.0)
     astrolabe (1.3.0)
       parser (>= 2.2.0.pre.3, < 3.0)
-    atomic (1.1.16)
-    atomic (1.1.16-java)
+    atomic (1.1.99)
+    atomic (1.1.99-java)
     avl_tree (1.2.1)
       atomic (~> 1.1)
     axiom-types (0.1.1)
@@ -108,7 +108,7 @@ GEM
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
-    connection_pool (2.1.0)
+    connection_pool (2.1.1)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     dalli (2.7.2)
@@ -146,7 +146,7 @@ GEM
     hike (1.2.3)
     hitimes (1.2.2)
     hitimes (1.2.2-java)
-    httpclient (2.3.4.1)
+    httpclient (2.6.0.1)
     i18n (0.7.0)
     ice_nine (0.11.1)
     jdbc-postgres (9.3.1102)
@@ -196,10 +196,10 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
       spoon (~> 0.0)
-    pusher (0.12.0)
-      httpclient (~> 2.3.0)
+    pusher (0.14.4)
+      httpclient (~> 2.5)
       multi_json (~> 1.0)
-      signature (~> 0.1.6)
+      signature (~> 0.1.8)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -210,7 +210,7 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_serve_static_assets (0.0.3)
+    rails_serve_static_assets (0.0.4)
     rails_stdout_logging (0.0.3)
     railties (3.2.21)
       actionpack (= 3.2.21)
@@ -249,9 +249,9 @@ GEM
     s3 (0.3.21)
       proxies (~> 0.2.0)
     safe_yaml (1.0.4)
-    sidekiq (3.3.0)
+    sidekiq (3.3.1)
       celluloid (>= 0.16.0)
-      connection_pool (>= 2.0.0)
+      connection_pool (>= 2.1.1)
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
@@ -283,7 +283,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.42)
+    tzinfo (0.3.43)
     virtus (1.0.4)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
