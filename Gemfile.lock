@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/getsentry/raven-ruby.git
-  revision: 9c708710b370fc2c0ecf68b4d8e100c4064f9df0
+  revision: 4be72d2eb53123c49e10ca7505744c1f66b71b57
   specs:
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: eca2944956418e33f869c104d75899fa7162beb8
+  revision: 962c19ad9c1f81c7dc3d10dc1b3a627e7e0c4ee0
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
