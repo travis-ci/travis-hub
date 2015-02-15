@@ -1,6 +1,10 @@
+require 'travis/support/logging'
+
 module Travis
   module Hub
     class Solo
+      include Travis::Logging
+
       def setup
         Travis::Async.enabled = true
         Travis::Amqp.config = Travis.config.amqp
