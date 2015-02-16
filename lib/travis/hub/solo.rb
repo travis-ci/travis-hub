@@ -76,7 +76,7 @@ module Travis
         def enqueue_jobs?
           Travis::Features.feature_active?(:travis_enqueue)
         rescue => e
-          Travis.logging.log_exception(e)
+          log_exception(e)
           false
         end
 
