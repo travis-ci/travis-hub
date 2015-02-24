@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/getsentry/raven-ruby.git
-  revision: 4be72d2eb53123c49e10ca7505744c1f66b71b57
+  revision: e87590fbdfc53a90eca1e56804c546aee99918b2
   specs:
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: a82f25fb00a39c3c64b8c09c716c206e6f4c6fad
+  revision: 4cfa414b1d384e518d567c70d572b34a74cbf0bf
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -55,6 +55,12 @@ GIT
   specs:
     travis-support (0.0.1)
 
+GIT
+  remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
+  revision: 16230176b2b85f7c569550ce3544b273d77616ee
+  specs:
+    unlimited-jce-policy-jdk7 (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -87,12 +93,11 @@ GEM
     activesupport (3.2.21)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    addressable (2.3.6)
+    addressable (2.3.7)
     arel (3.0.3)
     ast (2.0.0)
     astrolabe (1.3.0)
       parser (>= 2.2.0.pre.3, < 3.0)
-    atomic (1.1.99)
     atomic (1.1.99-java)
     avl_tree (1.2.1)
       atomic (~> 1.1)
@@ -124,7 +129,6 @@ GEM
     erubis (2.7.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.6)
     ffi (1.9.6-java)
     formatador (0.2.5)
     gh (0.14.0)
@@ -144,16 +148,14 @@ GEM
       guard (>= 1.1)
     hashr (0.0.22)
     hike (1.2.3)
-    hitimes (1.2.2)
     hitimes (1.2.2-java)
     httpclient (2.6.0.1)
     i18n (0.7.0)
     ice_nine (0.11.1)
-    jdbc-postgres (9.3.1102)
+    jdbc-postgres (9.4.1200)
     journey (1.0.4)
     jruby-openssl (0.8.10)
       bouncy-castle-java (>= 1.5.0147)
-    json (1.8.2)
     json (1.8.2-java)
     listen (1.3.1)
       rb-fsevent (>= 0.9.3)
@@ -182,15 +184,11 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    parser (2.2.0.2)
+    parser (2.2.0.3)
       ast (>= 1.1, < 3.0)
     polyglot (0.3.5)
-    powerpack (0.0.9)
+    powerpack (0.1.0)
     proxies (0.2.1)
-    pry (0.10.1)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
     pry (0.10.1-java)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -228,7 +226,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
-    redis (3.2.0)
+    redis (3.2.1)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
     rspec (2.7.0)
@@ -239,17 +237,17 @@ GEM
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.7.0)
-    rubocop (0.28.0)
+    rubocop (0.29.1)
       astrolabe (~> 1.3)
-      parser (>= 2.2.0.pre.7, < 3.0)
-      powerpack (~> 0.0.6)
+      parser (>= 2.2.0.1, < 3.0)
+      powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-progressbar (1.7.1)
     s3 (0.3.21)
       proxies (~> 0.2.0)
     safe_yaml (1.0.4)
-    sidekiq (3.3.1)
+    sidekiq (3.3.2)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
       json
@@ -259,11 +257,11 @@ GEM
     simple_states (1.0.1)
       activesupport
       hashr (~> 0.0.10)
-    simplecov (0.9.1)
+    simplecov (0.9.2)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
-      simplecov-html (~> 0.8.0)
-    simplecov-html (0.8.0)
+      simplecov-html (~> 0.9.0)
+    simplecov-html (0.9.0)
     slop (3.6.0)
     spoon (0.0.4)
       ffi
@@ -273,7 +271,6 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     thor (0.14.6)
-    thread_safe (0.3.4)
     thread_safe (0.3.4-java)
     tilt (1.4.1)
     timers (4.0.1)
@@ -295,7 +292,6 @@ GEM
 
 PLATFORMS
   java
-  ruby
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter (~> 1.3.0)
@@ -320,4 +316,5 @@ DEPENDENCIES
   travis-core!
   travis-sidekiqs!
   travis-support!
+  unlimited-jce-policy-jdk7!
   webmock (~> 1.8.0)
