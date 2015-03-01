@@ -1,9 +1,13 @@
 require 'travis/support/logging'
+require 'travis/support/retryable'
 
 module Travis
   module Hub
     class Solo
       include Travis::Logging
+      include Travis::Retryable
+
+      DEFAULT_SUBSCRIBER_COUNT = 2
 
       def setup
         Travis::Async.enabled = true
@@ -25,11 +29,10 @@ module Travis
         declare_exchanges_and_queues
       end
 
-      attr_accessor :name, :count, :number
-      def initialize(name, count = nil, number = nil)
-        @name   = name
-        @count  = Integer count[/\d+/]  if count
-        @number = Integer number[/\d+/] if number
+      attr_accessor :name, :count
+      def initialize(name, count = nil)
+        @name  = name
+        @count = count ? Integer count[/\d+/] : DEFAULT_SUBSCRIBER_COUNT
       end
 
       def run
@@ -40,7 +43,9 @@ module Travis
       private
 
         def subscribe_to_queue
-          Queue.subscribe(queue, &method(:handle))
+          1.upto(count) do |num|
+            Queue.subscribe(queue, &method(:handle))
+          end
         end
 
         def queue
@@ -48,9 +53,14 @@ module Travis
         end
 
         def handle(event, payload)
-          Metriks.timer("hub.#{name}.handle").time do
-            ActiveRecord::Base.cache do
-              handle_event(event, payload)
+          retryable(tries: 5) do
+            Metriks.timer("hub.#{name}.handle").time do
+              ActiveRecord::Base.connection.begin_db_transaction
+              ActiveRecord::Base.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
+              ActiveRecord::Base.cache do
+                handle_event(event, payload)
+              end
+              ActiveRecord::Base.connection.commit_db_transaction
             end
           end
         end
