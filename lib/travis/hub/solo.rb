@@ -32,7 +32,7 @@ module Travis
       attr_accessor :name, :count
       def initialize(name, count = nil)
         @name  = name
-        @count = count ? Integer count[/\d+/] : DEFAULT_SUBSCRIBER_COUNT
+        @count = count ? Integer(count[/\d+/]) : DEFAULT_SUBSCRIBER_COUNT
       end
 
       def run
