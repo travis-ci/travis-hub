@@ -57,9 +57,7 @@ module Travis
             Metriks.timer("hub.#{name}.handle").time do
               ActiveRecord::Base.connection.begin_db_transaction
               ActiveRecord::Base.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
-              ActiveRecord::Base.cache do
-                handle_event(event, payload)
-              end
+              handle_event(event, payload)
               ActiveRecord::Base.connection.commit_db_transaction
             end
           end
