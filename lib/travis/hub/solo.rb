@@ -53,7 +53,7 @@ module Travis
         end
 
         def handle(event, payload)
-          retryable(tries: 5) do
+          retryable(tries: 10, sleep: 1) do
             Metriks.timer("hub.#{name}.handle").time do
               ActiveRecord::Base.connection.begin_db_transaction
               ActiveRecord::Base.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
