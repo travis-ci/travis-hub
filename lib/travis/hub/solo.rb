@@ -70,7 +70,7 @@ module Travis
         def enqueue_jobs!
           Travis.run_service(:enqueue_jobs) unless enqueue_jobs?
         rescue => e
-          Travis.logging.log_exception(e)
+          log_exception(e)
         end
 
         def enqueue_jobs?
