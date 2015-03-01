@@ -22,8 +22,6 @@ module Travis
         Travis::Notification.setup
         Travis::Addons.register
 
-        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production' && Travis.config.metrics.report
-
         declare_exchanges_and_queues
       end
 
