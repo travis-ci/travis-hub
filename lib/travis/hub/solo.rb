@@ -68,16 +68,9 @@ module Travis
         end
 
         def enqueue_jobs!
-          Travis.run_service(:enqueue_jobs) unless enqueue_jobs?
+          Travis.run_service(:enqueue_jobs)
         rescue => e
           log_exception(e)
-        end
-
-        def enqueue_jobs?
-          Travis::Features.feature_active?(:travis_enqueue)
-        rescue => e
-          log_exception(e)
-          false
         end
 
         def declare_exchanges_and_queues
