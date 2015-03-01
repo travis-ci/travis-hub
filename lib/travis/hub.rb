@@ -9,13 +9,14 @@ require 'travis/hub/error'
 require 'travis/hub/solo'
 require 'travis/hub/worker'
 require 'travis/hub/dispatcher'
+require 'travis/hub/enqueue'
 require 'core_ext/kernel/run_periodically'
 
 $stdout.sync = true
 
 module Travis
   module Hub
-    TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher }
+    TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher, 'enqueue' => Enqueue }
     extend self
 
     def new(type = nil, *args)
