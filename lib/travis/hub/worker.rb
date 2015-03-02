@@ -21,7 +21,7 @@ module Travis
       end
 
       def enqueue_jobs
-        # handled by dispatcher
+        # handled by enqueue
       end
     end
   end

@@ -26,6 +26,10 @@ module Travis
       def queue_name(index)
         "builds.#{index + 1}"
       end
+
+      def enqueue_jobs
+        # handled by enqueue
+      end
     end
   end
 end

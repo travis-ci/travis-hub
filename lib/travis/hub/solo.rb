@@ -22,8 +22,6 @@ module Travis
         Travis::Notification.setup
         Travis::Addons.register
 
-        Travis::Memory.new(:hub).report_periodically if Travis.env == 'production' && Travis.config.metrics.report
-
         declare_exchanges_and_queues
       end
 
@@ -68,16 +66,9 @@ module Travis
         end
 
         def enqueue_jobs!
-          Travis.run_service(:enqueue_jobs) unless enqueue_jobs?
-        rescue => e
-          Travis.logging.log_exception(e)
-        end
-
-        def enqueue_jobs?
-          Travis::Features.feature_active?(:travis_enqueue)
+          Travis.run_service(:enqueue_jobs)
         rescue => e
           log_exception(e)
-          false
         end
 
         def declare_exchanges_and_queues
