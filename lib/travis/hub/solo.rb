@@ -55,10 +55,16 @@ module Travis
         def handle(event, payload)
           retryable(tries: 10, sleep: 1) do
             Metriks.timer("hub.#{name}.handle").time do
-              ActiveRecord::Base.connection.begin_db_transaction
-              ActiveRecord::Base.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
-              handle_event(event, payload)
-              ActiveRecord::Base.connection.commit_db_transaction
+              begin
+                ActiveRecord::Base.connection.begin_db_transaction
+                ActiveRecord::Base.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
+                handle_event(event, payload)
+                ActiveRecord::Base.connection.commit_db_transaction
+              rescue => e
+                puts "error during updating the job"
+                puts e.inspect
+                raise
+              end
             end
           end
         end
