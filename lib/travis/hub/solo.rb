@@ -55,13 +55,7 @@ module Travis
         def handle(event, payload)
           retryable(tries: 10, sleep: 1) do
             Metriks.timer("hub.#{name}.handle").time do
-              begin
-                handle_event(event, payload)
-              rescue => e
-                puts "error updating the job"
-                puts e.inspect
-                raise
-              end
+              handle_event(event, payload)
             end
           end
         end
