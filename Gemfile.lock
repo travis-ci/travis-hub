@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 09cf7e19add5d8e1cda0f7f091e2038fcb7ad71d
+  revision: 0aabb1bc8b6f1afd316383e2a2a99c86bc3dce16
   branch: jk_touch_build_on_job_event
   specs:
     travis-core (0.0.1)
