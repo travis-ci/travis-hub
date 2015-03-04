@@ -51,6 +51,7 @@ module Travis
       private
 
         def subscribe_to_queue
+          Travis.logger.info('[hub] subscribing to queue %p' % queue)
           Queue.subscribe(queue, &method(:handle))
         end
 
@@ -71,6 +72,7 @@ module Travis
         end
 
         def enqueue_jobs
+          Travis.logger.info('[hub] setting up enqueue_jobs')
           run_periodically(Travis.config.queue.interval) do
             Metriks.timer("hub.#{name}.enqueue_jobs").time { enqueue_jobs! }
           end
