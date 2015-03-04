@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 3c031d6fb8dbbb415e5d2ef3b2af68a80d361933
+  revision: 65d3311df51928004b382d0e08a47d5998c2951e
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -113,7 +113,7 @@ GEM
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
-    connection_pool (2.1.1)
+    connection_pool (2.1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     dalli (2.7.2)
@@ -180,7 +180,7 @@ GEM
     mime-types (1.25.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.10.1)
+    multi_json (1.11.0)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
