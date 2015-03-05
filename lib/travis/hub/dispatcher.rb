@@ -13,6 +13,10 @@ module Travis
         end
       end
 
+      def run
+        subscribe_to_queue
+      end
+
       def handle_event(event, payload)
         key       = key_for(payload)
         publisher = @publishers[key]
@@ -27,10 +31,6 @@ module Travis
 
       def queue_name(index)
         "builds.#{index + 1}"
-      end
-
-      def enqueue_jobs
-        # handled by enqueue
       end
     end
   end

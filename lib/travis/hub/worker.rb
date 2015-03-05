@@ -7,6 +7,10 @@ module Travis
         super
       end
 
+      def run
+        subscribe_to_queue
+      end
+
       def queue
         "builds.#{number}"
       end
@@ -18,10 +22,6 @@ module Travis
         Metriks.meter("hub.#{name}.requeue").mark
         publisher = Travis::Amqp::Publisher.jobs('builds')
         publisher.publish(payload, properties: { type: event })
-      end
-
-      def enqueue_jobs
-        # handled by enqueue
       end
     end
   end
