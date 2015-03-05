@@ -1,6 +1,8 @@
 require 'multi_json'
 
 require 'travis'
+
+Travis.logger.info('[hub] loading dependencies')
 require 'travis/model'
 require 'travis/states_cache'
 require 'travis/support/amqp'
@@ -11,6 +13,7 @@ require 'travis/hub/worker'
 require 'travis/hub/dispatcher'
 require 'travis/hub/enqueue'
 require 'core_ext/kernel/run_periodically'
+Travis.logger.info('[hub] done loading dependencies')
 
 $stdout.sync = true
 

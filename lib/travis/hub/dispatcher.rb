@@ -7,7 +7,9 @@ module Travis
         @publishers = {}
         count.times do |index|
           name = queue_name(index)
+          Travis.logger.info('[hub] creating publisher %p' % name)
           @publishers[name] = Travis::Amqp::Publisher.jobs(name)
+          Travis.logger.info('[hub] publisher created')
         end
       end
 
