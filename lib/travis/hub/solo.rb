@@ -13,17 +13,28 @@ module Travis
         Travis::Async.enabled = true
         Travis::Amqp.config = Travis.config.amqp
 
+        Travis.logger.info('[hub] connecting to database')
         Travis::Database.connect
+
         if Travis.config.logs_database
+          Travis.logger.info('[hub] connecting to logs database')
           Log.establish_connection 'logs_database'
           Log::Part.establish_connection 'logs_database'
         end
 
+        Travis.logger.info('[hub] setting up sidekiq')
         Travis::Async::Sidekiq.setup(Travis.config.redis.url, Travis.config.sidekiq)
 
+        Travis.logger.info('[hub] starting exceptions reporter')
         Travis::Exceptions::Reporter.start
+
+        Travis.logger.info('[hub] setting up metrics')
         Travis::Metrics.setup
+
+        Travis.logger.info('[hub] setting up notifications')
         Travis::Notification.setup
+
+        Travis.logger.info('[hub] setting up addons')
         Travis::Addons.register
 
         declare_exchanges_and_queues
@@ -44,6 +55,7 @@ module Travis
 
         def subscribe_to_queue
           1.upto(count) do |num|
+            Travis.logger.info("[hub] subscribing to queue #{queue} (#{num})")
             Queue.subscribe(queue, &method(:handle))
           end
         end
@@ -65,6 +77,7 @@ module Travis
         end
 
         def enqueue_jobs
+          Travis.logger.info('[hub] setting up enqueue_jobs')
           run_periodically(Travis.config.queue.interval) do
             Metriks.timer("hub.#{name}.enqueue_jobs").time { enqueue_jobs! }
           end
@@ -77,6 +90,7 @@ module Travis
         end
 
         def declare_exchanges_and_queues
+          Travis.logger.info('[hub] connecting to amqp')
           channel = Travis::Amqp.connection.create_channel
           channel.exchange 'reporting', durable: true, auto_delete: false, type: :topic
           channel.queue 'builds.linux', durable: true, exclusive: false

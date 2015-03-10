@@ -7,6 +7,11 @@ $LOAD_PATH << 'lib'
 require 'bundler/setup'
 require 'travis/hub'
 
+
 app = Travis::Hub.new(ARGV[0], ARGV[1])
+
+Travis.logger.info('[hub] setting up hub app')
 app.setup
+
+Travis.logger.info('[hub] start crunching away')
 app.run
