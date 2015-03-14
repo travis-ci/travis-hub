@@ -1,8 +1,6 @@
 sudo: false
 language: ruby
-rvm:
-  - jruby-1.7.16
-  - jruby-head
+rvm: jruby-1.7.16
 jdk: openjdk7
 
 cache:
