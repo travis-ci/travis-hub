@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/getsentry/raven-ruby.git
-  revision: 8e6f8dbbc64e7ce4a046fa7aeb6a261f155a24ea
+  revision: 8ea61f94b7a9ece8ed69e796d326f10c7800127c
   specs:
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
@@ -114,7 +114,7 @@ GEM
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
-    connection_pool (2.1.2)
+    connection_pool (2.1.3)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     dalli (2.7.4)
@@ -126,7 +126,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.1.3)
     docile (1.1.5)
-    equalizer (0.0.9)
+    equalizer (0.0.10)
     erubis (2.7.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
@@ -248,7 +248,7 @@ GEM
     s3 (0.3.21)
       proxies (~> 0.2.0)
     safe_yaml (1.0.4)
-    sidekiq (3.3.2)
+    sidekiq (3.3.3)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
       json
@@ -282,7 +282,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.43)
-    virtus (1.0.4)
+    virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
