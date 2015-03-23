@@ -1,7 +1,7 @@
 language: ruby
 
 rvm:
-  - jruby-1.7.16
+  - jruby-1.7.19
   - jruby-head
 
 jdk: openjdk7
@@ -22,10 +22,6 @@ env:
   matrix:
     - RAKE_TASK=spec
     - RAKE_TASK=rubocop
-
-before_install:
-  - rvm @global do gem uninstall -x -a executable-hooks
-  - rvm @global do gem uninstall -x -a rubygems-bundler
 
 before_script:
   - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
