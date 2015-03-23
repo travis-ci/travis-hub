@@ -1,29 +1,10 @@
-sudo: false
 language: ruby
+
 rvm:
   - jruby-1.7.16
   - jruby-head
+
 jdk: openjdk7
-
-cache:
-  - bundler
-
-env:
-  global:
-  - COVERAGE=1
-  matrix:
-  - RAKE_TASK=spec
-  - RAKE_TASK=rubocop
-
-matrix:
-  allow_failures:
-  - rvm: jruby-head
-    env: RAKE_TASK=rubocop
-  - rvm: jruby-1.7.16
-    env: RAKE_TASK=rubocop
-  - rvm: jruby-head
-    env: RAKE_TASK=spec
-  fast_finish: true
 
 services:
   - redis
@@ -31,11 +12,33 @@ services:
 addons:
   postgresql: 9.3
 
+cache: bundler
+
+sudo: false
+
+env:
+  global:
+    - COVERAGE=1
+  matrix:
+    - RAKE_TASK=spec
+    - RAKE_TASK=rubocop
+
+before_install:
+  - rvm @global do gem uninstall executable-hooks -f
+  - rvm @global do gem uninstall rubygems-bundler -f
+
 before_script:
   - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
 
 script: ./build.sh $RAKE_TASK
 
-notifications:
-  irc: "irc.freenode.org#travis"
+matrix:
+  allow_failures:
+    - rvm: jruby-head
+      env: RAKE_TASK=rubocop
+    - rvm: jruby-1.7.16
+      env: RAKE_TASK=rubocop
+    - rvm: jruby-head
+      env: RAKE_TASK=spec
+  fast_finish: true
 
