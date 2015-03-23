@@ -24,8 +24,8 @@ env:
     - RAKE_TASK=rubocop
 
 before_install:
-  - rvm @global do gem uninstall executable-hooks -f
-  - rvm @global do gem uninstall rubygems-bundler -f
+  - rvm @global do gem uninstall -f executable-hooks
+  - rvm @global do gem uninstall -f rubygems-bundler
 
 before_script:
   - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
