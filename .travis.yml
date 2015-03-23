@@ -32,9 +32,7 @@ matrix:
   allow_failures:
     - rvm: jruby-head
       env: RAKE_TASK=rubocop
-    - rvm: jruby-1.7.16
+    - rvm: jruby-1.7.19
       env: RAKE_TASK=rubocop
     - rvm: jruby-head
       env: RAKE_TASK=spec
-  fast_finish: true
-
