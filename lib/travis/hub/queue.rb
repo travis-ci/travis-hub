@@ -17,9 +17,7 @@ module Travis
       end
 
       def subscribe
-        Travis.logger.info('[hub] subscribing to %p' % queue)
         Travis::Amqp::Consumer.jobs(queue).subscribe(ack: true, &method(:receive))
-        Travis.logger.info('[hub] subscribed')
       end
 
       private
