@@ -20,8 +20,8 @@ gem 'rails_12factor'
 gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
-gem 'march_hare',         '~> 2.0.0.rc2'
-gem 'jruby-openssl',      '~> 0.8.8', require: false
+gem 'march_hare',         '~> 2.8.0'
+gem 'jruby-openssl',      '~> 0.9.4', require: false
 
 # see http://www.ruby-forum.com/topic/4409725
 gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0'
