@@ -21,7 +21,6 @@ GIT
 GIT
   remote: git://github.com/travis-ci/travis-core.git
   revision: 9ef018a267e94251dbaac54503a410baca71d1c6
-  branch: jk_touch_build_on_job_event
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)

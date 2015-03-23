@@ -2,12 +2,12 @@ source 'https://rubygems.org'
 
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.16' if ENV.key?('DYNO')
 
-gem 'travis-core',        github: 'travis-ci/travis-core', branch: 'jk_touch_build_on_job_event'
-gem 'unlimited-jce-policy-jdk7', github: 'travis-ci/unlimited-jce-policy-jdk7'
-
+gem 'travis-core',        github: 'travis-ci/travis-core'
 gem 'travis-support',     github: 'travis-ci/travis-support'
 gem 'travis-config',      '~> 0.1.0'
 gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs', require: nil
+
+gem 'unlimited-jce-policy-jdk7', github: 'travis-ci/unlimited-jce-policy-jdk7'
 
 gem 'dalli'
 
