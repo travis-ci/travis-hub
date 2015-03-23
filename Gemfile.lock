@@ -163,7 +163,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    march_hare (2.8.0-java)
+    march_hare (2.7.0-java)
     metaclass (0.0.4)
     method_source (0.8.2)
     metriks (0.9.9.7)
@@ -299,7 +299,7 @@ DEPENDENCIES
   guard
   guard-rspec
   jruby-openssl (~> 0.9.4)
-  march_hare (~> 2.8.0)
+  march_hare (~> 2.7.0)
   metriks-librato_metrics
   micro_migrations
   mocha (~> 0.10.0)

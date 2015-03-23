@@ -20,7 +20,7 @@ gem 'rails_12factor'
 gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
 gem 'sidekiq'
 
-gem 'march_hare',         '~> 2.8.0'
+gem 'march_hare',         '~> 2.7.0'
 gem 'jruby-openssl',      '~> 0.9.4', require: false
 
 # see http://www.ruby-forum.com/topic/4409725
