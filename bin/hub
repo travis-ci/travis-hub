@@ -5,11 +5,9 @@ $stdout.sync = true
 $LOAD_PATH << 'lib'
 
 require 'bundler/setup'
-require 'unlimited-jce-policy-jdk7'
 require 'travis/hub'
 
-
-app = Travis::Hub.new(ARGV[0], ARGV[1])
+app = Travis::Hub.new(ARGV[0], ARGV[1], ARGV[2])
 
 Travis.logger.info('[hub] setting up hub app')
 app.setup

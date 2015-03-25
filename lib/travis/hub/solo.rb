@@ -1,13 +1,9 @@
 require 'travis/support/logging'
-require 'travis/support/retryable'
 
 module Travis
   module Hub
     class Solo
       include Travis::Logging
-      include Travis::Retryable
-
-      DEFAULT_SUBSCRIBER_COUNT = 2
 
       def setup
         Travis::Async.enabled = true
@@ -40,10 +36,11 @@ module Travis
         declare_exchanges_and_queues
       end
 
-      attr_accessor :name, :count
-      def initialize(name, count = nil)
-        @name  = name
-        @count = count ? Integer(count[/\d+/]) : DEFAULT_SUBSCRIBER_COUNT
+      attr_accessor :name, :count, :number
+      def initialize(name, count = nil, number = nil)
+        @name   = name
+        @count  = Integer count[/\d+/]  if count
+        @number = Integer number[/\d+/] if number
       end
 
       def run
@@ -54,10 +51,8 @@ module Travis
       private
 
         def subscribe_to_queue
-          1.upto(count) do |num|
-            Travis.logger.info("[hub] subscribing to queue #{queue} (#{num})")
-            Queue.subscribe(queue, &method(:handle))
-          end
+          Travis.logger.info('[hub] subscribing to queue %p' % queue)
+          Queue.subscribe(queue, &method(:handle))
         end
 
         def queue
@@ -65,8 +60,8 @@ module Travis
         end
 
         def handle(event, payload)
-          retryable(tries: 10, sleep: 1) do
-            Metriks.timer("hub.#{name}.handle").time do
+          Metriks.timer("hub.#{name}.handle").time do
+            ActiveRecord::Base.cache do
               handle_event(event, payload)
             end
           end

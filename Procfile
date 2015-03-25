@@ -1,3 +1,4 @@
 solo:       ./bin/hub solo
-worker:     ./bin/hub worker $NUM_PROCESSORS
+dispatcher: ./bin/hub dispatcher $DYNO_COUNT
+worker:     ./bin/hub worker $DYNO_COUNT $DYNO
 enqueue:    ./bin/hub enqueue
