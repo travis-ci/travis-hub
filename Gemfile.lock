@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 1ae5328d1eaeb0ed5c77a84d24baff409d1af516
+  revision: 561f4d19147b3962a46c230c349fdef11be7f01b
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -241,7 +241,7 @@ GEM
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
-    ruby-progressbar (1.7.4)
+    ruby-progressbar (1.7.1)
     s3 (0.3.21)
       proxies (~> 0.2.0)
     safe_yaml (1.0.4)
@@ -307,6 +307,7 @@ DEPENDENCIES
   rollout!
   rspec (~> 2.7.0)
   rubocop
+  ruby-progressbar (= 1.7.1)
   sentry-raven!
   sidekiq
   simplecov
