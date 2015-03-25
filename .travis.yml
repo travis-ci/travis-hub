@@ -23,6 +23,8 @@ env:
     - RAKE_TASK=spec
     - RAKE_TASK=rubocop
 
+before_install: gem install bundler
+
 before_script:
   - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
 
