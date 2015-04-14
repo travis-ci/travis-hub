@@ -9,8 +9,6 @@ cache:
   - bundler
 
 env:
-  global:
-  - COVERAGE=1
   matrix:
   - RAKE_TASK=spec
   - RAKE_TASK=rubocop

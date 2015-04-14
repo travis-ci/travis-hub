@@ -1,12 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'simplecov' if ENV['RAILS_ENV'] == 'test' && ENV['COVERAGE']
-
 require 'travis/hub'
 require 'travis/testing'
 require 'travis/support'
-require 'support/active_record'
-require 'support/payloads'
 require 'stringio'
 require 'mocha'
 require 'travis/testing/matchers'

@@ -1,3 +1,5 @@
+require_relative 'environment'
+
 require 'active_record'
 require 'logger'
 require 'fileutils'
