@@ -1,4 +1,5 @@
 require 'travis/support/logging'
+require 'active_record_postgres_variables'
 
 module Travis
   module Hub
@@ -6,6 +7,11 @@ module Travis
       include Travis::Logging
 
       def setup
+        Travis.config.database.variables ||= {}
+        Travis.config.database.variables[:application_name] = [
+          'hub', Travis.env, ENV['DYNO']
+        ].compact.join(?-)
+
         Travis::Async.enabled = true
         Travis::Amqp.config = Travis.config.amqp
 
