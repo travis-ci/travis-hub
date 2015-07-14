@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 397d34aafc5ecbfab18d62287e87ad6dde05a50a
+  revision: 3bf0ef70894375578a9af55e0eb9566eb9424294
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -105,7 +105,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
-    backports (3.6.4)
+    backports (3.6.5)
     bouncy-castle-java (1.5.0147)
     builder (3.0.4)
     celluloid (0.16.0)
@@ -180,7 +180,7 @@ GEM
     mime-types (1.25.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.11.1)
+    multi_json (1.11.2)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
@@ -198,7 +198,7 @@ GEM
       httpclient (~> 2.5)
       multi_json (~> 1.0)
       signature (~> 0.1.8)
-    rack (1.4.6)
+    rack (1.4.7)
     rack-cache (1.2)
       rack (>= 0.4)
     rack-ssl (1.3.4)
@@ -318,3 +318,6 @@ DEPENDENCIES
   travis-support!
   unlimited-jce-policy-jdk7!
   webmock (~> 1.8.0)
+
+BUNDLED WITH
+   1.10.5
