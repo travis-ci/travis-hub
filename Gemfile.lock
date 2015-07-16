@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-core.git
-  revision: 3bf0ef70894375578a9af55e0eb9566eb9424294
+  revision: 5ac778b18ec128b855099abd112901e07a60174f
   specs:
     travis-core (0.0.1)
       actionmailer (~> 3.2.19)
@@ -318,6 +318,3 @@ DEPENDENCIES
   travis-support!
   unlimited-jce-policy-jdk7!
   webmock (~> 1.8.0)
-
-BUNDLED WITH
-   1.10.5
