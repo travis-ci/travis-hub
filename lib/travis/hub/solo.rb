@@ -12,6 +12,8 @@ module Travis
         Travis.logger.info('[hub] connecting to database')
         Travis::Database.connect
 
+        # TODO hub should not write to logs at all atm?
+        #
         if Travis.config.logs_database
           Travis.logger.info('[hub] connecting to logs database')
           Log.establish_connection 'logs_database'
@@ -44,7 +46,6 @@ module Travis
       end
 
       def run
-        enqueue_jobs
         subscribe_to_queue
       end
 
@@ -69,19 +70,6 @@ module Travis
 
         def handle_event(event, payload)
           Travis.run_service(:update_job, event: event.to_s.split(':').last, data: payload)
-        end
-
-        def enqueue_jobs
-          Travis.logger.info('[hub] setting up enqueue_jobs')
-          run_periodically(Travis.config.queue.interval) do
-            Metriks.timer("hub.#{name}.enqueue_jobs").time { enqueue_jobs! }
-          end
-        end
-
-        def enqueue_jobs!
-          Travis.run_service(:enqueue_jobs)
-        rescue => e
-          log_exception(e)
         end
 
         def declare_exchanges_and_queues

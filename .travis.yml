@@ -13,14 +13,9 @@ env:
   - COVERAGE=1
   matrix:
   - RAKE_TASK=spec
-  - RAKE_TASK=rubocop
 
 matrix:
   allow_failures:
-  - rvm: jruby-head
-    env: RAKE_TASK=rubocop
-  - rvm: jruby-1.7.16
-    env: RAKE_TASK=rubocop
   - rvm: jruby-head
     env: RAKE_TASK=spec
   fast_finish: true
