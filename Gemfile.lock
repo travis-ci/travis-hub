@@ -12,11 +12,6 @@ GIT
     unlimited-jce-policy-jdk7 (0.1.0)
 
 PATH
-  remote: ../travis-encrypt
-  specs:
-    travis-encrypt (0.0.1)
-
-PATH
   remote: ../travis-event
   specs:
     travis-event (0.0.1)
@@ -129,6 +124,7 @@ GEM
       hitimes
     travis-config (0.1.1)
       hashr (~> 0.0)
+    travis-encrypt (0.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
@@ -157,10 +153,7 @@ DEPENDENCIES
   sidekiq
   simple_states
   travis-config (~> 0.1.0)
-  travis-encrypt!
+  travis-encrypt (~> 0.0.1)
   travis-event!
   travis-support!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.10.5
