@@ -7,12 +7,20 @@ module Travis
   # This is used so people can add encrypted sensitive data to their
   # `.travis.yml` file.
   class SecureConfig < Struct.new(:key)
-    def self.decrypt(config, key)
-      self.new(key).decrypt(config)
-    end
+    require 'travis/secure_config/obfuscate'
 
-    def self.encrypt(config, key)
-      self.new(key).encrypt(config)
+    class << self
+      def decrypt(config, key)
+        new(key).decrypt(config)
+      end
+
+      def encrypt(config, key)
+        new(key).encrypt(config)
+      end
+
+      def obfuscate(config, key)
+        Obfuscate.new(config, key).run
+      end
     end
 
     def decrypt(config)
@@ -27,6 +35,9 @@ module Travis
 
     def encrypt(config)
       { 'secure' => key.encode(config) }
+    end
+
+    def obfuscate(config)
     end
 
     private

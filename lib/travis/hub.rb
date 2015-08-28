@@ -1,27 +1,37 @@
-require 'multi_json'
+require 'travis/support/database'
+require 'travis/support/exceptions'
+require 'travis/support/instrumentation'
+require 'travis/support/logger'
 
-require 'travis'
-
-Travis.logger.info('[hub] loading dependencies')
-require 'travis/states_cache'
-require 'travis/support/amqp'
-require 'travis/hub/queue'
-require 'travis/hub/error'
-require 'travis/hub/solo'
-require 'travis/hub/worker'
-require 'travis/hub/dispatcher'
-Travis.logger.info('[hub] done loading dependencies')
-
-$stdout.sync = true
+require 'travis/hub/config'
+require 'travis/hub/app'
+require 'travis/hub/handler/metrics'
 
 module Travis
   module Hub
-    TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher }
-    extend self
+    QUEUE = 'builds'
 
-    def new(type = nil, *args)
-      type ||= 'solo'
-      TYPES.fetch(type).new(type, *args)
+    attr_reader :logger
+
+    def config
+      @config ||= Config.load
     end
+
+    def env
+      config.env
+    end
+
+    def logger
+      @logger ||= Logger.configure(Travis::Logger.new(STDOUT))
+    end
+
+    def logger=(logger)
+      @logger = Logger.configure(logger)
+    end
+
+    extend self
   end
+
+  extend Hub
 end
+

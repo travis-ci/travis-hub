@@ -6,86 +6,64 @@ GIT
       faraday (>= 0.7.6)
 
 GIT
-  remote: git://github.com/jamesgolick/rollout.git
-  revision: 3e7312cc018061b1ac6a8aeb9f11bbd0331da889
-  ref: v1.1.0
-  specs:
-    rollout (1.1.0)
-
-GIT
-  remote: git://github.com/rkh/coder.git
-  revision: 44b0cf89b98caecc654dd1a724a448e17ef7aa6c
-  specs:
-    coder (0.4.0)
-
-GIT
-  remote: git://github.com/travis-ci/travis-sidekiqs.git
-  revision: 21a2fee158e25252dd78f5fa31e81b4f6583be23
-  specs:
-    travis-sidekiqs (0.0.1)
-      sidekiq
-
-GIT
-  remote: git://github.com/travis-ci/travis-support.git
-  revision: e7f81093f83bd029cca6508739c5720e57e3d571
-  specs:
-    travis-support (0.0.1)
-
-GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
 
+PATH
+  remote: ../travis-encrypt
+  specs:
+    travis-encrypt (0.0.1)
+
+PATH
+  remote: ../travis-event
+  specs:
+    travis-event (0.0.1)
+
+PATH
+  remote: ../travis-support
+  specs:
+    travis-support (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    actionpack (3.2.22)
-      activemodel (= 3.2.22)
-      activesupport (= 3.2.22)
-      builder (~> 3.0.0)
-      erubis (~> 2.7.0)
-      journey (~> 1.0.4)
-      rack (~> 1.4.5)
-      rack-cache (~> 1.2)
-      rack-test (~> 0.6.1)
-      sprockets (~> 2.2.1)
-    activemodel (3.2.22)
-      activesupport (= 3.2.22)
-      builder (~> 3.0.0)
-    activerecord (3.2.22)
-      activemodel (= 3.2.22)
-      activesupport (= 3.2.22)
-      arel (~> 3.0.2)
-      tzinfo (~> 0.3.29)
-    activesupport (3.2.22)
-      i18n (~> 0.6, >= 0.6.4)
-      multi_json (~> 1.0)
+    activemodel (4.2.3)
+      activesupport (= 4.2.3)
+      builder (~> 3.1)
+    activerecord (4.2.3)
+      activemodel (= 4.2.3)
+      activesupport (= 4.2.3)
+      arel (~> 6.0)
+    activerecord-jdbc-adapter (1.3.17)
+      activerecord (>= 2.2)
+    activerecord-jdbcpostgresql-adapter (1.3.17)
+      activerecord-jdbc-adapter (~> 1.3.17)
+      jdbc-postgres (>= 9.1)
+    activesupport (4.2.3)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
     addressable (2.3.8)
-    arel (3.0.3)
+    arel (6.0.3)
     atomic (1.1.99)
+    atomic (1.1.99-java)
     avl_tree (1.2.1)
       atomic (~> 1.1)
-    axiom-types (0.1.1)
-      descendants_tracker (~> 0.0.4)
-      ice_nine (~> 0.11.0)
-      thread_safe (~> 0.3, >= 0.3.1)
     backports (3.6.6)
-    builder (3.0.4)
-    celluloid (0.16.0)
+    builder (3.2.2)
+    celluloid (0.16.1)
       timers (~> 4.0.0)
-    coercible (1.0.0)
-      descendants_tracker (~> 0.0.1)
+    coder (0.4.0)
     connection_pool (2.2.0)
     dalli (2.7.4)
-    database_cleaner (0.8.0)
-    descendants_tracker (0.0.4)
-      thread_safe (~> 0.3, >= 0.3.1)
-    diff-lcs (1.1.3)
-    equalizer (0.0.11)
-    erubis (2.7.0)
-    factory_girl (2.6.4)
-      activesupport (>= 2.3.9)
+    database_cleaner (1.4.1)
+    diff-lcs (1.2.5)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     gh (0.14.0)
@@ -96,12 +74,14 @@ GEM
       net-http-persistent (>= 2.7)
       net-http-pipeline
     hashr (0.0.22)
-    hike (1.2.3)
     hitimes (1.2.2)
+    hitimes (1.2.2-java)
     i18n (0.7.0)
-    ice_nine (0.11.1)
-    journey (1.0.4)
+    jdbc-postgres (9.4.1200)
+    jruby-openssl (0.9.8-java)
     json (1.8.3)
+    json (1.8.3-java)
+    march_hare (2.11.0-java)
     metaclass (0.0.4)
     metriks (0.9.9.7)
       atomic (~> 1.0)
@@ -109,49 +89,31 @@ GEM
       hitimes (~> 1.1)
     metriks-librato_metrics (1.0.3)
       metriks (>= 0.9.9.6)
-    micro_migrations (0.0.2)
-      activerecord
-      railties
-    mocha (0.10.5)
+    minitest (5.8.0)
+    mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.11.2)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     pg (0.18.2)
-    rack (1.4.7)
-    rack-cache (1.2)
-      rack (>= 0.4)
-    rack-ssl (1.3.4)
-      rack
-    rack-test (0.6.3)
-      rack (>= 1.0)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.4)
-    rails_stdout_logging (0.0.3)
-    railties (3.2.22)
-      actionpack (= 3.2.22)
-      activesupport (= 3.2.22)
-      rack-ssl (~> 1.3.2)
-      rake (>= 0.8.7)
-      rdoc (~> 3.4)
-      thor (>= 0.14.6, < 2.0)
     rake (10.4.2)
-    rdoc (3.12.2)
-      json (~> 1.4)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    rspec (2.7.0)
-      rspec-core (~> 2.7.0)
-      rspec-expectations (~> 2.7.0)
-      rspec-mocks (~> 2.7.0)
-    rspec-core (2.7.1)
-    rspec-expectations (2.7.0)
-      diff-lcs (~> 1.1.2)
-    rspec-mocks (2.7.0)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.2)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-mocks (3.3.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
     sidekiq (3.4.2)
       celluloid (~> 0.16.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -161,50 +123,44 @@ GEM
     simple_states (1.0.1)
       activesupport
       hashr (~> 0.0.10)
-    sprockets (2.2.3)
-      hike (~> 1.2)
-      multi_json (~> 1.0)
-      rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
-    thor (0.19.1)
     thread_safe (0.3.5)
-    tilt (1.4.1)
+    thread_safe (0.3.5-java)
     timers (4.0.1)
       hitimes
     travis-config (0.1.1)
       hashr (~> 0.0)
-    tzinfo (0.3.44)
-    virtus (1.0.5)
-      axiom-types (~> 0.1)
-      coercible (~> 1.0)
-      descendants_tracker (~> 0.0, >= 0.0.3)
-      equalizer (~> 0.0, >= 0.0.9)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
-  activerecord (~> 3)
-  coder!
-  coercible
+  activerecord
+  activerecord-jdbcpostgresql-adapter (~> 1.3.0)
+  coder
   dalli
-  database_cleaner (~> 0.8.0)
+  database_cleaner
   factory_girl
   gh
+  jruby-openssl (~> 0.9.8)
+  march_hare
   metriks-librato_metrics
-  micro_migrations
-  mocha (~> 0.10.0)
+  mocha
   multi_json
   pg
-  rails_12factor
+  rake
   redis
-  rollout!
-  rspec (~> 2.7.0)
+  rspec
   sentry-raven!
   sidekiq
   simple_states
   travis-config (~> 0.1.0)
-  travis-sidekiqs!
+  travis-encrypt!
+  travis-event!
   travis-support!
   unlimited-jce-policy-jdk7!
-  virtus
+
+BUNDLED WITH
+   1.10.5

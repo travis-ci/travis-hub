@@ -1,31 +1,24 @@
-require 'travis/notification'
-require 'travis/task'
+require 'travis/addons/instrument'
+require 'travis/addons/model'
+require 'travis/addons/handlers'
+require 'travis/event/subscription'
 
 module Travis
-  module Addons
-    require 'travis/addons/campfire'
-    require 'travis/addons/email'
-    require 'travis/addons/flowdock'
-    require 'travis/addons/github_status'
-    require 'travis/addons/hipchat'
-    require 'travis/addons/irc'
-    require 'travis/addons/pusher'
-    require 'travis/addons/states_cache'
-    require 'travis/addons/sqwiggle'
-    require 'travis/addons/webhook'
-    require 'travis/addons/slack'
-    require 'travis/addons/pushover'
+  AdminMissing      = Class.new(StandardError)
+  RepositoryMissing = Class.new(StandardError)
 
+  module Addons
     class << self
-      def register
-        constants(false).each do |name|
-          key = name.to_s.underscore
-          const = const_get(name)
-          handler = const.const_get(:EventHandler) rescue nil
-          Travis::Event::Subscription.register(key, handler) if handler
-          const.setup if const.respond_to?(:setup)
+      def setup
+        Handlers.constants(false).each do |name|
+          handler = Handlers.const_get(name)
+          name    = name.to_s.underscore
+          Event::Handler.register(name, handler)
+          handler.setup if handler.respond_to?(:setup)
         end
       end
     end
+
+    setup
   end
 end
