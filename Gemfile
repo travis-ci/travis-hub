@@ -2,17 +2,16 @@ source 'https://rubygems.org'
 
 ruby '1.9.3', engine: 'jruby', engine_version: '1.7.16' if ENV.key?('DYNO')
 
-# gem 'travis-support', github: 'travis-ci/travis-support'
-gem 'travis-support', path: '../travis-support'
+gem 'travis-support', github: 'travis-ci/travis-support', ref: 'sf-instrumentation'
 gem 'travis-config',  '~> 0.1.0'
 gem 'travis-encrypt', '~> 0.0.1'
-gem 'travis-event',   path: '../travis-event'
 
 gem 'rake'
 gem 'redis'
 gem 'dalli'
 gem 'activerecord'
 gem 'sidekiq'
+gem 'celluloid', '0.16.0' # 0.16.1 was yanked, and sidekiq 3.4.2 does not yet allow 0.17.x
 
 gem 'gh'
 gem 'metriks-librato_metrics'
