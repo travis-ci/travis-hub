@@ -1,6 +1,9 @@
 require 'rake'
 
-desc 'Create the test database'
-task :db_setup do
-  sh 'psql -q < spec/support/db.sql'
+namespace :db do
+  desc 'Create the test database'
+  task :create do
+    sh 'createdb travis' rescue nil
+    sh 'psql -q < spec/support/db.sql'
+  end
 end

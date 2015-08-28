@@ -1,18 +1,11 @@
 sudo: false
 language: ruby
 rvm:
-  - jruby-1.7.16
-  - jruby-head
+  - jruby-1.7.20
 jdk: openjdk7
 
 cache:
   - bundler
-
-env:
-  global:
-  - COVERAGE=1
-  matrix:
-  - RAKE_TASK=spec
 
 matrix:
   allow_failures:
@@ -27,10 +20,6 @@ addons:
   postgresql: 9.3
 
 before_script:
-  - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
-
-script: ./build.sh $RAKE_TASK
-
-notifications:
-  irc: "irc.freenode.org#travis"
-
+  - bundle exec rake 'test:setup'
+script:
+  - bundle exec rspec --require spec_helper
