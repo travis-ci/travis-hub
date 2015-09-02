@@ -26,7 +26,7 @@ module Travis
         private
 
           def cache
-            self.class.states_cache || fail("States cache not set up.")
+            self.class.states_cache || fail('States cache not set up.')
           end
 
           def repository_id

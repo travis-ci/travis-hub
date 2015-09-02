@@ -15,8 +15,8 @@ gem 'celluloid', '0.16.0' # 0.16.1 was yanked, and sidekiq 3.4.2 does not yet al
 
 gem 'gh'
 gem 'metriks-librato_metrics'
-gem 'sentry-raven',    github: 'getsentry/raven-ruby'
-gem 'simple_states'
+gem 'sentry-raven',  github: 'getsentry/raven-ruby'
+gem 'simple_states', '~> 1.1.0.pre'
 gem 'coder'
 gem 'multi_json'
 

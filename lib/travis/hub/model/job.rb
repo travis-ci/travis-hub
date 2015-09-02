@@ -13,7 +13,7 @@ class Job < ActiveRecord::Base
 
   serialize :config
 
-  states :created, :queued, :received, :started, :passed, :failed, :errored, :canceled
+  states :created, :queued, :received, :started, :passed, :failed, :errored, :canceled, ordered: true
 
   event :receive, to: :received, if: :receive?
   event :start,   to: :started,  if: :start?,  after: :propagate
@@ -46,6 +46,10 @@ class Job < ActiveRecord::Base
     !finished?
   end
 
+  def finished?
+    [:passed, :failed, :errored, :canceled].include?(state)
+  end
+
   def finish(data = {})
     self.attributes = { state: data[:state], finished_at: data[:finished_at] }
   end
@@ -65,10 +69,6 @@ class Job < ActiveRecord::Base
 
   def cancel(*)
     self.attributes = { canceled_at: Time.now, finished_at: Time.now }
-  end
-
-  def finished?
-    [:passed, :failed, :errored, :canceled].include?(state)
   end
 
   def invalid_config?

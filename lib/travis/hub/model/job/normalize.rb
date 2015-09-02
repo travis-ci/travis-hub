@@ -5,7 +5,7 @@ class Job < ActiveRecord::Base
     end
 
     def state=(state)
-      super(state.to_sym)
+      super(state.try(:to_sym))
     end
 
     def state

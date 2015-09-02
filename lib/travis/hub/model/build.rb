@@ -22,7 +22,7 @@ class Build < ActiveRecord::Base
     end
   end
 
-  states :created, :started, :passed, :failed, :errored, :canceled
+  states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
 
   event  :start,   to: :started,  if: :start?
   event  :finish,  to: :finished, if: :finish?

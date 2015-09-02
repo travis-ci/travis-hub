@@ -17,7 +17,6 @@ describe Travis::Addons::Serializer::Pusher::Build do
       commit: '62aae5f70ceee39123ef',
       commit_id: commit.id,
       branch: 'master',
-      job_ids: [1],
       message: 'the commit message',
       author_name: 'Sven Fuchs',
       author_email: 'me@svenfuchs.com',

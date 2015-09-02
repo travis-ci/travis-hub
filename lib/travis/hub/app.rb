@@ -37,6 +37,7 @@ module Travis
           Support::Amqp.setup(config.amqp)
           Support::Sidekiq.setup(config)
 
+          # TODO what's with the metrics handler. do we still need that? add it to the config?
           Travis::Event.setup(config.notifications) # TODO rename to :event_handlers
           Travis::Instrumentation.setup(logger)
           Travis::Exceptions::Reporter.start
