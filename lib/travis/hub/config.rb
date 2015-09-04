@@ -7,6 +7,7 @@ module Travis
               database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning' },
               redis:         { url: 'redis://localhost:6379' },
               sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
+              lock:          { strategy: :none },
               states_cache:  { memcached_servers: 'localhost:11211' },
 
               host:          'travis-ci.org',

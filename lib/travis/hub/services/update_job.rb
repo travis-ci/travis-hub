@@ -2,6 +2,7 @@ require 'metriks'
 require 'travis/support/instrumentation'
 require 'travis/hub/model/job'
 require 'travis/hub/services/workers'
+require 'travis/hub/support/lock'
 
 module Travis
   module Services
@@ -27,7 +28,9 @@ module Travis
       private
 
         def update_job
-          job.send(:"#{event}!", data)
+          exclusive do
+            job.send(:"#{event}!", data)
+          end
         end
 
         def job
@@ -36,6 +39,10 @@ module Travis
 
         def validate
           EVENTS.include?(event) || fail(ArgumentError, "Unknown event: #{event}, data: #{data}")
+        end
+
+        def exclusive(&block)
+          Hub::Support::Lock.exclusive("hub:update_job:#{job.id}", Hub.config.lock, &block)
         end
 
         class Instrument < Instrumentation::Instrument
