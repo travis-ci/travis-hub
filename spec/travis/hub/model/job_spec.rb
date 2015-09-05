@@ -264,14 +264,14 @@ describe Job do
   end
 
   shared_examples 'does not apply' do
-    it 'does not call the event' do
-      job.expects(:notify).never
-      receive
-    end
-
     it 'does not change the job :state' do
       receive
       expect(job.reload.state).to eql(state)
+    end
+
+    it 'does not change the job `[state]ed_at` time' do
+      attr = "#{state}_ed".sub(/eed$/, 'ed')
+      expect { receive }.to_not change { job.reload.send(attr) } if job.respond_to?(attr)
     end
 
     it 'does not change the build :state' do
@@ -279,9 +279,9 @@ describe Job do
       expect(job.reload.state).to eql(state)
     end
 
-    it 'does not propagate to the build' do
-      job.expects(:propagate).never
-      receive
+    it 'does not change the build `[state]ed_at` time' do
+      attr = "#{state}_ed".sub(/eed$/, 'ed')
+      expect { receive }.to_not change { build.reload.send(attr) } if build.respond_to?(attr)
     end
   end
 

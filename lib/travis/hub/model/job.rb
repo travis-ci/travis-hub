@@ -15,43 +15,31 @@ class Job < ActiveRecord::Base
 
   states :created, :queued, :received, :started, :passed, :failed, :errored, :canceled, ordered: true
 
-  event :receive, to: :received, if: :receive?
-  event :start,   to: :started,  if: :start?,  after: :propagate
-  event :finish,  to: :finished, if: :finish?, after: :propagate
-  event :cancel,  to: :canceled, if: :cancel?, after: :propagate
-  event :reset,   to: :created,  if: :reset?,  after: :propagate
+  event :receive
+  event :start,   after: :propagate
+  event :finish,  after: :propagate
+  event :cancel,  after: :propagate, if: :cancel?
+  event :reset,   after: :propagate, if: :reset?
   event :all, after: :notify
 
   def duration
     started_at && finished_at ? finished_at - started_at : nil
   end
 
-  def receive?
-    [:created, :queued].include?(state)
+  def receive(data)
+    self.received_at = data[:received_at]
   end
 
-  def receive(data = {})
-    self.attributes = { received_at: data[:received_at] }
-  end
-
-  def start?
-    [:created, :queued, :received].include?(state)
-  end
-
-  def start(data = {})
-    self.attributes = { started_at: data[:started_at] }
-  end
-
-  def finish?
-    !finished?
+  def start(data)
+    self.started_at = data[:started_at]
   end
 
   def finished?
     [:passed, :failed, :errored, :canceled].include?(state)
   end
 
-  def finish(data = {})
-    self.attributes = { state: data[:state], finished_at: data[:finished_at] }
+  def finish(data)
+    self.finished_at = data[:finished_at]
   end
 
   def reset?
@@ -82,5 +70,6 @@ class Job < ActiveRecord::Base
 
   def propagate(event, *args)
     build.send(:"#{event}!", *args)
+    true
   end
 end

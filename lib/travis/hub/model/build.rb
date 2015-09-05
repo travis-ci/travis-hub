@@ -24,17 +24,13 @@ class Build < ActiveRecord::Base
 
   states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
 
-  event  :start,   to: :started,  if: :start?
+  event  :start,   to: :started
   event  :finish,  to: :finished, if: :finish?
   event  :cancel,  to: :canceled, if: :finish?
   event  :reset,   to: :created,  if: :reset?
   event  :all, after: [:denormalize, :notify]
 
   serialize :config
-
-  def start?
-    state == :created
-  end
 
   def start(data = {})
     self.attributes = { started_at: data[:started_at] }
@@ -48,6 +44,10 @@ class Build < ActiveRecord::Base
     self.attributes = { state: matrix.state, duration: matrix.duration, finished_at: data[:finished_at] }
   end
 
+  def finished?
+    [:passed, :failed, :errored, :canceled].include?(state)
+  end
+
   def reset?
     finished? && config_valid?
   end
@@ -58,10 +58,6 @@ class Build < ActiveRecord::Base
 
   def cancel(*)
     self.attributes = { state: matrix.state, duration: matrix.duration, canceled_at: Time.now, finished_at: Time.now }
-  end
-
-  def finished?
-    [:passed, :failed, :errored, :canceled].include?(state)
   end
 
   def config_valid?

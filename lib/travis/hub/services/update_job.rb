@@ -19,18 +19,20 @@ module Travis
       end
 
       def run
-        validate
-        update_job
-        Workers.new.cancel(job) if job.canceled? && event != :reset
+        exclusive do
+          validate
+          update_job
+          Workers.new.cancel(job) if job.canceled? && event != :reset
+        end
       end
       instrument :run
 
       private
 
         def update_job
-          exclusive do
-            job.send(:"#{event}!", data)
-          end
+          job.send(:"#{event}!", data)
+        rescue Exception => e
+          puts e.message, e.backtrace
         end
 
         def job
@@ -42,7 +44,9 @@ module Travis
         end
 
         def exclusive(&block)
-          Hub::Support::Lock.exclusive("hub:update_job:#{job.id}", Hub.config.lock, &block)
+          Hub::Support::Lock.exclusive("hub:update_job:#{data[:id]}", Hub.config.lock, &block)
+        rescue Timeout::Error => e
+          Hub.logger.info("Timeout processing an update for job #{data[:id]}. Could not obtain a lock?")
         end
 
         class Instrument < Instrumentation::Instrument

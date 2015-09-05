@@ -11,22 +11,26 @@ module Travis
     module Support
       module Lock
         class Postgresql < Struct.new(:name, :options)
+          attr_reader :lock
+
           def exclusive
             Timeout.timeout(timeout) do
-              sleep(rand(0.1..0.2)) until obtained?
-              yield
+              connection.transaction do
+                sleep(rand(0.1..0.2)) until obtained?
+                yield
+              end
             end
           ensure
-            release unless transactional?
+            release if lock && transactional?
           end
 
           private
 
             def obtained?
               raise 'lock name cannot be blank' if name.nil? || name.empty?
-              name   = "pg_try_advisory#{'_xact' if transactional?}_lock"
-              result = connection.select_value("select #{name}(#{key});")
-              result == 't' || result == 'true'
+              func   = "pg_try_advisory#{'_xact' if transactional?}_lock"
+              result = connection.select_value("select #{func}(#{key});")
+              @lock  = result == 't' || result = 'true'
             end
 
             def release

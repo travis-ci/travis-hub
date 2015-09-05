@@ -28,7 +28,7 @@ module Travis
 
         class Instrument < Addons::Instrument
           def notify_completed
-            publish if Instruments.publish?(handler.event)
+            publish
           end
         end
         Instrument.attach_to(self)

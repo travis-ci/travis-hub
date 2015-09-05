@@ -93,6 +93,8 @@ GEM
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    redlock (0.1.1)
+      redis (~> 3, >= 3.0.5)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -112,7 +114,7 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
-    simple_states (1.1.0.pre)
+    simple_states (1.1.0.rc1)
       activesupport
       hashr (~> 0.0.10)
     thread_safe (0.3.5)
@@ -146,10 +148,11 @@ DEPENDENCIES
   pg
   rake
   redis
+  redlock
   rspec
   sentry-raven!
   sidekiq
-  simple_states (~> 1.1.0.pre)
+  simple_states (~> 1.1.0.rc1)
   travis-config (~> 0.1.0)
   travis-encrypt (~> 0.0.1)
   travis-support!

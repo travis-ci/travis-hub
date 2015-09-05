@@ -1,3 +1,7 @@
+# TODO
+
+* Merge travis-support branches (sf-log_newline, sf-instrumentation)
+
 # WHAT HUB DOES
 
 * Accept job state updates

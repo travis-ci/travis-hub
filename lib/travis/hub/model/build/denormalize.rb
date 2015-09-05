@@ -20,7 +20,7 @@ class Build < ActiveRecord::Base
 
     def denormalize(event, *args)
       repository.update_attributes!(denormalize_attributes_for(event)) if denormalize?(event)
-      Branch.update_last_build(repository.id, branch)
+      Branch.update_last_build(self)
     end
 
     def denormalize?(event)

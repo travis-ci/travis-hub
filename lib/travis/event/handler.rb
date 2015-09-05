@@ -36,11 +36,11 @@ module Travis
       instrument :notify
       rescues :notify, from: Exception
 
-      private
+      def object
+        Kernel.const_get(object_type.camelize).find(data[:id])
+      end
 
-        def object
-          Kernel.const_get(object_type.camelize).find(data[:id])
-        end
+      private
 
         def object_type
           event.split(':').first

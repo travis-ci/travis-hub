@@ -9,6 +9,7 @@ gem 'travis-encrypt', '~> 0.0.1'
 gem 'rake'
 gem 'redis'
 gem 'dalli'
+gem 'redlock'
 gem 'activerecord'
 gem 'sidekiq'
 gem 'celluloid', '0.16.0' # 0.16.1 was yanked, and sidekiq 3.4.2 does not yet allow 0.17.x
@@ -16,7 +17,7 @@ gem 'celluloid', '0.16.0' # 0.16.1 was yanked, and sidekiq 3.4.2 does not yet al
 gem 'gh'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven',  github: 'getsentry/raven-ruby'
-gem 'simple_states', '~> 1.1.0.pre'
+gem 'simple_states', '~> 1.1.0.rc1'
 gem 'coder'
 gem 'multi_json'
 
