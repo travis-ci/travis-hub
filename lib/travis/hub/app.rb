@@ -25,16 +25,14 @@ module Travis
         end
 
         def setup
+          Travis::Database.connect
           Support::Amqp.setup(config.amqp)
           Travis::Metrics.setup
         end
 
         def setup_worker
-          Travis::Database.connect
           # ActiveRecord::Base.logger = nil
           setup_logs_database if config.logs_database # TODO remove
-
-          Support::Amqp.setup(config.amqp)
           Support::Sidekiq.setup(config)
 
           # TODO what's with the metrics handler. do we still need that? add it to the config?
@@ -48,7 +46,7 @@ module Travis
 
         def setup_logs_database
           [Log, Log::Part].each do |const|
-            const.establish_connection 'logs_database'
+            const.establish_connection(config.logs_database)
           end
         end
 

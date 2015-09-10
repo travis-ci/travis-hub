@@ -44,6 +44,10 @@ module Travis
               # endpoints:     { }
 
       default :_access => [:key]
+
+      def logs_database
+        super || database
+      end
     end
   end
 end

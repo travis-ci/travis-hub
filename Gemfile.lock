@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 07f34972e2c74260a483bceeda1b230c0e2da0cc
+  revision: 129c18bff69add680e291414122319d6c1b733ed
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
@@ -157,6 +157,3 @@ DEPENDENCIES
   travis-encrypt (~> 0.0.1)
   travis-support!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.10.6
