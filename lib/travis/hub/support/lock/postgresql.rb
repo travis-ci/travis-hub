@@ -4,55 +4,92 @@
 # http://www.postgresql.org/docs/9.3/static/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS
 
 require 'zlib'
-require 'timeout'
+require 'active_record'
 
 module Travis
-  module Hub
-    module Support
-      module Lock
-        class Postgresql < Struct.new(:name, :options)
-          attr_reader :lock
+  module Support
+    module Lock
+      class Postgresql < Struct.new(:name, :options)
+        WAIT = 0.0001..0.0009
 
-          def exclusive
-            Timeout.timeout(timeout) do
-              connection.transaction do
-                sleep(rand(0.1..0.2)) until obtained?
-                yield
-              end
-            end
+        attr_reader :lock
+
+        def exclusive(&block)
+          with_lock do
+            transactional? ? connection.transaction(&block) : yield
+          end
+          # TODO how to deal with timeout when using try?
+        end
+
+        private
+
+          def with_lock
+            wait until obtained? || timeout?
+            return unless lock
+            yield
           ensure
-            release if lock && transactional?
+            release unless transactional?
           end
 
-          private
-
-            def obtained?
-              raise 'lock name cannot be blank' if name.nil? || name.empty?
-              func   = "pg_try_advisory#{'_xact' if transactional?}_lock"
-              result = connection.select_value("select #{func}(#{key});")
-              @lock  = result == 't' || result = 'true'
+          def obtained?
+            raise 'lock name cannot be blank' if name.nil? || name.empty?
+            with_statement_timeout do
+              result = connection.select_value("select #{pg_function}(#{key});")
+              @lock  = try? ? result == 't' || result == 'true' : true
             end
+          end
 
-            def release
-              connection.execute("select pg_advisory_unlock(#{key});")
-            end
+          def release
+            connection.execute("select pg_advisory_unlock(#{key});")
+          end
 
-            def timeout
-              options[:timeout] || 30
-            end
+          def wait
+            sleep(rand(WAIT)) if try?
+          end
 
-            def transactional?
-              !!options[:transactional]
-            end
+          def started
+            @started ||= Time.now
+          end
 
-            def connection
-              ActiveRecord::Base.connection
-            end
+          def timeout?
+            started + timeout < Time.now
+          end
 
-            def key
-              Zlib.crc32(name)
-            end
-        end
+          def timeout
+            options[:timeout] || 30
+          end
+
+          def try?
+            !!options[:try]
+          end
+
+          def transactional?
+            !!options[:transactional]
+          end
+
+          def with_statement_timeout
+            return yield if try?
+            connection.select_value("set statement_timeout to #{timeout * 1000};")
+            yield
+          rescue ActiveRecord::StatementInvalid => e
+            retry if e.original_exception.is_a?(PG::QueryCanceled)
+            raise
+          end
+
+          def pg_function
+            func = ['pg', 'advisory', 'lock']
+            func.insert(2, 'xact') if transactional?
+            func.insert(1, 'try')  if try?
+            func.join('_')
+          end
+
+          def connection
+            ActiveRecord::Base.connection
+          end
+
+          def key
+            Zlib.crc32(name).to_i & 0x7fffffff
+          end
       end
     end
   end

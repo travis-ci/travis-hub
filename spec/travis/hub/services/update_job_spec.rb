@@ -1,4 +1,4 @@
-describe Travis::Services::UpdateJob do
+describe Travis::Hub::Services::UpdateJob do
   let(:state)  { :queued }
   let(:job)    { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
   let(:params) { { event: 'start', data: { id: job.id, started_at: Time.now } } }
