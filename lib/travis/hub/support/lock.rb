@@ -7,8 +7,8 @@ module Travis
     module Lock
       extend self
 
-      def exclusive(name, options = {}, &block)
-        strategy = options[:strategy] || fail('No lock strategy given.')
+      def exclusive(name, options = nil, &block)
+        strategy = options && options[:strategy] || :none
         const_get(camelize(strategy)).new(name, options).exclusive(&block)
       end
 

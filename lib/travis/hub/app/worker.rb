@@ -6,8 +6,8 @@ module Travis
 
         def initialize(name, count, number)
           super(name)
-          @count  = count.to_i
-          @number = number.to_i
+          @count  = count
+          @number = number
         end
 
         private

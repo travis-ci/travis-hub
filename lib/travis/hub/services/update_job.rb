@@ -47,7 +47,6 @@ module Travis
           def exclusive(&block)
             # # TODO use the build_id here!
             Travis::Support::Lock.exclusive("hub:update_job:#{data[:id]}", Hub.config.lock, &block)
-            # job.with_lock(lock: true, &block)
           rescue Timeout::Error => e
             Hub.logger.info("Timeout processing an update for job #{data[:id]}. Could not obtain a lock?")
           end

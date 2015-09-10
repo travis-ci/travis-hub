@@ -68,11 +68,10 @@ module Travis
           end
 
           def with_statement_timeout
-            return yield if try?
-            connection.select_value("set statement_timeout to #{timeout * 1000};")
+            connection.select_value("set statement_timeout to #{timeout * 1000};") unless try?
             yield
           rescue ActiveRecord::StatementInvalid => e
-            retry if e.original_exception.is_a?(PG::QueryCanceled)
+            retry if defined?(PG) && e.original_exception.is_a?(PG::QueryCanceled)
             raise
           end
 

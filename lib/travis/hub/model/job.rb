@@ -6,6 +6,8 @@ require 'travis/hub/model/job/normalize'
 class Job < ActiveRecord::Base
   include Normalize, SimpleStates, Travis::Event
 
+  Job.inheritance_column = :missing
+
   has_one    :log
   belongs_to :repository
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type

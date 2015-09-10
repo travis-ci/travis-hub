@@ -6,6 +6,8 @@ module Travis
   module Addons
     module Handlers
       class Pusher < Event::Handler
+        include Helpers
+
         EVENTS = [
           /^build:(created|received|started|finished|canceled)/,
           /^job:(created|received|started|finished|canceled)/
@@ -19,7 +21,14 @@ module Travis
         end
 
         def handle
-          run_task(QUEUE, payload, event: event)
+          # TODO change live to allow using an alternative worker signature
+          ::Sidekiq::Client.push(
+            'queue'  => QUEUE,
+            'class'  => 'Travis::Async::Sidekiq::Worker',
+            'method' => 'perform',
+            'args'   => [nil, nil, nil, payload, event: event],
+            'retry'  => true
+          )
         end
 
         def payload

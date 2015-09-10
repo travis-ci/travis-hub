@@ -7,4 +7,7 @@ $LOAD_PATH << 'lib'
 require 'bundler/setup'
 require 'travis/hub'
 
-Travis::Hub::App.run(*ARGV)
+type = ARGV.shift
+args = ARGV.map { |arg| arg.gsub(/\D/, '').to_i }
+
+Travis::Hub::App.run(type, *args)
