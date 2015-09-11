@@ -275,7 +275,7 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
-    travis-config (0.1.0)
+    travis-config (0.1.4)
       hashr (~> 0.0)
     treetop (1.4.15)
       polyglot
@@ -318,3 +318,6 @@ DEPENDENCIES
   travis-support!
   unlimited-jce-policy-jdk7!
   webmock (~> 1.8.0)
+
+BUNDLED WITH
+   1.10.6
