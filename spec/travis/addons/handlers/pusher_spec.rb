@@ -34,7 +34,13 @@ describe Travis::Addons::Handlers::Pusher do
       let(:event) { 'job:finished' }
 
       it 'enqueues a task' do
-        handler.expects(:run_task).with(:'pusher-live', is_a(Hash), event: event)
+        ::Sidekiq::Client.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq(:'pusher-live')
+          expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
+          expect(payload['method']).to  eq('perform')
+          expect(payload['args'][3]).to be_a(Hash)
+          expect(payload['args'][4]).to eq(event: event)
+        end
         handler.handle
       end
     end
@@ -43,7 +49,13 @@ describe Travis::Addons::Handlers::Pusher do
       let(:event) { 'build:finished' }
 
       it 'enqueues a task' do
-        handler.expects(:run_task).with(:'pusher-live', is_a(Hash), event: event)
+        ::Sidekiq::Client.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq(:'pusher-live')
+          expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
+          expect(payload['method']).to  eq('perform')
+          expect(payload['args'][3]).to be_a(Hash)
+          expect(payload['args'][4]).to eq(event: event)
+        end
         handler.handle
       end
     end

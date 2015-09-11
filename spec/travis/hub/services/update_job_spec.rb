@@ -11,7 +11,7 @@ describe Travis::Hub::Services::UpdateJob do
 
   it 'instruments #run' do
     subject.run
-    expect(stdout.string).to include("Travis::Services::UpdateJob#run:completed event: start for <Job id=#{job.id}>")
+    expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: start for <Job id=#{job.id}>")
   end
 
   describe 'with a canceled job' do

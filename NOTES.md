@@ -13,7 +13,7 @@
 # REFACTOR
 
 * Dispatch events to subscribed apps, remove addons
-* Allow passing attributes to simple_state event methods
+* Allow passing attributes to simple_state event methods (automatically set :started_at etc)
 
 # EXTRACT OR MOVE TO SUPPORT
 
@@ -27,12 +27,13 @@
 
 # CAN WE REMOVE THESE FROM HUB?
 
-* Branch: does every event need to update the branch? are branches being sync'ed now?
-  See /lib/travis/hub/model/build/denormalize.rb#24
 * Repository: does the UI still use denormalized last\_build\* attributes?
-* data[:state] in Service::UpdateJob: does the worker send the state key?
 * Log (ported, but it would be nice to remove this dependency)
 * Annotations (not ported at all)
+* ~~Branch: does every event need to update the branch? are branches being sync'ed now?~~
+  ~~See /lib/travis/hub/model/build/denormalize.rb#24~~
+  ~~Removed all this for now. Branches were set to the last build created over and over~~
+* ~~data[:state] in Service::UpdateJob: does the worker send the state key?~~
 
 # CLEANUP
 

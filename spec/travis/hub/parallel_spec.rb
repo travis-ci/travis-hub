@@ -5,7 +5,7 @@ describe Travis::Hub do
   let(:finish)  { { event: 'finish',  data: { id: job.id, state: 'passed', finished_at: Time.now } } }
 
   def run(msg)
-    Travis::Services::UpdateJob.new(msg).run
+    Travis::Hub::Services::UpdateJob.new(msg).run
   end
 
   it 'works with unordered messages (1)' do

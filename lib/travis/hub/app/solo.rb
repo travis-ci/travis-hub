@@ -6,7 +6,7 @@ module Travis
     module App
       class Solo < Struct.new(:name)
         def run
-          Queue.subscribe(queue, prefetch: 5, &method(:handle))
+          Queue.subscribe(queue, &method(:handle))
         end
 
         private

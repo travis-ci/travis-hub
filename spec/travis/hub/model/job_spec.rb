@@ -63,12 +63,6 @@ describe Job do
         end
       end
     end
-
-    it 'denormalizes to the branch' do
-      receive
-      branch = Branch.where(repository_id: repo.id, name: build.branch).first
-      expect(branch.last_build).to eql(build)
-    end
   end
 
   shared_examples 'sets the job to :passed' do
@@ -125,12 +119,6 @@ describe Job do
         end
       end
     end
-
-    it 'denormalizes to the branch' do
-      receive
-      branch = Branch.where(repository_id: repo.id, name: build.branch).first
-      expect(branch.last_build).to eql(build)
-    end
   end
 
   shared_examples 'cancels the job' do
@@ -179,12 +167,6 @@ describe Job do
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
         end
       end
-    end
-
-    it 'denormalizes to the branch' do
-      receive
-      branch = Branch.where(repository_id: repo.id, name: build.branch).first
-      expect(branch.last_build).to eql(build)
     end
   end
 
@@ -254,12 +236,6 @@ describe Job do
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
         end
       end
-    end
-
-    it 'denormalizes to the branch' do
-      receive
-      branch = Branch.where(repository_id: repo.id, name: build.branch).first
-      expect(branch.last_build).to eql(build)
     end
   end
 

@@ -1,5 +1,3 @@
-require 'travis/hub/model/branch'
-
 class Build < ActiveRecord::Base
   # The build's start and finish events (state changes) trigger denormalization
   # of certain attributes to the repository in order to disburden the db a bit.
@@ -20,7 +18,6 @@ class Build < ActiveRecord::Base
 
     def denormalize(event, *args)
       repository.update_attributes!(denormalize_attributes_for(event)) if denormalize?(event)
-      Branch.update_last_build(self)
     end
 
     def denormalize?(event)
