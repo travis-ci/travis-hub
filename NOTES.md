@@ -8,6 +8,7 @@
 * Enqueue tasks
 * Enqueue live messages
 * Update the states cache
+* Collect metrics about job queue and run times
 
 # REFACTOR
 

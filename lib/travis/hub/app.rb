@@ -38,6 +38,7 @@ module Travis
           # TODO what's with the metrics handler. do we still need that? add it to the config?
           Travis::Event.setup(config.notifications) # TODO rename to :event_handlers
           Travis::Instrumentation.setup(logger)
+          # TODO re-add, maybe exclude staging?
           # Travis::Exceptions::Reporter.start
           Travis::Encrypt.setup(key: config.encryption)
 

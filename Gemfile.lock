@@ -121,7 +121,7 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.0.1)
       hitimes
-    travis-config (0.1.2)
+    travis-config (0.1.4)
       hashr (~> 0.0)
     travis-encrypt (0.0.1)
     tzinfo (1.2.2)

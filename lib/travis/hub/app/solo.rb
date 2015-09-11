@@ -6,7 +6,7 @@ module Travis
     module App
       class Solo < Struct.new(:name)
         def run
-          Queue.subscribe(queue, &method(:handle))
+          Queue.subscribe(queue, prefetch: 5, &method(:handle))
         end
 
         private
@@ -17,8 +17,10 @@ module Travis
 
           def handle(event, payload)
             Metriks.timer("hub.#{name}.handle").time do
-              ActiveRecord::Base.cache do
-                handle_event(event, payload)
+              ActiveRecord::Base.connection_pool.with_connection do
+                ActiveRecord::Base.cache do
+                  handle_event(event, payload)
+                end
               end
             end
           end

@@ -40,15 +40,18 @@ module Travis
             @job ||= Job.find(data[:id])
           end
 
+          def build_id
+            @build_id ||= Job.find(data[:id]).source_id
+          end
+
           def validate
             EVENTS.include?(event) || fail(ArgumentError, "Unknown event: #{event}, data: #{data}")
           end
 
           def exclusive(&block)
-            # # TODO use the build_id here!
-            Travis::Support::Lock.exclusive("hub:update_job:#{data[:id]}", Hub.config.lock, &block)
+            Travis::Support::Lock.exclusive("hub:update_job:#{build_id}", Hub.config.lock, &block)
           rescue Timeout::Error => e
-            Hub.logger.info("Timeout processing an update for job #{data[:id]}. Could not obtain a lock?")
+            Hub.logger.info("Timeout processing an update for job #{data[:id]}. Could not obtain a lock for build_id=#{build_id}?")
           end
 
           class Instrument < Instrumentation::Instrument

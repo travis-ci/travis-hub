@@ -24,13 +24,17 @@ class Build < ActiveRecord::Base
 
   states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
 
-  event  :start,   to: :started
+  event  :start,   to: :started,  if: :start?
   event  :finish,  to: :finished, if: :finish?
   event  :cancel,  to: :canceled, if: :finish?
   event  :reset,   to: :created,  if: :reset?
   event  :all, after: [:denormalize, :notify]
 
   serialize :config
+
+  def start?
+    !started?
+  end
 
   def start(data = {})
     self.attributes = { started_at: data[:started_at] }
