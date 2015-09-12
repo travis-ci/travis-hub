@@ -176,27 +176,27 @@ describe Job do
       expect(job.reload.state).to eql(:created)
     end
 
-    it 'restarts :queued_at' do
+    it 'resets :queued_at' do
       receive
       expect(job.reload.queued_at).to be_nil
     end
 
-    it 'restarts :received_at' do
+    it 'resets :received_at' do
       receive
       expect(job.reload.received_at).to be_nil
     end
 
-    it 'restarts :started_at' do
+    it 'resets :started_at' do
       receive
       expect(job.reload.started_at).to be_nil
     end
 
-    it 'restarts :finished_at' do
+    it 'resets :finished_at' do
       receive
       expect(job.reload.finished_at).to be_nil
     end
 
-    it 'dispatches a job:created event' do
+    it 'dispatches a job:restarted event' do
       Travis::Event.expects(:dispatch).with('job:restarted', id: job.id)
       receive
     end
@@ -207,17 +207,17 @@ describe Job do
         expect(job.build.reload.state).to eql(:created)
       end
 
-      it 'restarts :duration' do
+      it 'resets :duration' do
         receive
         expect(job.build.reload.duration).to be_nil
       end
 
-      it 'restarts :started_at' do
+      it 'resets :started_at' do
         receive
         expect(job.build.reload.started_at).to be_nil
       end
 
-      it 'restarts :finished_at' do
+      it 'resets :finished_at' do
         receive
         expect(job.build.reload.finished_at).to be_nil
       end

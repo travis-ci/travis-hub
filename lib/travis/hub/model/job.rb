@@ -1,3 +1,5 @@
+require 'simple_states'
+require 'travis/event'
 require 'travis/hub/model/build'
 require 'travis/hub/model/log'
 require 'travis/hub/model/repository'
@@ -5,14 +7,12 @@ require 'travis/hub/model/repository'
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
-  Job.inheritance_column = :missing
+  Job.inheritance_column = :unused
 
   has_one    :log
   belongs_to :repository
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
-
-  serialize :config
 
   states :created, :queued, :received, :started, :passed, :failed, :errored, :canceled, ordered: true
 
@@ -22,6 +22,8 @@ class Job < ActiveRecord::Base
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
+
+  serialize :config
 
   def config
     super || {}
@@ -36,7 +38,7 @@ class Job < ActiveRecord::Base
   end
 
   def restart?
-    finished? && !invalid_config?
+    finished? && config_valid?
   end
 
   def restart(*)
@@ -52,11 +54,13 @@ class Job < ActiveRecord::Base
     self.finished_at = Time.now
   end
 
-  def invalid_config?
-    config[:'.result'] == 'parse_error'
-  end
-
   def propagate(event, *args)
     build.send(:"#{event}!", *args)
   end
+
+  private
+
+    def config_valid?
+      !config[:'.result'].to_s.include?('error')
+    end
 end

@@ -1,5 +1,4 @@
 require 'simple_states'
-require 'core_ext/hash/deep_symbolize_keys'
 require 'travis/event'
 require 'travis/hub/model/job'
 require 'travis/hub/model/build/denormalize'
@@ -50,14 +49,17 @@ class Build < ActiveRecord::Base
   end
 
   def cancel(options = {})
+    self.finished_at = Time.now
     jobs.each(&:cancel!) if options[:all]
   end
 
-  def config_valid?
-    !config[:'.result'].to_s.include?('error')
-  end
+  private
 
-  def matrix
-    @matrix ||= Matrix.new(jobs, config[:matrix])
-  end
+    def config_valid?
+      !config[:'.result'].to_s.include?('error')
+    end
+
+    def matrix
+      @matrix ||= Matrix.new(jobs, config[:matrix])
+    end
 end
