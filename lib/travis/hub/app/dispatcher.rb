@@ -15,10 +15,10 @@ module Travis
 
         private
 
-          def handle_event(event, payload)
+          def handle_event(type, payload)
             id  = ::Job.find(payload.fetch('id')).source_id
             key = queue_for(id % count + 1)
-            publishers[key].publish(payload.merge(worker_count: count), properties: { type: event })
+            publishers[key].publish(payload.merge(worker_count: count), properties: { type: type })
             meter(key)
           end
 

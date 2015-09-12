@@ -1,18 +1,18 @@
 require 'metriks'
 require 'travis/support/instrumentation'
 require 'travis/hub/helpers/locking'
-require 'travis/hub/model/job'
+require 'travis/hub/model/build'
 require 'travis/hub/services/workers'
 require 'travis/hub/support/lock'
 
 module Travis
   module Hub
     module Services
-      class UpdateJob
+      class UpdateBuild
         include Helpers::Locking
         extend Instrumentation
 
-        EVENTS = [:receive, :start, :finish, :cancel, :restart]
+        EVENTS = [:cancel, :restart]
 
         attr_reader :event, :data
 
@@ -23,29 +23,25 @@ module Travis
 
         def run
           validate
-          update_job
+          update_build
           notify
         end
         instrument :run
 
         private
 
-          def update_job
-            exclusive "hub:update_job:#{build_id}" do
-              job.send(:"#{event}!", data)
+          def update_build
+            exclusive "hub:update_build:#{data[:id]}" do
+              build.send(:"#{event}!", data)
             end
           end
 
           def notify
-            Workers.new.cancel(job) if job.canceled?
+            build.jobs.each { |job| Workers.new.cancel(job) } if build.canceled?
           end
 
-          def job
-            @job ||= Job.find(data[:id])
-          end
-
-          def build_id
-            @build_id ||= Job.find(data[:id]).source_id
+          def build
+            @build ||= Build.find(data[:id])
           end
 
           def validate
@@ -59,8 +55,8 @@ module Travis
           class Instrument < Instrumentation::Instrument
             def run_completed
               publish(
-                msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}",
-                job_id: target.data[:id],
+                msg: "event: #{target.event} for <Build id=#{target.data[:id]}> data=#{target.data.inspect}",
+                build_id: target.data[:id],
                 event: target.event,
                 data: target.data
               )

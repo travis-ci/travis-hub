@@ -19,7 +19,7 @@ describe Travis::Hub::Services::UpdateJob do
     let(:fanout) { Travis::Amqp::FanoutPublisher.any_instance }
     before       { fanout.stubs(:publish) }
 
-    it 're-cancels the job in the workers' do
+    it 'notifies workers' do
       fanout.expects(:publish).with(type: 'cancel_job', job_id: job.id, source: 'update_job_service')
       subject.run
     end

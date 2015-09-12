@@ -27,9 +27,9 @@ module Travis
 
           def receive(message, payload)
             failsafe(message, payload) do
-              event = message.properties.type
+              type = message.properties.type
               payload = decode(payload)
-              handler.call(event, payload)
+              handler.call(type, payload)
             end
           end
 
@@ -49,7 +49,7 @@ module Travis
           def decode(payload)
             cleaned = Coder.clean(payload)
             decoded = MultiJson.decode(cleaned)
-            decoded || fail("no payload for #{event.inspect} (#{message.inspect})")
+            decoded || fail("No payload for #{event.inspect} (#{message.inspect})")
           rescue StandardError => e
             error '[decode error] payload could not be decoded with engine ' \
                   "#{MultiJson.engine}: #{e.inspect} #{payload.inspect}"
