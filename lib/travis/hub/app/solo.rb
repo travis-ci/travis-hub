@@ -1,6 +1,6 @@
 require 'travis/hub/app/queue'
-require 'travis/hub/services/update_build'
-require 'travis/hub/services/update_job'
+require 'travis/hub/service/update_build'
+require 'travis/hub/service/update_job'
 
 module Travis
   module Hub
@@ -31,7 +31,7 @@ module Travis
           end
 
           def handler(type)
-            Services.const_get("Update#{type.to_s.sub(/./) { |char| char.upcase }}")
+            Service.const_get("Update#{type.to_s.sub(/./) { |char| char.upcase }}")
           end
 
           def parse_type(type)

@@ -2,10 +2,10 @@ require 'travis/support/amqp'
 
 module Travis
   module Hub
-    module Services
-      class Workers
+    module Service
+      class NotifyWorkers
         def cancel(job)
-          publisher.publish(type: 'cancel_job', job_id: job.id, source: 'update_job_service')
+          publisher.publish(type: 'cancel_job', job_id: job.id, source: 'hub')
         end
 
         private

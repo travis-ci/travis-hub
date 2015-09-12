@@ -1,4 +1,4 @@
-describe Travis::Hub::Services::UpdateJob do
+describe Travis::Hub::Service::UpdateJob do
   let(:job)    { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
   let(:params) { { event: event, data: data } }
   let(:amqp)   { Travis::Amqp::FanoutPublisher.any_instance }
@@ -18,7 +18,7 @@ describe Travis::Hub::Services::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: start for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for <Job id=#{job.id}>")
     end
   end
 
@@ -34,7 +34,7 @@ describe Travis::Hub::Services::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: receive for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for <Job id=#{job.id}>")
     end
   end
 
@@ -50,7 +50,7 @@ describe Travis::Hub::Services::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: finish for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: finish for <Job id=#{job.id}>")
     end
   end
 
@@ -66,11 +66,11 @@ describe Travis::Hub::Services::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: cancel for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: cancel for <Job id=#{job.id}>")
     end
 
     it 'notifies workers' do
-      amqp.expects(:publish).with(type: 'cancel_job', job_id: job.id, source: 'update_job_service')
+      amqp.expects(:publish).with(type: 'cancel_job', job_id: job.id, source: 'hub')
       subject.run
     end
   end
@@ -87,7 +87,7 @@ describe Travis::Hub::Services::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Services::UpdateJob#run:completed event: restart for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for <Job id=#{job.id}>")
     end
   end
 
@@ -98,7 +98,7 @@ describe Travis::Hub::Services::UpdateJob do
     let(:finish)  { { event: 'finish',  data: { id: job.id, state: 'passed', finished_at: Time.now } } }
 
     def recieve(msg)
-      Travis::Hub::Services::UpdateJob.new(msg).run
+      described_class.new(msg).run
     end
 
     it 'works (1)' do

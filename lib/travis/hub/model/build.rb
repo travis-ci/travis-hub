@@ -14,7 +14,7 @@ class Build < ActiveRecord::Base
 
   event  :start,   to: :started,  if: :start?
   event  :finish,  to: :finished, if: :finish?
-  event  :cancel,  to: :canceled, if: :finish?
+  event  :cancel,  to: :canceled, if: :cancel?
   event  :restart, to: :created,  if: :restart?
   event  :all, after: [:denormalize, :notify]
 
@@ -46,6 +46,10 @@ class Build < ActiveRecord::Base
 
   def restart(*)
     reset_state
+  end
+
+  def cancel?(event, data = {})
+    !finished? && (data[:all] || matrix.finished?)
   end
 
   def cancel(options = {})

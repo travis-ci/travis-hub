@@ -1,6 +1,6 @@
 module Travis
   module Hub
-    module Helpers
+    module Helper
       module Locking
         def exclusive(key, options = nil, &block)
           options ||= Hub.config.lock
