@@ -57,12 +57,7 @@ class Build < ActiveRecord::Base
     !config[:'.result'].to_s.include?('error')
   end
 
-  def notify(event, *args)
-    event = :create if event == :restart # TODO move to clients?
-    super
-  end
-
   def matrix
-    Matrix.new(jobs, config[:matrix])
+    @matrix ||= Matrix.new(jobs, config[:matrix])
   end
 end

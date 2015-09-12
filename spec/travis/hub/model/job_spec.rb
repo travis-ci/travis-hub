@@ -197,7 +197,7 @@ describe Job do
     end
 
     it 'dispatches a job:created event' do
-      Travis::Event.expects(:dispatch).with('job:created', id: job.id) # TODO should be job:restart?
+      Travis::Event.expects(:dispatch).with('job:restarted', id: job.id)
       receive
     end
 

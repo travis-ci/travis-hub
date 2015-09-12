@@ -1,12 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Hipchat < Generic
-        API_VERSION = 'v2'
-
-        EVENTS = /build:finished/
+      class Hipchat < Base
+        EVENTS = 'build:finished'
 
         def handle?
           enabled? && targets.present? && config.send_on?(:hipchat, action)

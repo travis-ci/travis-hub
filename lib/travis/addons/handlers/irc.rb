@@ -1,11 +1,9 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Irc < Generic
-        API_VERSION = 'v2'
-
+      class Irc < Base
         EVENTS = 'build:finished'
 
         def handle?

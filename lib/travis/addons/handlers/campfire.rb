@@ -1,10 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Campfire < Generic
-        EVENTS = /build:finished/
+      class Campfire < Base
+        EVENTS = 'build:finished'
 
         def handle?
           !pull_request? && targets.present? && config.send_on?(:campfire, action)

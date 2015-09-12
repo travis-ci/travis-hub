@@ -1,11 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Sqwiggle < Generic
-
-        EVENTS = /build:finished/
+      class Sqwiggle < Base
+        EVENTS = 'build:finished'
 
         def handle?
           !pull_request? && targets.present? && config.send_on?(:sqwiggle, action)

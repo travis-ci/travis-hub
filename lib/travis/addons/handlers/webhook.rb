@@ -1,10 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 require 'travis/addons/serializer/webhook/build'
 
 module Travis
   module Addons
     module Handlers
-      class Webhook < Generic
+      class Webhook < Base
         EVENTS = /build:(started|finished)/
 
         def handle?

@@ -1,12 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 require 'travis/addons/model/broadcast'
 
 module Travis
   module Addons
     module Handlers
-      class Email < Generic
-        API_VERSION = 'v2'
-
+      class Email < Base
         EVENTS = 'build:finished'
 
         def handle?

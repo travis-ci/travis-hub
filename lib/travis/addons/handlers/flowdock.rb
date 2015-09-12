@@ -1,12 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Flowdock < Generic
-        API_VERSION = 'v2'
-
-        EVENTS = /build:finished/
+      class Flowdock < Base
+        EVENTS = 'build:finished'
 
         def handle?
           !pull_request? && targets.present? && config.send_on?(:flowdock, action)

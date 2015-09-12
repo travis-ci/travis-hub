@@ -1,11 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class GithubStatus < Generic
-        API_VERSION = 'v2'
-        EVENTS = /build:(created|started|finished|canceled)/
+      class GithubStatus < Base
+        EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
           Hub.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?

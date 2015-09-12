@@ -1,17 +1,17 @@
 require 'travis/support/states_cache'
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class StatesCache < Generic
-        EVENTS = /build:finished/
+      class StatesCache < Base
+        EVENTS = 'build:finished'
 
         class << self
           attr_reader :states_cache
 
           def setup
-            @states_cache = Travis::StatesCache.new
+            @states_cache ||= Travis::StatesCache.new
           end
         end
 

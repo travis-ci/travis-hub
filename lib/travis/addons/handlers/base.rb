@@ -8,15 +8,21 @@ require 'travis/addons/serializer/generic/build'
 module Travis
   module Addons
     module Handlers
-      class Generic < Event::Handler
+      class Base < Event::Handler
         include Helpers
 
-        attr_reader :payload, :config
+        def event
+          # TODO can this be moved to clients?
+          super == :restarted ? :created : super
+        end
 
-        def initialize(*)
-          super
-          @payload = Serializer::Generic.const_get(object_type.camelize).new(object).data
-          @config  = Config.new(@payload, secure_key)
+        def data
+          @data ||= Serializer::Generic.const_get(object_type.camelize).new(object).data
+        end
+        alias payload data
+
+        def config
+          @config ||= Config.new(data, secure_key)
         end
 
         def repository

@@ -56,13 +56,7 @@ class Job < ActiveRecord::Base
     config[:'.result'] == 'parse_error'
   end
 
-  def notify(event, *args)
-    event = :create if event == :restart # TODO move to clients?
-    super
-  end
-
   def propagate(event, *args)
     build.send(:"#{event}!", *args)
-    true
   end
 end

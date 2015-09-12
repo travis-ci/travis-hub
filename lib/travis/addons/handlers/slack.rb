@@ -1,12 +1,10 @@
-require 'travis/addons/handlers/generic'
+require 'travis/addons/handlers/base'
 
 module Travis
   module Addons
     module Handlers
-      class Slack < Generic
-        API_VERSION = 'v2'
-
-        EVENTS = /build:finished/
+      class Slack < Base
+        EVENTS = 'build:finished'
 
         def handle?
           targets.present? && config.send_on?(:slack, action)

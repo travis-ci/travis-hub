@@ -17,17 +17,17 @@ module Travis
           @@handlers ||= {}
         end
 
-        def notify(event, data = {})
-          handler = new(event, data)
+        def notify(event, params = {})
+          handler = new(event, params)
           handler.notify if handler.handle?
         end
       end
 
-      attr_reader :event, :data
+      attr_reader :event, :params
 
-      def initialize(event, data = {})
-        @event = event
-        @data  = symbolize_keys(data)
+      def initialize(event, params = {})
+        @event  = event
+        @params = symbolize_keys(params)
       end
 
       def notify
@@ -37,7 +37,7 @@ module Travis
       rescues :notify, from: Exception
 
       def object
-        Kernel.const_get(object_type.camelize).find(data[:id])
+        Kernel.const_get(object_type.camelize).find(params[:id])
       end
 
       private
