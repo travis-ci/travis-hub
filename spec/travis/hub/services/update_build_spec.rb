@@ -32,15 +32,4 @@ describe Travis::Hub::Services::UpdateBuild do
       expect(stdout.string).to include("Travis::Hub::Services::UpdateBuild#run:completed event: restart for <Build id=#{build.id}>")
     end
   end
-
-  # describe 'with a canceled build' do
-  #   let(:state)  { :canceled }
-  #   let(:fanout) { Travis::Amqp::FanoutPublisher.any_instance }
-  #   before       { fanout.stubs(:publish) }
-
-  #   it 're-cancels the build in the workers' do
-  #     fanout.expects(:publish).with(type: 'cancel_job', job_id: build.id, source: 'update_job_service')
-  #     subject.run
-  #   end
-  # end
 end
