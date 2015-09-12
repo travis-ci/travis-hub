@@ -54,7 +54,7 @@ class Build < ActiveRecord::Base
         private
 
           def format(job)
-            ATTRS.map { |name| "#{name}: #{job.send(name)}" }.join(', ')
+            ATTRS.map { |name| "#{name}: #{job.send(name).inspect}" }.join(', ')
           end
       end
   end

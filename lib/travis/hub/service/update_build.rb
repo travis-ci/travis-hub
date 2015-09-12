@@ -12,14 +12,13 @@ module Travis
         include Helper::Locking
         extend Instrumentation
 
-        EVENTS = [:cancel, :restart]
+        EVENTS = [:start, :finish, :cancel, :restart]
 
         attr_reader :event, :data
 
         def initialize(params)
           @event = params[:event].try(:to_sym)
           @data  = params[:data].symbolize_keys
-          @data  = data.merge(all: true) if event == :cancel
         end
 
         def run
@@ -33,7 +32,7 @@ module Travis
 
           def update_build
             exclusive "hub:update_build:#{data[:id]}" do
-              build.send(:"#{event}!", data)
+              build.jobs.each { |job| job.send(:"#{event}!", data) }
             end
           end
 

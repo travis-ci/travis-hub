@@ -28,11 +28,11 @@ class Build < ActiveRecord::Base
     !started?
   end
 
-  def finish?
+  def finish?(event, data = {})
     !finished? && matrix.finished?
   end
 
-  def finish(*)
+  def finish(data = {})
     self.attributes = { state: matrix.state, duration: matrix.duration }
   end
 
@@ -48,13 +48,10 @@ class Build < ActiveRecord::Base
     reset_state
   end
 
-  def cancel?(event, data = {})
-    !finished? && (data[:all] || matrix.finished?)
-  end
+  alias cancel? finish?
 
   def cancel(options = {})
     self.finished_at = Time.now
-    jobs.each(&:cancel!) if options[:all]
   end
 
   private
