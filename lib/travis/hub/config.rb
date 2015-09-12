@@ -15,7 +15,7 @@ module Travis
               encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
               logger:        { thread_id: true },
               metrics:       { reporter: 'librato' },
-              notifications: [], # TODO rename to event.handlers
+              notifications: [],
               repository:    { ssl_key: { size: 4096 } }
 
               # tokens:        { internal: 'token' },

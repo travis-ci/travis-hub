@@ -170,34 +170,34 @@ describe Job do
     end
   end
 
-  shared_examples 'resets the job' do
+  shared_examples 'restarts the job' do
     it 'sets :state to :created' do
       receive
       expect(job.reload.state).to eql(:created)
     end
 
-    it 'resets :queued_at' do
+    it 'restarts :queued_at' do
       receive
       expect(job.reload.queued_at).to be_nil
     end
 
-    it 'resets :received_at' do
+    it 'restarts :received_at' do
       receive
       expect(job.reload.received_at).to be_nil
     end
 
-    it 'resets :started_at' do
+    it 'restarts :started_at' do
       receive
       expect(job.reload.started_at).to be_nil
     end
 
-    it 'resets :finished_at' do
+    it 'restarts :finished_at' do
       receive
       expect(job.reload.finished_at).to be_nil
     end
 
     it 'dispatches a job:created event' do
-      Travis::Event.expects(:dispatch).with('job:created', id: job.id) # TODO should be job:reset?
+      Travis::Event.expects(:dispatch).with('job:created', id: job.id) # TODO should be job:restart?
       receive
     end
 
@@ -207,22 +207,22 @@ describe Job do
         expect(job.build.reload.state).to eql(:created)
       end
 
-      it 'resets :duration' do
+      it 'restarts :duration' do
         receive
         expect(job.build.reload.duration).to be_nil
       end
 
-      it 'resets :started_at' do
+      it 'restarts :started_at' do
         receive
         expect(job.build.reload.started_at).to be_nil
       end
 
-      it 'resets :finished_at' do
+      it 'restarts :finished_at' do
         receive
         expect(job.build.reload.finished_at).to be_nil
       end
 
-      it 'does not reset other jobs on the matrix' do
+      it 'does not restart other jobs on the matrix' do
         other = FactoryGirl.create(:job, build: job.build, state: :passed)
         receive
         expect(other.reload.state).to eql(:passed)
@@ -396,8 +396,8 @@ describe Job do
     end
   end
 
-  describe 'a :reset event' do
-    let(:event)  { :reset }
+  describe 'a :restart event' do
+    let(:event)  { :restart }
 
     describe 'received by a :created job' do
       let(:state) { :created }
@@ -416,22 +416,22 @@ describe Job do
 
     describe 'received by a :passed job' do
       let(:state) { :passed }
-      include_examples 'resets the job'
+      include_examples 'restarts the job'
     end
 
     describe 'received by a :failed job' do
       let(:state) { :failed }
-      include_examples 'resets the job'
+      include_examples 'restarts the job'
     end
 
     describe 'received by an :errored job' do
       let(:state) { :errored }
-      include_examples 'resets the job'
+      include_examples 'restarts the job'
     end
 
     describe 'received by a :canceled job' do
       let(:state) { :canceled }
-      include_examples 'resets the job'
+      include_examples 'restarts the job'
     end
   end
 

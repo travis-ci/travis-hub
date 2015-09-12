@@ -1,5 +1,6 @@
 require 'metriks'
 require 'travis/support/instrumentation'
+require 'travis/hub/helpers/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/services/workers'
 require 'travis/hub/support/lock'
@@ -8,9 +9,10 @@ module Travis
   module Hub
     module Services
       class UpdateJob
+        include Helpers::Locking
         extend Instrumentation
 
-        EVENTS = [:receive, :start, :finish, :cancel, :reset]
+        EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
         attr_reader :event, :data
 
@@ -20,20 +22,26 @@ module Travis
         end
 
         def run
-          exclusive do
-            validate
-            update_job
-            Workers.new.cancel(job) if job.canceled? && event != :reset
-          end
+          validate
+          process
+          notify
         end
         instrument :run
 
         private
 
+          def process
+            exclusive "hub:update_job:#{build_id}" do
+              update_job
+            end
+          end
+
+          def notify
+            Workers.new.cancel(job) if job.canceled? && event != :restart
+          end
+
           def update_job
             job.send(:"#{event}!", data)
-          rescue Exception => e
-            puts e.message, e.backtrace
           end
 
           def job
@@ -45,13 +53,11 @@ module Travis
           end
 
           def validate
-            EVENTS.include?(event) || fail(ArgumentError, "Unknown event: #{event}, data: #{data}")
+            EVENTS.include?(event) || unknown_event
           end
 
-          def exclusive(&block)
-            Travis::Support::Lock.exclusive("hub:update_job:#{build_id}", Hub.config.lock, &block)
-          rescue Timeout::Error => e
-            Hub.logger.info("Timeout processing an update for job #{data[:id]}. Could not obtain a lock for build_id=#{build_id}?")
+          def unknown_event
+            fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
           class Instrument < Instrumentation::Instrument

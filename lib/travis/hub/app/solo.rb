@@ -26,6 +26,7 @@ module Travis
           end
 
           def handle_event(event, payload)
+            event = :restart if event == :reset # TODO deprecate :reset
             Services::UpdateJob.new(event: event.to_s.split(':').last, data: payload).run
           end
       end

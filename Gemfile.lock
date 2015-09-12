@@ -6,17 +6,15 @@ GIT
       faraday (>= 0.7.6)
 
 GIT
-  remote: git://github.com/travis-ci/travis-support.git
-  revision: 129c18bff69add680e291414122319d6c1b733ed
-  ref: sf-instrumentation
-  specs:
-    travis-support (0.0.1)
-
-GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
+
+PATH
+  remote: ../travis-support
+  specs:
+    travis-support (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -114,7 +112,7 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
-    simple_states (1.1.0.rc1)
+    simple_states (1.1.0.rc2)
       activesupport
       hashr (~> 0.0.10)
     thread_safe (0.3.5)

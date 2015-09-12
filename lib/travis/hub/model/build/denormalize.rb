@@ -10,10 +10,10 @@ class Build < ActiveRecord::Base
   # These attributes are used in the repositories list and thus read frequently.
   module Denormalize
     DENORMALIZE = {
-      start:  %w(id number state duration started_at finished_at),
-      finish: %w(state duration finished_at),
-      reset:  %w(state duration started_at finished_at),
-      cancel: %w(state duration finished_at)
+      start:   %w(id number state duration started_at finished_at),
+      finish:  %w(state duration finished_at),
+      restart: %w(state duration started_at finished_at),
+      cancel:  %w(state duration finished_at)
     }
 
     def denormalize(event, *args)

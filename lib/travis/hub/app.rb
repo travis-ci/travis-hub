@@ -1,16 +1,14 @@
 require 'travis/support/metrics'
-
 require 'travis/addons'
 require 'travis/event'
-require 'travis/hub/support/amqp'
-require 'travis/hub/support/sidekiq'
-
-require 'travis/hub/model/log'
-require 'travis/hub/model/log/part'
 
 require 'travis/hub/app/dispatcher'
 require 'travis/hub/app/solo'
 require 'travis/hub/app/worker'
+require 'travis/hub/model/log'
+require 'travis/hub/model/log/part'
+require 'travis/hub/support/amqp'
+require 'travis/hub/support/sidekiq'
 
 module Travis
   module Hub
@@ -31,12 +29,11 @@ module Travis
         end
 
         def setup_worker
-          # ActiveRecord::Base.logger = nil
-          setup_logs_database if config.logs_database # TODO remove
+          setup_logs_database
           Support::Sidekiq.setup(config)
 
           # TODO what's with the metrics handler. do we still need that? add it to the config?
-          Travis::Event.setup(config.notifications) # TODO rename to :event_handlers
+          Travis::Event.setup(config.notifications)
           Travis::Instrumentation.setup(logger)
           # TODO re-add, maybe exclude staging?
           # Travis::Exceptions::Reporter.start
@@ -45,7 +42,7 @@ module Travis
           # Travis.logger = Logger.configure(Logger.new(STDOUT))
         end
 
-        def setup_logs_database
+        def setup_logs_database # TODO remove
           [Log, Log::Part].each do |const|
             const.establish_connection(config.logs_database)
           end

@@ -49,8 +49,8 @@
   it off via config, since Features is not available atm
 * :reset is processed in hub (coming in from the worker, for requeues?) and in
   api. can this be unified?
-* Rename :reset to :restart?
 * What's required to start using travis-yaml? Would gatekeeper need to use it first?
+* ~~Rename :reset to :restart?~~
 
 # DETAILS NEEDED BY ADDONS
 

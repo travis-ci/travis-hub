@@ -1,10 +1,9 @@
 require 'travis/hub/model/build'
 require 'travis/hub/model/log'
 require 'travis/hub/model/repository'
-require 'travis/hub/model/job/normalize'
 
 class Job < ActiveRecord::Base
-  include Normalize, SimpleStates, Travis::Event
+  include SimpleStates, Travis::Event
 
   Job.inheritance_column = :missing
 
@@ -21,8 +20,12 @@ class Job < ActiveRecord::Base
   event :start,   after: :propagate
   event :finish,  after: :propagate
   event :cancel,  after: :propagate, if: :cancel?
-  event :reset,   after: :propagate, if: :reset?
+  event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
+
+  def config
+    super || {}
+  end
 
   def duration
     started_at && finished_at ? finished_at - started_at : nil
@@ -44,11 +47,11 @@ class Job < ActiveRecord::Base
     self.finished_at = data[:finished_at]
   end
 
-  def reset?
+  def restart?
     finished? && !invalid_config?
   end
 
-  def reset(*)
+  def restart(*)
     self.attributes = { state: :created, queued_at: nil, received_at: nil, started_at: nil, finished_at: nil }
     log ? log.clear! : build_log
   end
@@ -66,7 +69,7 @@ class Job < ActiveRecord::Base
   end
 
   def notify(event, *args)
-    event = :create if event == :reset # TODO move to clients?
+    event = :create if event == :restart # TODO move to clients?
     super
   end
 

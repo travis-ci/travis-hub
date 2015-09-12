@@ -4,33 +4,26 @@ require 'travis/event'
 require 'travis/hub/model/job'
 require 'travis/hub/model/build/denormalize'
 require 'travis/hub/model/build/matrix'
-require 'travis/hub/model/build/normalize'
 
 class Build < ActiveRecord::Base
-  include Denormalize, Normalize, SimpleStates, Travis::Event
+  include Denormalize, SimpleStates, Travis::Event
 
   belongs_to :repository
   has_many   :jobs, -> { order(:id) }, as: :source
-
-  class << self
-    def last_on_branch(branch)
-      pushes.where('branch IN (?)', branch).order('id DESC').first
-    end
-
-    def pushes
-      where(event_type: 'push')
-    end
-  end
 
   states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
 
   event  :start,   to: :started,  if: :start?
   event  :finish,  to: :finished, if: :finish?
   event  :cancel,  to: :canceled, if: :finish?
-  event  :reset,   to: :created,  if: :reset?
+  event  :restart, to: :created,  if: :restart?
   event  :all, after: [:denormalize, :notify]
 
   serialize :config
+
+  def config
+    super || {}
+  end
 
   def start?
     !started?
@@ -52,11 +45,11 @@ class Build < ActiveRecord::Base
     [:passed, :failed, :errored, :canceled].include?(state)
   end
 
-  def reset?
+  def restart?
     finished? && config_valid?
   end
 
-  def reset(*)
+  def restart(*)
     self.attributes = { state: :created, duration: nil, started_at: nil, finished_at: nil }
   end
 
@@ -65,11 +58,11 @@ class Build < ActiveRecord::Base
   end
 
   def config_valid?
-    config[:'.result'] != 'parse_error'
+    !config[:'.result'].to_s.include?('error')
   end
 
   def notify(event, *args)
-    event = :create if event == :reset # TODO move to clients?
+    event = :create if event == :restart # TODO move to clients?
     super
   end
 

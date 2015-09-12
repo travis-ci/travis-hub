@@ -8,9 +8,11 @@ module Travis
           publisher.publish(type: 'cancel_job', job_id: job.id, source: 'update_job_service')
         end
 
-        def publisher
-          Amqp::FanoutPublisher.new('worker.commands')
-        end
+        private
+
+          def publisher
+            Amqp::FanoutPublisher.new('worker.commands')
+          end
       end
     end
   end

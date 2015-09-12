@@ -24,7 +24,7 @@ class Build < ActiveRecord::Base
       elsif required.jobs.all?(&:passed?)
         :passed
       else
-        raise InvalidMatrixStateException.new(jobs)
+        raise InvalidMatrixState.new(jobs)
       end
     end
 
@@ -35,12 +35,10 @@ class Build < ActiveRecord::Base
       end
 
       def fast_finish?
-        config = config || {}
-        config = {} if config.is_a?(Array)
-        !!config[:fast_finish]
+        !![config || {}].flatten.first[:fast_finish]
       end
 
-      class InvalidMatrixStateException < StandardError
+      class InvalidMatrixState < StandardError
         ATTRS = %w(id state allow_failure created_at queued_at started_at finished_at canceled_at)
 
         attr_reader :jobs
