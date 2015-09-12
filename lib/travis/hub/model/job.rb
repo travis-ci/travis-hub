@@ -28,23 +28,11 @@ class Job < ActiveRecord::Base
   end
 
   def duration
-    started_at && finished_at ? finished_at - started_at : nil
-  end
-
-  def receive(data)
-    self.received_at = data[:received_at]
-  end
-
-  def start(data)
-    self.started_at = data[:started_at]
+    finished_at - started_at if started_at && finished_at
   end
 
   def finished?
     [:passed, :failed, :errored, :canceled].include?(state)
-  end
-
-  def finish(data)
-    self.finished_at = data[:finished_at]
   end
 
   def restart?
@@ -52,8 +40,8 @@ class Job < ActiveRecord::Base
   end
 
   def restart(*)
-    self.attributes = { state: :created, queued_at: nil, received_at: nil, started_at: nil, finished_at: nil }
-    log ? log.clear! : build_log
+    reset_state
+    log.clear
   end
 
   def cancel?
@@ -61,7 +49,7 @@ class Job < ActiveRecord::Base
   end
 
   def cancel(*)
-    self.attributes = { canceled_at: Time.now, finished_at: Time.now }
+    self.finished_at = Time.now
   end
 
   def invalid_config?

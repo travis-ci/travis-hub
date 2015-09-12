@@ -29,16 +29,12 @@ class Build < ActiveRecord::Base
     !started?
   end
 
-  def start(data = {})
-    self.attributes = { started_at: data[:started_at] }
-  end
-
   def finish?
     !finished? && matrix.finished?
   end
 
-  def finish(data = {})
-    self.attributes = { state: matrix.state, duration: matrix.duration, finished_at: data[:finished_at] }
+  def finish(*)
+    self.attributes = { state: matrix.state, duration: matrix.duration }
   end
 
   def finished?
@@ -50,11 +46,11 @@ class Build < ActiveRecord::Base
   end
 
   def restart(*)
-    self.attributes = { state: :created, duration: nil, started_at: nil, finished_at: nil }
+    reset_state
   end
 
-  def cancel(*)
-    self.attributes = { state: matrix.state, duration: matrix.duration, canceled_at: Time.now, finished_at: Time.now }
+  def cancel(options = {})
+    jobs.each(&:cancel!) if options[:all]
   end
 
   def config_valid?

@@ -448,6 +448,11 @@ describe Job do
       include_examples 'cancels the job'
     end
 
+    describe 'received by a :received job' do
+      let(:state) { :received }
+      include_examples 'cancels the job'
+    end
+
     describe 'received by a :started job' do
       let(:state) { :started }
       include_examples 'cancels the job'
