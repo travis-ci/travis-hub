@@ -6,15 +6,17 @@ GIT
       faraday (>= 0.7.6)
 
 GIT
+  remote: git://github.com/travis-ci/travis-support.git
+  revision: 6db7be71535b712170ac5923dcab185f7129ef2a
+  ref: sf-instrumentation
+  specs:
+    travis-support (0.0.1)
+
+GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
-
-PATH
-  remote: ../travis-support
-  specs:
-    travis-support (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -155,3 +157,6 @@ DEPENDENCIES
   travis-encrypt (~> 0.0.1)
   travis-support!
   unlimited-jce-policy-jdk7!
+
+BUNDLED WITH
+   1.10.6
