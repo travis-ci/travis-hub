@@ -35,7 +35,7 @@ module Travis
           end
 
           def parse_type(type)
-            parts = type.to_s.split(':')
+            parts = type.to_s.gsub(':test', '').split(':')
             unknown_type(type) unless parts.size == 2
             parts.map(&:to_sym)
           end
