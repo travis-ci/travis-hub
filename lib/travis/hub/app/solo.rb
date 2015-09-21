@@ -46,14 +46,15 @@ module Travis
 
           def time(type, event, &block)
             Metriks.timer("hub.#{name}.handle.#{type}").time do
-              Metriks.timer("hub.#{name}.handle.#{type}.#{event}", &block)
+              Metriks.timer("hub.#{name}.handle.#{type}.#{event}").time(&block)
             end
           end
 
           def with_active_record(&block)
-            ActiveRecord::Base.connection_pool.with_connection do
-              ActiveRecord::Base.cache(&block)
-            end
+            # ActiveRecord::Base.connection_pool.with_connection do
+            #   ActiveRecord::Base.cache(&block)
+            # end
+            yield
           end
       end
     end

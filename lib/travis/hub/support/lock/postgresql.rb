@@ -15,7 +15,6 @@ module Travis
         attr_reader :lock
 
         def exclusive(&block)
-          p self
           with_lock do
             transactional? ? connection.transaction(&block) : yield
           end
@@ -36,9 +35,7 @@ module Travis
           def obtained?
             raise 'lock name cannot be blank' if name.nil? || name.empty?
             with_statement_timeout do
-              puts "select #{pg_function}(#{key});"
               result = connection.select_value("select #{pg_function}(#{key});")
-              p "result: #{result.inspect}"
               @lock  = try? ? result == 't' || result == 'true' : true
             end
           end
