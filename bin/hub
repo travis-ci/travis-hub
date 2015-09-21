@@ -7,7 +7,7 @@ $LOAD_PATH << 'lib'
 require 'bundler/setup'
 require 'travis/hub'
 
-type = ARGV.shift
+type = ARGV.shift || fail("Need to specify a run-mode [solo|dispatcher|worker]")
 args = ARGV.map { |arg| arg.gsub(/\D/, '').to_i }
 
 Travis::Hub::App.run(type, *args)

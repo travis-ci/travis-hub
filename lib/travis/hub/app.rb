@@ -23,6 +23,8 @@ module Travis
         end
 
         def setup
+          p config.database
+          p config.logs_database
           Travis::Database.connect
           Support::Amqp.setup(config.amqp)
           Travis::Metrics.setup
