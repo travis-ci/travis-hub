@@ -1,3 +1,4 @@
+require 'travis/support/database'
 require 'travis/support/metrics'
 require 'travis/addons'
 require 'travis/event'
@@ -23,9 +24,7 @@ module Travis
         end
 
         def setup
-          p config.database
-          p config.logs_database
-          Travis::Database.connect
+          Travis::Database.connect(config.database)
           Support::Amqp.setup(config.amqp)
           Travis::Metrics.setup
         end
