@@ -124,6 +124,8 @@ GEM
     travis-config (0.1.4)
       hashr (~> 0.0)
     travis-encrypt (0.0.1)
+    travis-lock (0.1.0)
+      activerecord (~> 4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
@@ -155,6 +157,7 @@ DEPENDENCIES
   simple_states (~> 1.1.0.rc5)
   travis-config (~> 0.1.0)
   travis-encrypt (~> 0.0.1)
+  travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
 

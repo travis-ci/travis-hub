@@ -6,6 +6,7 @@ gem 'travis-support', github: 'travis-ci/travis-support', ref: 'sf-instrumentati
 # gem 'travis-support', path: '../travis-support'
 gem 'travis-config',  '~> 0.1.0'
 gem 'travis-encrypt', '~> 0.0.1'
+gem 'travis-lock',    '~> 0.1.0'
 
 gem 'rake'
 gem 'redis'

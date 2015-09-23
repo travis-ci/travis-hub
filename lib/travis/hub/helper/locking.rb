@@ -1,10 +1,13 @@
+require 'travis/lock'
+
 module Travis
   module Hub
     module Helper
       module Locking
         def exclusive(key, options = nil, &block)
           options ||= Hub.config.lock
-          Travis::Support::Lock.exclusive(key, options, &block)
+          options[:url] ||= Hub.config.redis.url if options[:strategy] == :redis
+          Travis::Lock.exclusive(key, options, &block)
         end
       end
     end
