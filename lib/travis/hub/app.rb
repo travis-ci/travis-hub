@@ -34,10 +34,10 @@ module Travis
           Support::Sidekiq.setup(config)
 
           # TODO what's with the metrics handler. do we still need that? add it to the config?
+          Travis::Addons.setup(config)
           Travis::Event.setup(config.notifications)
           Travis::Instrumentation.setup(logger)
           Travis::Exceptions::Reporter.start if config.env == :production
-          Travis::Encrypt.setup(key: config.encryption)
 
           # Travis.logger = Logger.configure(Logger.new(STDOUT))
         end

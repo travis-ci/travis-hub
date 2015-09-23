@@ -1,3 +1,5 @@
+require 'unlimited-jce-policy-jdk7' if RUBY_PLATFORM == 'java'
+
 require 'travis/support/database'
 require 'travis/support/exceptions'
 require 'travis/support/instrumentation'
@@ -5,6 +7,8 @@ require 'travis/support/logger'
 
 require 'travis/hub/config'
 require 'travis/hub/app'
+require 'travis/hub/model'
+require 'travis/hub/service'
 require 'travis/hub/handler/metrics'
 
 module Travis

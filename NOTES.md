@@ -10,10 +10,14 @@
 * Update the states cache
 * Collect metrics about job queue and run times
 
+# BUGS
+
+* For a cancelled build, does restarting it send out notifications??
+
 # REFACTOR
 
 * Dispatch events to subscribed apps, remove addons
-* Allow passing attributes to simple_state event methods (automatically set :started_at etc)
+* ~Allow passing attributes to simple_state event methods (automatically set :started_at etc)~
 
 # EXTRACT OR MOVE TO SUPPORT
 

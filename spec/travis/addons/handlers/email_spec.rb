@@ -2,8 +2,9 @@ describe Travis::Addons::Handlers::Email do
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:build)   { FactoryGirl.create(:build, commit: commit, config: { notifications: config }) }
   let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
-  let(:config)  { { email: email } }
-  let(:email)   { 'me@email.com' }
+  let!(:email)  { Email.create(email: address) }
+  let(:config)  { { email: address } }
+  let(:address) { 'me@email.com' }
 
   describe 'subscription' do
     before { Travis::Event.setup([:email]) }
@@ -20,8 +21,6 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'handle?' do
-    before { Email.create(email: email) }
-
     it 'is true if the build is a push request' do
       build.update_attributes(event_type: 'push')
       expect(handler.handle?).to eql(true)
@@ -38,7 +37,7 @@ describe Travis::Addons::Handlers::Email do
     end
 
     it 'is true if recipients are given in the config' do
-      config[:email] = { recipients: 'me@email.com' }
+      config[:email] = { recipients: address }
       expect(handler.handle?).to eql(true)
     end
 
@@ -59,16 +58,17 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'handle' do
-    before { Email.create(email: email) }
+    let!(:broadcast) { Broadcast.create(message: 'message') }
+    let(:recipient)  { 'me@email.com' }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:email, is_a(Hash), recipients: ['me@email.com'], broadcasts: [])
+      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message' }])
       handler.handle
     end
   end
 
   describe 'recipients' do
-    let(:email)     { 'me@email.com' }
+    let(:address)   { 'me@email.com' }
     let(:other)     { 'other@email.com' }
     let(:author)    { 'author@email.com' }
     let(:committer) { 'committer@email.com' }
@@ -77,7 +77,7 @@ describe Travis::Addons::Handlers::Email do
       let(:config)  { { email: true } }
 
       it 'returns known committer and author addresses' do
-        [committer, author].each { |email| Email.create(email: email) }
+        [committer, author].each { |address| Email.create(email: address) }
         expect(handler.recipients).to eql [committer, author]
       end
 
@@ -93,33 +93,33 @@ describe Travis::Addons::Handlers::Email do
     end
 
     it 'returns an array of addresses when given a string' do
-      config[:email] = email
-      expect(handler.recipients).to eql [email]
+      config[:email] = address
+      expect(handler.recipients).to eql [address]
     end
 
     it 'returns an array of addresses when given an array' do
-      config[:email] = [email]
-      expect(handler.recipients).to eql [email]
+      config[:email] = [address]
+      expect(handler.recipients).to eql [address]
     end
 
     it 'returns an array of addresses when given a comma separated string' do
-      config[:email] = "#{email}, #{other}"
-      expect(handler.recipients).to eql [email, other]
+      config[:email] = "#{address}, #{other}"
+      expect(handler.recipients).to eql [address, other]
     end
 
     it 'returns an array of addresses given a string within a hash' do
-      config[:email] = { recipients: email, on_success: 'change' }
-      expect(handler.recipients).to eql [email]
+      config[:email] = { recipients: address, on_success: 'change' }
+      expect(handler.recipients).to eql [address]
     end
 
     it 'returns an array of addresses given an array within a hash' do
-      config[:email] = { recipients: [email], on_success: 'change' }
-      expect(handler.recipients).to eql [email]
+      config[:email] = { recipients: [address], on_success: 'change' }
+      expect(handler.recipients).to eql [address]
     end
 
     it 'returns an array of addresses given a comma separated string within a hash' do
-      config[:email] = { recipients: "#{email}, #{other}", on_success: 'change' }
-      expect(handler.recipients).to eql [email, other]
+      config[:email] = { recipients: "#{address}, #{other}", on_success: 'change' }
+      expect(handler.recipients).to eql [address, other]
     end
   end
 end

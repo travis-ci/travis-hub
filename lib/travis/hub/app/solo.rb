@@ -7,7 +7,10 @@ module Travis
     module App
       class Solo < Struct.new(:name)
         def run
-          Queue.subscribe(queue, &method(:handle))
+          # TODO use, e.g. --concurrency
+          5.times do
+            Queue.subscribe(queue, &method(:handle))
+          end
         end
 
         private
@@ -24,7 +27,6 @@ module Travis
 
           def handle_event(type, payload)
             type, event = parse_type(type)
-            event = :restart if event == :reset # TODO deprecate :reset
             time(type, event) do
               handler(type).new(event: event, data: payload).run
             end
@@ -35,9 +37,13 @@ module Travis
           end
 
           def parse_type(type)
-            parts = type.to_s.gsub(':test', '').split(':')
+            parts = normalize_type(type).split(':')
             unknown_type(type) unless parts.size == 2
             parts.map(&:to_sym)
+          end
+
+          def normalize_type(type)
+            type.to_s.gsub(':test', '').gsub('reset', 'restart') # TODO deprecate :reset
           end
 
           def unknown_type(type)
@@ -51,10 +57,7 @@ module Travis
           end
 
           def with_active_record(&block)
-            # ActiveRecord::Base.connection_pool.with_connection do
-            #   ActiveRecord::Base.cache(&block)
-            # end
-            yield
+            ActiveRecord::Base.connection_pool.with_connection(&block)
           end
       end
     end

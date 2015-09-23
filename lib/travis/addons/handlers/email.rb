@@ -33,7 +33,8 @@ module Travis
           end
 
           def broadcasts
-            Broadcast.by_repo(object.repository).pluck(:message)
+            msgs = Broadcast.by_repo(object.repository).pluck(:message)
+            msgs.map { |msg| { message: msg } }
           end
 
           def default_recipients

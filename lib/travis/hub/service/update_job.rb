@@ -30,7 +30,7 @@ module Travis
         private
 
           def update_job
-            exclusive "hub:update_job:#{build_id}" do
+            exclusive "hub:build-#{build_id}" do
               job.send(:"#{event}!", data)
             end
           end
@@ -44,7 +44,7 @@ module Travis
           end
 
           def build_id
-            @build_id ||= Job.find(data[:id]).source_id
+            @build_id ||= Job.where(id: data[:id]).select(:source_id).pluck(:source_id).first
           end
 
           def validate

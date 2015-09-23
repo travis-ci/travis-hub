@@ -9,16 +9,16 @@ module Travis
 
   module Addons
     class << self
-      def setup
+      def setup(config = {})
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore
           Event::Handler.register(name, handler)
           handler.setup if handler.respond_to?(:setup)
         end
+
+        Travis::Encrypt.setup(key: config[:encryption][:key])
       end
     end
-
-    setup
   end
 end

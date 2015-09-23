@@ -6,8 +6,8 @@ require 'support/factories'
 require 'support/logger'
 require 'travis/hub/handler/metrics'
 
+Travis::Addons.setup(encryption: { key: 'secret' * 10 })
 Travis::Event.setup
-Travis::Encrypt.setup(key: 'secret' * 10)
 Travis::Database.connect
 ActiveRecord::Base.logger = nil
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')

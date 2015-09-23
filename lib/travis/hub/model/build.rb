@@ -12,10 +12,10 @@ class Build < ActiveRecord::Base
 
   states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
 
-  event  :start,   to: :started,  if: :start?
-  event  :finish,  to: :finished, if: :finish?
-  event  :cancel,  to: :canceled, if: :cancel?
-  event  :restart, to: :created,  if: :restart?
+  event  :start,   if: :start?
+  event  :finish,  if: :finish?
+  event  :cancel,  if: :cancel?
+  event  :restart, if: :restart?
   event  :all, after: [:denormalize, :notify]
 
   serialize :config
@@ -57,7 +57,7 @@ class Build < ActiveRecord::Base
   private
 
     def config_valid?
-      !config[:'.result'].to_s.include?('error')
+      not config[:'.result'].to_s.include?('error')
     end
 
     def matrix

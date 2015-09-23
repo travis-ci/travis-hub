@@ -29,6 +29,7 @@ module Travis
             failsafe(message, payload) do
               type = message.properties.type
               payload = decode(payload)
+              payload.delete('uuid') # TODO seems useless atm, and pollutes the log. decide what to do with these.
               handler.call(type, payload)
             end
           end

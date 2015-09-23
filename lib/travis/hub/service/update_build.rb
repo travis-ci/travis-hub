@@ -22,15 +22,15 @@ module Travis
 
         def run
           validate
-          update_build
+          update_jobs
           notify
         end
         instrument :run
 
         private
 
-          def update_build
-            exclusive "hub:update_build:#{data[:id]}" do
+          def update_jobs
+            exclusive "hub:build-#{data[:id]}" do
               build.jobs.each { |job| job.send(:"#{event}!", data) }
             end
           end

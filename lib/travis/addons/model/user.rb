@@ -1,7 +1,7 @@
+require 'travis/encrypt'
+
 class User < ActiveRecord::Base
-  has_many :permissions
-  has_many :repositories, through: :permissions
-  # has_many :emails
+  include Travis::Encrypt::Helpers::ActiveRecord
 
   class << self
     def with_github_token
@@ -12,4 +12,9 @@ class User < ActiveRecord::Base
       where(:permissions => permissions).includes(:permissions)
     end
   end
+
+  has_many :permissions
+  has_many :repositories, through: :permissions
+
+  attr_encrypted :github_oauth_token
 end

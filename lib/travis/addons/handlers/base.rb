@@ -13,7 +13,7 @@ module Travis
 
         def event
           # TODO can this be moved to clients?
-          super == :restarted ? :created : super
+          super.to_s.gsub('restarted', 'created')
         end
 
         def data

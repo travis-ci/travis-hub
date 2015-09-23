@@ -10,6 +10,7 @@ class Log < ActiveRecord::Base
     update_column(:aggregated_at, nil) # TODO why in the world does update_attributes not set aggregated_at to nil?
     update_column(:archived_at, nil)
     update_column(:archive_verified, nil)
-    parts.delete_all
+
+    Part.where(log_id: id).delete_all
   end
 end
