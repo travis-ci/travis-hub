@@ -10,8 +10,8 @@ cache:
 
 matrix:
   allow_failures:
-  - rvm: jruby-head
-    env: RAKE_TASK=spec
+  - rvm: jruby-9.0.0.0.pre1
+    jdk: openjdk7
   fast_finish: true
 
 services:
