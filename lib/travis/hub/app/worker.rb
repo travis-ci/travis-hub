@@ -4,10 +4,9 @@ module Travis
       class Worker < Solo
         attr_accessor :count, :number
 
-        def initialize(name, count, number)
-          super(name)
-          @count  = count
-          @number = number
+        def initialize(name, options)
+          super
+          @number = options[:number] || 1
         end
 
         private

@@ -15,12 +15,12 @@ module Travis
   module Hub
     module App
       class << self
-        TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher }
+        MODES = { solo: Solo, worker: Worker, dispatcher: Dispatcher }
 
-        def run(type, *args)
+        def run(mode, options)
           setup
-          setup_worker unless type == 'dispatcher'
-          TYPES.fetch(type).new(type, *args).run
+          setup_worker unless mode == :dispatcher
+          MODES.fetch(mode).new(mode, options).run
         end
 
         def setup

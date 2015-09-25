@@ -5,10 +5,16 @@ require 'travis/hub/service/update_job'
 module Travis
   module Hub
     module App
-      class Solo < Struct.new(:name)
+      class Solo
+        attr_reader :name, :count
+
+        def initialize(name, options)
+          @name  = name
+          @count = options[:count] || 1
+        end
+
         def run
-          # TODO use, e.g. --concurrency
-          5.times do
+          count.times do
             Queue.subscribe(queue, &method(:handle))
           end
         end

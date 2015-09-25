@@ -7,9 +7,8 @@ module Travis
       class Dispatcher < Solo
         attr_accessor :count, :publishers
 
-        def initialize(name, count)
-          super(name)
-          @count = count
+        def initialize(name, options)
+          super
           @publishers = setup_publishers
         end
 
