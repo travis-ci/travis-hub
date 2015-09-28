@@ -17,7 +17,7 @@
 # REFACTOR
 
 * Dispatch events to subscribed apps, remove addons
-* ~Allow passing attributes to simple_state event methods (automatically set :started_at etc)~
+* ~~Allow passing attributes to simple_state event methods (automatically set :started_at etc)~~
 
 # EXTRACT OR MOVE TO SUPPORT
 

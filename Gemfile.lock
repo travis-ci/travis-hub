@@ -164,6 +164,3 @@ DEPENDENCIES
   travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.10.6

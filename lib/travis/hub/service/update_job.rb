@@ -13,6 +13,10 @@ module Travis
 
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
+        MSGS = {
+          update_job: 'Processing %s for <Job id=%s> updating state from %s to %s'
+        }
+
         attr_reader :event, :data
 
         def initialize(params)
@@ -21,18 +25,19 @@ module Travis
         end
 
         def run
-          validate
-          update_job
-          notify
+          exclusive do
+            validate
+            update_job
+            notify
+          end
         end
         instrument :run
 
         private
 
           def update_job
-            exclusive "hub:build-#{build_id}" do
-              job.send(:"#{event}!", data)
-            end
+            logger.info MSGS[:update_job] % [event, job.id, job.state, data[:state]]
+            p job.send(:"#{event}!", data)
           end
 
           def notify
@@ -51,8 +56,16 @@ module Travis
             EVENTS.include?(event) || unknown_event
           end
 
+          def exclusive(&block)
+            super("hub:build-#{build_id}", &block)
+          end
+
           def unknown_event
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def logger
+            Hub.logger
           end
 
           class Instrument < Instrumentation::Instrument
