@@ -188,14 +188,14 @@ describe Build do
     end
   end
 
-  describe 'a build with a matrix, starting jobs' do
-    let(:state) { :created }
+  # describe 'a build with a matrix, starting jobs' do
+  #   let(:state) { :created }
 
-    it 'propagates to the build only once' do
-      FactoryGirl.create(:job, build: build)
-      FactoryGirl.create(:job, build: build)
-      build.jobs.each { |job| job.start!(started_at: Time.now) }
-      p build.reload.state
-    end
-  end
+  #   it 'propagates to the build only once' do
+  #     FactoryGirl.create(:job, build: build)
+  #     FactoryGirl.create(:job, build: build)
+  #     build.jobs.each { |job| job.start!(started_at: Time.now) }
+  #     build.reload.state
+  #   end
+  # end
 end

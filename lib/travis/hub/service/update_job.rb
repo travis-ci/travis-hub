@@ -14,7 +14,6 @@ module Travis
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          update:  'Processing event job:%s for <Job id=%s> updating state from %s to %s',
           skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s',
         }
 
@@ -37,7 +36,6 @@ module Travis
         private
 
           def update_job
-            log :update
             log :skipped unless job.send(:"#{event}!", data)
           end
 
