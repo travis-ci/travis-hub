@@ -10,3 +10,4 @@ log/*
 tmp
 /coverage
 *.env
+.jdk-overlay

@@ -6,26 +6,15 @@ GIT
       faraday (>= 0.7.6)
 
 GIT
-  remote: git://github.com/svenfuchs/simple_states.git
-  revision: c6e6219ebfdce7acb8f7112d839dd6a9fdcf86c8
-  ref: sf-module-prepend
-  specs:
-    simple_states (1.1.0.rc6)
-      activesupport
-      hashr (~> 0.0.10)
-
-GIT
-  remote: git://github.com/travis-ci/travis-support.git
-  revision: 6c336e3b1e13d0dd36b171950f9f579e5d3057f0
-  ref: sf-instrumentation
-  specs:
-    travis-support (0.0.1)
-
-GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
+
+PATH
+  remote: ../travis-support
+  specs:
+    travis-support (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -126,6 +115,9 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    simple_states (1.1.0.rc7)
+      activesupport
+      hashr (~> 0.0.10)
     thread_safe (0.3.5)
     thread_safe (0.3.5-java)
     timers (4.0.1)
@@ -164,7 +156,7 @@ DEPENDENCIES
   rspec
   sentry-raven!
   sidekiq
-  simple_states!
+  simple_states (~> 1.1.0.rc7)
   travis-config (~> 0.1.0)
   travis-encrypt (~> 0.0.1)
   travis-lock (~> 0.1.0)
