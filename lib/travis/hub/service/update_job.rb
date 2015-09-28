@@ -14,7 +14,8 @@ module Travis
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          update_job: 'Processing %s for <Job id=%s> updating state from %s to %s'
+          update:  'Processing event job:%s for <Job id=%s> updating state from %s to %s',
+          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s',
         }
 
         attr_reader :event, :data
@@ -36,8 +37,8 @@ module Travis
         private
 
           def update_job
-            logger.info MSGS[:update_job] % [event, job.id, job.state, data[:state]]
-            p job.send(:"#{event}!", data)
+            log :update
+            log :skipped unless job.send(:"#{event}!", data)
           end
 
           def notify
@@ -64,18 +65,17 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
-          def logger
-            Hub.logger
+          def log(msg)
+            Hub.logger.info MSGS[msg] % [event, job.id, job.state, data[:state]]
           end
 
           class Instrument < Instrumentation::Instrument
+            def run_received
+              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}"
+            end
+
             def run_completed
-              publish(
-                msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}",
-                job_id: target.data[:id],
-                event: target.event,
-                data: target.data
-              )
+              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}"
             end
           end
           Instrument.attach_to(self)
