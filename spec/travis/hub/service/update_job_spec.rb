@@ -14,6 +14,7 @@ describe Travis::Hub::Service::UpdateJob do
     it 'updates the job' do
       subject.run
       expect(job.reload.state).to eql(:started)
+      puts stdout.string
     end
 
     it 'instruments #run' do

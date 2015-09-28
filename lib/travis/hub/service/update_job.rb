@@ -69,11 +69,11 @@ module Travis
 
           class Instrument < Instrumentation::Instrument
             def run_received
-              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}"
+              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> #{to_pairs(target.data)}"
             end
 
             def run_completed
-              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> data=#{target.data.inspect}"
+              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> #{to_pairs(target.data)}"
             end
           end
           Instrument.attach_to(self)
