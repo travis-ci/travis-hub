@@ -33,7 +33,7 @@ module Travis
       def notify
         handle
       end
-      instrument :notify
+      instrument :notify, on: [:completed, :failed]
       rescues :notify, from: Exception
 
       def object

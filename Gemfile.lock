@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: a30bcbbd89d6c3bcabf8126fc8288a24883b5124
+  revision: 1131ca6fc44b8b9499078938dd50a3a8262d1499
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
