@@ -194,10 +194,11 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
       spoon (~> 0.0)
-    pusher (0.14.5)
+    pusher (0.14.6)
       httpclient (~> 2.5)
       multi_json (~> 1.0)
-      signature (~> 0.1.8)
+      pusher-signature (~> 0.1.8)
+    pusher-signature (0.1.8)
     rack (1.4.7)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -253,7 +254,6 @@ GEM
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
-    signature (0.1.8)
     simple_states (1.0.1)
       activesupport
       hashr (~> 0.0.10)
@@ -318,6 +318,3 @@ DEPENDENCIES
   travis-support!
   unlimited-jce-policy-jdk7!
   webmock (~> 1.8.0)
-
-BUNDLED WITH
-   1.10.6
