@@ -20,6 +20,7 @@ module Travis
         end
 
         def subscribe
+          info "Subscribing to #{queue}."
           Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
         end
 

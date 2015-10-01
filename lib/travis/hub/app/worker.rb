@@ -12,8 +12,7 @@ module Travis
         private
 
           def queue
-            # "#{QUEUE}.#{number}" # TODO for gradual rollout
-            "#{QUEUE}.next"
+            "#{QUEUE}.#{number}"
           end
 
           def handle_event(type, payload)

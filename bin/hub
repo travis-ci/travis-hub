@@ -13,11 +13,11 @@ def options_parser(options)
 
   OptionParser.new do |o|
     o.on('-n', '--number NUMBER', 'Worker number') do |number|
-      options[:number] = number.to_i
+      options[:number] = number[/\d+/].to_i
     end
 
     o.on('-c', '--count COUNT', 'Workers count') do |count|
-      options[:count] = count.to_i
+      options[:count] = count[/\d+/].to_i
     end
   end
 end
