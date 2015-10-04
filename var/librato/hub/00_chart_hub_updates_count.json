@@ -1,0 +1,18 @@
+{
+  "name": "Hub Updates count",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "hub.worker.handle",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "sum",
+      "summary_function": "sum"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}"
+    }
+  ]
+}

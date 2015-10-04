@@ -1,0 +1,32 @@
+{
+  "name": "Postgres Load Avg (%{db_name})",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.load-avg-15m",
+      "type": "gauge",
+      "source": "%{db_source}",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "heroku.logs.load-avg-1m",
+      "type": "gauge",
+      "source": "%{db_source}",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "heroku.logs.load-avg-5m",
+      "type": "gauge",
+      "source": "%{db_source}",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*"
+    }
+  ]
+}
