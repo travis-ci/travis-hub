@@ -48,7 +48,7 @@ module Travis
           end
 
           def exclusive(&block)
-            super("hub:build-#{build_id}", &block)
+            super("hub:build-#{data[:id]}", &block)
           end
 
           def unknown_event

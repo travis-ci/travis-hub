@@ -8,7 +8,7 @@ require 'travis/hub/handler/metrics'
 
 Travis::Addons.setup(encryption: { key: 'secret' * 10 })
 Travis::Event.setup
-Travis::Database.connect
+Travis::Database.connect(Travis::Hub.config.database.to_h)
 ActiveRecord::Base.logger = nil
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
