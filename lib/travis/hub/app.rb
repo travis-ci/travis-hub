@@ -24,8 +24,8 @@ module Travis
         end
 
         def setup
-          Travis::Database.connect(config.database)
-          Support::Amqp.setup(config.amqp)
+          Travis::Database.connect(config.database.to_h)
+          Support::Amqp.setup(config.amqp.to_h)
           Travis::Metrics.setup
         end
 
@@ -44,7 +44,7 @@ module Travis
 
         def setup_logs_database # TODO remove
           [Log, Log::Part].each do |const|
-            const.establish_connection(config.logs_database)
+            const.establish_connection(config.logs_database.to_h)
           end
         end
 
