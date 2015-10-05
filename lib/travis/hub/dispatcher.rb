@@ -24,7 +24,7 @@ module Travis
         key       = key_for(payload)
         publisher = @publishers[key]
         Metriks.meter("hub.#{name}.delegate.#{key}").mark
-        puts "Routing #{event} for <Job id=#{payload.fetch('id')}> to #{key}."
+        # puts "Routing #{event} for <Job id=#{payload.fetch('id')}> to #{key}."
         publisher.publish(payload.merge('hub_count' => count), properties: { type: event })
       end
 
@@ -45,8 +45,8 @@ module Travis
         ]
       else
         NEXT = [
-          # ['Organization', 87],  # travis-ci
-          # ['Organization', 340], # travis-repos
+          ['Organization', 87],  # travis-ci
+          ['Organization', 340], # travis-repos
           ['User', 8]            # svenfuchs
         ]
       end
