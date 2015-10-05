@@ -34,7 +34,11 @@ class Job < ActiveRecord::Base
   end
 
   def finished?
-    [:passed, :failed, :errored, :canceled].include?(state)
+    [:passed, :failed, :errored, :canceled].include?(state.try(:to_sym))
+  end
+
+  def finished_unsuccessfully?
+    [:failed, :errored, :canceled].include?(state.try(:to_sym))
   end
 
   def restart?
