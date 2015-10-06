@@ -34,7 +34,7 @@ module Travis
           def handle_event(type, payload)
             type, event = parse_type(type)
             time(type, event) do
-              handler(type).new(event: event, data: payload).run
+              handler(type).new(event: event, data: normalize_payload(payload)).run
             end
           end
 
@@ -49,8 +49,15 @@ module Travis
           end
 
           def normalize_type(type)
-            # TODO if event is :reset, then data['state'] also seems to be :reset
-            type.to_s.gsub(':test', '').gsub('reset', 'restart') # TODO deprecate :reset
+            type = type.to_s.gsub(':test', '')
+            type = type.gsub('reset', 'restart') # TODO deprecate :reset
+            type
+          end
+
+          def normalize_payload(payload)
+            payload['state'] = 'created'  if payload['state'] == 'reset'
+            payload['state'] = 'canceled' if payload['state'] == 'cancelled'
+            payload
           end
 
           def unknown_type(type)
