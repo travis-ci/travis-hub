@@ -21,9 +21,9 @@ module Travis
         private
 
           def handle_received
-            return unless object.created_at && object.received_at
+            return unless object.queued_at && object.received_at
             events = %W(job.queue.wait_time job.queue.wait_time.#{queue})
-            meter(events, object.created_at, object.received_at)
+            meter(events, object.queued_at, object.received_at)
           end
 
           def handle_started
