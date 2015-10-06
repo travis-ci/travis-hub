@@ -49,6 +49,7 @@ module Travis
           end
 
           def normalize_type(type)
+            # TODO if event is :reset, then data['state'] also seems to be :reset
             type.to_s.gsub(':test', '').gsub('reset', 'restart') # TODO deprecate :reset
           end
 
