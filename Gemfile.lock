@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-config.git
-  revision: 2df46ab61662c0dbc595b198bc30975bd7911ba8
+  revision: 9d2863d56c9322a629431f185ba3d06c70579297
   ref: sf-bump-hashr
   specs:
     travis-config (1.0.0.rc1)
@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 1131ca6fc44b8b9499078938dd50a3a8262d1499
+  revision: 306f2a4580336f6f5845ff91075e64dce5706dda
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
@@ -176,3 +176,6 @@ DEPENDENCIES
   travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
+
+BUNDLED WITH
+   1.10.6
