@@ -14,12 +14,11 @@ describe Travis::Hub::Service::UpdateJob do
     it 'updates the job' do
       subject.run
       expect(job.reload.state).to eql(:started)
-      puts stdout.string
     end
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 
@@ -35,7 +34,7 @@ describe Travis::Hub::Service::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 
@@ -51,7 +50,7 @@ describe Travis::Hub::Service::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: finish for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: finish for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 
@@ -67,7 +66,7 @@ describe Travis::Hub::Service::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: cancel for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: cancel for repo=travis-ci/travis-core id=#{job.id}")
     end
 
     it 'notifies workers' do
@@ -88,7 +87,7 @@ describe Travis::Hub::Service::UpdateJob do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for <Job id=#{job.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 

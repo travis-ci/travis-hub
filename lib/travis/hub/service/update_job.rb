@@ -17,11 +17,12 @@ module Travis
           skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s',
         }
 
-        attr_reader :event, :data
+        attr_reader :event, :data, :job
 
         def initialize(params)
           @event = params[:event].try(:to_sym)
           @data  = params[:data].symbolize_keys
+          @job   = Job.find(data[:id])
         end
 
         def run
@@ -36,19 +37,11 @@ module Travis
         private
 
           def update_job
-            log :skipped unless job.send(:"#{event}!", data)
+            log :skipped unless job.reload.send(:"#{event}!", data)
           end
 
           def notify
             NotifyWorkers.new.cancel(job) if event == :cancel
-          end
-
-          def job
-            @job ||= Job.find(data[:id])
-          end
-
-          def build_id
-            @build_id ||= Job.where(id: data[:id]).select(:source_id).pluck(:source_id).first
           end
 
           def validate
@@ -56,7 +49,7 @@ module Travis
           end
 
           def exclusive(&block)
-            super("hub:build-#{build_id}", &block)
+            super("hub:build-#{job.source_id}", &block)
           end
 
           def unknown_event
@@ -69,11 +62,11 @@ module Travis
 
           class Instrument < Instrumentation::Instrument
             def run_received
-              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> #{to_pairs(target.data)}"
+              publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
             end
 
             def run_completed
-              publish msg: "event: #{target.event} for <Job id=#{target.data[:id]}> #{to_pairs(target.data)}"
+              publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
             end
           end
           Instrument.attach_to(self)

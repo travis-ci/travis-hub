@@ -19,7 +19,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: start for <Build id=#{build.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: start for repo=travis-ci/travis-core id=#{build.id}")
     end
   end
 
@@ -35,7 +35,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: finish for <Build id=#{build.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: finish for repo=travis-ci/travis-core id=#{build.id}")
     end
   end
 
@@ -56,7 +56,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for <Build id=#{build.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")
     end
 
     it 'notifies workers' do
@@ -77,7 +77,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: restart for <Build id=#{build.id}>")
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: restart for repo=travis-ci/travis-core id=#{build.id}")
     end
   end
 end
