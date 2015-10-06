@@ -17,7 +17,7 @@ module Travis
           def handle_event(type, payload)
             id  = ::Job.find(payload.fetch('id')).source_id
             key = queue_for(id % count + 1)
-            puts "Routing #{type} for <Job id=#{payload.fetch('id')}> to #{key}."
+            # puts "Routing #{type} for <Job id=#{payload.fetch('id')}> to #{key}."
             publishers[key].publish(payload.merge(worker_count: count), properties: { type: type })
             meter(key)
           end
