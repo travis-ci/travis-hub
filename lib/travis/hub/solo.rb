@@ -44,7 +44,6 @@ module Travis
       end
 
       def run
-        enqueue_jobs
         subscribe_to_queue
       end
 
@@ -69,19 +68,6 @@ module Travis
 
         def handle_event(event, payload)
           Travis.run_service(:update_job, event: event.to_s.split(':').last, data: payload)
-        end
-
-        def enqueue_jobs
-          Travis.logger.info('[hub] setting up enqueue_jobs')
-          run_periodically(Travis.config.queue.interval) do
-            Metriks.timer("hub.#{name}.enqueue_jobs").time { enqueue_jobs! }
-          end
-        end
-
-        def enqueue_jobs!
-          Travis.run_service(:enqueue_jobs)
-        rescue => e
-          log_exception(e)
         end
 
         def declare_exchanges_and_queues
