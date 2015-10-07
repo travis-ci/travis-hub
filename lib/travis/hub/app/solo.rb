@@ -65,9 +65,11 @@ module Travis
           end
 
           def time(type, event, &block)
-            Metriks.timer("hub.#{name}.handle.#{type}").time do
-              Metriks.timer("hub.#{name}.handle.#{type}.#{event}").time(&block)
-            end
+            started_at = Time.now
+            yield
+            options = { started_at: started_at, finished_at: Time.now }
+            Metrics.meter("hub.#{name}.handle.#{type}", options)
+            Metrics.meter("hub.#{name}.handle.#{type}.#{event}", options)
           end
 
           def with_active_record(&block)
