@@ -6,23 +6,8 @@ GIT
       faraday (>= 0.7.6)
 
 GIT
-  remote: git://github.com/svenfuchs/hashr.git
-  revision: 5833cdf3d67fa4b9cdfe2f328b715448d47bd7f9
-  ref: 2.x
-  specs:
-    hashr (2.0.0.rc1)
-
-GIT
-  remote: git://github.com/travis-ci/travis-config.git
-  revision: 9d2863d56c9322a629431f185ba3d06c70579297
-  ref: sf-bump-hashr
-  specs:
-    travis-config (1.0.0.rc1)
-      hashr (~> 2.0.0.rc1)
-
-GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 9599f3364865dad2b4fb8b1cb445c7e632856d20
+  revision: a87fea0681550741dd449a2c09b3388dd7627fdf
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
@@ -83,6 +68,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
+    hashr (2.0.0.rc1)
     hitimes (1.2.2)
     hitimes (1.2.2-java)
     i18n (0.7.0)
@@ -137,6 +123,8 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.0.1)
       hitimes
+    travis-config (1.0.0.rc1)
+      hashr (~> 2.0.0.rc1)
     travis-encrypt (0.0.1)
     travis-lock (0.1.0)
       activerecord (~> 4.0)
@@ -157,7 +145,6 @@ DEPENDENCIES
   database_cleaner
   factory_girl
   gh
-  hashr!
   jruby-openssl (~> 0.9.8)
   march_hare
   metriks-librato_metrics
@@ -171,8 +158,11 @@ DEPENDENCIES
   sentry-raven!
   sidekiq
   simple_states (~> 1.1.0.rc7)
-  travis-config!
+  travis-config (~> 1.0.0rc1)
   travis-encrypt (~> 0.0.1)
   travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
+
+BUNDLED WITH
+   1.10.6
