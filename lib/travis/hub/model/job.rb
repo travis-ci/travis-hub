@@ -42,7 +42,7 @@ class Job < ActiveRecord::Base
   end
 
   def restart?
-    finished? && config_valid?
+    config_valid?
   end
 
   def restart(*)

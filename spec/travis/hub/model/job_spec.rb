@@ -406,12 +406,12 @@ describe Job do
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
-      include_examples 'does not apply'
+      include_examples 'restarts the job'
     end
 
     describe 'received by a :started job' do
       let(:state) { :started }
-      include_examples 'does not apply'
+      include_examples 'restarts the job'
     end
 
     describe 'received by a :passed job' do

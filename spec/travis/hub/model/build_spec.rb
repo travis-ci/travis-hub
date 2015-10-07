@@ -159,12 +159,12 @@ describe Build do
 
     describe 'received by a :queued build' do
       let(:state) { :queued }
-      include_examples 'does not apply'
+      include_examples 'restarts the build'
     end
 
     describe 'received by a :started build' do
       let(:state) { :started }
-      include_examples 'does not apply'
+      include_examples 'restarts the build'
     end
 
     describe 'received by a :passed build' do
