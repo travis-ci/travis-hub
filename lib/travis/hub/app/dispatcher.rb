@@ -34,7 +34,7 @@ module Travis
           end
 
           def meter(key)
-            Metriks.meter("hub.#{name}.delegate.#{key}").mark
+            Metrics.meter("hub.#{name}.delegate.#{key}")
           end
       end
     end
