@@ -5,7 +5,7 @@
     {
       "metric": "hub.worker.handle.median",
       "type": "gauge",
-      "source": "*",
+      "source": "%{app}-production.*",
       "group_function": "average",
       "summary_function": "average"
     },

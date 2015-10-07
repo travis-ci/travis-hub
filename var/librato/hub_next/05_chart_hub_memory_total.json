@@ -1,13 +1,13 @@
 {
-  "name": "Hub Updates count",
+  "name": "Hub Memory Total",
   "type": "line",
   "streams": [
     {
-      "metric": "hub.worker.handle",
+      "metric": "heroku.logs.memory_total",
       "type": "gauge",
-      "source": "%{app}-production.*",
-      "group_function": "sum",
-      "summary_function": "sum"
+      "source": "%{app}.*",
+      "group_function": "breakout",
+      "summary_function": "max"
     },
     {
       "metric": "heroku.logs.releases",

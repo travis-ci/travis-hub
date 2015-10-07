@@ -24,6 +24,8 @@ module Travis
         end
 
         def setup
+          Travis.config.librato_source = 'travis-hub-next-production' if config.env == 'production'
+
           Travis::Database.connect(config.database.to_h)
           Support::Amqp.setup(config.amqp.to_h)
           Travis::Metrics.setup

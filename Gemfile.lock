@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: 306f2a4580336f6f5845ff91075e64dce5706dda
+  revision: 9599f3364865dad2b4fb8b1cb445c7e632856d20
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
@@ -176,6 +176,3 @@ DEPENDENCIES
   travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.10.6

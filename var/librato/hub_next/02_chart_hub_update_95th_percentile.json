@@ -5,7 +5,7 @@
     {
       "metric": "hub.worker.handle.95th_percentile",
       "type": "gauge",
-      "source": "%{app}-production.*",
+      "source": "travis-hub-next-production.*",
       "group_function": "average",
       "summary_function": "average"
     },

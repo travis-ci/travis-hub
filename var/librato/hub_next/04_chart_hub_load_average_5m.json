@@ -1,13 +1,13 @@
 {
-  "name": "Hub Updates count",
+  "name": "Hub Load Average 5m",
   "type": "line",
   "streams": [
     {
-      "metric": "hub.worker.handle",
+      "metric": "heroku.logs.load_avg_5m",
       "type": "gauge",
-      "source": "%{app}-production.*",
-      "group_function": "sum",
-      "summary_function": "sum"
+      "source": "%{app}.*",
+      "group_function": "breakout",
+      "summary_function": "max"
     },
     {
       "metric": "heroku.logs.releases",

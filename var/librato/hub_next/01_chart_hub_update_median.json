@@ -1,11 +1,11 @@
 {
-  "name": "Hub Update 95th percentile",
+  "name": "Hub Update median",
   "type": "line",
   "streams": [
     {
-      "metric": "hub.worker.handle.95th_percentile",
+      "metric": "hub.worker.handle.median",
       "type": "gauge",
-      "source": "%{app}-production.*",
+      "source": "travis-hub-next-production.*",
       "group_function": "average",
       "summary_function": "average"
     },

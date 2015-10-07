@@ -5,7 +5,7 @@
     {
       "metric": "hub.worker.handle",
       "type": "gauge",
-      "source": "%{app}-production.*",
+      "source": "travis-hub-next-production.*",
       "group_function": "sum",
       "summary_function": "sum"
     },
