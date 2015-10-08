@@ -26,6 +26,7 @@ gem 'multi_json'
 platform :ruby do
   gem 'pg'
   gem 'bunny'
+  gem 'jemalloc'
 end
 
 platform :jruby do
