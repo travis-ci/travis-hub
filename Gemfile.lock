@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: a87fea0681550741dd449a2c09b3388dd7627fdf
+  revision: 46cbc0b00feb656b3ff8aeff958297d97064a420
   ref: sf-instrumentation
   specs:
     travis-support (0.0.1)
@@ -73,6 +73,7 @@ GEM
     hitimes (1.2.2-java)
     i18n (0.7.0)
     jdbc-postgres (9.4.1200)
+    jemalloc (1.0.1)
     jruby-openssl (0.9.10-java)
     json (1.8.3)
     json (1.8.3-java)
@@ -145,6 +146,7 @@ DEPENDENCIES
   database_cleaner
   factory_girl
   gh
+  jemalloc
   jruby-openssl (~> 0.9.8)
   march_hare
   metriks-librato_metrics
@@ -163,6 +165,3 @@ DEPENDENCIES
   travis-lock (~> 0.1.0)
   travis-support!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.10.6
