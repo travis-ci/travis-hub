@@ -8,7 +8,7 @@ module Travis
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
-             states_cache:  { memcached_servers: 'localhost:11211' },
+             states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
 
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
