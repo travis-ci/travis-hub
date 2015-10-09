@@ -1,4 +1,4 @@
-# Travis Hub
+# Travis Hub [![Build Status](https://travis-ci.org/travis-ci/travis-hub.svg?branch=master)](https://travis-ci.org/travis-ci/travis-hub)
 
 Travis Hub is the application that, in the life-cycle of accepting,
 evaluating, and executing a build request, sits in the fifth position,
