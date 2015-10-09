@@ -1,7 +1,3 @@
-# TODO
-
-* Merge travis-support branches (sf-log_newline, sf-instrumentation)
-
 # WHAT HUB DOES
 
 * Accept job state updates
@@ -33,7 +29,7 @@
 
 * Repository: does the UI still use denormalized last\_build\* attributes?
 * Log (ported, but it would be nice to remove this dependency)
-* Annotations (not ported at all)
+* ~~Annotations (not ported at all)~~
 * ~~Branch: does every event need to update the branch? are branches being sync'ed now?~~
   ~~See /lib/travis/hub/model/build/denormalize.rb#24~~
   ~~Removed all this for now. Branches were set to the last build created over and over~~
