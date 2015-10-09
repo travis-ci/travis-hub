@@ -13,7 +13,8 @@ require 'travis/hub/handler/metrics'
 
 module Travis
   module Hub
-    QUEUE = 'builds.next' # TODO
+    # QUEUE = 'builds.next'
+    QUEUE = 'builds'
 
     attr_reader :logger
 
