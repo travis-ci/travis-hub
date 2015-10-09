@@ -24,7 +24,7 @@ module Travis
     end
 
     def decrypt(config)
-      return config if config.is_a?(String)
+      return config if config.nil? || config.is_a?(String)
 
       config.inject(config.class.new) do |result, element|
         key, element = element if result.is_a?(Hash)
