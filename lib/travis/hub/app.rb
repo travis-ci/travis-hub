@@ -37,7 +37,7 @@ module Travis
           Travis::Addons.setup(config)
           Travis::Event.setup(config.notifications)
           Travis::Instrumentation.setup(logger)
-          Travis::Exceptions::Reporter.start if config.env == :production
+          Travis::Exceptions::Reporter.start if config.env == 'production'
 
           # Travis.logger = Logger.configure(Logger.new(STDOUT))
         end
