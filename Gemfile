@@ -19,7 +19,7 @@ gem 'gh'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven',  github: 'getsentry/raven-ruby'
 # gem 'simple_states', github: 'svenfuchs/simple_states', ref: 'sf-module-prepend'
-gem 'simple_states', '~> 1.1.0.rc7'
+gem 'simple_states', '~> 1.1.0.rc10'
 gem 'coder'
 gem 'multi_json'
 

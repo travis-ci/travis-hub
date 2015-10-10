@@ -28,8 +28,8 @@ class Build < ActiveRecord::Base
     !started?
   end
 
-  def finish?(event, data = {})
-    !finished? && matrix.finished?
+  def finish?(*)
+    matrix.finished?
   end
 
   def finish(data = {})
@@ -48,7 +48,9 @@ class Build < ActiveRecord::Base
     reset_state
   end
 
-  alias cancel? finish?
+  def cancel?(*)
+    !finished? && finish?
+  end
 
   def cancel(options = {})
     self.finished_at = Time.now
