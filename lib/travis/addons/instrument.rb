@@ -17,17 +17,34 @@ module Travis
 
       def publish(event = {})
         event = event.reverse_merge(
-          :msg => "(#{handler.event}) for #<#{object.class.name} id=#{object.id}>",
+          :msg => "(#{handler.event}) for #{serialize(object)}",
           :object_type => object.class.name,
           :object_id => object.id,
           :event => handler.event
         )
 
         event[:payload]    = handler.payload
-        event[:request_id] = object.request_id if object.respond_to?(:request_id)
-        event[:repository] = object.repository.slug if object.respond_to?(:repository)
+        event[:request_id] = request_id
+        event[:repository] = repo
         super(event)
       end
+
+      private
+
+        def serialize(object)
+          pairs = { id: object.id }
+          pairs[:number] = object.number if object.respond_to?(:number)
+          pairs[:repo] = repo.slug if repo
+          "#<#{object.class.name} #{pairs.map { |key, value| [key, value].join('=') }}>"
+        end
+
+        def repo
+          object.repository.slug if object.respond_to?(:repository)
+        end
+
+        def request_id
+          object.request_id if object.respond_to?(:request_id)
+        end
     end
   end
 end

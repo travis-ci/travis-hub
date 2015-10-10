@@ -1,5 +1,7 @@
 # Travis Hub [![Build Status](https://travis-ci.org/travis-ci/travis-hub.svg?branch=master)](https://travis-ci.org/travis-ci/travis-hub)
 
+*Keeper of the statuses*
+
 Travis Hub is the application that, in the life-cycle of accepting,
 evaluating, and executing a build request, sits in the fifth position,
 next to [Travis Logs](http://github.com/travis-ci/travis-logs).
