@@ -14,7 +14,7 @@ module Travis
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s, job=%s',
+          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s',
         }
 
         attr_reader :event, :data, :job
@@ -62,7 +62,7 @@ module Travis
           end
 
           def warn(msg)
-            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data, job.inspect]
+            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data]
           end
 
           class Instrument < Instrumentation::Instrument
