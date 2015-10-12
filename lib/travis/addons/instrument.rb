@@ -35,7 +35,7 @@ module Travis
           pairs = { id: object.id }
           pairs[:number] = object.number if object.respond_to?(:number)
           pairs[:repo] = repo.slug if repo
-          "#<#{object.class.name} #{pairs.map { |key, value| [key, value].join('=') }}>"
+          "#<#{object.class.name} #{pairs.map { |key, value| [key, value].join('=') }.join(' ')}>"
         end
 
         def repo
