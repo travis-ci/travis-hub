@@ -39,7 +39,7 @@ module Travis
         end
 
         def repo
-          object.repository.slug if object.respond_to?(:repository)
+          object.repository if object.respond_to?(:repository)
         end
 
         def request_id
