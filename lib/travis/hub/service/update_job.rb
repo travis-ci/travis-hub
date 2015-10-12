@@ -14,7 +14,7 @@ module Travis
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s',
+          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s, job=%s',
         }
 
         attr_reader :event, :data, :job
@@ -37,7 +37,7 @@ module Travis
         private
 
           def update_job
-            log :skipped unless job.reload.send(:"#{event}!", data)
+            warn :skipped unless job.reload.send(:"#{event}!", data)
           end
 
           def notify
@@ -56,8 +56,8 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
-          def log(msg)
-            Hub.logger.info MSGS[msg] % [event, job.id, job.state, data[:state]]
+          def warn(msg)
+            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data, job]
           end
 
           class Instrument < Instrumentation::Instrument
