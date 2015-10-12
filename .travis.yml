@@ -2,7 +2,7 @@ sudo: false
 language: ruby
 rvm:
   - jruby-19mode
-  - jruby-9.0.0.0.pre1
+  # - jruby-9.0.0.0.pre1
 jdk: openjdk7
 
 cache:
