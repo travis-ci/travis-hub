@@ -57,7 +57,7 @@ module Travis
           end
 
           def warn(msg)
-            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data, job]
+            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data, job.inspect]
           end
 
           class Instrument < Instrumentation::Instrument

@@ -9,6 +9,7 @@ module Travis
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
+             # memcached:     { servers: 'localhost:11211', options: {} },
 
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
@@ -20,6 +21,11 @@ module Travis
       def logs_database
         super || database
       end
+
+      # # TODO legacy, upgrade travis-config
+      # def states_cache
+      #   super || { memcached_servers: memcached.servers, memcached_options: memcached.options }
+      # end
     end
   end
 end
