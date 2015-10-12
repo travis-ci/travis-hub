@@ -11,6 +11,10 @@ describe Job do
   end
 
   shared_examples 'sets the job to :received' do
+    it 'returns true' do
+      expect(receive).to be_truthy
+    end
+
     it 'sets :state to :received' do
       receive
       expect(job.reload.state).to eql(:received)
@@ -28,6 +32,10 @@ describe Job do
   end
 
   shared_examples 'sets the job to :started' do
+    it 'returns true' do
+      expect(receive).to be_truthy
+    end
+
     it 'sets :state to :started' do
       receive
       expect(job.reload.state).to eql(:started)
@@ -66,6 +74,10 @@ describe Job do
   end
 
   shared_examples 'sets the job to :passed' do
+    it 'returns true' do
+      expect(receive).to be_truthy
+    end
+
     it 'sets :state to :passed' do
       receive
       expect(job.reload.state).to eql(:passed)
@@ -122,6 +134,10 @@ describe Job do
   end
 
   shared_examples 'cancels the job' do
+    it 'returns true' do
+      expect(receive).to be_truthy
+    end
+
     it 'sets :state to :canceled' do
       receive
       expect(job.reload.state).to eql(:canceled)
@@ -171,6 +187,10 @@ describe Job do
   end
 
   shared_examples 'restarts the job' do
+    it 'returns true' do
+      expect(receive).to be_truthy
+    end
+
     it 'sets :state to :created' do
       receive
       expect(job.reload.state).to eql(:created)
