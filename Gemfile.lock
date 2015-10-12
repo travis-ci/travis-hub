@@ -53,6 +53,7 @@ GEM
     celluloid (0.16.0)
       timers (~> 4.0.0)
     coder (0.4.0)
+    coderay (1.1.0)
     connection_pool (2.2.0)
     dalli (2.7.4)
     database_cleaner (1.4.1)
@@ -79,6 +80,7 @@ GEM
     json (1.8.3-java)
     march_hare (2.12.0-java)
     metaclass (0.0.4)
+    method_source (0.8.2)
     metriks (0.9.9.7)
       atomic (~> 1.0)
       avl_tree (~> 1.2.0)
@@ -93,6 +95,10 @@ GEM
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     pg (0.18.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rake (10.4.2)
     redis (3.2.1)
     redis-namespace (1.5.2)
@@ -120,6 +126,7 @@ GEM
       redis-namespace (~> 1.5, >= 1.5.2)
     simple_states (1.1.0.rc11)
       activesupport
+    slop (3.6.0)
     thread_safe (0.3.5)
     thread_safe (0.3.5-java)
     timers (4.0.1)
@@ -153,6 +160,7 @@ DEPENDENCIES
   mocha
   multi_json
   pg
+  pry
   rake
   redis
   redlock

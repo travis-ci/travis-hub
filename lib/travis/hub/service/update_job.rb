@@ -21,7 +21,7 @@ module Travis
 
         def initialize(params)
           @event = params[:event].try(:to_sym)
-          @data  = params[:data].symbolize_keys
+          @data  = normalize_data(params[:data])
           @job   = Job.find(data[:id])
         end
 
@@ -46,6 +46,11 @@ module Travis
 
           def validate
             EVENTS.include?(event) || unknown_event
+          end
+
+          def normalize_data(data)
+            data.delete(:state) if event == :restart
+            data.symbolize_keys
           end
 
           def exclusive(&block)

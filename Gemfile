@@ -22,6 +22,7 @@ gem 'sentry-raven',  github: 'getsentry/raven-ruby'
 gem 'simple_states', '~> 1.1.0.rc10'
 gem 'coder'
 gem 'multi_json'
+gem 'pry'
 
 platform :ruby do
   gem 'pg'

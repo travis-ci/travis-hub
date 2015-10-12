@@ -55,7 +55,7 @@ module Travis
           end
 
           def normalize_payload(payload)
-            payload['state'] = 'created'  if payload['state'] == 'reset'
+            payload['state'] = nil        if payload['state'] == 'reset'
             payload['state'] = 'canceled' if payload['state'] == 'cancelled'
             payload
           end

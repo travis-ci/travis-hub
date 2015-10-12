@@ -91,6 +91,18 @@ describe Travis::Hub::Service::UpdateJob do
     end
   end
 
+  describe 'a :restart event with state: :created passed (legacy worker?)' do
+    let(:state) { :started }
+    let(:event) { :restart }
+    let(:data)  { { id: job.id, state: :created } }
+
+    it 'updates the job' do
+      subject.run
+      expect(job.reload.state).to eql(:created)
+    end
+  end
+
+
   describe 'unordered messages' do
     let(:job)     { FactoryGirl.create(:job, state: :created) }
     let(:start)   { { event: 'start',   data: { id: job.id, started_at: Time.now } } }
