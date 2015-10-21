@@ -24,23 +24,23 @@ module Travis
         end
 
         def setup
-          Travis::Database.connect(config.database.to_h)
+          Database.connect(config.database.to_h)
+          Metrics.setup
           Support::Amqp.setup(config.amqp.to_h)
-          Travis::Metrics.setup
         end
 
         def setup_worker
-          setup_logs_database
-          Support::Sidekiq.setup(config)
+          setup_logs_database # TODO remove, message travis-logs instead
 
           # TODO what's with the metrics handler. do we still need that? add it to the config?
-          Travis::Addons.setup(config)
-          Travis::Event.setup(config.notifications)
-          Travis::Instrumentation.setup(logger)
-          Travis::Exceptions::Reporter.start if config.env == 'production'
+          Addons.setup(config)
+          Event.setup(config.notifications)
+          Exceptions::Reporter.start if config.env == 'production'
+          Instrumentation.setup(logger)
+          Support::Sidekiq.setup(config)
         end
 
-        def setup_logs_database # TODO remove
+        def setup_logs_database
           [Log, Log::Part].each do |const|
             const.establish_connection(config.logs_database.to_h)
           end
