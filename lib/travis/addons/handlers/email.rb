@@ -41,7 +41,7 @@ module Travis
 
           class EventHandler < Addons::Instrument
             def notify_completed
-              publish(:recipients => handler.recipients)
+              publish(recipients: handler.recipients)
             end
           end
           EventHandler.attach_to(self)
