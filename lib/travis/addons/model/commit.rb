@@ -4,7 +4,8 @@ class Commit < ActiveRecord::Base
   end
 
   def pull_request_number
-    pull_request? && $1.to_i
+    match = ref.match(%r(^refs/pull/(\d+)/merge$))
+    match && match[1].to_i
   end
 
   def tag_name
