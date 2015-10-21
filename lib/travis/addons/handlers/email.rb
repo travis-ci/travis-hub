@@ -8,7 +8,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && enabled? && send? && recipients.present?
+          !pull_request? && config.enabled?(:email) && config.send_on?(:email, action) && recipients.present?
         end
 
         def handle
@@ -24,12 +24,10 @@ module Travis
 
         private
 
-          def enabled?
-            config.enabled?(:email)
-          end
-
-          def send?
-            config.send_on?(:email, action)
+          def default_recipients
+            emails = [commit.author_email, commit.committer_email]
+            user_ids = object.repository.permissions.pluck(:user_id)
+            ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
           end
 
           def broadcasts
@@ -37,9 +35,8 @@ module Travis
             msgs.map { |msg| { message: msg } }
           end
 
-          def default_recipients
-            emails = [commit.author_email, commit.committer_email]
-            ::Email.where(email: emails).pluck(:email).uniq
+          def normalize_array(array)
+            Array(array).join(',').split(',').map(&:strip).select(&:present?).uniq
           end
 
           class EventHandler < Addons::Instrument
