@@ -53,7 +53,8 @@ module Travis
             }
 
             if commit.pull_request?
-              data['pull_request_number'] = commit.pull_request_number
+              # TODO not sure why we'd overwrite this at all. should be populated on the build, no?
+              data['pull_request_number'] ||= commit.pull_request_number
             end
 
             data

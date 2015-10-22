@@ -24,7 +24,7 @@ module Travis
 
         class Instrument < Addons::Instrument
           def notify_completed
-            publish(:users => handler.users, :api_key => handler.api_key)
+            publish(users: handler.users, api_key: handler.api_key)
           end
         end
         Instrument.attach_to(self)

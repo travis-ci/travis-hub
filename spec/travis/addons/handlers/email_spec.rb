@@ -1,6 +1,7 @@
 describe Travis::Addons::Handlers::Email do
   let(:handler) { described_class.new('build:finished', id: build.id) }
-  let(:build)   { FactoryGirl.create(:build, commit: commit, config: { notifications: config }) }
+  let(:repo)    { FactoryGirl.create(:repository) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: config }) }
   let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
   let!(:email)  { Email.create(email: address) }
   let(:config)  { { email: address } }
@@ -68,6 +69,7 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'recipients' do
+    let(:user)      { FactoryGirl.create(:user) }
     let(:address)   { 'me@email.com' }
     let(:other)     { 'other@email.com' }
     let(:author)    { 'author@email.com' }
@@ -75,19 +77,20 @@ describe Travis::Addons::Handlers::Email do
 
     describe 'no addresses given in config' do
       let(:config)  { { email: true } }
+      before { repo.permissions.create(user: user) }
 
-      it 'returns known committer and author addresses' do
-        [committer, author].each { |address| Email.create(email: address) }
-        expect(handler.recipients).to eql [committer, author]
+      it 'returns permitted and known committer and author addresses' do
+        [committer, author].each { |address| Email.create(user: user, email: address) }
+        expect(handler.recipients.sort).to eql [author, committer]
       end
 
-      it 'returns known author address' do
-        Email.create(email: author)
+      it 'returns permitted and known author address' do
+        Email.create(user: user, email: author)
         expect(handler.recipients).to eql [author]
       end
 
-      it 'returns known committer address' do
-        Email.create(email: committer)
+      it 'returns permitted and known committer address' do
+        Email.create(user: user, email: committer)
         expect(handler.recipients).to eql [committer]
       end
     end
