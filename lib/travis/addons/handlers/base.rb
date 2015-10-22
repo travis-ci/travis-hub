@@ -19,7 +19,10 @@ module Travis
         def data
           @data ||= Serializer::Generic.const_get(object_type.camelize).new(object).data
         end
-        alias payload data
+
+        def payload
+          Travis::SecureConfig.decrypt(data, secure_key)
+        end
 
         def config
           @config ||= Config.new(data, secure_key)
