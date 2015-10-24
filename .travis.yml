@@ -1,18 +1,10 @@
 sudo: false
 language: ruby
+
 rvm:
-  - jruby-19mode
-  # - jruby-9.0.0.0.pre1
-jdk: openjdk7
-
-cache:
-  - bundler
-
-matrix:
-  allow_failures:
-  - rvm: jruby-9.0.0.0.pre1
-    jdk: openjdk7
-  fast_finish: true
+  - 2.2
+  - jruby-1.7
+  - jruby-9.0.3.0
 
 services:
   - redis
@@ -20,7 +12,14 @@ services:
 addons:
   postgresql: 9.3
 
+cache:
+  - bundler
+
+before_install:
+  - which bundle || gem install bundler
+
 before_script:
   - bundle exec rake db:create
+
 script:
   - bundle exec rspec --require spec_helper
