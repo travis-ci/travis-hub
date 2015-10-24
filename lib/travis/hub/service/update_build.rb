@@ -33,7 +33,11 @@ module Travis
         private
 
           def update_jobs
-            build.jobs.each { |job| job.reload.send(:"#{event}!", data) }
+            build.jobs.each { |job| job.reload.send(:"#{event}!", attrs) }
+          end
+
+          def attrs
+            data.reject { |key, _| key == :id }
           end
 
           def notify

@@ -110,6 +110,8 @@ describe Travis::Hub::Service::UpdateJob do
     let(:finish)  { { event: 'finish',  data: { id: job.id, state: 'passed', finished_at: Time.now } } }
 
     def recieve(msg)
+      # puts Build.all.map(&:id).include?(job.source_id) ? 'Ok' : 'WTF'
+      # p [Job.count, Build.count]
       described_class.new(msg).run
     end
 

@@ -37,7 +37,11 @@ module Travis
         private
 
           def update_job
-            warn :skipped unless job.reload.send(:"#{event}!", data)
+            warn :skipped unless job.reload.send(:"#{event}!", attrs)
+          end
+
+          def attrs
+            data.reject { |key, _| key == :id }
           end
 
           def notify

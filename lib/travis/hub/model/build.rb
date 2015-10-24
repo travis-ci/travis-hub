@@ -7,13 +7,13 @@ require 'travis/hub/model/build/matrix'
 class Build < ActiveRecord::Base
   include Denormalize, SimpleStates, Travis::Event
 
+  FINISHED_STATES = [:passed, :failed, :errored, :canceled]
+
   belongs_to :repository
   has_many   :jobs, -> { order(:id) }, as: :source
 
-  states :created, :started, :passed, :failed, :errored, :canceled, ordered: true
-
   event  :start,   if: :start?
-  event  :finish,  if: :finish?
+  event  :finish,  if: :finish?, to: [:passed, :failed, :errored]
   event  :cancel,  if: :cancel?
   event  :restart, if: :restart?
   event  :all, after: [:denormalize, :notify]
@@ -24,7 +24,7 @@ class Build < ActiveRecord::Base
     super || {}
   end
 
-  def start?
+  def start?(*)
     !started?
   end
 
@@ -32,15 +32,15 @@ class Build < ActiveRecord::Base
     matrix.finished?
   end
 
-  def finish(data = {})
+  def finish(*)
     self.attributes = { state: matrix.state, duration: matrix.duration }
   end
 
   def finished?
-    [:passed, :failed, :errored, :canceled].include?(state)
+    FINISHED_STATES.include?(state)
   end
 
-  def restart?
+  def restart?(*)
     config_valid?
   end
 
@@ -52,17 +52,17 @@ class Build < ActiveRecord::Base
     !finished? && finish?
   end
 
-  def cancel(options = {})
+  def cancel(*)
     self.finished_at = Time.now
   end
 
   private
 
-    def config_valid?
-      not config[:'.result'].to_s.include?('error')
-    end
-
     def matrix
       @matrix ||= Matrix.new(jobs, config[:matrix])
+    end
+
+    def config_valid?
+      not config[:'.result'].to_s.include?('error')
     end
 end

@@ -5,7 +5,7 @@ class Build < ActiveRecord::Base
     end
 
     def unsuccessful?
-      jobs.any?(&:finished_unsuccessfully?)
+      jobs.any?(&:unsuccessful?)
     end
 
     def duration

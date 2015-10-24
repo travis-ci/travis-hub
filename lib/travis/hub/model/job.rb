@@ -7,18 +7,19 @@ require 'travis/hub/model/repository'
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
+  FINISHED_STATES = [:passed, :failed, :errored, :canceled]
+  FAILED_STATES   = FINISHED_STATES - [:passed]
+
   Job.inheritance_column = :unused
 
-  has_one    :log
   belongs_to :repository
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
-
-  states :created, :queued, :received, :started, :passed, :failed, :errored, :canceled, ordered: true
+  has_one    :log
 
   event :receive
   event :start,   after: :propagate
-  event :finish,  after: :propagate
+  event :finish,  after: :propagate, to: [:passed, :failed, :errored]
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
@@ -34,14 +35,14 @@ class Job < ActiveRecord::Base
   end
 
   def finished?
-    [:passed, :failed, :errored, :canceled].include?(state.try(:to_sym))
+    FINISHED_STATES.include?(state.try(:to_sym))
   end
 
-  def finished_unsuccessfully?
-    [:failed, :errored, :canceled].include?(state.try(:to_sym))
+  def unsuccessful?
+    FAILED_STATES.include?(state.try(:to_sym))
   end
 
-  def restart?
+  def restart?(*)
     config_valid?
   end
 
@@ -50,7 +51,7 @@ class Job < ActiveRecord::Base
     log.clear
   end
 
-  def cancel?
+  def cancel?(*)
     !finished?
   end
 
@@ -58,11 +59,12 @@ class Job < ActiveRecord::Base
     self.finished_at = Time.now
   end
 
-  def propagate(event, *args)
-    build.send(:"#{event}!", *args)
-  end
-
   private
+
+    def propagate(event, *args)
+      save!
+      build.send(:"#{event}!", *args)
+    end
 
     def config_valid?
       !config[:'.result'].to_s.include?('error')

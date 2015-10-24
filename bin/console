@@ -2,12 +2,10 @@
 
 $: << 'lib'
 
-require 'pry'
+require 'irb'
 require 'travis/hub'
 
 Travis::Hub::App.setup
 Travis::Hub::App.setup_worker
 
-Pry.config.prompt = Pry::SIMPLE_PROMPT
-Pry.start
-
+IRB.start(__FILE__)
