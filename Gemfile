@@ -19,7 +19,6 @@ gem 'sentry-raven'
 # gem 'simple_states', path: '../../simple_states'
 # gem 'simple_states', '~> 1.1.0.rc10'
 gem 'simple_states', github: 'svenfuchs/simple_states', ref: '2.x'
-gem 'coder'
 gem 'multi_json'
 
 platform :ruby do

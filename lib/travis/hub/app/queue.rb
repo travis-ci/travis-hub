@@ -1,4 +1,3 @@
-require 'coder'
 require 'travis/hub/app/error'
 
 module Travis
@@ -49,8 +48,7 @@ module Travis
           end
 
           def decode(payload)
-            cleaned = Coder.clean(payload)
-            decoded = MultiJson.decode(cleaned)
+            decoded = MultiJson.decode(payload)
             decoded || fail("No payload for #{event.inspect} (#{message.inspect})")
           rescue StandardError => e
             error '[decode error] payload could not be decoded with engine ' \
