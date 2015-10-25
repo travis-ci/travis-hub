@@ -14,9 +14,10 @@ module Travis
         end
 
         def run
-          count.times do
-            Queue.subscribe(queue, &method(:handle))
-          end
+          Queue.subscribe(queue, &method(:handle))
+          # count.times do
+          #   Queue.subscribe(queue, &method(:handle))
+          # end
         end
 
         private
