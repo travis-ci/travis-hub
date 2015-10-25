@@ -15,7 +15,7 @@ module Travis
             "#{QUEUE}.#{number}"
           end
 
-          def handle_event(type, payload)
+          def handle(type, payload)
             payload['worker_count'] == count ? super : requeue(type, payload)
           end
 

@@ -27,15 +27,11 @@ module Travis
           end
 
           def handle(type, payload)
-            with_active_record do
-              handle_event(type, payload)
-            end
-          end
-
-          def handle_event(type, payload)
             type, event = parse_type(type)
-            time(type, event) do
-              handler(type).new(event: event, data: normalize_payload(payload)).run
+            with_active_record do
+              time(type, event) do
+                handler(type).new(event: event, data: normalize_payload(payload)).run
+              end
             end
           end
 

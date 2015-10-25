@@ -14,7 +14,7 @@ module Travis
 
         private
 
-          def handle_event(type, payload)
+          def handle(type, payload)
             id  = ::Job.find(payload.fetch('id')).source_id
             key = queue_for(id % count + 1)
             # puts "Routing #{type} for <Job id=#{payload.fetch('id')}> to #{key}."
