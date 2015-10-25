@@ -4,8 +4,8 @@ module Travis
       class Handler
         attr_reader :type, :event, :payload
 
-        def initialize(type, payload)
-          @type, @event = parse_type(type)
+        def initialize(event, payload)
+          @type, @event = parse_event(event)
           @payload = normalize_payload(payload)
         end
 
@@ -20,19 +20,19 @@ module Travis
         private
 
           def service
-            Service.const_get("Update#{type.to_s.sub(/./) { |char| char.upcase }}")
+            Service.const_get("Update#{camelize(type)}")
           end
 
-          def parse_type(type)
-            parts = normalize_type(type).split(':')
-            unknown_type(type) unless parts.size == 2
+          def parse_event(event)
+            parts = normalize_event(event).split(':')
+            unknown_event(event) unless parts.size == 2
             parts.map(&:to_sym)
           end
 
-          def normalize_type(type)
-            type = type.to_s.gsub(':test', '')
-            type = type.gsub('reset', 'restart') # TODO deprecate :reset
-            type
+          def normalize_event(event)
+            event = event.to_s.gsub(':test', '')
+            event = event.gsub('reset', 'restart') # TODO deprecate :reset
+            event
           end
 
           def normalize_payload(payload)
@@ -41,8 +41,8 @@ module Travis
             payload
           end
 
-          def unknown_type(type)
-            fail("Cannot parse type: #{type.inspect}. Must have the format [type]:[event], e.g. job:start")
+          def unknown_event(event)
+            fail("Cannot parse event: #{event.inspect}. Must have the format [type]:[event], e.g. job:start")
           end
 
           def meter
@@ -55,6 +55,10 @@ module Travis
 
           def with_active_record(&block)
             ActiveRecord::Base.connection_pool.with_connection(&block)
+          end
+
+          def camelize(string)
+            string.to_s.sub(/./) { |char| char.upcase }
           end
       end
     end

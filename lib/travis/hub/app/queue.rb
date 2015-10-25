@@ -43,7 +43,7 @@ module Travis
           end
 
           def decode(payload)
-            cleaned = Coder.clean(payload)
+            cleaned = Coder.clean(payload) # TODO not needed anymore?
             decoded = MultiJson.decode(cleaned)
             decoded
           rescue StandardError => e

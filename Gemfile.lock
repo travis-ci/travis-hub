@@ -200,7 +200,6 @@ DEPENDENCIES
   pg
   rake
   redis
-  redlock
   rspec
   sentry-raven
   sidekiq
