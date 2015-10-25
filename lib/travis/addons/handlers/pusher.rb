@@ -1,4 +1,5 @@
 require 'travis/addons/handlers/base'
+require 'travis/addons/helpers/task'
 require 'travis/addons/serializer/pusher/build'
 require 'travis/addons/serializer/pusher/job'
 
@@ -6,8 +7,6 @@ module Travis
   module Addons
     module Handlers
       class Pusher < Base
-        include Helpers
-
         EVENTS = [
           /^build:(created|received|started|finished|canceled|restarted)/,
           /^job:(created|received|started|finished|canceled|restarted)/

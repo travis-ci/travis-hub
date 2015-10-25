@@ -1,5 +1,5 @@
+require 'travis/metrics'
 require 'travis/event/handler'
-require 'travis/support/metrics'
 
 module Travis
   module Hub

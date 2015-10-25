@@ -1,4 +1,4 @@
-require 'travis/support/instrumentation/instrument'
+require 'travis/instrumentation/instrument'
 
 module Travis
   module Addons

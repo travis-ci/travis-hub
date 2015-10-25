@@ -1,6 +1,6 @@
 require 'travis/event/handler'
 require 'travis/addons/config'
-require 'travis/addons/helpers'
+require 'travis/addons/helpers/task'
 require 'travis/addons/instrument'
 require 'travis/addons/serializer/generic/job'
 require 'travis/addons/serializer/generic/build'
@@ -9,7 +9,7 @@ module Travis
   module Addons
     module Handlers
       class Base < Event::Handler
-        include Helpers
+        include Helpers::Task
 
         def event
           # TODO can this be moved to clients?

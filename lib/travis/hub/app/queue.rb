@@ -4,8 +4,6 @@ module Travis
   module Hub
     module App
       class Queue
-        include Logging
-
         def self.subscribe(queue, options = {}, &handler)
           new(queue, options, &handler).subscribe
         end
@@ -19,8 +17,8 @@ module Travis
         end
 
         def subscribe
-          info "Subscribing to #{queue}."
-          Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
+          logger.info "Subscribing to #{queue}."
+          Travis::Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
         end
 
         private
@@ -51,9 +49,14 @@ module Travis
             decoded = MultiJson.decode(payload)
             decoded || fail("No payload for #{event.inspect} (#{message.inspect})")
           rescue StandardError => e
-            error '[decode error] payload could not be decoded with engine ' \
-                  "#{MultiJson.engine}: #{e.inspect} #{payload.inspect}"
+            # TODO use Exceptions.handle
+            logger.error '[decode error] payload could not be decoded with engine ' \
+              "#{MultiJson.engine}: #{e.inspect} #{payload.inspect}"
             nil
+          end
+
+          def logger
+            Hub.logger # TODO
           end
       end
     end

@@ -1,4 +1,4 @@
-require 'travis/support/amqp'
+require 'travis/amqp'
 
 module Travis
   module Hub
@@ -11,7 +11,7 @@ module Travis
         private
 
           def publisher
-            Amqp::FanoutPublisher.new('worker.commands')
+            Travis::Amqp::FanoutPublisher.new('worker.commands')
           end
       end
     end

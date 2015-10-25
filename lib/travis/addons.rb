@@ -9,7 +9,11 @@ module Travis
 
   module Addons
     class << self
+      attr_reader :config
+
       def setup(config = {})
+        @config = config
+
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore

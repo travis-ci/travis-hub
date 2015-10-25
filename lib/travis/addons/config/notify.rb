@@ -1,9 +1,12 @@
 require 'travis/secure_config'
+require 'travis/addons/helpers/hash'
 
 module Travis
   module Addons
     class Config
       class Notify
+        include Helpers::Hash
+
         DEFAULTS = {
           start:   { email: false,   webhooks: false,   campfire: false,   hipchat: false,   irc: false,   flowdock: false,   sqwiggle: false,   slack: false,   pushover: false   },
           success: { email: :change, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
@@ -14,7 +17,7 @@ module Travis
 
         def initialize(build, config)
           @build = build
-          @config = config.deep_symbolize_keys
+          @config = deep_symbolize_keys(config)
         end
 
         def on?(type, event)

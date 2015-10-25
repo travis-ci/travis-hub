@@ -1,5 +1,4 @@
-require 'metriks'
-require 'travis/support/instrumentation'
+require 'travis/instrumentation'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/service/notify_workers'

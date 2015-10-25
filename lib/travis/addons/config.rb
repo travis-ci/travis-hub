@@ -1,16 +1,18 @@
-require 'core_ext/hash/deep_symbolize_keys'
 require 'travis/secure_config'
 require 'travis/addons/config/notify'
+require 'travis/addons/helpers/hash'
 
 module Travis
   module Addons
     class Config
+      include Helpers::Hash
+
       attr_reader :payload, :build, :secure_key, :config
 
       def initialize(payload, secure_key = nil)
         @payload = payload
         @build = payload[:build]
-        @config = build.fetch(:config, {}).deep_symbolize_keys
+        @config = deep_symbolize_keys(build.fetch(:config, {}))
         @secure_key = secure_key
       end
 

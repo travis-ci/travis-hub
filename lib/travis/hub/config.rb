@@ -14,12 +14,18 @@ module Travis
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
              logger:        { thread_id: true },
+             librato:       {},
              metrics:       { reporter: 'librato' },
              notifications: [],
              repository:    { ssl_key: { size: 4096 } }
 
       def logs_database
         super || database
+      end
+
+      def metrics
+        # TODO cleanup keychain?
+        super.to_h.merge(librato: librato.merge(source: librato_source), graphite: graphite)
       end
 
       # # TODO legacy, upgrade travis-config

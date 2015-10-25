@@ -1,10 +1,6 @@
 require 'unlimited-jce-policy-jdk7' if RUBY_PLATFORM == 'java'
 
-require 'travis/support/database'
-require 'travis/support/exceptions'
-require 'travis/support/instrumentation'
-require 'travis/support/logger'
-
+require 'travis/logger'
 require 'travis/hub/config'
 require 'travis/hub/app'
 require 'travis/hub/model'
@@ -13,6 +9,8 @@ require 'travis/hub/handler/metrics'
 
 module Travis
   module Hub
+    # Context = Struct.new(:config, :features, :logger, :metrics, :redis)
+
     # QUEUE = 'builds.next'
     QUEUE = 'builds'
 
@@ -20,10 +18,6 @@ module Travis
 
     def config
       @config ||= Config.load
-    end
-
-    def env
-      config.env
     end
 
     def logger
@@ -36,7 +30,4 @@ module Travis
 
     extend self
   end
-
-  extend Hub
 end
-

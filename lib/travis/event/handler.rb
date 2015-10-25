@@ -1,12 +1,10 @@
-require 'travis/support/logging'
-require 'travis/support/instrumentation'
-require 'travis/support/exceptions'
+require 'travis/instrumentation'
+require 'travis/exceptions'
 
 module Travis
   module Event
     class Handler
-      include Logging
-      extend  Instrumentation, Exceptions::Handling
+      extend  Instrumentation
 
       class << self
         def register(name, const)
@@ -32,9 +30,10 @@ module Travis
 
       def notify
         handle
+      rescue Exception => e
+        Exceptions.handle(e) # TODO pass in
       end
       instrument :notify, on: [:completed, :failed]
-      rescues :notify, from: Exception
 
       def object
         Kernel.const_get(object_type.camelize).find(params[:id])

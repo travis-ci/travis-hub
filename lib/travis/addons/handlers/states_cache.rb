@@ -1,5 +1,5 @@
-require 'travis/support/states_cache'
 require 'travis/addons/handlers/base'
+require 'travis/hub/support/states_cache'
 
 module Travis
   module Addons

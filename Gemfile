@@ -2,10 +2,16 @@ source 'https://rubygems.org'
 
 ruby '2.2.2', engine: 'jruby', engine_version: '9.0.3.0' if ENV.key?('DYNO')
 
-gem 'travis-support', github: 'travis-ci/travis-support', ref: 'sf-instrumentation'
-gem 'travis-config',  '~> 1.0.0rc1'
-gem 'travis-encrypt', '~> 0.0.1'
-gem 'travis-lock',    '~> 0.1.0'
+gem 'travis-amqp',            path: '../travis-amqp'
+gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
+# gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
+gem 'travis-logger',          path: '../travis-logger'
+gem 'travis-metrics',         path: '../travis-metrics'
+gem 'travis-instrumentation', path: '../travis-instrumentation'
+
+gem 'travis-config'
+gem 'travis-encrypt'
+gem 'travis-lock'
 
 gem 'rake'
 gem 'redis'

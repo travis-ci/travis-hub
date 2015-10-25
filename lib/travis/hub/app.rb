@@ -1,13 +1,15 @@
-require 'travis/support/database'
-require 'travis/support/metrics'
 require 'travis/addons'
 require 'travis/event'
+require 'travis/exceptions'
+require 'travis/instrumentation'
+require 'travis/metrics'
 
 require 'travis/hub/app/dispatcher'
 require 'travis/hub/app/solo'
 require 'travis/hub/app/worker'
 require 'travis/hub/model/log'
 require 'travis/hub/model/log/part'
+require 'travis/hub/support/database'
 require 'travis/hub/support/amqp'
 require 'travis/hub/support/sidekiq'
 
@@ -24,9 +26,9 @@ module Travis
         end
 
         def setup
-          Database.connect(config.database.to_h)
-          Metrics.setup
-          Support::Amqp.setup(config.amqp.to_h)
+          Database.connect(config.database, logger)
+          Metrics.setup(config, logger)
+          Amqp.setup(config.amqp)
         end
 
         def setup_worker
@@ -35,9 +37,9 @@ module Travis
           # TODO what's with the metrics handler. do we still need that? add it to the config?
           Addons.setup(config)
           Event.setup(config.notifications)
-          Exceptions::Reporter.start if config.env == 'production'
+          Exceptions.setup(config, config.env, logger)
           Instrumentation.setup(logger)
-          Support::Sidekiq.setup(config)
+          Sidekiq.setup(config)
         end
 
         def setup_logs_database

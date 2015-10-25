@@ -1,3 +1,4 @@
+require 'active_record'
 require 'travis/addons/model/broadcast'
 require 'travis/addons/model/build'
 require 'travis/addons/model/commit'

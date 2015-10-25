@@ -6,17 +6,40 @@ GIT
     simple_states (2.0.0.rc1)
 
 GIT
-  remote: git://github.com/travis-ci/travis-support.git
-  revision: 96b04f6b07d53918fff6e1bdb749fc5b9c8308a6
-  ref: sf-instrumentation
+  remote: git://github.com/travis-ci/travis-exceptions.git
+  revision: be75aae2fe968ba3f744c195090764e1eb67c923
   specs:
-    travis-support (0.0.1)
+    travis-exceptions (0.0.1)
+      sentry-raven
 
 GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
+
+PATH
+  remote: ../travis-amqp
+  specs:
+    travis-amqp (0.0.1)
+
+PATH
+  remote: ../travis-instrumentation
+  specs:
+    travis-instrumentation (0.0.1)
+      activesupport (~> 4)
+      travis-metrics (~> 0)
+
+PATH
+  remote: ../travis-logger
+  specs:
+    travis-logger (0.0.1)
+
+PATH
+  remote: ../travis-metrics
+  specs:
+    travis-metrics (0.0.1)
+      metriks-librato_metrics (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -169,10 +192,14 @@ DEPENDENCIES
   sentry-raven
   sidekiq
   simple_states!
-  travis-config (~> 1.0.0rc1)
-  travis-encrypt (~> 0.0.1)
-  travis-lock (~> 0.1.0)
-  travis-support!
+  travis-amqp!
+  travis-config
+  travis-encrypt
+  travis-exceptions!
+  travis-instrumentation!
+  travis-lock
+  travis-logger!
+  travis-metrics!
   unlimited-jce-policy-jdk7!
 
 BUNDLED WITH
