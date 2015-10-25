@@ -1,5 +1,6 @@
 require 'travis/hub/app/context'
 require 'travis/hub/app/dispatcher'
+require 'travis/hub/app/handler'
 require 'travis/hub/app/solo'
 require 'travis/hub/app/worker'
 
