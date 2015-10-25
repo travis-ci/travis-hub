@@ -26,4 +26,4 @@ options = {}
 options_parser(options).parse!
 mode = ARGV.shift || :solo
 
-Travis::Hub::App.run(mode.to_sym, options)
+Travis::Hub::App.new(mode.to_sym, options).run

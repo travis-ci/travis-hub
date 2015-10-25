@@ -3,7 +3,7 @@ require 'travis/hub/helper/context'
 
 module Travis
   module Hub
-    module App
+    class App
       class Queue
         include Helper::Context
 

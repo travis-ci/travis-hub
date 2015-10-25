@@ -5,7 +5,7 @@ module Travis
         attr_reader :context
 
         def initialize(context, *args)
-          fail "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(Hub::Context)
+          fail "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(App::Context)
           @context = context
           super(*args)
         end

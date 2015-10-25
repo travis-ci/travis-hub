@@ -1,45 +1,49 @@
 GIT
   remote: git://github.com/svenfuchs/simple_states.git
-  revision: 3d3c42789c57b89c1efec16c56a086972e0f24b5
+  revision: 3f1bf14fb6a633aa7b697e9eecca0677155c7011
   ref: 2.x
   specs:
     simple_states (2.0.0.rc1)
 
 GIT
+  remote: git://github.com/travis-ci/travis-amqp.git
+  revision: 4eaadb995e44bf41d252b5e903b86e0e3950f3ae
+  specs:
+    travis-amqp (0.0.1)
+
+GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: be75aae2fe968ba3f744c195090764e1eb67c923
+  revision: 9ebdfcdd89ace7d45fde01380bbbf1de038988e5
   specs:
     travis-exceptions (0.0.1)
       sentry-raven
+
+GIT
+  remote: git://github.com/travis-ci/travis-instrumentation.git
+  revision: b068fa1b54752a829ceb35532bf5dda85d947f01
+  specs:
+    travis-instrumentation (0.0.1)
+      activesupport (~> 4)
+      travis-metrics (~> 0)
+
+GIT
+  remote: git://github.com/travis-ci/travis-logger.git
+  revision: f363c9f2ab32473d3a1d90b62d74cad5a6235605
+  specs:
+    travis-logger (0.0.1)
+
+GIT
+  remote: git://github.com/travis-ci/travis-metrics.git
+  revision: d2d46f902ddb84217f189f07a42e24d6a6e733c7
+  specs:
+    travis-metrics (0.0.1)
+      metriks-librato_metrics (~> 1.0)
 
 GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
     unlimited-jce-policy-jdk7 (0.1.0)
-
-PATH
-  remote: ../travis-amqp
-  specs:
-    travis-amqp (0.0.1)
-
-PATH
-  remote: ../travis-instrumentation
-  specs:
-    travis-instrumentation (0.0.1)
-      activesupport (~> 4)
-      travis-metrics (~> 0)
-
-PATH
-  remote: ../travis-logger
-  specs:
-    travis-logger (0.0.1)
-
-PATH
-  remote: ../travis-metrics
-  specs:
-    travis-metrics (0.0.1)
-      metriks-librato_metrics (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -105,7 +109,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
-    hashr (2.0.0.rc2)
+    hashr (0.0.22)
     hitimes (1.2.3)
     hitimes (1.2.3-java)
     i18n (0.7.0)
@@ -159,8 +163,8 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.1.1)
       hitimes
-    travis-config (1.0.0.rc1)
-      hashr (~> 2.0.0.rc1)
+    travis-config (0.1.4)
+      hashr (~> 0.0)
     travis-encrypt (0.0.1)
     travis-lock (0.1.0)
       activerecord (~> 4.0)

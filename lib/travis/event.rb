@@ -5,8 +5,11 @@ require 'travis/event/subscription'
 module Travis
   module Event
     class << self
-      def setup(handlers = nil)
-        @handlers = handlers || []
+      attr_reader :logger
+
+      def setup(handlers = [], logger = nil)
+        @logger = logger
+        @handlers = handlers
       end
 
       def handlers
@@ -21,7 +24,7 @@ module Travis
 
       def subscriptions
         @subscriptions ||= handlers.map do |name|
-          subscription = Subscription.new(name)
+          subscription = Subscription.new(name, logger)
           subscription if subscription.subscriber
         end.compact
       end

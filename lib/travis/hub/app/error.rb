@@ -1,6 +1,6 @@
 module Travis
   module Hub
-    module App
+    class App
       class Error < StandardError
         attr_reader :event, :payload, :exception
 

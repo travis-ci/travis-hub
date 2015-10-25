@@ -19,7 +19,7 @@ module Travis
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore
           Event::Handler.register(name, handler)
-          handler.setup if handler.respond_to?(:setup)
+          handler.setup(config, logger) if handler.respond_to?(:setup)
         end
 
         Travis::Encrypt.setup(key: config[:encryption][:key])

@@ -4,11 +4,12 @@ require 'active_support/inflector/inflections.rb'
 module Travis
   module Event
     class Subscription
-      attr_reader :name
+      attr_reader :name, :logger
 
-      def initialize(name)
+      def initialize(name, logger)
         name = 'github_status' if name == 'github_commit_status' # TODO compat, remove once configs have been updated
         @name = name
+        @logger = logger
       end
 
       def subscriber
@@ -38,7 +39,7 @@ module Travis
         # end
 
         def missing_handler
-          Travis.logger.error("Could not find event handler #{name.inspect}, ignoring.")
+          logger.error("Could not find event handler #{name.inspect}, ignoring.")
         end
     end
   end

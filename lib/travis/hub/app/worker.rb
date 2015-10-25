@@ -1,6 +1,6 @@
 module Travis
   module Hub
-    module App
+    class App
       class Worker < Solo
         attr_accessor :count, :number
 

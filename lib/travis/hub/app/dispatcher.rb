@@ -3,7 +3,7 @@ require 'travis/hub/app/solo'
 
 module Travis
   module Hub
-    module App
+    class App
       class Dispatcher < Solo
         attr_accessor :count, :publishers
 

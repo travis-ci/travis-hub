@@ -22,8 +22,8 @@ module Travis
 
     delegate :fetch, :to => :adapter
 
-    def initialize(options = {})
-      @adapter = options[:adapter] || Memcached.new
+    def initialize(config, logger)
+      @adapter = Memcached.new(config, logger)
     end
 
     def write(id, branch, data)
@@ -36,33 +36,15 @@ module Travis
       data['state'].to_sym if data && data['state']
     end
 
-    class Test
-      attr_reader :calls
-      def initialize
-        @calls = []
-      end
-
-      def fetch(id, branch)
-        calls << [:fetch, id, branch]
-      end
-
-      def write(id, branch, data)
-        calls << [:write, id, branch, data]
-      end
-
-      def clear
-        calls.clear
-      end
-    end
-
     class Memcached
-      attr_reader :pool
+      attr_reader :logger, :pool
       attr_accessor :jitter
       attr_accessor :ttl
 
-      def initialize(options = {})
+      def initialize(config, logger)
+        @logger = logger
         @pool = ConnectionPool.new(:size => 10, :timeout => 3) do
-          options[:client] || new_dalli_connection
+          config[:client] || new_dalli_connection(config)
         end
         @jitter = 0.5
         @ttl = 7.days
@@ -77,7 +59,7 @@ module Travis
         build_id = data['id']
         data     = data.to_json
 
-        Travis.logger.info("[states-cache] Caching states for repo_id=#{id} branch=#{branch} build_id=#{build_id}")
+        logger.info("[states-cache] Caching states for repo_id=#{id} branch=#{branch} build_id=#{build_id}")
         set(key(id), data) if update?(id, nil, build_id)
         set(key(id, branch), data) if update?(id, branch, build_id)
       end
@@ -88,13 +70,13 @@ module Travis
         if data
           last_id = data['id'].to_i
           stale   = build_id.to_i >= last_id
-          Travis.logger.info(
+          logger.info(
             "[states-cache] cache is #{stale ? 'stale' : 'fresh' }: repo id=#{id} branch=#{branch}, " \
             "last cached build id=#{last_id}, checked build id=#{build_id}"
           )
           stale
         else
-          Travis.logger.info(
+          logger.info(
             "[states-cache] cache does not exist: repo id=#{id} branch=#{branch}, " \
             "checked build id=#{build_id}"
           )
@@ -112,9 +94,9 @@ module Travis
 
       private
 
-      def new_dalli_connection
-        servers = Travis.config.states_cache.memcached_servers
-        options = Travis.config.states_cache.memcached_options || {}
+      def new_dalli_connection(config)
+        servers = config.states_cache.memcached_servers
+        options = config.states_cache.memcached_options || {}
         Dalli::Client.new(servers, options.to_h)
       end
 
@@ -130,11 +112,11 @@ module Travis
       def set(key, data)
         retry_ring_error do
           pool.with { |client| client.set(key, data) }
-          Travis.logger.info("[states-cache] Setting cache for key=#{key} data=#{data}")
+          logger.info("[states-cache] Setting cache for key=#{key} data=#{data}")
         end
       rescue Dalli::RingError => e
         Metriks.meter("memcached.connect-errors").mark
-        Travis.logger.info("[states-cache] Writing cache key failed key=#{key} data=#{data}")
+        logger.info("[states-cache] Writing cache key failed key=#{key} data=#{data}")
         raise CacheError, "Couldn't connect to a memcached server: #{e.message}"
       end
 

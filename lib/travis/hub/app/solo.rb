@@ -5,7 +5,7 @@ require 'travis/hub/service/update_job'
 
 module Travis
   module Hub
-    module App
+    class App
       class Solo
         include Helper::Context
 
@@ -19,9 +19,6 @@ module Travis
 
         def run
           Queue.new(context, queue, &method(:handle)).subscribe
-          # count.times do
-          #   Queue.subscribe(queue, &method(:handle))
-          # end
         end
 
         private

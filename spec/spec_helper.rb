@@ -3,7 +3,7 @@ require 'time'
 
 require 'database_cleaner'
 require 'support/factories'
-require 'support/logger'
+require 'support/context'
 require 'travis/hub/handler/metrics'
 
 Travis::Event.setup
@@ -18,7 +18,7 @@ NOW = Time.parse('2011-01-01 00:02:00 +0200')
 RSpec.configure do |c|
   c.mock_with :mocha
   c.filter_run_excluding pending: true
-  c.include Support::Logger
+  c.include Support::Context
 
   c.before :each do
     DatabaseCleaner.start

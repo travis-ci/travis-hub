@@ -1,5 +1,5 @@
 require 'travis/addons/handlers/base'
-require 'travis/hub/support/states_cache'
+require 'travis/addons/support/states_cache'
 
 module Travis
   module Addons
@@ -10,8 +10,8 @@ module Travis
         class << self
           attr_reader :states_cache
 
-          def setup
-            @states_cache ||= Travis::StatesCache.new
+          def setup(config, logger)
+            @states_cache ||= Travis::StatesCache.new(config, logger)
           end
         end
 

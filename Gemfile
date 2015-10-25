@@ -2,12 +2,11 @@ source 'https://rubygems.org'
 
 ruby '2.2.2', engine: 'jruby', engine_version: '9.0.3.0' if ENV.key?('DYNO')
 
-gem 'travis-amqp',            path: '../travis-amqp'
+gem 'travis-amqp',            github: 'travis-ci/travis-amqp'
 gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
-# gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
-gem 'travis-logger',          path: '../travis-logger'
-gem 'travis-metrics',         path: '../travis-metrics'
-gem 'travis-instrumentation', path: '../travis-instrumentation'
+gem 'travis-logger',          github: 'travis-ci/travis-logger'
+gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
+gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 
 gem 'travis-config'
 gem 'travis-encrypt'
@@ -22,8 +21,8 @@ gem 'sidekiq'
 gem 'gh'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven'
+# gem 'simple_states', '~> 2.0.0.rc1'
 # gem 'simple_states', path: '../../simple_states'
-# gem 'simple_states', '~> 1.1.0.rc10'
 gem 'simple_states', github: 'svenfuchs/simple_states', ref: '2.x'
 gem 'multi_json'
 
