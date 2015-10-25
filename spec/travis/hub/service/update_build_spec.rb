@@ -1,12 +1,11 @@
 describe Travis::Hub::Service::UpdateBuild do
-  let(:now)    { Time.now }
-  let(:build)  { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
-  let(:job)    { FactoryGirl.create(:job, state: state) }
-  let(:params) { { event: event, data: data } }
-  let(:amqp)   { Travis::Amqp::FanoutPublisher.any_instance }
+  let(:now)   { Time.now }
+  let(:build) { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
+  let(:job)   { FactoryGirl.create(:job, state: state) }
+  let(:amqp)  { Travis::Amqp::FanoutPublisher.any_instance }
 
-  subject      { described_class.new(params) }
-  before       { amqp.stubs(:publish) }
+  subject     { described_class.new(context, event, data) }
+  before      { amqp.stubs(:publish) }
 
   describe 'start event' do
     let(:state) { :created }

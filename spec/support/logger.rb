@@ -5,9 +5,10 @@ module Support
     extend ActiveSupport::Concern
 
     included do
-      let(:stdout) { StringIO.new }
-      before       { Travis::Hub.logger = Travis::Logger.new(stdout) }
-      before       { Travis::Instrumentation.setup(Travis::Hub.logger) }
+      let(:stdout)  { StringIO.new }
+      let(:logger)  { Travis::Logger.new(stdout) }
+      let(:context) { Travis::Hub::Context.new(logger: logger) }
+      before        { Travis::Instrumentation.setup(context.logger) }
     end
   end
 end

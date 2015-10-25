@@ -1,10 +1,9 @@
 describe Travis::Hub::Service::UpdateJob do
-  let(:job)    { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
-  let(:params) { { event: event, data: data } }
-  let(:amqp)   { Travis::Amqp::FanoutPublisher.any_instance }
+  let(:job)  { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
+  let(:amqp) { Travis::Amqp::FanoutPublisher.any_instance }
 
-  subject      { described_class.new(params) }
-  before       { amqp.stubs(:publish) }
+  subject    { described_class.new(context, event, data) }
+  before     { amqp.stubs(:publish) }
 
   describe 'start event' do
     let(:state) { :queued }
@@ -105,14 +104,12 @@ describe Travis::Hub::Service::UpdateJob do
 
   describe 'unordered messages' do
     let(:job)     { FactoryGirl.create(:job, state: :created) }
-    let(:start)   { { event: 'start',   data: { id: job.id, started_at: Time.now } } }
-    let(:receive) { { event: 'receive', data: { id: job.id, received_at: Time.now } } }
-    let(:finish)  { { event: 'finish',  data: { id: job.id, state: 'passed', finished_at: Time.now } } }
+    let(:start)   { [:start,   { id: job.id, started_at: Time.now }] }
+    let(:receive) { [:receive, { id: job.id, received_at: Time.now }] }
+    let(:finish)  { [:finish,  { id: job.id, state: 'passed', finished_at: Time.now }] }
 
     def recieve(msg)
-      # puts Build.all.map(&:id).include?(job.source_id) ? 'Ok' : 'WTF'
-      # p [Job.count, Build.count]
-      described_class.new(msg).run
+      described_class.new(context, *msg).run
     end
 
     it 'works (1)' do

@@ -6,7 +6,7 @@ describe SslKey do
   end
 
   def generate_keys(key)
-    pair = OpenSSL::PKey::RSA.generate(Travis::Hub.config.repository.ssl_key.size)
+    pair = OpenSSL::PKey::RSA.generate(1024)
     key.public_key  = pair.public_key.to_s
     key.private_key = pair.to_pem
   end

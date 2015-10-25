@@ -1,4 +1,5 @@
 require 'travis/instrumentation'
+require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/service/notify_workers'
@@ -6,8 +7,8 @@ require 'travis/hub/service/notify_workers'
 module Travis
   module Hub
     module Service
-      class UpdateJob
-        include Helper::Locking
+      class UpdateJob < Struct.new(:event, :data)
+        include Helper::Context, Helper::Locking
         extend Instrumentation
 
         EVENTS = [:receive, :start, :finish, :cancel, :restart]
@@ -15,14 +16,6 @@ module Travis
         MSGS = {
           skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s',
         }
-
-        attr_reader :event, :data, :job
-
-        def initialize(params)
-          @event = params[:event].try(:to_sym)
-          @data  = normalize_data(params[:data])
-          @job   = Job.find(data[:id])
-        end
 
         def run
           exclusive do
@@ -33,10 +26,14 @@ module Travis
         end
         instrument :run
 
+        def job
+          @job ||= Job.find(data[:id])
+        end
+
         private
 
           def update_job
-            warn :skipped unless job.reload.send(:"#{event}!", attrs)
+            skipped unless job.reload.send(:"#{event}!", attrs)
           end
 
           def attrs
@@ -44,16 +41,11 @@ module Travis
           end
 
           def notify
-            NotifyWorkers.new.cancel(job) if event == :cancel
+            NotifyWorkers.new(context).cancel(job) if event == :cancel
           end
 
           def validate
             EVENTS.include?(event) || unknown_event
-          end
-
-          def normalize_data(data)
-            data.delete(:state) if event == :restart
-            data.symbolize_keys
           end
 
           def exclusive(&block)
@@ -64,8 +56,8 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
-          def warn(msg)
-            Hub.logger.warn MSGS[msg] % [event, job.id, job.state, data[:state], data]
+          def skipped
+            warn :skipped, event, job.id, job.state, data[:state], data
           end
 
           class Instrument < Instrumentation::Instrument

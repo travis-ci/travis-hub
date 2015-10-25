@@ -6,9 +6,8 @@ require 'support/factories'
 require 'support/logger'
 require 'travis/hub/handler/metrics'
 
-Travis::Addons.setup(host: 'host.com', encryption: { key: 'secret' * 10 })
 Travis::Event.setup
-Travis::Hub::Database.connect(Travis::Hub.config.database.to_h)
+Travis::Hub::Database.connect(Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
 DatabaseCleaner.clean_with :truncation
@@ -24,7 +23,7 @@ RSpec.configure do |c|
   c.before :each do
     DatabaseCleaner.start
     Travis::Event.instance_variable_set(:@subscriptions, nil)
-    Travis::Hub.config.repository.ssl_key.size = 1024
+    Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
     Time.stubs(:now).returns(NOW)
   end
 

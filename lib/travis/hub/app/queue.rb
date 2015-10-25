@@ -1,23 +1,24 @@
 require 'travis/hub/app/error'
+require 'travis/hub/helper/context'
 
 module Travis
   module Hub
     module App
       class Queue
-        def self.subscribe(queue, options = {}, &handler)
-          new(queue, options, &handler).subscribe
-        end
+        include Helper::Context
 
-        attr_reader :queue, :options, :handler
+        attr_reader :context, :queue, :options, :handler
 
-        def initialize(queue, options, &handler)
+        def initialize(context, queue, options = {}, &handler)
+          @context = context
           @queue   = queue
           @options = options.merge(ack: true)
           @handler = handler
         end
 
         def subscribe
-          logger.info "Subscribing to #{queue}."
+          info "Subscribing to #{queue}."
+          # TODO use context.amqp
           Travis::Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
         end
 
@@ -37,7 +38,7 @@ module Travis
           rescue Exception => e
             begin
               puts e.message, e.backtrace
-              Exceptions.handle(Error.new(message.properties.type, payload, e))
+              handle_exception(Error.new(message.properties.type, payload, e))
             rescue => e
               puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
             end
@@ -50,13 +51,9 @@ module Travis
             decoded || fail("No payload for #{event.inspect} (#{message.inspect})")
           rescue StandardError => e
             # TODO use Exceptions.handle
-            logger.error '[decode error] payload could not be decoded with engine ' \
+            error '[decode error] payload could not be decoded with engine ' \
               "#{MultiJson.engine}: #{e.inspect} #{payload.inspect}"
             nil
-          end
-
-          def logger
-            Hub.logger # TODO
           end
       end
     end

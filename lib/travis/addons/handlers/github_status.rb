@@ -7,7 +7,7 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          Hub.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
+          Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
           tokens.any?
         end
 

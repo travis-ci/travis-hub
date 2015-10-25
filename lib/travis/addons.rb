@@ -9,10 +9,11 @@ module Travis
 
   module Addons
     class << self
-      attr_reader :config
+      attr_reader :config, :logger
 
-      def setup(config = {})
+      def setup(config, logger)
         @config = config
+        @logger = logger
 
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)

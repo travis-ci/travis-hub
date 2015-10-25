@@ -1,4 +1,5 @@
 require 'travis/instrumentation'
+require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/build'
 require 'travis/hub/service/notify_workers'
@@ -6,19 +7,11 @@ require 'travis/hub/service/notify_workers'
 module Travis
   module Hub
     module Service
-      class UpdateBuild
-        include Helper::Locking
+      class UpdateBuild < Struct.new(:event, :data)
+        include Helper::Context, Helper::Locking
         extend Instrumentation
 
         EVENTS = [:start, :finish, :cancel, :restart]
-
-        attr_reader :event, :data, :build
-
-        def initialize(params)
-          @event = params[:event].try(:to_sym)
-          @data  = params[:data].symbolize_keys
-          @build = Build.find(data[:id])
-        end
 
         def run
           exclusive do
@@ -28,6 +21,10 @@ module Travis
           end
         end
         instrument :run
+
+        def build
+          @build ||= Build.find(data[:id])
+        end
 
         private
 
@@ -48,7 +45,7 @@ module Travis
           end
 
           def exclusive(&block)
-            super("hub:build-#{build.id}", &block)
+            super("hub:build-#{build.id}", config.lock, &block)
           end
 
           def unknown_event

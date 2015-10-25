@@ -1,4 +1,5 @@
 require 'travis/hub/app/queue'
+require 'travis/hub/helper/context'
 require 'travis/hub/service/update_build'
 require 'travis/hub/service/update_job'
 
@@ -6,15 +7,18 @@ module Travis
   module Hub
     module App
       class Solo
-        attr_reader :name, :count
+        include Helper::Context
 
-        def initialize(name, options)
+        attr_reader :context, :name, :count
+
+        def initialize(context, name, options)
+          @context = context
           @name  = name
           @count = options[:count] || 1
         end
 
         def run
-          Queue.subscribe(queue, &method(:handle))
+          Queue.new(context, queue, &method(:handle)).subscribe
           # count.times do
           #   Queue.subscribe(queue, &method(:handle))
           # end
@@ -30,7 +34,7 @@ module Travis
             type, event = parse_type(type)
             with_active_record do
               time(type, event) do
-                handler(type).new(event: event, data: normalize_payload(payload)).run
+                handler(type).new(context, event, normalize_payload(payload)).run
               end
             end
           end
@@ -52,21 +56,22 @@ module Travis
           end
 
           def normalize_payload(payload)
-            payload['state'] = nil        if payload['state'] == 'reset'
-            payload['state'] = 'canceled' if payload['state'] == 'cancelled'
+            payload = payload.symbolize_keys
+            payload.delete(:state)       if payload[:state] == 'reset'
+            payload[:state] = 'canceled' if payload[:state] == 'cancelled'
             payload
           end
 
           def unknown_type(type)
-            fail("Cannot parse type: #{type.inspect}. Must have the format [type]:[event], e.g. job:start")
+            fail "Cannot parse type: #{type.inspect}. Must have the format [type]:[event], e.g. job:start"
           end
 
           def time(type, event, &block)
             started_at = Time.now
             yield
             options = { started_at: started_at, finished_at: Time.now }
-            Metrics.meter("hub.#{name}.handle.#{type}", options)
-            Metrics.meter("hub.#{name}.handle.#{type}.#{event}", options)
+            meter("hub.#{name}.handle.#{type}", options)
+            meter("hub.#{name}.handle.#{type}.#{event}", options)
           end
 
           def with_active_record(&block)

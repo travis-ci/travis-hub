@@ -7,7 +7,7 @@ module Travis
       class Dispatcher < Solo
         attr_accessor :count, :publishers
 
-        def initialize(name, options)
+        def initialize(context, name, options)
           super
           @publishers = setup_publishers
         end
@@ -19,7 +19,7 @@ module Travis
             key = queue_for(id % count + 1)
             # puts "Routing #{type} for <Job id=#{payload.fetch('id')}> to #{key}."
             publishers[key].publish(payload.merge(worker_count: count), properties: { type: type })
-            meter(key)
+            meter("hub.#{name}.delegate.#{key}")
           end
 
           def setup_publishers
@@ -31,10 +31,6 @@ module Travis
 
           def queue_for(num)
             "#{QUEUE}.#{num}"
-          end
-
-          def meter(key)
-            Metrics.meter("hub.#{name}.delegate.#{key}")
           end
       end
     end

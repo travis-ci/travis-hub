@@ -1,31 +1,21 @@
 require 'unlimited-jce-policy-jdk7' if RUBY_PLATFORM == 'java'
-
-require 'travis/logger'
-require 'travis/hub/config'
 require 'travis/hub/app'
-require 'travis/hub/model'
-require 'travis/hub/service'
-require 'travis/hub/handler/metrics'
 
 module Travis
   module Hub
-    # Context = Struct.new(:config, :features, :logger, :metrics, :redis)
-
     # QUEUE = 'builds.next'
     QUEUE = 'builds'
 
-    attr_reader :logger
+    attr_accessor :context
 
     def config
-      @config ||= Config.load
+      puts "Calling Hub.config is deprected. Called from #{caller.first}"
+      context.config
     end
 
     def logger
-      @logger ||= Logger.configure(Travis::Logger.new(STDOUT))
-    end
-
-    def logger=(logger)
-      @logger = Logger.configure(logger)
+      puts "Calling Hub.logger is deprected. Called from #{caller.first}"
+      context.logger
     end
 
     extend self
