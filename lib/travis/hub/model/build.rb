@@ -59,7 +59,7 @@ class Build < ActiveRecord::Base
   private
 
     def matrix
-      @matrix ||= Matrix.new(jobs, config[:matrix])
+      Matrix.new(jobs, config[:matrix])
     end
 
     def config_valid?

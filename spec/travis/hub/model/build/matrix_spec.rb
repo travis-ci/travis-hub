@@ -1,6 +1,19 @@
 describe Build::Matrix do
+  let(:config) { {} }
   let(:jobs)   { attrs.map { |attrs| FactoryGirl.create(:job, attrs) } }
   let(:matrix) { described_class.new(jobs, config) }
+
+  describe 'duration' do
+    let(:attrs) do
+      [
+        { state: :passed, started_at: Time.now, finished_at: nil },
+        { state: :passed, started_at: Time.now, finished_at: Time.now + 60 },
+        { state: :passed, started_at: Time.now, finished_at: Time.now + 120 }
+      ]
+    end
+
+    it { expect(matrix.duration).to eq 180 }
+  end
 
   describe 'with all jobs being required' do
     describe 'with all jobs being :started' do

@@ -5,8 +5,7 @@ class Build < ActiveRecord::Base
     end
 
     def duration
-      # jobs.map(&:duration).map(&:to_i).inject(&:+) if finished?
-      finished? ? jobs.inject(0) { |duration, job| duration + job.duration.to_i } : nil
+      jobs.map(&:duration).map(&:to_i).inject(&:+) if finished?
     end
 
     def state
@@ -46,7 +45,7 @@ class Build < ActiveRecord::Base
     end
 
     def to_s
-      "Invalid build matrix state detected. Jobs:\n\t#{jobs.map { |job| format(job) }.join}"
+      "Invalid build matrix state detected. Jobs:\n\t#{jobs.map { |job| format(job) }.join("\n")}"
     end
 
     private
