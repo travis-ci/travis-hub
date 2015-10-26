@@ -8,7 +8,6 @@ class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
   FINISHED_STATES = [:passed, :failed, :errored, :canceled]
-  FAILED_STATES   = FINISHED_STATES - [:passed]
 
   Job.inheritance_column = :unused
 
@@ -36,10 +35,6 @@ class Job < ActiveRecord::Base
 
   def finished?
     FINISHED_STATES.include?(state.try(:to_sym))
-  end
-
-  def unsuccessful?
-    FAILED_STATES.include?(state.try(:to_sym))
   end
 
   def restart?(*)

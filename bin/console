@@ -5,7 +5,7 @@ $: << 'lib'
 require 'irb'
 require 'travis/hub'
 
-Travis::Hub::App.setup
-Travis::Hub::App.setup_worker
+context = Travis::Hub::App::Context.new
+context.setup
 
 IRB.start(__FILE__)
