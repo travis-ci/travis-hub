@@ -32,8 +32,10 @@ module Travis
       private
 
         def serialize(object)
+          # TODO this does not add all the stuff that is added on the subclasses (e.g. webhook targets)
           pairs = { id: object.id }
           pairs[:number] = object.number if object.respond_to?(:number)
+          pairs[:state] = object.state if object.respond_to?(:state)
           pairs[:repo] = repo.slug if repo
           "#<#{object.class.name} #{pairs.map { |key, value| [key, value].join('=') }.join(' ')}>"
         end
