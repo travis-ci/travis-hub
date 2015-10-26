@@ -31,7 +31,9 @@ module Travis
             type, event = parse_type(type)
             with_active_record do
               time(type, event) do
-                handler(type).new(context, event, normalize_payload(payload)).run
+                payload = normalize_payload(payload)
+                # event = :cancel if payload[:state].to_s == 'canceled' # wtf.
+                handler(type).new(context, event, payload).run
               end
             end
           end

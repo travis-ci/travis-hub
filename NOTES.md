@@ -8,6 +8,7 @@
 
 # BUGS
 
+* We have an event cancel, but workers send job:finish with state=cancel. Also notifications don't respond to cancel.
 * For a cancelled build, does restarting it send out notifications??
 
 # REFACTOR
