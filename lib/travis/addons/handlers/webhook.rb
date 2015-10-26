@@ -21,6 +21,8 @@ module Travis
 
         def payload
           Serializer::Webhook::Build.new(object).data
+        rescue Java::OrgBouncycastleCrypto::DataLengthException => e
+          Travis.logger.info("#{e} caught; object #{object.inspect}")
         end
 
         class Instrument < Addons::Instrument
