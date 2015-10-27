@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/svenfuchs/simple_states.git
-  revision: 3f1bf14fb6a633aa7b697e9eecca0677155c7011
+  revision: 2da2bef75492c2d17121c84cef3b1bb176631c87
   ref: 2.x
   specs:
     simple_states (2.0.0.rc1)
