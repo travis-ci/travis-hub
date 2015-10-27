@@ -16,7 +16,7 @@ module Travis
           end
 
           def handle(type, payload)
-            payload['worker_count'] == count ? super : requeue(type, payload)
+            payload.delete('worker_count') == count ? super : requeue(type, payload)
           end
 
           def requeue(type, payload)
