@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$: << 'lib'
+
+require 'irb'
+require 'travis/hub'
+
+context = Travis::Hub::App::Context.new
+context.setup
+
+IRB.start(__FILE__)

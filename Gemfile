@@ -1,44 +1,47 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3', engine: 'jruby', engine_version: '1.7.16' if ENV.key?('DYNO')
+ruby '2.2.2', engine: 'jruby', engine_version: '9.0.3.0' if ENV.key?('DYNO')
 
-gem 'travis-core',        github: 'travis-ci/travis-core'
-gem 'unlimited-jce-policy-jdk7', github: 'travis-ci/unlimited-jce-policy-jdk7'
+gem 'travis-amqp',            github: 'travis-ci/travis-amqp'
+gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
+gem 'travis-logger',          github: 'travis-ci/travis-logger'
+gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
+gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 
-gem 'travis-support',     github: 'travis-ci/travis-support'
-gem 'travis-config',      '~> 0.1.0'
-gem 'travis-sidekiqs',    github: 'travis-ci/travis-sidekiqs', require: nil
+gem 'travis-config'
+gem 'travis-encrypt'
+gem 'travis-lock'
 
+gem 'rake'
+gem 'redis'
 gem 'dalli'
-
-gem 'sentry-raven',       github: 'getsentry/raven-ruby'
-gem 'metriks-librato_metrics'
-gem 'rails_12factor'
-
-# can't be removed yet, even though we're on jruby 1.6.7 everywhere
-# this is due to Invalid gemspec errors
-gem 'rollout',            github: 'jamesgolick/rollout', ref: 'v1.1.0'
+gem 'activerecord'
 gem 'sidekiq'
 
-gem 'march_hare',         '~> 2.0.0.rc2'
-gem 'jruby-openssl',      '~> 0.8.8', require: false
+gem 'gh'
+gem 'metriks-librato_metrics'
+gem 'sentry-raven'
+# gem 'simple_states', '~> 2.0.0.rc1'
+# gem 'simple_states', path: '../../simple_states'
+gem 'simple_states', github: 'svenfuchs/simple_states', ref: '2.x'
+gem 'multi_json'
 
-# see http://www.ruby-forum.com/topic/4409725
-gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.0'
-
-gem 'coder',              github: 'rkh/coder'
-
-group :test do
-  gem 'database_cleaner', '~> 0.8.0'
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'mocha',            '~> 0.10.0'
-  gem 'rspec',            '~> 2.7.0'
-  gem 'rubocop',          require: false
-  gem 'simplecov',        require: false
-  gem 'webmock',          '~> 1.8.0'
+platform :ruby do
+  gem 'pg'
+  gem 'jemalloc'
 end
 
-group :development, :test do
-  gem 'micro_migrations'
+platform :jruby do
+  gem 'march_hare'
+  gem 'jruby-openssl', require: false
+  gem 'activerecord-jdbcpostgresql-adapter'
+  gem 'unlimited-jce-policy-jdk7', github: 'travis-ci/unlimited-jce-policy-jdk7'
+end
+
+group :test do
+  gem 'rspec'
+  gem 'mocha'
+  gem 'database_cleaner'
+  gem 'factory_girl'
+  gem 'bunny', platform: :ruby
 end

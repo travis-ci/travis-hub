@@ -1,30 +1,33 @@
-ENV['RAILS_ENV'] ||= 'test'
-
-require 'simplecov' if ENV['RAILS_ENV'] == 'test' && ENV['COVERAGE']
-
 require 'travis/hub'
-require 'travis/testing'
-require 'travis/support'
-require 'support/active_record'
-require 'support/payloads'
-require 'stringio'
-require 'mocha'
-require 'travis/testing/matchers'
+require 'time'
 
-Travis.logger = Logger.new(StringIO.new)
-Travis.services = Travis::Services
+require 'database_cleaner'
+require 'support/factories'
+require 'support/context'
+require 'travis/hub/handler/metrics'
 
-include Mocha::API
+Travis::Event.setup
+Travis::Hub::Database.connect(Travis::Hub::Config.new.database.to_h)
+# ActiveRecord::Base.logger = Logger.new('log/test.db.log')
+
+DatabaseCleaner.clean_with :truncation
+DatabaseCleaner.strategy = :transaction
+
+NOW = Time.parse('2011-01-01 00:02:00 +0200')
 
 RSpec.configure do |c|
   c.mock_with :mocha
+  c.filter_run_excluding pending: true
+  c.include Support::Context
 
-  c.before(:each) do
-    Time.now.utc.tap { |now| Time.stubs(:now).returns(now) }
+  c.before :each do
+    DatabaseCleaner.start
+    Travis::Event.instance_variable_set(:@subscriptions, nil)
+    Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
+    Time.stubs(:now).returns(NOW)
   end
 
   c.after :each do
-    Travis.config.notifications.clear
-    Travis::Event.instance_variable_set(:@subscriptions, nil)
+    DatabaseCleaner.clean
   end
 end

@@ -1,4 +1,0 @@
-- tag: 'bundle-missing-rake'
-  pattern: 'rake is not part of the bundle'
-  message: 'Your Gemfile is missing Rake.'
-   

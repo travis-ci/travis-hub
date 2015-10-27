@@ -1,0 +1,32 @@
+{
+  "name": "Hub RabbitMQ Queues",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "v1.travis.rabbitmq.queues.reporting.jobs.builds.1.messages",
+      "type": "gauge",
+      "source": "travis-hub-next-production.*",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "v1.travis.rabbitmq.queues.reporting.jobs.builds.1.messages_ready",
+      "type": "gauge",
+      "source": "travis-hub-next-production.*",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "v1.travis.rabbitmq.queues.reporting.jobs.builds.1.messages_unacked",
+      "type": "gauge",
+      "source": "travis-hub-next-production.*",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}"
+    }
+  ]
+}

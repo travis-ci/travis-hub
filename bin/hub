@@ -4,13 +4,26 @@ $stdout.sync = true
 
 $LOAD_PATH << 'lib'
 
+require 'optparse'
 require 'bundler/setup'
 require 'travis/hub'
 
-app = Travis::Hub.new(ARGV[0], ARGV[1], ARGV[2])
+def options_parser(options)
+  options[:retries] = 3
 
-Travis.logger.info('[hub] setting up hub app')
-app.setup
+  OptionParser.new do |o|
+    o.on('-n', '--number NUMBER', 'Worker number') do |number|
+      options[:number] = number[/\d+/].to_i
+    end
 
-Travis.logger.info('[hub] start crunching away')
-app.run
+    o.on('-c', '--count COUNT', 'Workers count') do |count|
+      options[:count] = count[/\d+/].to_i
+    end
+  end
+end
+
+options = {}
+options_parser(options).parse!
+mode = ARGV.shift || :solo
+
+Travis::Hub::App.new(mode.to_sym, options).run

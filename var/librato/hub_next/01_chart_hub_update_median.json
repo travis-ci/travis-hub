@@ -1,0 +1,18 @@
+{
+  "name": "Hub Update median",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "hub.worker.handle.median",
+      "type": "gauge",
+      "source": "travis-hub-next-production.*",
+      "group_function": "average",
+      "summary_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}"
+    }
+  ]
+}

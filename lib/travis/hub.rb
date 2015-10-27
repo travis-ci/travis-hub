@@ -1,30 +1,23 @@
-require 'multi_json'
-
-require 'travis'
-
-Travis.logger.info('[hub] loading dependencies')
-require 'travis/model'
-require 'travis/states_cache'
-require 'travis/support/amqp'
-require 'travis/hub/queue'
-require 'travis/hub/error'
-require 'travis/hub/solo'
-require 'travis/hub/worker'
-require 'travis/hub/dispatcher'
-require 'travis/hub/enqueue'
-require 'core_ext/kernel/run_periodically'
-Travis.logger.info('[hub] done loading dependencies')
-
-$stdout.sync = true
+require 'unlimited-jce-policy-jdk7' if RUBY_PLATFORM == 'java'
+require 'travis/hub/app'
 
 module Travis
   module Hub
-    TYPES = { 'solo' => Solo, 'worker' => Worker, 'dispatcher' => Dispatcher, 'enqueue' => Enqueue }
-    extend self
+    # QUEUE = 'builds.next'
+    QUEUE = 'builds'
 
-    def new(type = nil, *args)
-      type ||= 'solo'
-      TYPES.fetch(type).new(type, *args)
+    attr_accessor :context
+
+    def config
+      puts "Calling Hub.config is deprected. Called from #{caller.first}"
+      context.config
     end
+
+    def logger
+      puts "Calling Hub.logger is deprected. Called from #{caller.first}"
+      context.logger
+    end
+
+    extend self
   end
 end

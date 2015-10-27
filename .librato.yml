@@ -1,0 +1,27 @@
+spaces:
+  # -
+  #   name: Hub
+  #   order:
+  #     - hub_updates_count
+  #     - hub_update_median
+  #     - hub_update_95th_percentile
+  #     - hub_rabbitmq_queues
+  #     - hub_load_average_5m
+  #     - hub_memory_total
+  #     - postgres_load_avg
+  -
+    name: Hub next
+
+accounts:
+  org:
+    user: mathias@travis-ci.org
+    vars:
+      app: travis-hub
+      db_source: travis-production.heroku_postgresql_white
+      db_name: white
+  com:
+    user: mathias@travis-ci.com
+    vars:
+      app: travis-pro-hub
+      db_source: travis-pro-production.heroku_postgresql_maroon
+      db_name: maroon

@@ -1,29 +1,10 @@
 sudo: false
 language: ruby
+
 rvm:
-  - jruby-1.7.16
-  - jruby-head
-jdk: openjdk7
-
-cache:
-  - bundler
-
-env:
-  global:
-  - COVERAGE=1
-  matrix:
-  - RAKE_TASK=spec
-  - RAKE_TASK=rubocop
-
-matrix:
-  allow_failures:
-  - rvm: jruby-head
-    env: RAKE_TASK=rubocop
-  - rvm: jruby-1.7.16
-    env: RAKE_TASK=rubocop
-  - rvm: jruby-head
-    env: RAKE_TASK=spec
-  fast_finish: true
+  - 2.2
+  - jruby-1.7
+  - jruby-9.0.3.0
 
 services:
   - redis
@@ -31,11 +12,14 @@ services:
 addons:
   postgresql: 9.3
 
+cache:
+  - bundler
+
+before_install:
+  - which bundle || gem install bundler
+
 before_script:
-  - 'RAILS_ENV=test bundle exec rake db:create db:structure:load --trace'
+  - psql -q < spec/support/db.sql
 
-script: ./build.sh $RAKE_TASK
-
-notifications:
-  irc: "irc.freenode.org#travis"
-
+script:
+  - bundle exec rspec --require spec_helper
