@@ -28,6 +28,7 @@ module Travis
           end
 
           def handle(type, payload)
+            puts "MSG #{type.inspect} #{payload.inspect}"
             type, event = parse_type(type)
             with_active_record do
               time(type, event) do
