@@ -8,6 +8,8 @@ require 'travis/encrypt'
 class SslKey < ActiveRecord::Base
   include Travis::Encrypt::Helpers::ActiveRecord
 
+  belongs_to :repository
+
   attr_encrypted :private_key
 
   def encode(string)
