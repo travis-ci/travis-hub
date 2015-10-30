@@ -9,6 +9,10 @@ module Travis
   class SecureConfig < Struct.new(:key)
     require 'travis/secure_config/obfuscate'
 
+    MSGS = {
+      decrypt_failed: 'Error decrypting config value for %s: %s'
+    }
+
     class << self
       def decrypt(config, key)
         new(key).decrypt(config)
@@ -50,6 +54,9 @@ module Travis
         else
           element
         end
+      rescue => e
+        Travis::Addons.logger.warn(MSGS[:decrypt_failed] % [key.repository.slug, string])
+        nil
       end
 
       def process(result, key, value)
