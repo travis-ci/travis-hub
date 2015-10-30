@@ -54,9 +54,6 @@ module Travis
         else
           element
         end
-      rescue => e
-        Travis::Addons.logger.warn(MSGS[:decrypt_failed] % [key.repository.slug, string])
-        nil
       end
 
       def process(result, key, value)
@@ -71,15 +68,18 @@ module Travis
       end
 
       def decrypt_value(value)
-        decoded = Base64.decode64(value)
         # TODO should probably be checked earlier
-        if key.respond_to?(:decrypt)
-          key.decrypt(decoded)
-        else
-          puts "Can not decrypt secure config value: #{value.inspect[0..10]} using key: #{key.inspect[0..10]}"
-        end
-      rescue OpenSSL::PKey::RSAError => e
-        value
+        raise unless key.respond_to?(:decrypt)
+        decoded = Base64.decode64(value)
+        result = key.decrypt(decoded)
+        result || raise
+      rescue => e
+        decrypt_failed(value)
+        nil
+      end
+
+      def decrypt_failed(value)
+        Travis::Addons.logger.warn(MSGS[:decrypt_failed] % [self.key.try(:repository).try(:slug), value])
       end
 
       def secure_key?(key)
