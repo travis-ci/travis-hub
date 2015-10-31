@@ -79,7 +79,7 @@ module Travis
       end
 
       def decrypt_failed(value)
-        Travis::Addons.logger.warn(MSGS[:decrypt_failed] % [self.key.try(:repository).try(:slug), value])
+        Travis::Addons.logger.error(MSGS[:decrypt_failed] % [self.key.try(:repository).try(:slug), value])
       end
 
       def secure_key?(key)
