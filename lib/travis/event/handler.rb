@@ -1,5 +1,6 @@
 require 'travis/instrumentation'
 require 'travis/exceptions'
+require 'travis/event/error'
 
 module Travis
   module Event
@@ -31,7 +32,7 @@ module Travis
       def notify
         handle
       rescue Exception => e
-        Exceptions.handle(e) # TODO pass in
+        Exceptions.handle(Error.new(e, event, params)) # TODO pass in
       end
       instrument :notify, on: [:completed, :failed]
 

@@ -2,28 +2,20 @@ module Travis
   module Hub
     class App
       class Error < StandardError
-        attr_reader :event, :payload, :exception
+        extend Forwardable
 
-        def initialize(event, payload, exception)
-          @event = event
-          @payload = payload
+        def_delegators :exception, :message, :backtrace, :class
+
+        attr_reader :exception, :event, :params
+
+        def initialize(exception, event, params)
           @exception = exception
-        end
-
-        def message
-          exception.message
-        end
-
-        def backtrace
-          exception.backtrace
-        end
-
-        def class
-          exception.class
+          @event = event
+          @params = params
         end
 
         def metadata
-          { 'payload' => payload, 'event' => event }
+          { event: event, payload: payload }
         end
       end
     end
