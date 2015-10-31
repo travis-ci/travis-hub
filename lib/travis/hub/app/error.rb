@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Travis
   module Hub
     class App
