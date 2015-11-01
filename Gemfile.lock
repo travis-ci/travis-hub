@@ -109,7 +109,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
-    hashr (2.0.0.rc2)
+    hashr (2.0.0)
     hitimes (1.2.3)
     hitimes (1.2.3-java)
     i18n (0.7.0)
@@ -163,8 +163,8 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.1.1)
       hitimes
-    travis-config (1.0.0.rc1)
-      hashr (~> 2.0.0.rc1)
+    travis-config (1.0.1)
+      hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
     travis-lock (0.1.0)
       activerecord (~> 4.0)
@@ -197,7 +197,7 @@ DEPENDENCIES
   sidekiq
   simple_states!
   travis-amqp!
-  travis-config (~> 1.0.0rc1)
+  travis-config
   travis-encrypt
   travis-exceptions!
   travis-instrumentation!
