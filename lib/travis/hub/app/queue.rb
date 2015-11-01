@@ -37,7 +37,6 @@ module Travis
             Timeout.timeout(options[:timeout] || 60, &block)
           rescue Exception => e
             begin
-              puts e.message, e.backtrace
               handle_exception(Error.new(e, message.properties.type, payload))
             rescue => e
               puts "!!!FAILSAFE!!! #{e.message}", e.backtrace

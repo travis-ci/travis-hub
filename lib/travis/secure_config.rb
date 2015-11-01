@@ -79,6 +79,7 @@ module Travis
       end
 
       def decrypt_failed(value)
+        # TODO make this an exception on the level :warning
         Travis::Addons.logger.error(MSGS[:decrypt_failed] % [self.key.try(:repository).try(:slug), value])
       end
 

@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/svenfuchs/simple_states.git
-  revision: 2da2bef75492c2d17121c84cef3b1bb176631c87
-  ref: 2.x
-  specs:
-    simple_states (2.0.0.rc1)
-
-GIT
   remote: git://github.com/travis-ci/travis-amqp.git
   revision: 4eaadb995e44bf41d252b5e903b86e0e3950f3ae
   specs:
@@ -13,7 +6,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: f3243de7535ed131fe2983bb79dc2b85a5c347cc
+  revision: 86e7f5d414800ab27eab8e189b55d1ecc27bd836
+  ref: sf-refactor
   specs:
     travis-exceptions (0.0.1)
       sentry-raven
@@ -159,6 +153,7 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    simple_states (2.0.0)
     thread_safe (0.3.5)
     thread_safe (0.3.5-java)
     timers (4.1.1)
@@ -195,7 +190,7 @@ DEPENDENCIES
   rspec
   sentry-raven
   sidekiq
-  simple_states!
+  simple_states
   travis-amqp!
   travis-config
   travis-encrypt
