@@ -88,6 +88,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.5)
       timers (>= 4.1.1)
+    coder (0.4.0)
     connection_pool (2.2.0)
     dalli (2.7.4)
     database_cleaner (1.5.1)
@@ -174,6 +175,7 @@ DEPENDENCIES
   activerecord
   activerecord-jdbcpostgresql-adapter
   bunny
+  coder
   dalli
   database_cleaner
   factory_girl

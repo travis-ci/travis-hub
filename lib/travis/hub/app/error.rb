@@ -8,12 +8,12 @@ module Travis
 
         def_delegators :exception, :message, :backtrace, :class
 
-        attr_reader :exception, :event, :params, :options
+        attr_reader :exception, :event, :payload, :options
 
-        def initialize(exception, event, params, options = {})
+        def initialize(exception, event, payload, options = {})
           @exception = exception
           @event = event
-          @params = params
+          @payload = payload
           @options = options
         end
 
