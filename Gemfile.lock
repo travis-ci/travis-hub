@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 86e7f5d414800ab27eab8e189b55d1ecc27bd836
+  revision: d9d077e003e33daf28265aab3c828cfc3572bf03
   ref: sf-refactor
   specs:
     travis-exceptions (0.0.1)
