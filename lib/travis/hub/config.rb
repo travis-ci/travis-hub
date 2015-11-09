@@ -25,7 +25,7 @@ module Travis
 
       def metrics
         # TODO cleanup keychain?
-        super.to_h.merge(librato: librato.merge(source: librato_source), graphite: graphite)
+        super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)
       end
 
       # # TODO legacy, upgrade travis-config
