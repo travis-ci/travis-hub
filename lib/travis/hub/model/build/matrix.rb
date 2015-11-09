@@ -31,7 +31,8 @@ class Build < ActiveRecord::Base
       end
 
       def fast_finish?
-        !![config || {}].flatten.first[:fast_finish]
+        config = [self.config || {}].flatten.first
+        !!config[:fast_finish] if config.is_a?(Hash) # TODO travis-yaml
       end
   end
 

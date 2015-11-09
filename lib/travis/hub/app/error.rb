@@ -1,29 +1,32 @@
+require 'forwardable'
+
 module Travis
   module Hub
     class App
       class Error < StandardError
-        attr_reader :event, :payload, :exception
+        extend Forwardable
 
-        def initialize(event, payload, exception)
+        def_delegators :exception, :message, :backtrace, :class
+
+        attr_reader :exception, :event, :payload, :options
+
+        def initialize(exception, event, payload, options = {})
+          @exception = exception
           @event = event
           @payload = payload
-          @exception = exception
+          @options = options
         end
 
-        def message
-          exception.message
+        def level
+          options[:level] || :error
         end
 
-        def backtrace
-          exception.backtrace
+        def data
+          { event: event, payload: payload }
         end
 
-        def class
-          exception.class
-        end
-
-        def metadata
-          { 'payload' => payload, 'event' => event }
+        def tags
+          { app: :hub, context: :app }.merge(options[:tags] || {})
         end
       end
     end

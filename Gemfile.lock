@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/svenfuchs/simple_states.git
-  revision: 2da2bef75492c2d17121c84cef3b1bb176631c87
-  ref: 2.x
-  specs:
-    simple_states (2.0.0.rc1)
-
-GIT
   remote: git://github.com/travis-ci/travis-amqp.git
   revision: 4eaadb995e44bf41d252b5e903b86e0e3950f3ae
   specs:
@@ -13,7 +6,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 9ebdfcdd89ace7d45fde01380bbbf1de038988e5
+  revision: d9d077e003e33daf28265aab3c828cfc3572bf03
+  ref: sf-refactor
   specs:
     travis-exceptions (0.0.1)
       sentry-raven
@@ -28,13 +22,13 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-logger.git
-  revision: f363c9f2ab32473d3a1d90b62d74cad5a6235605
+  revision: 765046a4746617a70395fe2200e8a91dc416f1b3
   specs:
     travis-logger (0.0.1)
 
 GIT
   remote: git://github.com/travis-ci/travis-metrics.git
-  revision: f175346b0e2d0dbdc3fe4bee2cae40e23681b18e
+  revision: b0daa726bd285f1fa913fab713b5c216f5083ae4
   specs:
     travis-metrics (0.0.1)
       metriks-librato_metrics (~> 1.0)
@@ -94,6 +88,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.5)
       timers (>= 4.1.1)
+    coder (0.4.0)
     connection_pool (2.2.0)
     dalli (2.7.4)
     database_cleaner (1.5.1)
@@ -109,7 +104,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
-    hashr (0.0.22)
+    hashr (2.0.0)
     hitimes (1.2.3)
     hitimes (1.2.3-java)
     i18n (0.7.0)
@@ -118,7 +113,7 @@ GEM
     jruby-openssl (0.9.12-java)
     json (1.8.3)
     json (1.8.3-java)
-    march_hare (2.13.0-java)
+    march_hare (2.15.0-java)
     metaclass (0.0.4)
     metriks (0.9.9.7)
       atomic (~> 1.0)
@@ -126,7 +121,7 @@ GEM
       hitimes (~> 1.1)
     metriks-librato_metrics (1.0.5)
       metriks (>= 0.9.9.6)
-    minitest (5.8.1)
+    minitest (5.8.2)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.11.2)
@@ -153,18 +148,19 @@ GEM
     rspec-support (3.3.0)
     sentry-raven (0.15.2)
       faraday (>= 0.7.6)
-    sidekiq (3.5.1)
+    sidekiq (3.5.3)
       celluloid (~> 0.17.2)
       connection_pool (~> 2.2, >= 2.2.0)
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    simple_states (2.0.0)
     thread_safe (0.3.5)
     thread_safe (0.3.5-java)
     timers (4.1.1)
       hitimes
-    travis-config (0.1.4)
-      hashr (~> 0.0)
+    travis-config (1.0.1)
+      hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
     travis-lock (0.1.0)
       activerecord (~> 4.0)
@@ -179,6 +175,7 @@ DEPENDENCIES
   activerecord
   activerecord-jdbcpostgresql-adapter
   bunny
+  coder
   dalli
   database_cleaner
   factory_girl
@@ -195,7 +192,7 @@ DEPENDENCIES
   rspec
   sentry-raven
   sidekiq
-  simple_states!
+  simple_states
   travis-amqp!
   travis-config
   travis-encrypt
