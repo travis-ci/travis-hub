@@ -27,8 +27,8 @@ module Travis
 
           def receive(message, payload)
             failsafe(message, payload) do
-              type = message.properties.type
-              payload = decode(payload) || fail("No payload for #{message.inspect} (payload: #{payload.inspect})")
+              type = message.properties.type || fail("No type given on #{message.properties.inspect} (payload: #{payload.inspect})")
+              payload = decode(payload)      || fail("No payload for #{message.inspect} (payload: #{payload.inspect})")
               payload.delete('uuid') # TODO seems useless atm, and pollutes the log. decide what to do with these.
               handler.call(type, payload)
             end
