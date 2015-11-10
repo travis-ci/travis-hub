@@ -11,7 +11,6 @@ describe Travis::Addons::Serializer::Pusher::Job do
       build_id: build.id,
       repository_id: repo.id,
       commit_id: commit.id,
-      log_id: job.log_id,
       repository_slug: 'travis-ci/travis-core',
       repository_private: false,
       number: '1.1',
