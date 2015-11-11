@@ -3,8 +3,8 @@ require 'travis/hub/app'
 
 module Travis
   module Hub
-    # QUEUE = 'builds.next'
-    QUEUE = 'builds'
+    QUEUE = 'builds.next'
+    # QUEUE = 'builds'
 
     attr_accessor :context
 
