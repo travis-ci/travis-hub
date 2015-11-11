@@ -40,14 +40,14 @@ module Travis
 
       if ENV['ENV'] == 'staging'
         NEXT = [
-          ['Organization', 287], # travis-repos
-          ['User', 3664]         # svenfuchs
+          ['Organization', 44], # travis-repos
+          ['User', 24]          # svenfuchs
         ]
       else
         NEXT = [
-          ['Organization', 87],  # travis-ci
-          ['Organization', 340], # travis-repos
-          ['User', 8]            # svenfuchs
+          ['Organization', 31], # travis-ci
+          ['Organization', 32], # travis-repos
+          ['User', 5]           # svenfuchs
         ]
       end
 
