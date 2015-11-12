@@ -28,6 +28,11 @@ module Travis
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)
       end
 
+      # TODO remove this once the rollout is done on com
+      def librato_source
+        'travis-hub-next-production'
+      end
+
       # # TODO legacy, upgrade travis-config
       # def states_cache
       #   super || { memcached_servers: memcached.servers, memcached_options: memcached.options }
