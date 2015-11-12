@@ -46,6 +46,7 @@ module Travis
       else
         NEXT = [
           ['Organization', 31], # travis-ci
+          ['Organization', 34], # travis-pro
           ['Organization', 32], # travis-repos
           ['User', 5]           # svenfuchs
         ]
