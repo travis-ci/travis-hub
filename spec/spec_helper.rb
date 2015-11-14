@@ -7,7 +7,7 @@ require 'support/context'
 require 'travis/hub/handler/metrics'
 
 Travis::Event.setup
-Travis::Hub::Database.connect(Travis::Hub::Config.new.database.to_h)
+Travis::Database.connect(Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
 DatabaseCleaner.clean_with :truncation
