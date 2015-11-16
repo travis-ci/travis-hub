@@ -69,6 +69,7 @@ module Travis
             started_at = Time.now
             yield
             options = { started_at: started_at, finished_at: Time.now }
+            meter("hub.#{name}.handle", options)
             meter("hub.#{name}.handle.#{type}", options)
             meter("hub.#{name}.handle.#{type}.#{event}", options)
           end
