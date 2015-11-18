@@ -24,6 +24,7 @@ gem 'sentry-raven'
 gem 'simple_states'
 gem 'multi_json'
 gem 'coder'
+gem 'redlock'
 
 platform :ruby do
   gem 'pg'
