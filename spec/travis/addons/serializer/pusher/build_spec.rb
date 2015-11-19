@@ -28,7 +28,8 @@ describe Travis::Addons::Serializer::Pusher::Build do
       pull_request: false,
       pull_request_title: nil,
       pull_request_number: nil,
-      job_ids: [job.id]
+      job_ids: [job.id],
+      is_on_default_branch: true
     )
   end
 

@@ -41,6 +41,8 @@ module Travis
                 job_ids: build.job_ids,
                 event_type: build.event_type,
 
+                is_on_default_branch: on_default_branch?(build),
+
                 # this is a legacy thing, we should think about removing it
                 commit: commit.commit,
                 branch: commit.branch,
@@ -86,6 +88,9 @@ module Travis
               }
             end
 
+            def on_default_branch?(build)
+              build.repository.default_branch == build.commit.branch
+            end
         end
       end
     end
