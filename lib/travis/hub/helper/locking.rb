@@ -5,7 +5,7 @@ module Travis
     module Helper
       module Locking
         def exclusive(key, options = nil, &block)
-          options ||= config.lock
+          options ||= config.lock.to_h
           options[:url] ||= config.redis.url if options[:strategy] == :redis
 
           debug "Locking #{key} with: #{options[:strategy]}"
@@ -14,7 +14,7 @@ module Travis
           count ||= 0
           raise e if count > 10
           count += 1
-          error "Redis::TimeoutError while trying to acquire lock for #{key} (#{options}). Retrying #{count}/10."
+          error "Redis::TimeoutError while trying to acquire lock for #{key}. Retrying #{count}/10."
           sleep 1
           retry
         end
