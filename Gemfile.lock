@@ -21,6 +21,12 @@ GIT
       travis-metrics (~> 0)
 
 GIT
+  remote: git://github.com/travis-ci/travis-lock.git
+  revision: 8aadc4cd7a1c8d89788dfc096507ee96a71fceb6
+  specs:
+    travis-lock (0.1.0)
+
+GIT
   remote: git://github.com/travis-ci/travis-logger.git
   revision: 765046a4746617a70395fe2200e8a91dc416f1b3
   specs:
@@ -164,8 +170,6 @@ GEM
     travis-config (1.0.3)
       hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
-    travis-lock (0.1.0)
-      activerecord (~> 4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
@@ -201,7 +205,7 @@ DEPENDENCIES
   travis-encrypt
   travis-exceptions!
   travis-instrumentation!
-  travis-lock
+  travis-lock!
   travis-logger!
   travis-metrics!
   unlimited-jce-policy-jdk7!

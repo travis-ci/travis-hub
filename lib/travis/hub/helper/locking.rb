@@ -10,6 +10,8 @@ module Travis
 
           debug "Locking #{key} with: #{options[:strategy]}"
           Lock.exclusive(key, options, &block)
+
+        # TODO move this to travis-locks
         rescue Redis::TimeoutError => e
           count ||= 0
           raise e if count > 10

@@ -10,7 +10,7 @@ gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 
 gem 'travis-config'
 gem 'travis-encrypt'
-gem 'travis-lock'
+gem 'travis-lock', github: 'travis-ci/travis-lock'
 
 gem 'rake'
 gem 'redis'
