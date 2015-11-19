@@ -74,8 +74,8 @@ module Travis
           end
 
           def with_active_record(&block)
-            # ActiveRecord::Base.connection_pool.with_connection(&block)
-            yield
+            ActiveRecord::Base.connection_pool.with_connection(&block)
+            # yield
           rescue ActiveRecord::ConnectionTimeoutError => e
             count ||= 0
             raise e if count > 10
