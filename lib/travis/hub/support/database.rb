@@ -12,7 +12,7 @@ module Travis
           ActiveRecord::Base.default_timezone = :utc
           ActiveRecord::Base.logger = logger
           logger.info(MSGS[:setup] % except(config.to_h, :adapter, :username, :password).inspect) if logger
-          Thread.new { loop { log_connection_count(logger) } }
+          # Thread.new { loop { log_connection_count(logger) } }
         end
 
         private

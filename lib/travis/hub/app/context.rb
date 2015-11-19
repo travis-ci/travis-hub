@@ -38,6 +38,8 @@ module Travis
           [Log, Log::Part].each do |const|
             const.establish_connection(config.logs_database.to_h)
           end
+
+          test_exception_reporting
         end
 
         private
@@ -46,6 +48,10 @@ module Travis
             channel = amqp.connection.create_channel
             channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
             channel.queue('builds.linux', durable: true, exclusive: false)
+          end
+
+          def test_exception_reporting
+            Travis::Exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
           end
       end
     end
