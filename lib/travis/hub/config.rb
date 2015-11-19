@@ -7,8 +7,8 @@ module Travis
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25 },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
-             # lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
-             lock:          { strategy: :redis },
+             lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
+             # lock:          { strategy: :redis },
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
              # memcached:     { servers: 'localhost:11211', options: {} },
 
