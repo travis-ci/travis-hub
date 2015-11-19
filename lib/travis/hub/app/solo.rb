@@ -75,6 +75,13 @@ module Travis
 
           def with_active_record(&block)
             ActiveRecord::Base.connection_pool.with_connection(&block)
+          rescue ActiveRecord::ConnectionTimeoutError => e
+            count ||= 0
+            raise e if count > 10
+            count += 1
+            error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
+            sleep 1
+            retry
           end
       end
     end
