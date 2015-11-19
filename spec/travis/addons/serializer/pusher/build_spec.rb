@@ -46,7 +46,11 @@ describe Travis::Addons::Serializer::Pusher::Build do
       last_build_duration: nil,
       last_build_state: '',
       last_build_language: nil,
-      github_language: 'ruby'
+      github_language: 'ruby',
+      default_branch: {
+        name: 'master',
+        last_build_id: build.id
+      }
     )
   end
 end
