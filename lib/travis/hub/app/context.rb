@@ -28,7 +28,7 @@ module Travis
 
         def setup
           # TODO what's with the metrics handler. do we still need that? add it to the config?
-          Database.connect(config.database, logger)
+          Database.connect(ActiveRecord::Base, config.database, logger)
           Addons.setup(config, logger)
           Event.setup(config.notifications, logger)
           Instrumentation.setup(logger)
@@ -36,10 +36,7 @@ module Travis
 
           # TODO remove, message travis-logs instead
           [Log, Log::Part].each do |const|
-            msg = 'Setting up logs database connection with: %s'
-            skip = [:username, :password, :encoding, :min_messages]
-            logger.info msg % config.logs_database.to_h.reject { |k, _| skip.include?(k) }.inspect
-            const.establish_connection(config.logs_database.to_h)
+            Database.connect(const, config.logs_database.to_h, logger)
           end
 
           # test_exception_reporting
