@@ -36,9 +36,10 @@ module Travis
 
           # TODO remove, message travis-logs instead
           [Log, Log::Part].each do |const|
-            const.establish_connection(config.logs_database.to_h)
             msg = 'Setting up logs database connection with: %s'
-            logger.info msg % config.logs_database.to_h.select { |k, _| [:pool, :application_name].include?(k) }.inspect
+            skip = [:username, :password, :encoding, :min_messages]
+            logger.info msg % config.logs_database.to_h.reject { |k, _| skip.include?(k) }.inspect
+            const.establish_connection(config.logs_database.to_h)
           end
 
           # test_exception_reporting

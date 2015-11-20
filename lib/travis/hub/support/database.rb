@@ -7,14 +7,15 @@ module Travis
           count: 'Database connection count: %s'
         }
 
-        SKIP_CONFIG = [:adapter, :host, :username, :password, :encoding, :min_messages]
+        SKIP_CONFIG = [:username, :password, :encoding, :min_messages]
 
         def connect(config, logger = nil)
+          log_connection_info(config, logger) if logger
+
           ActiveRecord::Base.establish_connection(config.to_h)
           ActiveRecord::Base.default_timezone = :utc
           ActiveRecord::Base.logger = logger
 
-          log_connection_info(config, logger) if logger
           Thread.new { loop { log_connection_count(logger) } }
         end
 
