@@ -75,7 +75,9 @@ module Travis
 
           def with_active_record(&block)
             ActiveRecord::Base.connection_pool.with_connection do
-              Log.connection_pool.with_connection(&block)
+              Log.connection_pool.with_connection do
+                Log::Part.connection_pool.with_connection(&block)
+              end
             end
             # yield
           rescue ActiveRecord::ConnectionTimeoutError => e
