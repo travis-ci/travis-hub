@@ -39,7 +39,7 @@ module Travis
             const.establish_connection(config.logs_database.to_h)
           end
 
-          test_exception_reporting
+          # test_exception_reporting
         end
 
         private
