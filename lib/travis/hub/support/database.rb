@@ -7,18 +7,21 @@ module Travis
           count: 'Database connection count: %s'
         }
 
+        SKIP_CONFIG = [:adapter, :host, :username, :password, :encoding, :min_messages]
+
         def connect(config, logger = nil)
           ActiveRecord::Base.establish_connection(config.to_h)
           ActiveRecord::Base.default_timezone = :utc
           ActiveRecord::Base.logger = logger
-          logger.info(MSGS[:setup] % except(config.to_h, :adapter, :username, :password).inspect) if logger
-          # Thread.new { loop { log_connection_count(logger) } }
+
+          log_connection_info(config, logger) if logger
+          Thread.new { loop { log_connection_count(logger) } }
         end
 
         private
 
-          def except(hash, *keys)
-            hash.reject { |key, _| keys.include?(key) }
+          def log_connection_info(config, logger)
+            logger.info(MSGS[:setup] % except(config.to_h, *SKIP_CONFIG).inspect)
           end
 
           def log_connection_count(logger)
@@ -30,6 +33,10 @@ module Travis
 
           def connection_count
             ActiveRecord::Base.connection_pool.connections.size
+          end
+
+          def except(hash, *keys)
+            hash.reject { |key, _| keys.include?(key) }
           end
       end
     end
