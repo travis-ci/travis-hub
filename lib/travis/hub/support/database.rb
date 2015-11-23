@@ -16,7 +16,7 @@ module Travis
           const.default_timezone = :utc
           const.logger = logger
 
-          start_log_connection_counts(const, logger)
+          # start_log_connection_counts(const, logger)
         end
 
         private
