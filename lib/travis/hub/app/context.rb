@@ -28,7 +28,7 @@ module Travis
 
         def setup
           # TODO what's with the metrics handler. do we still need that? add it to the config?
-          Database.connect(config.database, logger)
+          Database.connect(ActiveRecord::Base, config.database, logger)
           Addons.setup(config, logger)
           Event.setup(config.notifications, logger)
           Instrumentation.setup(logger)
@@ -36,8 +36,10 @@ module Travis
 
           # TODO remove, message travis-logs instead
           [Log, Log::Part].each do |const|
-            const.establish_connection(config.logs_database.to_h)
+            Database.connect(const, config.logs_database.to_h, logger)
           end
+
+          # test_exception_reporting
         end
 
         private
@@ -46,6 +48,10 @@ module Travis
             channel = amqp.connection.create_channel
             channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
             channel.queue('builds.linux', durable: true, exclusive: false)
+          end
+
+          def test_exception_reporting
+            Travis::Exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
           end
       end
     end

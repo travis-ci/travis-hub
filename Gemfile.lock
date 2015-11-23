@@ -5,8 +5,15 @@ GIT
     travis-amqp (0.0.1)
 
 GIT
+  remote: git://github.com/travis-ci/travis-config.git
+  revision: 3094fc53386aa96115a871d48bd573046f849468
+  specs:
+    travis-config (1.0.3)
+      hashr (~> 2.0.0)
+
+GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 13a7394c55b0e790a6c5deb5b8a82b2d07b3f784
+  revision: 87c136388da8594ade7d757a9bea54093d6c501c
   ref: sf-refactor
   specs:
     travis-exceptions (0.0.1)
@@ -167,8 +174,6 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.1.1)
       hitimes
-    travis-config (1.0.3)
-      hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -201,7 +206,7 @@ DEPENDENCIES
   sidekiq
   simple_states
   travis-amqp!
-  travis-config
+  travis-config!
   travis-encrypt
   travis-exceptions!
   travis-instrumentation!
