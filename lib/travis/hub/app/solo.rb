@@ -80,13 +80,13 @@ module Travis
                 Log::Part.connection_pool.with_connection(&block)
               end
             end
-            # yield
-          rescue ActiveRecord::ConnectionTimeoutError => e
+          rescue ActiveRecord::ActiveRecordError => e
+          # rescue ActiveRecord::ConnectionTimeoutError, ActiveRecord::StatementInvalid => e
             count ||= 0
             raise e if count > 10
             count += 1
             error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
-            sleep 0.1
+            sleep 1
             puts e.message, e.backtrace
             retry
           end
