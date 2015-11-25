@@ -6,7 +6,6 @@ FactoryGirl.define do
     github_language 'ruby'
     owner_name      'travis-ci'
     name            'travis-core'
-    default_branch  'master'
   end
 
   factory :request do
