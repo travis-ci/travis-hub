@@ -49,7 +49,9 @@ module Travis
           end
 
           def exclusive(&block)
-            super("hub:build-#{job.source_id}", &block)
+            super("hub:repo-#{job.repository_id}") do
+              super("hub:build-#{job.source_id}", &block)
+            end
           end
 
           def unknown_event
