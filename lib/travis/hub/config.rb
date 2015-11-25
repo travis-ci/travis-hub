@@ -23,7 +23,6 @@ module Travis
       def logs_database
         config = super
         config.reaping_frequency = 60 if config
-        config.variables.statement_timeout = 10000 if config
         config || database
       end
 
