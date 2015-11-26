@@ -2,11 +2,15 @@ module Travis
   module Hub
     class App
       class Worker < Solo
-        attr_accessor :count, :number
+        attr_accessor :number
 
         def initialize(context, name, options)
           super
           @number = options[:number] || 1
+        end
+
+        def run
+          subscribe
         end
 
         private

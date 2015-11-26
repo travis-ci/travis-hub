@@ -9,19 +9,26 @@ module Travis
       class Solo
         include Helper::Context
 
+        THREADS = 2
+
         attr_reader :context, :name, :count
 
         def initialize(context, name, options)
           @context = context
-          @name  = name
-          @count = options[:count] || 1
+          @name = name
+          @count  = options[:count] || 1
         end
 
         def run
-          Queue.new(context, queue, &method(:handle)).subscribe
+          THREADS.times { Thread.new { subscribe } }
+          sleep
         end
 
         private
+
+          def subscribe
+            Queue.new(context, queue, &method(:handle)).subscribe
+          end
 
           def queue
             QUEUE
