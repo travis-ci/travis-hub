@@ -45,9 +45,7 @@ module Travis
           end
 
           def exclusive(&block)
-            super("hub:repo-#{build.repository_id}") do
-              super("hub:build-#{build.id}", config.lock, &block)
-            end
+            super("hub:build-#{build.id}", config.lock, &block)
           end
 
           def unknown_event
