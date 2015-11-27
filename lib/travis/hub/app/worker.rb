@@ -16,7 +16,7 @@ module Travis
         private
 
           def queue
-            "#{QUEUE}.#{number}"
+            "#{super}.#{number}"
           end
 
           def handle(type, payload)

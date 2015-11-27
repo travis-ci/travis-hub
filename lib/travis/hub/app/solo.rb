@@ -10,7 +10,6 @@ module Travis
         include Helper::Context
 
         THREADS = 2
-        QUEUE = 'builds'
 
         attr_reader :context, :name, :count
 
@@ -32,7 +31,7 @@ module Travis
           end
 
           def queue
-            ENV['QUEUE'] || QUEUE
+            config.queue
           end
 
           def handle(type, payload)

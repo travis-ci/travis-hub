@@ -39,7 +39,7 @@ module Travis
           end
 
           def queue_for(num)
-            "#{QUEUE}.#{num}"
+            "#{queue}.#{num}"
           end
 
           def with_active_record(&block)
