@@ -41,7 +41,7 @@ describe Travis::Addons::Handlers::Webhook do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:webhook, is_a(Hash), targets: ['http://host.com/target'], token: 'token')
+      handler.expects(:run_task).with(is_a(Hash), targets: ['http://host.com/target'], token: 'token')
       handler.handle
     end
   end

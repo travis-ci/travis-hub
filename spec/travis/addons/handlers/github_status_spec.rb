@@ -45,7 +45,7 @@ describe Travis::Addons::Handlers::GithubStatus do
     before { permissions.create(user: admin, admin: true) }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
+      handler.expects(:run_task).with(is_a(Hash), tokens: { 'admin' => 'admin-token' })
       handler.handle
     end
   end

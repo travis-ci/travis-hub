@@ -11,7 +11,7 @@ module Travis
         end
 
         def handle
-          run_task(:sqwiggle, payload, targets: targets)
+          run_task(payload, targets: targets)
         end
 
         def targets
@@ -28,4 +28,3 @@ module Travis
     end
   end
 end
-

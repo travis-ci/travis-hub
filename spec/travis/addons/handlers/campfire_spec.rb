@@ -51,7 +51,7 @@ describe Travis::Addons::Handlers::Campfire do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:campfire, is_a(Hash), targets: ['room'])
+      handler.expects(:run_task).with(is_a(Hash), targets: ['room'])
       handler.handle
     end
   end

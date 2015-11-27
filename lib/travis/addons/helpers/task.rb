@@ -30,14 +30,16 @@ module Travis
 
         include Coder
 
-        def run_task(queue, *args)
+        QUEUE = :'notifications'
+
+        def run_task(*args)
           target = "Travis::Addons::#{self.class.name.split('::').last}::Task"
           args   = deep_clean_strings(args)
 
           ::Sidekiq::Client.push(
-            'queue'   => queue,
-            'class'   => 'Travis::Async::Sidekiq::Worker',
-            'args'    => [nil, target, 'perform', *args]
+            'queue' => QUEUE,
+            'class' => 'Travis::Async::Sidekiq::Worker',
+            'args'  => [nil, target, 'perform', *args]
           )
         rescue => e
           Exceptions.handle(Error.new(e, queue, args)) # TODO pass in

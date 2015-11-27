@@ -11,7 +11,7 @@ module Travis
         end
 
         def handle
-          run_task(:hipchat, payload, targets: targets)
+          run_task(payload, targets: targets)
         end
 
         def enabled?
