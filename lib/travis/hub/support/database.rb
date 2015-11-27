@@ -7,7 +7,7 @@ module Travis
           count: 'Database connections on %s: size=%s, count=%s, reserved=%s, available=%s, reserved keys=%p'
         }
 
-        SKIP_CONFIG = [:username, :password, :encoding, :min_messages]
+        SKIP_CONFIG = [:adapter, :host, :port, :username, :password, :encoding, :min_messages]
 
         def connect(const, config, logger = nil)
           log_connection_info(const, config, logger) if logger
