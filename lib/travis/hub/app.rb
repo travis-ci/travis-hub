@@ -12,12 +12,10 @@ module Travis
 
       attr_reader :context, :processor
 
-        def setup(context)
-          Database.connect(config.database.to_h)
-          Metrics.setup
-          setup_amqp   unless context == :sidekiq
-          setup_worker unless context == :dispatcher || context == :drain
-        end
+      def initialize(mode, options)
+        Hub.context = @context = Context.new # TODO remove Hub.context
+        @processor = MODES.fetch(mode).new(context, mode, options)
+      end
 
       def run
         context.setup

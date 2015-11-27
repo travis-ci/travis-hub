@@ -25,24 +25,6 @@ module Travis
             end
           end
 
-          def handle(type, payload)
-            job = ::Job.find(payload.fetch('id'))
-            handler = next?(job) ? :drain : :dispatch
-            send(job, type, payload)
-          end
-
-          def drain(job, type, payload)
-            Drain.new.handle(type, payload)
-          end
-
-          def dispatch(job, type, payload)
-            id  = job.source_id
-            key = queue_for(id % count + 1)
-            # puts "Routing #{type} for <Job id=#{payload.fetch('id')}> to #{key}."
-            publishers[key].publish(payload.merge(worker_count: count), properties: { type: type })
-            meter(key)
-          end
-
           def publish(key, type, payload)
             publisher = publisher(queue_for(key))
             publisher.publish(payload.merge(worker_count: count), properties: { type: type })

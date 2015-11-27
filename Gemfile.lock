@@ -200,6 +200,7 @@ DEPENDENCIES
   pg
   rake
   redis
+  redlock
   rspec
   sentry-raven
   sidekiq
@@ -213,3 +214,6 @@ DEPENDENCIES
   travis-logger!
   travis-metrics!
   unlimited-jce-policy-jdk7!
+
+BUNDLED WITH
+   1.10.6

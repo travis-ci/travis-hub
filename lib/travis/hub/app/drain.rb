@@ -3,7 +3,7 @@ require 'travis/hub/app/queue'
 
 module Travis
   module Hub
-    module App
+    class App
       class Drain < Struct.new(:name, :options)
         def run
           Queue.subscribe(QUEUE, &method(:handle))

@@ -1,17 +1,23 @@
+require 'travis/hub/helper/context'
+require 'travis/hub/helper/string'
+
 module Travis
   module Hub
-    module App
+    class App
       class Handler
-        attr_reader :type, :event, :payload
+        include Helper::Context, Helper::String
 
-        def initialize(event, payload)
+        attr_reader :context, :type, :event, :payload
+
+        def initialize(context, event, payload)
+          @context = context
           @type, @event = parse_event(event)
           @payload = normalize_payload(payload)
         end
 
         def handle
           with_active_record do
-            meter do
+            time do
               service.new(event: event, data: payload).run
             end
           end
@@ -36,8 +42,9 @@ module Travis
           end
 
           def normalize_payload(payload)
-            payload['state'] = nil        if payload['state'] == 'reset'
-            payload['state'] = 'canceled' if payload['state'] == 'cancelled'
+            payload = payload.symbolize_keys
+            payload.delete(:state)       if payload[:state] == 'reset'
+            payload[:state] = 'canceled' if payload[:state] == 'cancelled'
             payload
           end
 
@@ -45,20 +52,30 @@ module Travis
             fail("Cannot parse event: #{event.inspect}. Must have the format [type]:[event], e.g. job:start")
           end
 
-          def meter
+          def time
             started_at = Time.now
             yield
             options = { started_at: started_at, finished_at: Time.now }
-            Metrics.meter("hub.#{name}.handle.#{type}", options)
-            Metrics.meter("hub.#{name}.handle.#{type}.#{event}", options)
+            meter("hub.#{name}.handle", options)
+            meter("hub.#{name}.handle.#{type}", options)
+            meter("hub.#{name}.handle.#{type}.#{event}", options)
           end
 
           def with_active_record(&block)
-            ActiveRecord::Base.connection_pool.with_connection(&block)
-          end
-
-          def camelize(string)
-            string.to_s.sub(/./) { |char| char.upcase }
+            ActiveRecord::Base.connection_pool.with_connection do
+              Log.connection_pool.with_connection do
+                Log::Part.connection_pool.with_connection(&block)
+              end
+            end
+          rescue ActiveRecord::ActiveRecordError => e
+          # rescue ActiveRecord::ConnectionTimeoutError, ActiveRecord::StatementInvalid => e
+            count ||= 0
+            raise e if count > 10
+            count += 1
+            error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
+            sleep 1
+            puts e.message, e.backtrace
+            retry
           end
       end
     end
