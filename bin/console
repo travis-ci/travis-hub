@@ -5,6 +5,18 @@ $: << 'lib'
 require 'irb'
 require 'travis/hub'
 
+Job.class_eval do
+  class << self
+    def running
+      where(state: [:queued, :received, :started]).order('jobs.id')
+    end
+
+    def since(time)
+      where('updated_at < ?', time)
+    end
+  end
+end
+
 context = Travis::Hub::App::Context.new
 context.setup
 
