@@ -9,10 +9,6 @@ module Travis
           @number = options[:number] || 1
         end
 
-        def run
-          subscribe
-        end
-
         private
 
           def queue

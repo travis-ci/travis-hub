@@ -37,6 +37,10 @@ module Travis
         ENV['QUEUE'] || 'builds' # super
       end
 
+      def threads
+        ENV['THREADS'] || 1
+      end
+
       def librato_source
         ENV['LIBRATO_SOURCE'] || super
       end

@@ -20,7 +20,7 @@ module Travis
         end
 
         def run
-          THREADS.times { Thread.new { subscribe } }
+          threads.times { Thread.new { subscribe } }
           sleep
         end
 
@@ -32,6 +32,10 @@ module Travis
 
           def queue
             config.queue
+          end
+
+          def threads
+            config.threads
           end
 
           def handle(type, payload)
