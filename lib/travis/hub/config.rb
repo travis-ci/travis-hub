@@ -38,7 +38,7 @@ module Travis
       end
 
       def threads
-        ENV['THREADS'] || 1
+        ENV['THREADS'] ? ENV['THREADS'].to_i : 1
       end
 
       def librato_source

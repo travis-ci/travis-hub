@@ -20,7 +20,7 @@ module Travis
         end
 
         def run
-          info "Using #{threads} on #{name}."
+          info "Using #{threads} threads on #{name}."
           threads.times { Thread.new { subscribe } }
           sleep
         end
