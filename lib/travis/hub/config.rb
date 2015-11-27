@@ -4,7 +4,7 @@ module Travis
   module Hub
     class Config < Travis::Config
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
-             database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60 },
+             database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              # lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
@@ -23,6 +23,7 @@ module Travis
       def logs_database
         config = super
         config.reaping_frequency = 60 if config
+        config.variables.statement_timeout = 10000 if config
         config || database
       end
 

@@ -10,18 +10,20 @@ require 'travis/hub/config'
 require 'travis/hub/handler/metrics'
 require 'travis/hub/model'
 require 'travis/hub/support/database'
+require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
 
 module Travis
   module Hub
     class App
       class Context
-        attr_reader :amqp, :config, :exceptions, :logger, :metrics
+        attr_reader :amqp, :config, :exceptions, :logger, :metrics, :redis
 
         def initialize(options = {})
           @config     = Config.load
           @logger     = options[:logger] || Logger.new(STDOUT, config)
           @amqp       = Amqp.setup(config.amqp)
+          @redis      = RedisPool.new(config.redis.to_h)
           @exceptions = Exceptions.setup(config, config.env, logger)
           @metrics    = Metrics.setup(config.metrics, logger)
         end
