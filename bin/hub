@@ -5,8 +5,8 @@ $stdout.sync = true
 $LOAD_PATH << 'lib'
 
 require 'optparse'
-require 'bundler/setup'
 require 'travis/hub'
+require 'travis/hub/amqp'
 
 def options_parser(options)
   options[:retries] = 3
@@ -26,4 +26,4 @@ options = {}
 options_parser(options).parse!
 mode = ARGV.shift || :solo
 
-Travis::Hub::App.new(mode.to_sym, options).run
+Travis::Hub::Amqp.new(mode.to_sym, options).run

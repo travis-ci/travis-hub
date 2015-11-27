@@ -1,5 +1,6 @@
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/string'
+require 'travis/hub/service'
 
 module Travis
   module Hub

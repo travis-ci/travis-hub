@@ -1,11 +1,10 @@
-require 'travis/hub/app/queue'
+require 'travis/hub/amqp/queue'
+require 'travis/hub/handler'
 require 'travis/hub/helper/context'
-require 'travis/hub/service/update_build'
-require 'travis/hub/service/update_job'
 
 module Travis
   module Hub
-    class App
+    class Amqp
       class Solo
         include Helper::Context
 
@@ -31,15 +30,16 @@ module Travis
             Queue.new(context, queue, &method(:handle)).subscribe
           end
 
+          def handle(event, payload)
+            Handler.new(context, event, payload).run
+          end
+
           def queue
             config.queue
           end
 
           def threads
             config.threads
-          end
-
-          def handle(type, payload)
           end
       end
     end

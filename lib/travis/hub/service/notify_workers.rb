@@ -11,7 +11,6 @@ module Travis
         private
 
           def publisher
-            # TODO use context.amqp
             Travis::Amqp::FanoutPublisher.new('worker.commands')
           end
       end

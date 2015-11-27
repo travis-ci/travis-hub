@@ -1,10 +1,12 @@
 require 'coder'
-require 'travis/hub/app/error'
+require 'multi_json'
+require 'travis/amqp'
+require 'travis/hub/amqp/error'
 require 'travis/hub/helper/context'
 
 module Travis
   module Hub
-    class App
+    class Amqp
       class Queue
         include Helper::Context
 
@@ -19,7 +21,6 @@ module Travis
 
         def subscribe
           info "Subscribing to #{queue}."
-          # TODO use context.amqp
           Travis::Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
         end
 
@@ -27,10 +28,10 @@ module Travis
 
           def receive(message, payload)
             failsafe(message, payload) do
-              type = message.properties.type || fail("No type given on #{message.properties.inspect} (payload: #{payload.inspect})")
-              payload = decode(payload)      || fail("No payload for #{message.inspect} (payload: #{payload.inspect})")
+              event = message.properties.type || fail("No type given on #{message.properties.inspect} (payload: #{payload.inspect})")
+              payload = decode(payload)       || fail("No payload for #{message.inspect} (payload: #{payload.inspect})")
               payload.delete('uuid') # TODO seems useless atm, and pollutes the log. decide what to do with these.
-              handler.call(type, payload)
+              handler.call(event, payload)
             end
           end
 

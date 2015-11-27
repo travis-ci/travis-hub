@@ -1,24 +1,22 @@
-require 'travis/hub/app/context'
-require 'travis/hub/app/dispatcher'
-require 'travis/hub/app/drain'
-require 'travis/hub/app/handler'
-require 'travis/hub/app/solo'
-require 'travis/hub/app/worker'
+require 'travis/hub/context'
+require 'travis/hub/amqp/dispatcher'
+require 'travis/hub/amqp/drain'
+require 'travis/hub/amqp/solo'
+require 'travis/hub/amqp/worker'
 
 module Travis
   module Hub
-    class App
+    class Amqp
       MODES = { solo: Solo, worker: Worker, dispatcher: Dispatcher, drain: Drain }
 
       attr_reader :context, :processor
 
       def initialize(mode, options)
-        Hub.context = @context = Context.new # TODO remove Hub.context
+        @context   = Context.new
         @processor = MODES.fetch(mode).new(context, mode, options)
       end
 
       def run
-        context.setup
         processor.run
       end
     end

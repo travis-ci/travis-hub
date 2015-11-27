@@ -4,9 +4,9 @@ describe Travis::Addons::Handlers::StatesCache do
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:cache)   { described_class.states_cache }
 
-  describe 'subscription' do
-    before { Travis::Event.setup([:states_cache]) }
+  before { Travis::Event.setup([:states_cache]) }
 
+  describe 'subscription' do
     it 'build:started does not notify' do
       described_class.expects(:notify).never
       Travis::Event.dispatch('build:started', id: build.id)
