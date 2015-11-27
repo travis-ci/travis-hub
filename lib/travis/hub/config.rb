@@ -18,7 +18,8 @@ module Travis
              librato:       {},
              metrics:       { reporter: 'librato' },
              notifications: [],
-             repository:    { ssl_key: { size: 4096 } }
+             repository:    { ssl_key: { size: 4096 } },
+             queue:         'builds'
 
       def logs_database
         config = super
@@ -30,6 +31,18 @@ module Travis
       def metrics
         # TODO cleanup keychain?
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)
+      end
+
+      def queue
+        ENV['QUEUE'] || 'builds' # super
+      end
+
+      def threads
+        ENV['THREADS'] ? ENV['THREADS'].to_i : 1
+      end
+
+      def librato_source
+        ENV['LIBRATO_SOURCE'] || super
       end
 
       # # TODO legacy, upgrade travis-config

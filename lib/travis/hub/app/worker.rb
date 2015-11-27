@@ -2,7 +2,7 @@ module Travis
   module Hub
     class App
       class Worker < Solo
-        attr_accessor :count, :number
+        attr_accessor :number
 
         def initialize(context, name, options)
           super
@@ -12,7 +12,7 @@ module Travis
         private
 
           def queue
-            "#{QUEUE}.#{number}"
+            "#{super}.#{number}"
           end
 
           def handle(type, payload)

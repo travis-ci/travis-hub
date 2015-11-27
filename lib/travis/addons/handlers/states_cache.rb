@@ -20,6 +20,7 @@ module Travis
         end
 
         def handle
+          validate_duration
           cache.write(repository_id, branch, 'id' => object.id, 'state' => object.state.try(:to_sym))
         end
 
@@ -39,6 +40,24 @@ module Travis
 
           def branch
             object.commit.branch
+          end
+
+
+          # TODO This logic is here to verify if we ever see builds being
+          # finished before they had been started. If so, this should be rolled
+          # back. Eventually the worker should send all known timestamps with all
+          # state update messages, solving this problem.
+
+          MSGS = {
+            missing_duration: 'Missing duration for <%s id=%s> is: %s'
+          }
+
+          def validate_duration
+            warn_missing_duration if object.duration == 0 || object.duration.nil?
+          end
+
+          def warn_missing_duration
+            Addons.logger.warn(MSGS[:missing_duration] % [object.class.name, object.id, object.duration.inspect])
           end
       end
     end
