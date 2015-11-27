@@ -35,7 +35,7 @@ describe Travis::Addons::Handlers::Pusher do
 
       it 'enqueues a task' do
         ::Sidekiq::Client.expects(:push).with do |payload|
-          expect(payload['queue']).to   eq(:'pusher-live')
+          expect(payload['queue']).to   eq(:'live-updates')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['method']).to  eq('perform')
           expect(payload['args'][3]).to be_a(Hash)
@@ -50,7 +50,7 @@ describe Travis::Addons::Handlers::Pusher do
 
       it 'enqueues a task' do
         ::Sidekiq::Client.expects(:push).with do |payload|
-          expect(payload['queue']).to   eq(:'pusher-live')
+          expect(payload['queue']).to   eq(:'live-updates')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['method']).to  eq('perform')
           expect(payload['args'][3]).to be_a(Hash)
