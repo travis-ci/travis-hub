@@ -23,7 +23,7 @@ module Travis
         @logger     = options[:logger] || Travis::Logger.new(STDOUT, config)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
-        # TODO Exceptions.setup creates a thread and is not safe to call repeatedly, e.g. in tests
+        # TODO Exceptions.setup creates a thread and is not safe to be called repeatedly, e.g. in tests
         @exceptions = $exceptions ||= Travis::Exceptions.setup(config, config.env, logger)
 
         Travis::Amqp.setup(config.amqp)

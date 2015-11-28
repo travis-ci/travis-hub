@@ -74,6 +74,7 @@ module Travis
             raise e if count > 10
             count += 1
             error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
+            meter 'hub.exceptions.active_record'
             sleep 1
             puts e.message, e.backtrace
             retry
