@@ -25,11 +25,12 @@ module Travis
       end
 
       def by_owner?
+        p [data, owners]
         owners.include?(data[:owner_name])
       end
 
       def rollout?
-        data[:id].to_i % 100 <= percent
+        data[:id].to_i % 100 < percent
       end
 
       def owners

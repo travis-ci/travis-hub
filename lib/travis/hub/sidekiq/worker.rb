@@ -17,7 +17,7 @@ module Travis
         sidekiq_options queue: :hub
 
         def perform(event, payload)
-          App::Handler.new(event, payload).run
+          Handler.new(event, payload).run
         end
       end
     end
