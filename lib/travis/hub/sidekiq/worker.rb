@@ -1,4 +1,3 @@
-require 'monitor'
 require 'sidekiq/worker'
 require 'travis/hub'
 
@@ -6,18 +5,12 @@ module Travis
   module Hub
     module Sidekiq
       class Worker
-        @monitor = Monitor.new
-
-        def self.context
-          @monitor.synchronize { @context ||= Context.new }
-        end
-
         include ::Sidekiq::Worker
 
         sidekiq_options queue: :hub
 
         def perform(event, payload)
-          Handler.new(event, payload).run
+          Handler.new(Hub.context, event, payload).run
         end
       end
     end

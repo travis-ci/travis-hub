@@ -1,13 +1,14 @@
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/string'
 require 'travis/hub/service'
+require 'travis/hub/support/reroute'
 
 module Travis
   module Hub
     class Handler
       include Helper::Context, Helper::String
 
-      attr_reader :context, :type, :event, :payload
+      attr_reader :context, :type, :event, :payload, :object
 
       def initialize(context, event, payload)
         @context = context
@@ -18,15 +19,20 @@ module Travis
       def run
         with_active_record do
           time do
-            service.new(context, event, payload).run
+            reroute or handle
           end
         end
       end
 
       private
 
-        def service
-          Service.const_get("Update#{camelize(type)}")
+        def reroute
+          Reroute.new(context, type, event, payload).run
+        end
+
+        def handle
+          const = Service.const_get("Update#{camelize(type)}")
+          const.new(context, event, payload).run
         end
 
         def parse_event(event)
@@ -68,10 +74,8 @@ module Travis
             end
           end
         rescue ActiveRecord::ActiveRecordError => e
-        # rescue ActiveRecord::ConnectionTimeoutError, ActiveRecord::StatementInvalid => e
           count ||= 0
-          raise e if count > 10
-          count += 1
+          raise e if count += 1 > 10
           error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
           meter 'hub.exceptions.active_record'
           sleep 1

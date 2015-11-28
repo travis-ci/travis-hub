@@ -12,6 +12,7 @@ module Travis
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
              # memcached:     { servers: 'localhost:11211', options: {} },
 
+             name:          'hub',
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
              logger:        { thread_id: true },

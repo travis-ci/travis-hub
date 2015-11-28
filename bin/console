@@ -17,6 +17,6 @@ Job.class_eval do
   end
 end
 
-Travis::Hub::App::Context.new
+Travis::Hub::Context.new
 
 IRB.start(__FILE__)
