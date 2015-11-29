@@ -8,8 +8,6 @@ module Travis
       class Solo
         include Helper::Context
 
-        THREADS = 2
-
         attr_reader :context, :name, :count
 
         def initialize(context, name, options)

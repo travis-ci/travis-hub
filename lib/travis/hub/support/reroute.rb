@@ -40,7 +40,7 @@ module Travis
       end
 
       def reroute
-        target = ENV['REROUTE_TARGET'] || context.redis.get("#{name}_target") || :amqp
+        target = ENV['REROUTE_TARGET'] || :amqp # context.redis.get("#{name}_target")
         queue  = QUEUES[target.to_sym]
         info "Routing #{type}:#{event} for id=#{object.id} to #{target}=#{queue}"
         publisher = self.class.const_get(camelize(target)).new
