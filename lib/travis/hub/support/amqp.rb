@@ -13,6 +13,7 @@ module Travis
 
     def initialize(config)
       @connection = Bunny.new(config.to_h).tap { |connection| connection.start }
+      # TODO channels must not be shared across threads, set this to Thread.current?
       @channel = connection.create_channel
     end
 
@@ -32,7 +33,7 @@ module Travis
     def publish(key, type, payload)
       payload = MultiJson.encode(payload)
       exchange = channel.topic('reporting', durable: true, auto_delete: false)
-      exchange.publish(payload, routing_key: "reporting.jobs.#{key}")
+      exchange.publish(payload, type: type, routing_key: "reporting.jobs.#{key}")
     rescue => e
       puts e.message, e.backtrace
     end
