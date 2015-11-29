@@ -74,10 +74,11 @@ module Travis
 
         def percent
           percent = ENV['REROUTE_PERCENT'] || context.redis.get(:"#{name}_percent") || -1
-          context.metrics.meter('hub.reroute.percent', percent.to_i)
-          percent.to_i
-        rescue
-          -1
+          # metrics.gauge('hub.reroute.percent', percent.to_i) # TODO
+          Metriks.gauge('v1.hub.reroute.percent').set(percent.to_i)
+        rescue => e
+          puts e.message, e.backtrace
+          percent ? percent.to_i : -1
         end
 
         def object
