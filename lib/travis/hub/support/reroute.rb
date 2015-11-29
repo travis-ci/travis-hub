@@ -73,7 +73,7 @@ module Travis
         end
 
         def percent
-          percent = context.redis.get(:"#{name}_percent") || -1
+          percent = ENV['REROUTE_PERCENT'] || context.redis.get(:"#{name}_percent") || -1
           context.metrics.meter('hub.reroute.percent', percent.to_i)
           percent.to_i
         rescue
