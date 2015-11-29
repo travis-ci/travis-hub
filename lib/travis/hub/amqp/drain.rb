@@ -13,8 +13,9 @@ module Travis
         end
 
         def handle(event, payload)
+          info "Draining #{event} for id=#{payload['id']} to sidekiq=hub"
           publish(event, payload)
-          meter(key)
+          meter('hub.drain')
         end
 
         private
@@ -25,10 +26,6 @@ module Travis
               'class'   => 'Travis::Hub::Sidekiq::Worker',
               'args'    => [event, payload]
             )
-          end
-
-          def meter(key)
-            super("hub.#{name}.drain.#{key}")
           end
       end
     end
