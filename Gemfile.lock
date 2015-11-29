@@ -13,10 +13,9 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 87c136388da8594ade7d757a9bea54093d6c501c
-  ref: sf-refactor
+  revision: 4cbb8cd035dc1a42dd8df8ef4130caae367711c0
   specs:
-    travis-exceptions (0.0.1)
+    travis-exceptions (0.0.2)
       sentry-raven
 
 GIT

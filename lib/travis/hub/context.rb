@@ -21,18 +21,17 @@ module Travis
       def initialize(options = {})
         @config     = Config.load
         @logger     = options[:logger] || Travis::Logger.new(STDOUT, config)
-        @redis      = Travis::RedisPool.new(config.redis.to_h)
+        @exceptions = Travis::Exceptions.setup(config, config.env, logger)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
-        # TODO Exceptions.setup creates a thread and is not safe to be called repeatedly, e.g. in tests
-        @exceptions = $exceptions ||= Travis::Exceptions.setup(config, config.env, logger)
+        @redis      = Travis::RedisPool.new(config.redis.to_h)
 
         Travis::Amqp.setup(config.amqp)
+        Travis::Database.connect(ActiveRecord::Base, config.database, logger)
+        Travis::Sidekiq.setup(config)
+
         Travis::Addons.setup(config, logger)
         Travis::Event.setup(config.notifications, logger)
         Travis::Instrumentation.setup(logger)
-        Travis::Sidekiq.setup(config)
-
-        Travis::Database.connect(ActiveRecord::Base, config.database, logger)
 
         # TODO remove, message travis-logs instead
         [Log, Log::Part].each do |const|
@@ -41,6 +40,8 @@ module Travis
 
         # TODO remove Hub.context
         Hub.context = self
+
+        # test_exception_reporting
       end
 
 
@@ -53,7 +54,7 @@ module Travis
         end
 
         def test_exception_reporting
-          Travis::Exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
+          exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
         end
     end
   end

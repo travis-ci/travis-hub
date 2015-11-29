@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.2', engine: 'jruby', engine_version: '9.0.3.0' if ENV.key?('DYNO')
 
 gem 'travis-amqp',            github: 'travis-ci/travis-amqp'
-gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions', ref: 'sf-refactor'
+gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
 gem 'travis-logger',          github: 'travis-ci/travis-logger'
 gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
 gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
