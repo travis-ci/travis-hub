@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/travis-ci/travis-amqp.git
-  revision: 4eaadb995e44bf41d252b5e903b86e0e3950f3ae
-  specs:
-    travis-amqp (0.0.1)
-
-GIT
   remote: git://github.com/travis-ci/travis-config.git
   revision: 3094fc53386aa96115a871d48bd573046f849468
   specs:
@@ -204,7 +198,6 @@ DEPENDENCIES
   sentry-raven
   sidekiq
   simple_states
-  travis-amqp!
   travis-config!
   travis-encrypt
   travis-exceptions!

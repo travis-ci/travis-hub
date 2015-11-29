@@ -11,14 +11,13 @@ module Travis
 
     class Reroute < Struct.new(:type, :event, :payload)
       class Amqp
-        def publish(queue, event, payload)
-          publisher = Travis::Amqp::Publisher.jobs(queue)
-          publisher.publish(payload, properties: { type: event })
+        def publish(context, queue, event, payload)
+          context.amqp.publish(queue, event, payload)
         end
       end
 
       class Sidekiq
-        def publish(queue, event, payload)
+        def publish(context, queue, event, payload)
           ::Sidekiq::Client.push(
             'queue' => queue,
             'class' => 'Travis::Hub::Sidekiq::Worker',
@@ -41,11 +40,11 @@ module Travis
       end
 
       def reroute
-        target = context.redis.get("#{name}_target") || :amqp
+        target = ENV['REROUTE_TARGET'] || context.redis.get("#{name}_target") || :amqp
         queue  = QUEUES[target.to_sym]
         info "Routing #{type}:#{event} for id=#{object.id} to #{target}=#{queue}"
         publisher = self.class.const_get(camelize(target)).new
-        publisher.publish(queue, [type, event].join(':'), payload)
+        publisher.publish(context, queue, [type, event].join(':'), payload)
       end
 
       private

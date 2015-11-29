@@ -1,4 +1,3 @@
-require 'travis/amqp'
 require 'travis/event'
 require 'travis/exceptions'
 require 'travis/instrumentation'
@@ -9,6 +8,7 @@ require 'travis/addons'
 require 'travis/hub/config'
 require 'travis/hub/event/metrics'
 require 'travis/hub/model'
+require 'travis/hub/support/amqp'
 require 'travis/hub/support/database'
 require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
@@ -16,7 +16,7 @@ require 'travis/hub/support/sidekiq'
 module Travis
   module Hub
     class Context
-      attr_reader :config, :logger, :metrics, :redis, :exceptions
+      attr_reader :config, :logger, :metrics, :exceptions, :redis, :amqp
 
       def initialize(options = {})
         @config     = Config.load
@@ -24,8 +24,8 @@ module Travis
         @exceptions = Travis::Exceptions.setup(config, config.env, logger)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
+        @amqp       = Travis::Amqp.setup(config.amqp)
 
-        Travis::Amqp.setup(config.amqp)
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
 
@@ -46,12 +46,6 @@ module Travis
 
 
       private
-
-        def declare_exchanges_and_queues
-          channel = amqp.connection.create_channel
-          channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
-          channel.queue('builds.linux', durable: true, exclusive: false)
-        end
 
         def test_exception_reporting
           exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })

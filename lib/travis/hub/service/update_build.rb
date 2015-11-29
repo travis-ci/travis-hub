@@ -37,7 +37,7 @@ module Travis
           end
 
           def notify
-            build.jobs.each { |job| NotifyWorkers.new.cancel(job) } if event == :cancel
+            build.jobs.each { |job| NotifyWorkers.new(context).cancel(job) } if event == :cancel
           end
 
           def validate

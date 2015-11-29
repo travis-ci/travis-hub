@@ -1,5 +1,3 @@
-require 'travis/amqp'
-
 module Travis
   module Hub
     class Amqp
@@ -23,8 +21,7 @@ module Travis
 
           def requeue(event, payload)
             # hub worker count has changed, send this back to the original queue
-            publisher = Travis::Amqp::Publisher.jobs('builds')
-            publisher.publish(payload, properties: { type: event })
+            context.amqp.publish('builds', payload, properties: { type: event })
             meter("hub.#{name}.requeue")
           end
 
