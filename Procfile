@@ -1,8 +1,8 @@
-solo:       bundle exec bin/hub solo       --count $DYNO_COUNT
-dispatcher: bundle exec bin/hub dispatcher --count $DYNO_COUNT
-worker:     bundle exec bin/hub worker     --count $DYNO_COUNT --number $DYNO
+solo:       bundle exec je bin/hub solo       --count $DYNO_COUNT
+dispatcher: bundle exec je bin/hub dispatcher --count $DYNO_COUNT
+worker:     bundle exec je bin/hub worker     --count $DYNO_COUNT --number $DYNO
 
-drain:      bundle exec bin/hub drain
-sidekiq:    bundle exec bin/sidekiq ${SIDEKIQ_CONCURRENCY:-5} ${SIDEKIQ_QUEUE:-hub}
+drain:      bundle exec je bin/hub drain
+sidekiq:    bundle exec je bin/sidekiq ${SIDEKIQ_CONCURRENCY:-5} ${SIDEKIQ_QUEUE:-hub}
 
-console:    bundle exec bin/console
+console:    bundle exec je bin/console
