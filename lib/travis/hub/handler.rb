@@ -75,7 +75,8 @@ module Travis
           end
         rescue ActiveRecord::ActiveRecordError => e
           count ||= 0
-          raise e if count += 1 > 10
+          raise e if count > 10
+          count += 1
           error "ActiveRecord::ConnectionTimeoutError while processing a message. Retrying #{count}/10."
           meter 'hub.exceptions.active_record'
           sleep 1
