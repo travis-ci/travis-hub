@@ -1,0 +1,16 @@
+#!/bin/bash
+
+threads=$1
+shift
+queues=$@
+args=
+
+export RUBYOPT="-Ilib $RUBYOPT"
+
+cmd="sidekiq -r ./lib/travis/hub/sidekiq.rb -c $threads"
+for queue in $queues; do
+  cmd="$cmd -q $queue"
+done
+
+echo "Running: $cmd"
+$cmd

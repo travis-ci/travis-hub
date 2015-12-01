@@ -1,6 +1,6 @@
 module Travis
   module Hub
-    class App
+    class Amqp
       class Worker < Solo
         attr_accessor :number
 
@@ -15,15 +15,13 @@ module Travis
             "#{super}.#{number}"
           end
 
-          def handle(type, payload)
-            payload.delete('worker_count') == count ? super : requeue(type, payload)
+          def handle(event, payload)
+            payload.delete('worker_count') == count ? super : requeue(event, payload)
           end
 
-          def requeue(type, payload)
+          def requeue(event, payload)
             # hub worker count has changed, send this back to the original queue
-            # TODO use context.amqp
-            publisher = Travis::Amqp::Publisher.jobs('builds')
-            publisher.publish(payload, properties: { type: type })
+            context.amqp.publish('builds', event, payload)
             meter("hub.#{name}.requeue")
           end
 

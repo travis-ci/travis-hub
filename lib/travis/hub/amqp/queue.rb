@@ -1,49 +1,49 @@
 require 'coder'
-require 'travis/hub/app/error'
+require 'multi_json'
+require 'travis/hub/amqp/error'
 require 'travis/hub/helper/context'
 
 module Travis
   module Hub
-    class App
+    class Amqp
       class Queue
         include Helper::Context
 
-        attr_reader :context, :queue, :options, :handler
+        attr_reader :context, :queue, :handler
 
-        def initialize(context, queue, options = {}, &handler)
+        def initialize(context, queue, &handler)
           @context = context
           @queue   = queue
-          @options = options.merge(ack: true)
           @handler = handler
         end
 
         def subscribe
           info "Subscribing to #{queue}."
-          # TODO use context.amqp
-          Travis::Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
+          # Travis::Amqp::Consumer.jobs(queue).subscribe(options, &method(:receive))
+          context.amqp.subscribe(queue, manual_ack: true, &method(:receive))
         end
 
         private
 
-          def receive(message, payload)
-            failsafe(message, payload) do
-              type = message.properties.type || fail("No type given on #{message.properties.inspect} (payload: #{payload.inspect})")
-              payload = decode(payload)      || fail("No payload for #{message.inspect} (payload: #{payload.inspect})")
+          def receive(info, properties, payload)
+            failsafe(info, properties, payload) do
+              event = properties[:type] || fail("No type given on #{properties.inspect} (payload: #{payload.inspect})")
+              payload = decode(payload) || fail("No payload given: #{payload.inspect}")
               payload.delete('uuid') # TODO seems useless atm, and pollutes the log. decide what to do with these.
-              handler.call(type, payload)
+              handler.call(event, payload)
             end
           end
 
-          def failsafe(message, payload, options = {}, &block)
+          def failsafe(info, properties, payload, options = {}, &block)
             Timeout.timeout(options[:timeout] || 60, &block)
           rescue Exception => e
-            handle_exception(e, message, payload)
+            handle_exception(e, info, properties: properties, payload: payload)
           ensure
-            message.ack
+            context.amqp.ack(info)
           end
 
           def decode(payload)
-            cleaned = Coder.clean(payload)
+            cleaned = Coder.clean(payload) # TODO not needed anymore?
             decoded = MultiJson.decode(cleaned)
             decoded
           rescue StandardError => e
@@ -53,8 +53,8 @@ module Travis
             nil
           end
 
-          def handle_exception(e, message, payload)
-            super(Error.new(e, message.properties.type, payload))
+          def handle_exception(e, info, payload)
+            super(Error.new(e, nil, payload))
           rescue => e
             puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
           end

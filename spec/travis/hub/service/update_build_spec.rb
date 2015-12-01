@@ -2,10 +2,10 @@ describe Travis::Hub::Service::UpdateBuild do
   let(:now)   { Time.now }
   let(:build) { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
   let(:job)   { FactoryGirl.create(:job, state: state) }
-  let(:amqp)  { Travis::Amqp::FanoutPublisher.any_instance }
+  let(:amqp)  { Travis::Amqp.any_instance }
 
   subject     { described_class.new(context, event, data) }
-  before      { amqp.stubs(:publish) }
+  before      { amqp.stubs(:fanout) }
 
   describe 'start event' do
     let(:state) { :created }
@@ -84,7 +84,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
 
     it 'notifies workers' do
-      amqp.expects(:publish).with(type: 'cancel_job', job_id: job.id, source: 'hub')
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
       subject.run
     end
   end

@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2', engine: 'jruby', engine_version: '9.0.3.0' if ENV.key?('DYNO')
+ruby '2.2.2' if ENV.key?('DYNO')
 
-gem 'travis-amqp',            github: 'travis-ci/travis-amqp'
-gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions', ref: 'sf-refactor'
+gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
 gem 'travis-logger',          github: 'travis-ci/travis-logger'
 gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
 gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
@@ -27,8 +26,9 @@ gem 'coder'
 gem 'redlock'
 
 platform :ruby do
-  gem 'pg'
   gem 'jemalloc'
+  gem 'pg'
+  gem 'bunny'
 end
 
 platform :jruby do
@@ -43,5 +43,4 @@ group :test do
   gem 'mocha'
   gem 'database_cleaner'
   gem 'factory_girl'
-  gem 'bunny', platform: :ruby
 end

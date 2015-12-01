@@ -2,7 +2,7 @@ require 'forwardable'
 
 module Travis
   module Hub
-    class App
+    class Amqp
       class Error < StandardError
         extend Forwardable
 

@@ -5,7 +5,7 @@ module Travis
         attr_reader :context
 
         def initialize(context, *args)
-          fail "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(App::Context)
+          fail "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(Hub::Context)
           @context = context
           super(*args)
         end
@@ -27,11 +27,12 @@ module Travis
         end
 
         def log(level, msg, *args)
-          logger.send(level, msg.is_a?(String) ? msg : self.class::MSGS[msg] % args)
+          logger.send(level, msg.is_a?(::String) ? msg : self.class::MSGS[msg] % args)
         end
 
         def handle_exception(*args)
-          context.exceptions.handle(*args)
+          # context.exceptions.handle(*args)
+          Exceptions.handle(*args)
         end
 
         def meter(*args, &block)

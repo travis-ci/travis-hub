@@ -3,8 +3,8 @@ require 'travis/event/handler'
 
 module Travis
   module Hub
-    module Handler
-      class Metrics < Event::Handler
+    module Event
+      class Metrics < Travis::Event::Handler
         register :metrics, self
 
         EVENTS = /job:(received|started|finished)/

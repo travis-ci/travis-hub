@@ -17,7 +17,7 @@ describe Travis::Addons::Serializer::Webhook::Build do
       started_at: nil,
       finished_at: nil,
       duration: nil,
-      build_url: "https://host.com/travis-ci/travis-core/builds/#{build.id}",
+      build_url: "https://travis-ci.org/travis-ci/travis-core/builds/#{build.id}",
       config:  {},
       commit_id: commit.id,
       commit: '62aae5f70ceee39123ef',
