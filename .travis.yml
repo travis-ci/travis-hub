@@ -7,6 +7,7 @@ rvm:
 
 services:
   - redis
+  - rabbitmq
 
 addons:
   postgresql: 9.3
