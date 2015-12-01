@@ -9,12 +9,15 @@ module Travis
       class Dispatcher
         include Helper::Context
 
-        attr_reader :context, :count, :publishers
+        attr_reader :context, :count
 
         def initialize(context, _, options)
           @context = context
           @count = options[:count] || 1
-          @publishers = {}
+        end
+
+        def run
+          Queue.new(context, queue, &method(:handle)).subscribe
         end
 
         private
@@ -30,8 +33,7 @@ module Travis
           end
 
           def publish(key, event, payload)
-            publisher = publisher(queue_for(key))
-            publisher.publish(payload.merge(worker_count: count), properties: { type: event })
+            context.amqp.publish(queue_for(key), event, payload.merge(worker_count: count))
             meter("hub.dispatcher.delegate.#{key}")
           end
 
@@ -39,12 +41,12 @@ module Travis
           #   Reroute.new(:hub_next, id: job.id, owner_name: job.repository.owner_name).reroute?
           # end
 
-          def publisher(name)
-            publishers[name] ||= Travis::Amqp::Publisher.jobs(name)
-          end
-
           def queue_for(num)
             "#{queue}.#{num}"
+          end
+
+          def queue
+            config.queue
           end
 
           def with_active_record(&block)

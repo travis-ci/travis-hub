@@ -21,7 +21,7 @@ module Travis
 
           def requeue(event, payload)
             # hub worker count has changed, send this back to the original queue
-            context.amqp.publish('builds', payload, properties: { type: event })
+            context.amqp.publish('builds', event, payload)
             meter("hub.#{name}.requeue")
           end
 
