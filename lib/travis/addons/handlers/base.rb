@@ -47,6 +47,16 @@ module Travis
         def pull_request?
           object.pull_request?
         end
+
+        def enabled?(notifier)
+          sym = notifier.to_sym
+          pull_request? ? on_pull_request?(sym) : true
+        end
+
+        def on_pull_request?(sym)
+          value = config.values(sym, :on_pull_requests)
+          value.nil? || value
+        end
       end
     end
   end
