@@ -3,7 +3,6 @@ language: ruby
 
 rvm:
   - 2.2
-  - jruby-9.0.3.0
 
 services:
   - redis
