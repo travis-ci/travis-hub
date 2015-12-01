@@ -23,9 +23,15 @@ describe Travis::Addons::Handlers::Slack do
       expect(handler.handle?).to eql(true)
     end
 
-    it 'is true if the build is a pull request' do
+    it 'is true by default if the build is a pull request' do
       build.update_attributes(event_type: 'pull_request')
       expect(handler.handle?).to eql(true)
+    end
+
+    it 'is false if the build is a pull request and config opts out' do
+      config[:slack] = { rooms: 'room', on_pull_requests: false }
+      build.update_attributes(event_type: 'pull_request')
+      expect(handler.handle?).to eql(false)
     end
 
     it 'is true if rooms are present' do
