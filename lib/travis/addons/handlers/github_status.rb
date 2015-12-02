@@ -29,7 +29,7 @@ module Travis
               scope = scope.includes(:user).order('admin DESC')
               users = scope.map(&:user)
               users = [committer] + (users - [committer]) if committer
-              users
+              users.compact
             end
           end
 
