@@ -7,20 +7,11 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          enabled? && targets.present? && config.send_on?(:hipchat, action)
+          enabled?(:hipchat) && targets.present? && config.send_on?(:hipchat, action)
         end
 
         def handle
           run_task(:hipchat, payload, targets: targets)
-        end
-
-        def enabled?
-          pull_request? ? on_pull_request? : true
-        end
-
-        def on_pull_request?
-          value = config.values(:hipchat, :on_pull_requests)
-          value.nil? || value
         end
 
         def targets
