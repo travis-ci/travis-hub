@@ -58,6 +58,7 @@ module Travis
           payload.keys.each do |key|
             payload.delete(key) if payload[key].to_s.include?('0001-01-01')
           end
+          payload
         end
 
         def unknown_event(event)
