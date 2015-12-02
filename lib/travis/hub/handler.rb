@@ -51,7 +51,13 @@ module Travis
           payload = payload.symbolize_keys
           payload.delete(:state)       if payload[:state] == 'reset'
           payload[:state] = 'canceled' if payload[:state] == 'cancelled'
-          payload
+          normalize_timestamps(payload)
+        end
+
+        def normalize_timestamps(payload)
+          payload.keys.each do |key|
+            payload.delete(key) if payload[key].to_s.include?('0001-01-01')
+          end
         end
 
         def unknown_event(event)
