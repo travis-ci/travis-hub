@@ -1,18 +1,18 @@
 {
-  "name": "Hub Update median",
+  "name": "Hub RabbitMQ Ack Rates",
   "type": "line",
   "streams": [
     {
-      "metric": "hub.worker.handle.median",
+      "metric": "v1.travis.rabbitmq.queues.reporting.jobs.builds.ack_rate",
       "type": "gauge",
-      "source": "%{app}-production.*",
+      "source": "*",
       "group_function": "average",
       "summary_function": "average"
     },
     {
       "metric": "heroku.logs.releases",
       "type": "annotation",
-      "source": "%{app}"
+      "source": "%{app}*"
     }
   ]
 }

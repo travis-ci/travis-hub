@@ -3,16 +3,16 @@
   "type": "line",
   "streams": [
     {
-      "metric": "hub.worker.handle.95th_percentile",
+      "metric": "v1.hub.handle.job.95th_percentile",
       "type": "gauge",
-      "source": "%{app}-production.*",
-      "group_function": "average",
-      "summary_function": "average"
+      "source": "*",
+      "group_function": "breakout",
+      "summary_function": "max"
     },
     {
       "metric": "heroku.logs.releases",
       "type": "annotation",
-      "source": "%{app}"
+      "source": "%{app}*"
     }
   ]
 }

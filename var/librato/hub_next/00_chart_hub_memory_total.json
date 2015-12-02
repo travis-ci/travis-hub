@@ -1,0 +1,20 @@
+{
+  "name": "Hub Memory Total",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.memory_total",
+      "type": "gauge",
+      "source": "%{app}-next.*",
+      "group_function": "breakout",
+      "summary_function": "max",
+      "downsample_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}-next",
+      "downsample_function": "average"
+    }
+  ]
+}

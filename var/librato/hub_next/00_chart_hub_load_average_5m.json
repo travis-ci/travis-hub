@@ -5,14 +5,16 @@
     {
       "metric": "heroku.logs.load_avg_5m",
       "type": "gauge",
-      "source": "%{app}.*",
+      "source": "%{app}-next.*",
       "group_function": "breakout",
-      "summary_function": "max"
+      "summary_function": "average",
+      "downsample_function": "average"
     },
     {
       "metric": "heroku.logs.releases",
       "type": "annotation",
-      "source": "%{app}"
+      "source": "%{app}-next",
+      "downsample_function": "average"
     }
   ]
 }

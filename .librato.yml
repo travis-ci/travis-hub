@@ -1,6 +1,6 @@
 spaces:
-  # -
-  #   name: Hub
+  -
+    name: Hub
   #   order:
   #     - hub_updates_count
   #     - hub_update_median
@@ -9,8 +9,8 @@ spaces:
   #     - hub_load_average_5m
   #     - hub_memory_total
   #     - postgres_load_avg
-  -
-    name: Hub next
+  # -
+  #   name: Hub Next
 
 accounts:
   org:

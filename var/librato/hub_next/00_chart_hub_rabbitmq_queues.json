@@ -1,0 +1,12 @@
+{
+  "name": "Hub RabbitMQ Queues",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}",
+      "downsample_function": "average"
+    }
+  ]
+}
