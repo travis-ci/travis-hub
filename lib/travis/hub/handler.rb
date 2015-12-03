@@ -55,10 +55,7 @@ module Travis
         end
 
         def normalize_timestamps(payload)
-          payload.keys.each do |key|
-            payload.delete(key) if payload[key].to_s.include?('0001-01-01')
-          end
-          payload
+          payload.reject { |key, value| value.to_s.include?('0001') }
         end
 
         def unknown_event(event)
@@ -67,11 +64,12 @@ module Travis
 
         def time
           started_at = Time.now
-          yield
-          options = { started_at: started_at, finished_at: Time.now }
-          meter("hub.handle", options)
-          meter("hub.handle.#{type}", options)
-          meter("hub.handle.#{type}.#{event}", options)
+          yield.tap do
+            options = { started_at: started_at, finished_at: Time.now }
+            meter("hub.handle", options)
+            meter("hub.handle.#{type}", options)
+            meter("hub.handle.#{type}.#{event}", options)
+          end
         end
 
         def with_active_record(&block)
