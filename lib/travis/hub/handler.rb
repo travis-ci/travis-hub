@@ -49,9 +49,14 @@ module Travis
 
         def normalize_payload(payload)
           payload = payload.symbolize_keys
+          payload = normalize_state(payload)
+          normalize_timestamps(payload)
+        end
+
+        def normalize_state(payload)
           payload.delete(:state)       if payload[:state] == 'reset'
           payload[:state] = 'canceled' if payload[:state] == 'cancelled'
-          normalize_timestamps(payload)
+          payload
         end
 
         def normalize_timestamps(payload)

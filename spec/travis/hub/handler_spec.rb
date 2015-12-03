@@ -3,10 +3,6 @@ describe Travis::Hub::Handler do
   let(:received_at)  { '2015-12-01T10:20:40Z' }
   let(:finished_at)  { '2015-12-01T10:20:50Z' }
 
-  # let(:update_build) { Travis::Hub::Service::UpdateBuild }
-  # let(:update_job)   { Travis::Hub::Service::UpdateJob }
-  # let(:service)      { stub('service', run: nil) }
-
   let!(:build)       { FactoryGirl.create(:build, id: 1, state: :created, jobs: [job]) }
   let(:job)          { FactoryGirl.create(:job, id: 1, state: :created) }
 
@@ -24,6 +20,7 @@ describe Travis::Hub::Handler do
 
     describe 'given false timestamps' do
       let(:started_at)  { '0001-01-01T00:00:00Z' }
+      let(:received_at) { '0001-01-01T00:00:00Z' }
 
       it { expect { job.reload.started_at }.to_not raise_error }
       it { expect(job.reload.started_at).to be_nil }
@@ -35,3 +32,4 @@ describe Travis::Hub::Handler do
     hash.reject { |key, value| keys.include?(key) }
   end
 end
+
