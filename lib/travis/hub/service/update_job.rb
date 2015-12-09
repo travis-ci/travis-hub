@@ -28,6 +28,9 @@ module Travis
 
         def job
           @job ||= Job.find(data[:id])
+        rescue => e
+          p self
+          raise e
         end
 
         private

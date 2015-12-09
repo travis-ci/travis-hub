@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 4cbb8cd035dc1a42dd8df8ef4130caae367711c0
+  revision: 626974e5884173c97fdd0876ce51dda5ab3e5542
   specs:
     travis-exceptions (0.0.2)
       sentry-raven
