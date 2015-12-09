@@ -60,7 +60,7 @@ module Travis
         end
 
         def normalize_timestamps(payload)
-          payload.reject { |key, value| value.to_s.include?('0001') }
+          payload.reject { |key, value| key.to_s =~ /_at$/ && value.to_s.include?('0001') }
         end
 
         def unknown_event(event)
