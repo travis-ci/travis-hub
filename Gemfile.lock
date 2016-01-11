@@ -34,7 +34,8 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-metrics.git
-  revision: b0daa726bd285f1fa913fab713b5c216f5083ae4
+  revision: be5028f7d9a2904107d2caa42ab67159fe145990
+  ref: sf-tr-te
   specs:
     travis-metrics (0.0.1)
       metriks-librato_metrics (~> 1.0)
