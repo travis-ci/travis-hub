@@ -18,7 +18,9 @@ before_install:
   - which bundle || gem install bundler
 
 before_script:
-  - psql -q < spec/support/db.sql
+  - sh 'createdb travis_test' rescue nil
+  - sh "cp #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/structure.sql spec/support/db/structure.sql"
+  - psql -q < spec/support/structure.sql
 
 script:
   - bundle exec rspec --require spec_helper
