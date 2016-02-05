@@ -18,7 +18,7 @@ before_install:
   - which bundle || gem install bundler
 
 before_script:
-  - psql -q < spec/support/db.sql
+  - bundle exec rake db:create --trace
 
 script:
   - bundle exec rspec --require spec_helper
