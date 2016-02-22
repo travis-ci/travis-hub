@@ -4,7 +4,7 @@ ruby '2.2.2' if ENV.key?('DYNO')
 
 gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
 gem 'travis-logger',          github: 'travis-ci/travis-logger'
-gem 'travis-metrics',         github: 'travis-ci/travis-metrics', ref: 'sf-tr-te'
+gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
 gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 
 gem 'travis-config', '~> 1.0.4'

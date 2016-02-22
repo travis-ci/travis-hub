@@ -27,8 +27,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-metrics.git
-  revision: be5028f7d9a2904107d2caa42ab67159fe145990
-  ref: sf-tr-te
+  revision: 37eac93bd1e9bd949a9842f28154c335ebeda42a
   specs:
     travis-metrics (0.0.1)
       metriks-librato_metrics (~> 1.0)
@@ -204,4 +203,4 @@ DEPENDENCIES
   unlimited-jce-policy-jdk7!
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
