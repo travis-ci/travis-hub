@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/travis-ci/travis-config.git
-  revision: 3094fc53386aa96115a871d48bd573046f849468
-  specs:
-    travis-config (1.0.3)
-      hashr (~> 2.0.0)
-
-GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
   revision: 626974e5884173c97fdd0876ce51dda5ab3e5542
   specs:
@@ -34,7 +27,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-metrics.git
-  revision: b0daa726bd285f1fa913fab713b5c216f5083ae4
+  revision: 37eac93bd1e9bd949a9842f28154c335ebeda42a
   specs:
     travis-metrics (0.0.1)
       metriks-librato_metrics (~> 1.0)
@@ -173,6 +166,8 @@ GEM
     thread_safe (0.3.5-java)
     timers (4.1.1)
       hitimes
+    travis-config (1.0.4)
+      hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -204,7 +199,7 @@ DEPENDENCIES
   sentry-raven
   sidekiq
   simple_states
-  travis-config!
+  travis-config (~> 1.0.4)
   travis-encrypt
   travis-exceptions!
   travis-instrumentation!
@@ -215,4 +210,4 @@ DEPENDENCIES
   unlimited-jce-policy-jdk7!
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

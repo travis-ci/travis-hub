@@ -7,12 +7,12 @@ module Travis
     attr_accessor :context
 
     def config
-      puts "Calling Hub.config is deprected. Called from #{caller.first}"
+      puts "Calling Hub.config is deprecated. Called from #{caller.first}"
       context.config
     end
 
     def logger
-      puts "Calling Hub.logger is deprected. Called from #{caller.first}"
+      puts "Calling Hub.logger is deprecated. Called from #{caller.first}"
       context.logger
     end
 
