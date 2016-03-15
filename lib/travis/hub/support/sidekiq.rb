@@ -15,7 +15,7 @@ module Travis
         }
 
         c.server_middleware do |chain|
-          chain.add Travis::Exceptions::Sidekiq if config.sentry.dsn
+          chain.add Travis::Exceptions::Sidekiq if config.sentry && config.sentry.dsn
           chain.add Travis::Metrics::Sidekiq
         end
 
