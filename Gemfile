@@ -43,4 +43,5 @@ group :test do
   gem 'mocha'
   gem 'database_cleaner'
   gem 'factory_girl'
+  gem 'travis-migrations', github: 'travis-ci/travis-migrations'
 end

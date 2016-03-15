@@ -40,6 +40,12 @@ GIT
       metriks-librato_metrics (~> 1.0)
 
 GIT
+  remote: git://github.com/travis-ci/travis-migrations.git
+  revision: d6105ad77303bcd04d1e376070a11dbc8b3077c7
+  specs:
+    travis-migrations (0.0.1)
+
+GIT
   remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
   revision: 16230176b2b85f7c569550ce3544b273d77616ee
   specs:
@@ -205,6 +211,7 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
+  travis-migrations!
   unlimited-jce-policy-jdk7!
 
 BUNDLED WITH
