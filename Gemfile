@@ -10,6 +10,7 @@ gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 gem 'travis-config',          '~> 1.0.6'
 gem 'travis-encrypt'
 gem 'travis-lock',            github: 'travis-ci/travis-lock'
+gem 'travis-migrations',      github: 'travis-ci/travis-migrations'
 
 gem 'rake'
 gem 'redis'
@@ -43,5 +44,4 @@ group :test do
   gem 'mocha'
   gem 'database_cleaner'
   gem 'factory_girl'
-  gem 'travis-migrations', github: 'travis-ci/travis-migrations'
 end
