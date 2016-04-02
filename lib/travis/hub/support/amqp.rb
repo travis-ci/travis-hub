@@ -5,7 +5,9 @@ module Travis
   class Amqp
     class << self
       def setup(config)
-        @instance ||= new(config)
+        @instance ||= new(config).tap do |amqp|
+          amqp.setup
+        end
       end
     end
 
@@ -15,6 +17,12 @@ module Travis
       @connection = Bunny.new(config.to_h).tap { |connection| connection.start }
       # TODO channels must not be shared across threads, set this to Thread.current?
       @channel = connection.create_channel
+    end
+
+    def setup
+      # TODO required on enterprise. move details to config?
+      channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
+      channel.queue('builds.linux', durable: true, exclusive: false)
     end
 
     def subscribe(queue, options, &handler)
@@ -45,11 +53,5 @@ module Travis
     rescue => e
       puts e.message, e.backtrace
     end
-
-    #   TODO
-    #   def declare_exchanges_and_queues
-    #     channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
-    #     channel.queue('builds.linux', durable: true, exclusive: false)
-    #   end
   end
 end
