@@ -1,14 +1,9 @@
-require 'rake'
-require 'travis/migrations'
-
-task default: :spec
-
 namespace :db do
-  desc 'Create the test database'
+  env = ENV["RAILS_ENV"]
+  fail "Cannot run rake db:create in production." if env == 'production'
+  desc "Create and migrate the #{env} database"
   task :create do
-    sh 'createdb travis_test' rescue nil
-    sh 'mkdir spec/support/db'
-    sh "cp #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/structure.sql spec/support/db/structure.sql"
-    sh 'psql -q travis_test < spec/support/db/structure.sql'
+    sh "createdb travis_#{env}" rescue nil
+    sh "psql -q travis_#{env} < #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/structure.sql"
   end
 end
