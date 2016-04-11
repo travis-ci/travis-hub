@@ -1,5 +1,5 @@
 describe Travis::Addons::Serializer::Pusher::Build do
-  let(:repo)   { FactoryGirl.create(:repository) }
+  let(:repo)   { FactoryGirl.create(:repository, active: true) }
   let(:job)    { FactoryGirl.create(:job) }
   let(:build)  { FactoryGirl.create(:build, repository: repo, jobs: [job]) }
   let!(:branch){ FactoryGirl.create(:branch, repository: repo, name: 'master', last_build: build) }
@@ -50,7 +50,8 @@ describe Travis::Addons::Serializer::Pusher::Build do
       default_branch: {
         name: 'master',
         last_build_id: build.id
-      }
+      },
+      active: true
     )
   end
 end
