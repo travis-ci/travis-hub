@@ -55,7 +55,7 @@ class Job < ActiveRecord::Base
   end
 
   def first_job?
-    build.jobs.first == self
+    build.jobs.first.number == self.number
   end
 
   private
