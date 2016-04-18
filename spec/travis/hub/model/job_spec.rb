@@ -65,13 +65,14 @@ describe Job do
 
     describe 'multiple jobs' do
       let(:second_job)    { FactoryGirl.create(:job, repository: repo, build: build, state: state) }
+      before { receive }
       it 'sets :started_at on build, only on firs job' do
-        receive
         second_job.send(:start, params)
         expect(second_job.build.reload.started_at).to eql(job.reload.started_at)
+        expect(second_job.build.reload.started_at).to eql(now)
       end
-
     end
+
     describe 'it denormalizes to the repository' do
       %w(id number state duration started_at finished_at).each do |attr|
         it "sets last_build_#{attr}" do

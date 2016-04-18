@@ -17,7 +17,7 @@ class Job < ActiveRecord::Base
   has_one    :log
 
   event :receive
-  event :start,   after: :propagate
+  event :start,   after: :propagate, if: :first_job?
   event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
@@ -54,10 +54,14 @@ class Job < ActiveRecord::Base
     self.finished_at = Time.now
   end
 
+  def first_job?
+    build.jobs.first == self
+  end
+
   private
 
     def propagate(event, *args)
-      build.send(:"#{event}!", *args) unless event == "start" && build.jobs.first != self
+      build.send(:"#{event}!", *args)
     end
 
     def config_valid?
