@@ -57,7 +57,7 @@ class Job < ActiveRecord::Base
   private
 
     def propagate(event, *args)
-      build.send(:"#{event}!", *args)
+      build.send(:"#{event}!", *args) unless event == "start" && build.jobs.first != self
     end
 
     def config_valid?

@@ -208,6 +208,3 @@ DEPENDENCIES
   travis-metrics!
   travis-migrations!
   unlimited-jce-policy-jdk7!
-
-BUNDLED WITH
-   1.11.2
