@@ -28,6 +28,10 @@ class Build < ActiveRecord::Base
     !started?
   end
 
+  def start(*)
+    started_at = self.jobs.first.started_at
+  end
+
   def finish?(*)
     matrix.finished?
   end
