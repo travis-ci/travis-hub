@@ -28,8 +28,8 @@ class Build < ActiveRecord::Base
     !started?
   end
 
-  def start(*)
-    self.started_at = self.jobs.first.started_at
+  def started_at
+    started_at = jobs.first.started_at
   end
 
   def finish?(*)
