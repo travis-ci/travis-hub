@@ -38,7 +38,7 @@ class Job < ActiveRecord::Base
   end
 
   def restart?(*)
-    config_valid?
+    config_valid? && first_build?
   end
 
   def restart(*)
