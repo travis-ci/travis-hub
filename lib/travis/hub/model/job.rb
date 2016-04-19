@@ -17,7 +17,7 @@ class Job < ActiveRecord::Base
   has_one    :log
 
   event :receive
-  event :start,   after: :propagate
+  event :start,   after: :propagate, if: :first_build?
   event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
@@ -52,6 +52,11 @@ class Job < ActiveRecord::Base
 
   def cancel(*)
     self.finished_at = Time.now
+  end
+
+  #propagate to build only if it is the first job
+  def first_build?
+    self == self.build.jobs.first
   end
 
   private
