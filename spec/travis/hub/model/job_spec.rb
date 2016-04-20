@@ -69,7 +69,6 @@ describe Job do
       it 'sets :started_at on build, only on firs job' do
         second_job.send(:start, params)
         expect(second_job.build.reload.started_at).to eql(job.reload.started_at)
-        #expect(second_job.started_at).to eql(now)
       end
     end
 
