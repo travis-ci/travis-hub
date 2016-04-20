@@ -30,6 +30,7 @@ class Build < ActiveRecord::Base
   end
 
   def finish?(*)
+    p "finish? ------------- started_at: #{self.started_at} -- state: #{state} "
     matrix.finished?
   end
 
