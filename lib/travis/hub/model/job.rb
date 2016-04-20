@@ -38,7 +38,7 @@ class Job < ActiveRecord::Base
   end
 
   def restart?(*)
-    config_valid? && first_build?
+    config_valid?
   end
 
   def restart(*)
@@ -57,6 +57,7 @@ class Job < ActiveRecord::Base
   private
 
     def propagate(event, *args)
+      p "||- event: #{event}  args: #{args}"
       build.send(:"#{event}!", *args)
     end
 
