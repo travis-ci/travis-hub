@@ -57,6 +57,7 @@ class Job < ActiveRecord::Base
   private
 
     def propagate(event, *args)
+      p "||- event: #{event}  args: #{args}"
       build.send(:"#{event}!", *args)
     end
 

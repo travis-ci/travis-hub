@@ -25,10 +25,12 @@ class Build < ActiveRecord::Base
   end
 
   def start?(*)
-    !started?
+    p "start? -------#{!started?}------ started_at: #{self.started_at} -- state: #{state} "
+    !started?    # check if state is correct and it doesn't re set the date
   end
 
   def finish?(*)
+    p "finish? ------------- started_at: #{self.started_at} -- state: #{state} "
     matrix.finished?
   end
 

@@ -57,9 +57,18 @@ describe Job do
         expect(job.build.reload.state).to eql(:started)
       end
 
-      it 'sets :finished_at' do
+      it 'sets :started_at' do
         receive
         expect(job.build.reload.started_at).to eql(now)
+      end
+    end
+
+    describe 'multiple jobs' do
+      let(:second_job)    { FactoryGirl.create(:job, repository: repo, build: build, state: state) }
+      before { receive }
+      it 'sets :started_at on build, only on firs job' do
+        second_job.send(:start, params)
+        expect(second_job.build.reload.started_at).to eql(job.reload.started_at)
       end
     end
 
