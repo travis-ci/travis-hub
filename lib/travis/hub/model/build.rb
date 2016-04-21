@@ -25,7 +25,7 @@ class Build < ActiveRecord::Base
   end
 
   def start?(*)
-    p "start? ------------- started_at: #{self.started_at} -- state: #{state} "
+    p "start? -------#{!started?}------ started_at: #{self.started_at} -- state: #{state} "
     !started?    # check if state is correct and it doesn't re set the date
   end
 
