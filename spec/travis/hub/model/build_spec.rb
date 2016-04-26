@@ -1,4 +1,5 @@
 describe Build do
+  let(:state)  { :created }
   let(:params) { {} }
   let(:repo)   { FactoryGirl.create(:repository) }
   let(:build)  { FactoryGirl.create(:build, repository: repo, state: state) }
@@ -188,16 +189,20 @@ describe Build do
     end
   end
 
-  describe 'a build with a matrix, starting jobs' do
-    let(:state) { :created }
+  describe 'timestamps' do
+    let(:job)   { FactoryGirl.create(:job, build: build) }
+    let(:other) { FactoryGirl.create(:job, build: build) }
+    let(:started_at) { Time.now - 6 }
 
-    it 'propagates to the build without changing previous timestamps' do
-      FactoryGirl.create(:job, build: build)
-      FactoryGirl.create(:job, build: build)
-      started_at = Time.now - 6
-      build.jobs.first.start!(started_at: started_at, state: 'started')
-      build.jobs.last.start!(started_at: Time.now, state: 'started')
+    it 'a build with a matrix, starting multiple jobs' do
+      job.start!(started_at: started_at, state: 'started')
+      other.start!(started_at: Time.now, state: 'started')
+      expect(build.reload.started_at).to eq started_at
+    end
 
+    it 'worker sending started_at for the finish event' do
+      job.start!(started_at: started_at, state: 'started')
+      job.finish!(started_at: Time.now - 60, finished_at: Time.now, state: 'passed')
       expect(build.reload.started_at).to eq started_at
     end
   end
