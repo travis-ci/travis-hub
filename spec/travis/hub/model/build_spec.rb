@@ -188,14 +188,17 @@ describe Build do
     end
   end
 
-  # describe 'a build with a matrix, starting jobs' do
-  #   let(:state) { :created }
+  describe 'a build with a matrix, starting jobs' do
+    let(:state) { :created }
 
-  #   it 'propagates to the build only once' do
-  #     FactoryGirl.create(:job, build: build)
-  #     FactoryGirl.create(:job, build: build)
-  #     build.jobs.each { |job| job.start!(started_at: Time.now) }
-  #     build.reload.state
-  #   end
-  # end
+    it 'propagates to the build without changing previous timestamps' do
+      FactoryGirl.create(:job, build: build)
+      FactoryGirl.create(:job, build: build)
+      started_at = Time.now - 6
+      build.jobs.first.start!(started_at: started_at, state: 'started')
+      build.jobs.last.start!(started_at: Time.now, state: 'started')
+
+      expect(build.reload.started_at).to eq started_at
+    end
+  end
 end
