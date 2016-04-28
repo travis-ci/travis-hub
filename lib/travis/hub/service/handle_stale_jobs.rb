@@ -14,7 +14,7 @@ module Travis
         STALE_STATES = %w(queued received started)
         OFFSET       = 6 * 3600
         MSGS         = {
-          stale_job: 'A stale job with the id: %s and which was last updated: %s and had the state: %s was errored.'
+          stale_job: 'Erroring stale job: id=%s state=%s updated_at=%s.'
         }
 
         def run
@@ -28,13 +28,10 @@ module Travis
           end
 
           def error(job)
-            logger.info(MSGS[:stale_job] % [job.id, job.updated_at, job.state])
+            logger.info(MSGS[:stale_job] % [job.id, job.state, job.updated_at])
             job.finish!(state: :errored, finished_at: Time.now)
           end
       end
     end
   end
 end
-
-
-
