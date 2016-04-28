@@ -4,7 +4,6 @@ require 'time'
 require 'support/factories'
 require 'support/context'
 require 'support/database_cleaner'
-require 'travis/hub'
 
 # Travis::Hub::Context.new
 

@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << 'lib'
+
+require 'travis/hub'
+
+context = Travis::Hub::Context.new
+Travis::Hub::Service::HandleStaleJobs.new(context).run
