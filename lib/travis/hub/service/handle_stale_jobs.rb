@@ -14,10 +14,12 @@ module Travis
         STALE_STATES = %w(queued received started)
         OFFSET       = 6 * 3600
         MSGS         = {
+          run_stale_job: 'Cleanup stale job started.',
           stale_job: 'Erroring stale job: id=%s state=%s updated_at=%s.'
         }
 
         def run
+          logger.info(MSGS[:run_stale_job])
           stale_jobs.each { |job| error(job) }
         end
 
