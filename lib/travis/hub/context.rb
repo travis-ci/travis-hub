@@ -25,7 +25,6 @@ module Travis
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
         @amqp       = Travis::Amqp.setup(config.amqp)
-
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
 
