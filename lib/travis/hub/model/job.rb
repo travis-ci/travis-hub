@@ -57,10 +57,14 @@ class Job < ActiveRecord::Base
   private
 
     def propagate(event, *args)
-      build.send(:"#{event}!", *args)
+      build.send(:"#{event}!", *args) unless build_already_canceled?(event)
     end
 
     def config_valid?
       !config[:'.result'].to_s.include?('error')
+    end
+
+    def build_already_canceled?(event)
+      build.canceled? && event == 'finish'
     end
 end
