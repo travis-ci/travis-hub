@@ -14,7 +14,7 @@ class Build < ActiveRecord::Base
 
   event  :start,   if: :start?
   event  :finish,  if: :finish?, to: FINISHED_STATES
-  event  :cancel,  if: :cancel?
+  event  :cancel,  if: :cancel?  #TODO check if this is ever used?
   event  :restart, if: :restart?
   event  :all, after: [:denormalize, :notify]
 
@@ -29,7 +29,7 @@ class Build < ActiveRecord::Base
   end
 
   def finish?(*)
-    matrix.finished?
+    matrix.finished? && !canceled?
   end
 
   def finish(*)
