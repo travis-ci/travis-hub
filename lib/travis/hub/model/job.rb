@@ -65,6 +65,6 @@ class Job < ActiveRecord::Base
     end
 
     def build_already_canceled?(event)
-      build.canceled? && event == 'finish'
+      build.canceled? && event == :finish
     end
 end
