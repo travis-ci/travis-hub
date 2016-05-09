@@ -189,6 +189,20 @@ describe Build do
     end
   end
 
+  describe 'a :finish event' do
+    let(:event)  { :finish }
+
+    describe 'with a :canceled state' do
+      let(:state) { :canceled }
+
+      it 'does not change its current state' do
+        receive_event = build.send(:"#{event}!", { state: state })
+        expect { receive_event }.to_not change { build.reload.state }
+        described_class.expects(:notify).never
+      end
+    end
+  end
+
   describe 'timestamps' do
     let(:job)   { FactoryGirl.create(:job, build: build) }
     let(:other) { FactoryGirl.create(:job, build: build) }
