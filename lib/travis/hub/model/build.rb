@@ -3,6 +3,7 @@ require 'travis/event'
 require 'travis/hub/model/job'
 require 'travis/hub/model/build/denormalize'
 require 'travis/hub/model/build/matrix'
+require 'travis/hub/update_current_build'
 
 class Build < ActiveRecord::Base
   include Denormalize, SimpleStates, Travis::Event
@@ -20,12 +21,20 @@ class Build < ActiveRecord::Base
 
   serialize :config
 
+  def pull_request?
+    event_type == 'pull_request'
+  end
+
   def config
     super || {}
   end
 
   def start?(*)
     !started?
+  end
+
+  def start(*)
+    Travis::Hub::UpdateCurrentBuild.new(self).update!
   end
 
   def finish?(*)

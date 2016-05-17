@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-migrations.git
-  revision: 1eb209188460ad2a458753754baca076cd92ce2e
+  revision: bf360857ef7830f7e3ff12de181ab58c33fb29f1
   specs:
     travis-migrations (0.0.1)
 
