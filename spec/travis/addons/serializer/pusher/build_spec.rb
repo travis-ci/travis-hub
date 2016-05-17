@@ -6,6 +6,8 @@ describe Travis::Addons::Serializer::Pusher::Build do
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 
+  before { repo.update_attribute(:current_build_id, build.id) }
+
   it 'build' do
     expect(data[:build].except(:matrix)).to eql(
       id: build.id,
@@ -51,7 +53,8 @@ describe Travis::Addons::Serializer::Pusher::Build do
         name: 'master',
         last_build_id: build.id
       },
-      active: true
+      active: true,
+      current_build_id: build.id
     )
   end
 end
