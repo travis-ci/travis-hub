@@ -54,6 +54,7 @@ class Build < ActiveRecord::Base
   end
 
   def restart(*)
+    p "------- restart event in build model "
     reset_state
   end
 
