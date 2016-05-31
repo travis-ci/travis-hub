@@ -20,7 +20,7 @@ class Job < ActiveRecord::Base
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
   event :cancel,  after: :propagate, if: :cancel?
-  event :restart, after: :propagate, if: :restart?
+  event :restart, to: :created, after: :propagate, if: :restart?
   event :all, after: :notify
 
   serialize :config

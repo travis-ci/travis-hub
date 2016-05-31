@@ -55,6 +55,7 @@ class Build < ActiveRecord::Base
 
   def restart(*)
     %w(duration started_at finished_at).each { |attr| write_attribute(attr, nil) }
+    state = :created unless jobs.any? { |job| job.state == :started }
   end
 
   def cancel?(*)
