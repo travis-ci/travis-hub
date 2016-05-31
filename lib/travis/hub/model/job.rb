@@ -38,12 +38,17 @@ class Job < ActiveRecord::Base
   end
 
   def restart?(*)
-    config_valid?
+    config_valid? && !created?
   end
 
   def restart(*)
-    reset_state
-    log.clear
+    attrs = %w(started_at queued_at finished_at worker)
+    attrs.each { |attr| write_attribute(attr, nil) }
+    if log
+      log.clear
+    else
+      build_log
+    end
   end
 
   def cancel?(*)
