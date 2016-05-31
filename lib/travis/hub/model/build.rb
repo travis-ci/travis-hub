@@ -16,7 +16,7 @@ class Build < ActiveRecord::Base
   event  :start,   if: :start?
   event  :finish,  if: :finish?, to: FINISHED_STATES
   event  :cancel,  if: :cancel?  #TODO check if this is ever used?
-  event  :restart, to: :created, if: :restart?
+  event  :restart, if: :restart?
   event  :all, after: [:denormalize, :notify]
 
   serialize :config
@@ -50,12 +50,11 @@ class Build < ActiveRecord::Base
   end
 
   def restart?(*)
-    config_valid?
+    finished? && config_valid?
   end
 
   def restart(*)
-    %w(duration started_at finished_at).each { |attr| write_attribute(attr, nil) }
-    state = :created unless jobs.any? { |job| job.state == :started }
+    reset_state
   end
 
   def cancel?(*)

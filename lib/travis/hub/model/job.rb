@@ -20,7 +20,7 @@ class Job < ActiveRecord::Base
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
   event :cancel,  after: :propagate, if: :cancel?
-  event :restart, to: :created, after: :propagate, if: :restart?
+  event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
 
   serialize :config
@@ -38,12 +38,11 @@ class Job < ActiveRecord::Base
   end
 
   def restart?(*)
-    config_valid? && !created?
+    config_valid? && finished?
   end
 
   def restart(*)
-    attrs = %w(started_at queued_at finished_at worker)
-    attrs.each { |attr| write_attribute(attr, nil) }
+    reset_state
     if log
       log.clear
     else
