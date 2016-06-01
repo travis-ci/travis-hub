@@ -50,11 +50,12 @@ class Build < ActiveRecord::Base
   end
 
   def restart?(*)
-    finished? && config_valid?
+    (matrix.finished? || finished?) && config_valid?
   end
 
   def restart(*)
-    reset_state
+    %w(duration started_at finished_at).each { |attr| write_attribute(attr, nil) }
+    self.state = :created
   end
 
   def cancel?(*)
