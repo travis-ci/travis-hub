@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2' if ENV.key?('DYNO')
-
 gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
 gem 'travis-logger',          github: 'travis-ci/travis-logger'
 gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
