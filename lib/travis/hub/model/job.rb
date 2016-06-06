@@ -63,7 +63,6 @@ class Job < ActiveRecord::Base
     self.state.to_s == 'queued'
   end
 
-
   private
 
     def propagate(event, *args)

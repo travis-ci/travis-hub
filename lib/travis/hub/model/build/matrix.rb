@@ -4,6 +4,10 @@ class Build < ActiveRecord::Base
       jobs.all?(&:finished?) || fast_finish? && required.finished?
     end
 
+    def created?
+      jobs.any?(&:created?)
+    end
+
     def duration
       jobs.map(&:duration).map(&:to_i).inject(&:+) if finished?
     end

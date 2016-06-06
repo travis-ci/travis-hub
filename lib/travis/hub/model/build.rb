@@ -50,7 +50,7 @@ class Build < ActiveRecord::Base
   end
 
   def restart?(*)
-    (matrix.finished? || finished?) && config_valid?
+    (queued? || finished? || started? || matrix.created?) && config_valid?
   end
 
   def restart(*)
@@ -64,6 +64,10 @@ class Build < ActiveRecord::Base
 
   def cancel(*)
     self.finished_at = Time.now
+  end
+
+  def queued?
+    self.state.to_s == 'queued'
   end
 
   private
