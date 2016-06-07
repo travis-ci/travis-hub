@@ -50,7 +50,7 @@ class Build < ActiveRecord::Base
   end
 
   def restart?(*)
-    (queued? || finished? || started? || matrix.restartable?) && config_valid?
+    (queued? || finished? || started? || received? || matrix.restartable?) && config_valid?
   end
 
   def restart(*)
@@ -70,6 +70,10 @@ class Build < ActiveRecord::Base
     self.state.to_s == 'queued'
   end
 
+  def received?
+    self.state.to_s == 'received'
+  end
+  
   private
 
     def matrix
