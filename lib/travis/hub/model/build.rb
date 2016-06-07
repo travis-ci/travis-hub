@@ -49,11 +49,8 @@ class Build < ActiveRecord::Base
     FINISHED_STATES.include?(state)
   end
 
-  # Conditions on restart? method were added to match current tests, because the `created` state
-  # is now forced to be set on a restart event
-  # eg. https://github.com/travis-ci/travis-hub/blob/master/spec/travis/hub/model/build_spec.rb#L180
   def restart?(*)
-    (queued? || finished? || started? || matrix.created?) && config_valid?
+    (queued? || finished? || started? || matrix.restartable?) && config_valid?
   end
 
   def restart(*)

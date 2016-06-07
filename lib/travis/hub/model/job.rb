@@ -37,10 +37,8 @@ class Job < ActiveRecord::Base
     FINISHED_STATES.include?(state.try(:to_sym))
   end
 
-  # Conditions on restart? method were added to match current tests, because the `created` state
-  # is now forced to be set on a restart event
+  # Conditions on restart? method were added to match current tests
   # eg. https://github.com/travis-ci/travis-hub/blob/master/spec/travis/hub/service/update_job_spec.rb#L93
-  # https://github.com/travis-ci/travis-hub/blob/master/spec/travis/hub/model/job_spec.rb#L189
   def restart?(*)
     (finished? || started? || queued?) && config_valid?
   end

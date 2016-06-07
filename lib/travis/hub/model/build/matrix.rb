@@ -4,7 +4,7 @@ class Build < ActiveRecord::Base
       jobs.all?(&:finished?) || fast_finish? && required.finished?
     end
 
-    def created?
+    def restartable?
       jobs.any?(&:created?)
     end
 
