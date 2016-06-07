@@ -249,6 +249,14 @@ describe Job do
       end
     end
 
+    describe 'received state' do
+      it 'restarts the job' do
+        job.state = :received
+        receive
+        expect(job.reload.state).to eql(:created)
+      end
+    end
+
     describe 'it denormalizes to the repository' do
       %w(state duration started_at finished_at).each do |attr|
         it "sets last_build_#{attr}" do
