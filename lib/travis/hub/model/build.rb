@@ -63,6 +63,9 @@ class Build < ActiveRecord::Base
   end
 
   def cancel(*)
+    self.state       = matrix.state
+    self.duration    = matrix.duration
+    self.canceled_at = Time.now
     self.finished_at = Time.now
   end
 
@@ -73,7 +76,7 @@ class Build < ActiveRecord::Base
   def received?
     self.state.to_s == 'received'
   end
-  
+
   private
 
     def matrix
