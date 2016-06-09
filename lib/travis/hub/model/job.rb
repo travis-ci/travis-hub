@@ -58,7 +58,6 @@ class Job < ActiveRecord::Base
   end
 
   def cancel(*)
-    self.canceled_at = Time.now
     self.finished_at = Time.now
   end
 

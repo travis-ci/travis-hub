@@ -65,7 +65,6 @@ class Build < ActiveRecord::Base
   def cancel(*)
     self.state       = matrix.state
     self.duration    = matrix.duration
-    self.canceled_at = Time.now
     self.finished_at = Time.now
   end
 
