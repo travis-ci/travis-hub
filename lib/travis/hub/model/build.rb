@@ -63,8 +63,7 @@ class Build < ActiveRecord::Base
   end
 
   def cancel(*)
-    self.state       = matrix.state
-    self.duration    = matrix.duration
+    ## check how to set duration... self.duration    = matrix.duration
     self.finished_at = Time.now
   end
 
