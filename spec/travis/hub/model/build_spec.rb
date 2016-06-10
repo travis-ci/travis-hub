@@ -137,6 +137,16 @@ describe Build do
       include_examples 'cancels the build'
     end
 
+    describe 'received by a :queued build' do
+      let(:state) { :queued }
+      include_examples 'cancels the build'
+    end
+
+    describe 'received by a :received build' do
+      let(:state) { :received }
+      include_examples 'cancels the build'
+    end
+
     describe 'received by a :started build' do
       let(:state) { :started }
       include_examples 'cancels the build'
@@ -161,6 +171,7 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'does not apply'
     end
+
   end
 
   describe 'a :start event' do
@@ -203,6 +214,11 @@ describe Build do
       include_examples 'restarts the build'
     end
 
+    describe 'received by a :received build' do
+      let(:state) { :received }
+      include_examples 'restarts the build'
+    end
+
     describe 'received by a :started build' do
       let(:state) { :started }
       include_examples 'restarts the build'
@@ -227,6 +243,7 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'restarts the build'
     end
+
   end
 
   describe 'a :finish event' do
