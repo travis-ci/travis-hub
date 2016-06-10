@@ -43,7 +43,7 @@ class Job < ActiveRecord::Base
 
   def restart(*)
     self.state = :created
-    %w(started_at queued_at finished_at worker).each { |attr| write_attribute(attr, nil) }
+    %w(started_at queued_at finished_at worker canceled_at).each { |attr| write_attribute(attr, nil) }
     if log
       log.clear
     else
