@@ -216,6 +216,11 @@ describe Job do
       expect(job.reload.finished_at).to be_nil
     end
 
+    it 'resets :canceled_at' do
+      receive
+      expect(job.reload.canceled_at).to be_nil
+    end
+
     it 'dispatches a job:restarted event' do
       Travis::Event.expects(:dispatch).with('job:restarted', id: job.id)
       receive
