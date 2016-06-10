@@ -57,10 +57,12 @@ describe Travis::Hub::Service::UpdateJob do
     let(:state) { :created }
     let(:event) { :cancel }
     let(:data)  { { id: job.id } }
+    let(:now) { Time.now }
 
     it 'updates the job' do
       subject.run
       expect(job.reload.state).to eql(:canceled)
+      expect(job.reload.canceled_at).to eql(now)
     end
 
     it 'instruments #run' do
