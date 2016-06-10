@@ -32,9 +32,22 @@ describe Build do
     end
 
     describe 'with all other jobs being finished' do
+      let(:job)   { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
+
       it 'sets the build to :canceled' do
         receive
         expect(build.reload.state).to eql(:canceled)
+      end
+
+      it 'sets :duration' do
+        job
+        receive
+        expect(build.reload.duration.to_i).to eql(job.duration.to_i)
+      end
+
+      it 'sets :canceled_at' do
+        receive
+        expect(build.reload.canceled_at).to eql(now)
       end
     end
 
