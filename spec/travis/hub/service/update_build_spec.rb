@@ -78,6 +78,16 @@ describe Travis::Hub::Service::UpdateBuild do
       expect(job.reload.state).to eql(:canceled)
     end
 
+    it 'sets :finished_at' do
+      subject.run
+      expect(build.reload.finished_at).to eql(now)
+    end
+
+    it 'sets :canceled_at' do
+      subject.run
+      expect(build.reload.canceled_at).to eql(now)
+    end
+
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")

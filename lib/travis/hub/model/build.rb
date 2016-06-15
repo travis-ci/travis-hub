@@ -15,7 +15,7 @@ class Build < ActiveRecord::Base
 
   event  :start,   if: :start?
   event  :finish,  if: :finish?, to: FINISHED_STATES
-  event  :cancel,  if: :cancel?  #TODO check if this is ever used?
+  event  :cancel,  if: :cancel?
   event  :restart, if: :restart?
   event  :all, after: [:denormalize, :notify]
 
@@ -50,11 +50,11 @@ class Build < ActiveRecord::Base
   end
 
   def restart?(*)
-    (queued? || finished? || started? || received? || matrix.restartable?) && config_valid?
+    config_valid?
   end
 
   def restart(*)
-    %w(duration started_at finished_at).each { |attr| write_attribute(attr, nil) }
+    %w(duration started_at finished_at canceled_at).each { |attr| write_attribute(attr, nil) }
     self.state = :created
   end
 
@@ -63,17 +63,10 @@ class Build < ActiveRecord::Base
   end
 
   def cancel(*)
+    self.duration    = matrix.duration
     self.finished_at = Time.now
   end
 
-  def queued?
-    self.state.to_s == 'queued'
-  end
-
-  def received?
-    self.state.to_s == 'received'
-  end
-  
   private
 
     def matrix

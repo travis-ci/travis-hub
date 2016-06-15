@@ -32,9 +32,22 @@ describe Build do
     end
 
     describe 'with all other jobs being finished' do
+      let(:job)   { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
+
       it 'sets the build to :canceled' do
         receive
         expect(build.reload.state).to eql(:canceled)
+      end
+
+      it 'sets :duration' do
+        job
+        receive
+        expect(build.reload.duration.to_i).to eql(job.duration.to_i)
+      end
+
+      it 'sets :canceled_at' do
+        receive
+        expect(build.reload.canceled_at).to eql(now)
       end
     end
 
@@ -76,6 +89,11 @@ describe Build do
     it 'resets :finished_at' do
       receive
       expect(build.reload.finished_at).to be_nil
+    end
+
+    it 'resets :canceled_at' do
+      receive
+      expect(build.reload.canceled_at).to be_nil
     end
 
     it 'dispatches a build:restarted event' do
@@ -124,6 +142,16 @@ describe Build do
       include_examples 'cancels the build'
     end
 
+    describe 'received by a :queued build' do
+      let(:state) { :queued }
+      include_examples 'cancels the build'
+    end
+
+    describe 'received by a :received build' do
+      let(:state) { :received }
+      include_examples 'cancels the build'
+    end
+
     describe 'received by a :started build' do
       let(:state) { :started }
       include_examples 'cancels the build'
@@ -148,6 +176,7 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'does not apply'
     end
+
   end
 
   describe 'a :start event' do
@@ -190,6 +219,11 @@ describe Build do
       include_examples 'restarts the build'
     end
 
+    describe 'received by a :received build' do
+      let(:state) { :received }
+      include_examples 'restarts the build'
+    end
+
     describe 'received by a :started build' do
       let(:state) { :started }
       include_examples 'restarts the build'
@@ -214,6 +248,7 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'restarts the build'
     end
+
   end
 
   describe 'a :finish event' do

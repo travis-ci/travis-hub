@@ -216,6 +216,11 @@ describe Job do
       expect(job.reload.finished_at).to be_nil
     end
 
+    it 'resets :canceled_at' do
+      receive
+      expect(job.reload.canceled_at).to be_nil
+    end
+
     it 'dispatches a job:restarted event' do
       Travis::Event.expects(:dispatch).with('job:restarted', id: job.id)
       receive
@@ -246,14 +251,6 @@ describe Job do
         other = FactoryGirl.create(:job, build: job.build, state: :passed)
         receive
         expect(other.reload.state).to eql(:passed)
-      end
-    end
-
-    describe 'received state' do
-      it 'restarts the job' do
-        job.state = :received
-        receive
-        expect(job.reload.state).to eql(:created)
       end
     end
 
@@ -434,6 +431,11 @@ describe Job do
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
+      include_examples 'restarts the job'
+    end
+
+    describe 'received by a :received job' do
+      let(:state) { :received }
       include_examples 'restarts the job'
     end
 

@@ -37,15 +37,13 @@ class Job < ActiveRecord::Base
     FINISHED_STATES.include?(state.try(:to_sym))
   end
 
-  # Conditions on restart? method were added to match current tests
-  # eg. https://github.com/travis-ci/travis-hub/blob/master/spec/travis/hub/service/update_job_spec.rb#L93
   def restart?(*)
-    (finished? || started? || queued? || received?) && config_valid?
+    config_valid?
   end
 
   def restart(*)
     self.state = :created
-    %w(started_at queued_at finished_at worker).each { |attr| write_attribute(attr, nil) }
+    %w(started_at queued_at finished_at worker canceled_at).each { |attr| write_attribute(attr, nil) }
     if log
       log.clear
     else
@@ -59,14 +57,6 @@ class Job < ActiveRecord::Base
 
   def cancel(*)
     self.finished_at = Time.now
-  end
-
-  def queued?
-    self.state.to_s == 'queued'
-  end
-
-  def received?
-    self.state.to_s == 'received'
   end
 
   private
