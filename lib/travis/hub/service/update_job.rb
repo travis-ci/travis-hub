@@ -39,7 +39,6 @@ module Travis
           end
 
           def attrs
-            data[:type] = "Job::Test"
             data.reject { |key, _| key == :id }
           end
 
