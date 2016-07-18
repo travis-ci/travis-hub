@@ -184,19 +184,14 @@ describe Build do
 
     describe 'a pull request' do
       let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
-      it 'does not set the build as current build' do
+      it 'sets the build as current build' do
         receive
-        repo.reload.current_build_id.should_not == build.id
+        repo.reload.current_build_id.should == build.id
       end
     end
 
     describe 'a push build' do
       let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
-      it 'sets the build as current build if there are no other builds non pull request builds' do
-        FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'pull_request')
-        receive
-        repo.reload.current_build_id.should == build.id
-      end
 
       it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
         FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'api')

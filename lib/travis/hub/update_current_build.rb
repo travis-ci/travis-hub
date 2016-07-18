@@ -7,6 +7,7 @@ module Travis
 
       def update!
         logger.info MSGS[:update] % [build.id, repository.id]
+        p [:is_current, is_current?]
         if is_current?
           repository.update_attributes!(current_build_id: build.id)
         end
@@ -15,16 +16,12 @@ module Travis
       private
 
         def is_current?
-          return false if build.pull_request?
-
           states = ['started', 'passed', 'failed', 'errored', 'canceled']
-          event_types = ['api', 'cron', 'push']
 
           # the build is not current if there're any newer builds that
           # are being run or finshed already
           !repository.builds.where(["id > ?", build.id]).
-                             where(state: states).
-                             where(event_type: event_types).exists?
+                      where(state: states).exists?
         end
 
         def repository
