@@ -7,7 +7,6 @@ module Travis
 
       def update!
         logger.info MSGS[:update] % [build.id, repository.id]
-        p [:is_current, is_current?]
         if is_current?
           repository.update_attributes!(current_build_id: build.id)
         end
