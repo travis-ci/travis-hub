@@ -29,7 +29,10 @@ module Travis
 
       def values(type, key)
         config = notifications[type] rescue {}
+        p "values:config #{config}"
         value  = config.is_a?(Hash) ? config[key] : config
+        p "values:value #{value}"
+        p "normalize_array(value) #{normalize_array(value)}"
         value.is_a?(Array) || value.is_a?(String) ? normalize_array(value) : value
       end
 
