@@ -54,8 +54,12 @@ module Travis
         end
 
         def on_pull_request?(sym)
+          p "config #{config.inspect}"
+          p "sym ===> #{sym}"
           value = config.values(sym, :on_pull_requests)
-          value.nil? || value
+          val = value.nil? || value
+          p "value on_pull_request #{value}"
+          val
         end
       end
     end

@@ -7,6 +7,9 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
+          p "enabeld?(:slack) #{enabled?(:slack)}"
+          p "targets.present? #{targets.present?}"
+          p "config.send_on?(:slack, action) #{config.send_on?(:slack, action)}"
           enabled?(:slack) && targets.present? && config.send_on?(:slack, action)
         end
 
@@ -28,4 +31,3 @@ module Travis
     end
   end
 end
-
