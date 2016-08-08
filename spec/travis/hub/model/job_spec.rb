@@ -249,7 +249,7 @@ describe Job do
 
       it 'clears log' do
         receive
-        expect(job.log.reload.content).to be_nil
+        expect(job.log.reload.content).to be_empty
         expect(job.log.reload.archive_verified).to be_nil
         expect(job.log.reload.removed_by).to be_nil
         expect(job.log.reload.removed_at).to be_nil
