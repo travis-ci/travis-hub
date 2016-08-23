@@ -33,7 +33,7 @@ module Travis
         end
 
         def request
-          ::Travis::Addons.logger.info "calling object.request"
+          ::Travis::Addons.logger.info "object in base is #{object.inspect}"
           object.request
         end
 
