@@ -13,6 +13,7 @@ module Travis
 
         def handle
           ::Travis::Addons.logger.info "request is #{request.inspect}"
+          ::Travis::Addons.logger.info "token is #{request.token}"
 
           run_task(:webhook, payload, targets: targets, token: request.token)
         end
