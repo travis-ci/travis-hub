@@ -33,9 +33,9 @@ module Travis
         def run_task(queue, *args)
           target = "Travis::Addons::#{self.class.name.split('::').last}::Task"
 
-          info "original args #{args}"
+          ::Travis::Addons.logger.info "original args #{args}"
           args   = deep_clean_strings(args)
-          info "updated args #{args}"
+          ::Travis::Addons.logger.info "updated args #{args}"
 
           ::Sidekiq::Client.push(
             'queue'   => queue,
