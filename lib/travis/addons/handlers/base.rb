@@ -33,6 +33,7 @@ module Travis
         end
 
         def request
+          ::Travis::Addons.logger.info "calling object.request"
           object.request
         end
 

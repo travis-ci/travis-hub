@@ -39,7 +39,7 @@ module Travis
       def object
         ::Travis::Addons.logger.info "params[:id] is #{params[:id]}"
         obj = Kernel.const_get(object_type.camelize).find(params[:id])
-        ::Travis::Addons.logger.info "obj is #{obj.inspect}"
+        ::Travis::Addons.logger.info "obj.request is #{obj.request}"
         obj
       end
 
