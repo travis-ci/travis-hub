@@ -13,4 +13,4 @@ for queue in $queues; do
 done
 
 echo "Running: $cmd"
-$cmd
+exec $cmd
