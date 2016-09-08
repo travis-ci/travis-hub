@@ -11,7 +11,7 @@ module Travis
           /^build:(created|received|started|finished|canceled|restarted)/,
           /^job:(created|received|started|finished|canceled|restarted)/
         ]
-        QUEUE = :'pusher-live'
+        QUEUE = :'live-updates'
 
         attr_reader :channels
 

@@ -51,7 +51,7 @@ describe Travis::Addons::Handlers::Irc do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:irc, is_a(Hash), channels: ['channel'])
+      handler.expects(:run_task).with(is_a(Hash), channels: ['channel'])
       handler.handle
     end
   end

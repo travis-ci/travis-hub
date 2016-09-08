@@ -12,7 +12,7 @@ module Travis
         end
 
         def handle
-          run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
+          run_task(payload, recipients: recipients, broadcasts: broadcasts)
         end
 
         def recipients

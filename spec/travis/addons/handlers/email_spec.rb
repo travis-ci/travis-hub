@@ -63,7 +63,7 @@ describe Travis::Addons::Handlers::Email do
     let(:recipient)  { 'me@email.com' }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message' }])
+      handler.expects(:run_task).with(is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message' }])
       handler.handle
     end
   end

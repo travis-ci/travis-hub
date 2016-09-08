@@ -51,7 +51,7 @@ describe Travis::Addons::Handlers::Flowdock do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:flowdock, is_a(Hash), targets: ['room'])
+      handler.expects(:run_task).with(is_a(Hash), targets: ['room'])
       handler.handle
     end
   end
