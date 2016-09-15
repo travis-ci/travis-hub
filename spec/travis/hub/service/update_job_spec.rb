@@ -1,6 +1,7 @@
 describe Travis::Hub::Service::UpdateJob do
-  let(:job)  { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
-  let(:amqp) { Travis::Amqp.any_instance }
+  let(:redis) { Travis::Hub.context.redis }
+  let(:amqp)  { Travis::Amqp.any_instance }
+  let(:job)   { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
 
   subject    { described_class.new(context, event, data) }
   before     { amqp.stubs(:fanout) }
@@ -89,6 +90,17 @@ describe Travis::Hub::Service::UpdateJob do
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for repo=travis-ci/travis-core id=#{job.id}")
+    end
+
+    describe 'with restarts being limited' do
+      let(:started) { Time.now - 7 * 3600 }
+      let(:limit)   { Travis::Hub::Helper::Limit::Limit.new(redis, :restarts, job.id) }
+      let(:state)   { :queued }
+      before { 50.times { limit.record(started) } }
+      before { subject.run }
+      it { expect(job.reload.state).to eql(:errored) }
+      it { expect(job.log.parts.map(&:content).join).to eq "Restarts limited: Please try restarting this job later or contact support@travis-ci.com." }
+      it { expect(stdout.string).to include "Restarts limited: 50 restarts between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
     end
   end
 

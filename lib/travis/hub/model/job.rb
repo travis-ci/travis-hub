@@ -43,12 +43,8 @@ class Job < ActiveRecord::Base
 
   def restart(*)
     self.state = :created
-    %w(started_at queued_at finished_at worker canceled_at).each { |attr| write_attribute(attr, nil) }
-    if log
-      log.clear
-    else
-      build_log
-    end
+    clear_attrs %w(started_at queued_at finished_at worker canceled_at)
+    clear_log
   end
 
   def cancel?(*)
@@ -59,7 +55,20 @@ class Job < ActiveRecord::Base
     self.finished_at = Time.now
   end
 
+  def add_log(msg)
+    build_log unless log
+    log.add(msg)
+  end
+
   private
+
+    def clear_attrs(attrs)
+      attrs.each { |attr| write_attribute(attr, nil) }
+    end
+
+    def clear_log
+      log ? log.clear : build_log
+    end
 
     def propagate(event, *args)
       build.send(:"#{event}!", *args)
