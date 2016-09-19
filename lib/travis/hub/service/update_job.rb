@@ -9,7 +9,7 @@ module Travis
   module Hub
     module Service
       class UpdateJob < Struct.new(:event, :data)
-        include Helper::Context, Helper::Locking, Helper::Limit
+        include Helper::Context, Helper::Locking
         extend Instrumentation
 
         EVENTS = [:receive, :reset, :start, :finish, :cancel, :restart]
@@ -39,7 +39,8 @@ module Travis
 
           def update_job
             return error_job if event == :reset && resets.limited?
-            skipped unless job.reload.send(:"#{event}!", attrs)
+            return skipped unless job.reload.send(:"#{event}!", attrs)
+            resets.record if event == :reset
           end
 
           def error_job

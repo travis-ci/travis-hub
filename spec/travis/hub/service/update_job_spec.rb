@@ -121,7 +121,7 @@ describe Travis::Hub::Service::UpdateJob do
 
     describe 'with resets being limited' do
       let(:started) { Time.now - 7 * 3600 }
-      let(:limit)   { Travis::Hub::Helper::Limit::Limit.new(redis, :resets, job.id) }
+      let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
       before { 50.times { limit.record(started) } }
