@@ -6,22 +6,6 @@ describe Travis::Hub::Service::UpdateJob do
   subject    { described_class.new(context, event, data) }
   before     { amqp.stubs(:fanout) }
 
-  describe 'start event' do
-    let(:state) { :queued }
-    let(:event) { :start }
-    let(:data)  { { id: job.id, started_at: Time.now } }
-
-    it 'updates the job' do
-      subject.run
-      expect(job.reload.state).to eql(:started)
-    end
-
-    it 'instruments #run' do
-      subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for repo=travis-ci/travis-core id=#{job.id}")
-    end
-  end
-
   describe 'receive event' do
     let(:state) { :queued }
     let(:event) { :receive }
@@ -35,6 +19,22 @@ describe Travis::Hub::Service::UpdateJob do
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for repo=travis-ci/travis-core id=#{job.id}")
+    end
+  end
+
+  describe 'start event' do
+    let(:state) { :queued }
+    let(:event) { :start }
+    let(:data)  { { id: job.id, started_at: Time.now } }
+
+    it 'updates the job' do
+      subject.run
+      expect(job.reload.state).to eql(:started)
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 
@@ -82,7 +82,7 @@ describe Travis::Hub::Service::UpdateJob do
     let(:event) { :restart }
     let(:data)  { { id: job.id } }
 
-    it 'updates the job' do
+    it 'resets the job' do
       subject.run
       expect(job.reload.state).to eql(:created)
     end
@@ -90,17 +90,6 @@ describe Travis::Hub::Service::UpdateJob do
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for repo=travis-ci/travis-core id=#{job.id}")
-    end
-
-    describe 'with restarts being limited' do
-      let(:started) { Time.now - 7 * 3600 }
-      let(:limit)   { Travis::Hub::Helper::Limit::Limit.new(redis, :restarts, job.id) }
-      let(:state)   { :queued }
-      before { 50.times { limit.record(started) } }
-      before { subject.run }
-      it { expect(job.reload.state).to eql(:errored) }
-      it { expect(job.log.parts.map(&:content).join).to eq "Restarts limited: Please try restarting this job later or contact support@travis-ci.com." }
-      it { expect(stdout.string).to include "Restarts limited: 50 restarts between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
     end
   end
 
@@ -115,6 +104,34 @@ describe Travis::Hub::Service::UpdateJob do
     end
   end
 
+  describe 'reset event' do
+    let(:state) { :started }
+    let(:event) { :reset }
+    let(:data)  { { id: job.id } }
+
+    it 'resets the job' do
+      subject.run
+      expect(job.reload.state).to eql(:created)
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: reset for repo=travis-ci/travis-core id=#{job.id}")
+    end
+
+    describe 'with resets being limited' do
+      let(:started) { Time.now - 7 * 3600 }
+      let(:limit)   { Travis::Hub::Helper::Limit::Limit.new(redis, :resets, job.id) }
+      let(:state)   { :queued }
+
+      before { 50.times { limit.record(started) } }
+      before { subject.run }
+
+      it { expect(job.reload.state).to eql(:errored) }
+      it { expect(job.log.parts.map(&:content).join).to eq "Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com." }
+      it { expect(stdout.string).to include "Resets limited: 50 resets between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
+    end
+  end
 
   describe 'unordered messages' do
     let(:job)     { FactoryGirl.create(:job, state: :created) }

@@ -21,7 +21,7 @@ module Travis
              notifications: [],
              repository:    { ssl_key: { size: 4096 } },
              queue:         'builds',
-             limit:         { restarts: { max: 50, after: 6 * 60 * 60 } }
+             limit:         { resets: { max: 50, after: 6 * 60 * 60 } }
 
       def logs_database
         config = super

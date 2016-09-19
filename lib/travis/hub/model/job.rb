@@ -18,7 +18,7 @@ class Job < ActiveRecord::Base
 
   event :receive
   event :start,   after: :propagate
-  event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
+  event :finish,  after: :propagate, to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
@@ -45,6 +45,11 @@ class Job < ActiveRecord::Base
     self.state = :created
     clear_attrs %w(started_at queued_at finished_at worker canceled_at)
     clear_log
+  end
+
+  def reset!(*)
+    restart
+    save!
   end
 
   def cancel?(*)

@@ -13,7 +13,7 @@ module Travis
           end
 
           def to_s
-            "#{count} restarts between #{started.to_s} and #{now.to_s} (max: #{max}, after: #{after})"
+            "#{count} #{name} between #{started.to_s} and #{now.to_s} (max: #{max}, after: #{after})"
           end
 
           private
