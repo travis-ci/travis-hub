@@ -2,6 +2,7 @@ require 'travis/instrumentation'
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
+require 'travis/hub/service/error_job'
 require 'travis/hub/service/notify_workers'
 require 'travis/hub/helper/limit'
 
@@ -15,9 +16,7 @@ module Travis
         EVENTS = [:receive, :reset, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          skipped:        'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s',
-          resets_support: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.',
-          resets_limited: 'Resets limited: %s'
+          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s',
         }
 
         def run
@@ -38,19 +37,13 @@ module Travis
         private
 
           def update_job
-            return error_job if event == :reset && resets.limited?
+            return error_job if event == :reset && resets.limited? && !job.finished?
             return skipped unless job.reload.send(:"#{event}!", attrs)
             resets.record if event == :reset
           end
 
           def error_job
-            job.reload.finish!(state: :errored)
-            job.add_log  MSGS[:resets_support]
-            logger.error MSGS[:resets_limited] % resets.to_s
-          end
-
-          def attrs
-            data.reject { |key, _| key == :id }
+            ErrorJob.new(context, id: job.id, reason: :resets_limited, resets: resets.to_s).run
           end
 
           def notify
@@ -75,6 +68,10 @@ module Travis
 
           def resets
             @resets ||= Limit.new(redis, :resets, job.id, config.limit.resets)
+          end
+
+          def attrs
+            data.reject { |key, _| key == :id }
           end
 
           class Instrument < Instrumentation::Instrument

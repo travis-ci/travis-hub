@@ -60,11 +60,6 @@ class Job < ActiveRecord::Base
     self.finished_at = Time.now
   end
 
-  def add_log(msg)
-    build_log unless log
-    log.add(msg)
-  end
-
   private
 
     def clear_attrs(attrs)

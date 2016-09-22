@@ -95,6 +95,8 @@ GEM
       timers (>= 4.1.1)
     coder (0.4.0)
     connection_pool (2.2.0)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     dalli (2.7.4)
     database_cleaner (1.5.1)
     diff-lcs (1.2.5)
@@ -109,6 +111,7 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
+    hashdiff (0.3.0)
     hashr (2.0.0)
     hitimes (1.2.3)
     hitimes (1.2.3-java)
@@ -153,6 +156,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    safe_yaml (1.0.4)
     sentry-raven (0.15.2)
       faraday (>= 0.7.6)
     sidekiq (3.5.3)
@@ -171,6 +175,10 @@ GEM
     travis-encrypt (0.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    webmock (2.1.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
 
 PLATFORMS
   java
@@ -184,6 +192,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   factory_girl
+  faraday
   gh
   jemalloc
   jruby-openssl
@@ -208,6 +217,7 @@ DEPENDENCIES
   travis-metrics!
   travis-migrations!
   unlimited-jce-policy-jdk7!
+  webmock
 
 BUNDLED WITH
-   1.12.4
+   1.12.5

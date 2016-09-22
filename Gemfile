@@ -15,6 +15,7 @@ gem 'redis'
 gem 'dalli'
 gem 'activerecord'
 gem 'sidekiq'
+gem 'faraday'
 
 gem 'gh'
 gem 'metriks-librato_metrics'
@@ -42,4 +43,5 @@ group :test do
   gem 'mocha'
   gem 'database_cleaner'
   gem 'factory_girl'
+  gem 'webmock'
 end

@@ -14,12 +14,4 @@ class Log < ActiveRecord::Base
     update_column(:removed_by, nil)
     Part.where(log_id: id).delete_all
   end
-
-  def add(msg)
-    if aggregated_at
-      update_column(:content, [content, msg].join("\n"))
-    else
-      Part.create!(log_id: id, content: msg, final: true)
-    end
-  end
 end

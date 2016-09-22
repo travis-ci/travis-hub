@@ -120,16 +120,32 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     describe 'with resets being limited' do
+      let(:url)     { 'http://logs.travis-ci.org/logs' }
       let(:started) { Time.now - 7 * 3600 }
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
+      before { context.config[:logs] = { url: url, token: '1234' } }
+      before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}") }
       before { 50.times { limit.record(started) } }
-      before { subject.run }
 
-      it { expect(job.reload.state).to eql(:errored) }
-      it { expect(job.log.parts.map(&:content).join).to eq "Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com." }
-      it { expect(stdout.string).to include "Resets limited: 50 resets between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
+      describe 'sets the job to :errored' do
+        before { subject.run }
+        it { expect(job.reload.state).to eql(:errored) }
+      end
+
+      it 'PUTs the log message to travis-logs' do
+        subject.run
+        assert_requested(:put, "#{url}/#{job.id}",
+          body: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.',
+          headers: { 'Authorization' => 'token 1234' }
+        )
+      end
+
+      describe 'logs a message' do
+        before { subject.run }
+        it { expect(stdout.string).to include "Resets limited: 50 resets between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
+      end
     end
   end
 
