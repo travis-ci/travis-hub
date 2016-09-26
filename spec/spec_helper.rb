@@ -5,6 +5,9 @@ require 'support/factories'
 require 'support/context'
 require 'support/database_cleaner'
 
+require 'webmock'
+require 'webmock/rspec'
+
 # Travis::Hub::Context.new
 
 # Travis::Event.setup

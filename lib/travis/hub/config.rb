@@ -7,11 +7,9 @@ module Travis
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
-             # lock:          { strategy: :postgresql, try: true, transactional: false, timeout: 30 },
              lock:          { strategy: :redis },
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
-             # memcached:     { servers: 'localhost:11211', options: {} },
-
+             logs:          { url: ENV['LOGS_URL'], token: ENV['LOGS_TOKEN'] },
              name:          'hub',
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
@@ -20,7 +18,8 @@ module Travis
              metrics:       { reporter: 'librato' },
              notifications: [],
              repository:    { ssl_key: { size: 4096 } },
-             queue:         'builds'
+             queue:         'builds',
+             limit:         { resets: { max: 50, after: 6 * 60 * 60 } }
 
       def logs_database
         config = super

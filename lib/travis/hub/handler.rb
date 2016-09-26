@@ -1,7 +1,6 @@
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/string'
 require 'travis/hub/service'
-require 'travis/hub/support/reroute'
 
 module Travis
   module Hub
@@ -19,16 +18,12 @@ module Travis
       def run
         with_active_record do
           time do
-            reroute or handle
+            handle
           end
         end
       end
 
       private
-
-        def reroute
-          Reroute.new(context, type, event, payload).run
-        end
 
         def handle
           const = Service.const_get("Update#{camelize(type)}")
@@ -42,9 +37,7 @@ module Travis
         end
 
         def normalize_event(event)
-          event = event.to_s.gsub(':test', '')
-          event = event.gsub('reset', 'restart') # TODO deprecate :reset
-          event
+          event.to_s.gsub(':test', '') # TODO is anyone still sending these?
         end
 
         def normalize_payload(payload)

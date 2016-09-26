@@ -186,7 +186,7 @@ describe Job do
     end
   end
 
-  shared_examples 'restarts the job' do
+  shared_examples 'resets the job' do
     it 'returns true' do
       expect(receive).to be_truthy
     end
@@ -255,7 +255,7 @@ describe Job do
         expect(job.log.reload.removed_at).to be_nil
       end
 
-      it 'does not restart other jobs on the matrix' do
+      it 'does not reset other jobs on the matrix' do
         other = FactoryGirl.create(:job, build: job.build, state: :passed)
         receive
         expect(other.reload.state).to eql(:passed)
@@ -429,47 +429,49 @@ describe Job do
     end
   end
 
-  describe 'a :restart event' do
-    let(:event)  { :restart }
+  [:reset, :restart].each do |event|
+    describe "a #{event} event" do
+      let(:event)  { event }
 
-    describe 'received by a :created job' do
-      let(:state) { :created }
-      include_examples 'does not apply'
-    end
+      describe 'received by a :created job' do
+        let(:state) { :created }
+        include_examples 'does not apply'
+      end
 
-    describe 'received by a :queued job' do
-      let(:state) { :queued }
-      include_examples 'restarts the job'
-    end
+      describe 'received by a :queued job' do
+        let(:state) { :queued }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by a :received job' do
-      let(:state) { :received }
-      include_examples 'restarts the job'
-    end
+      describe 'received by a :received job' do
+        let(:state) { :received }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by a :started job' do
-      let(:state) { :started }
-      include_examples 'restarts the job'
-    end
+      describe 'received by a :started job' do
+        let(:state) { :started }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by a :passed job' do
-      let(:state) { :passed }
-      include_examples 'restarts the job'
-    end
+      describe 'received by a :passed job' do
+        let(:state) { :passed }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by a :failed job' do
-      let(:state) { :failed }
-      include_examples 'restarts the job'
-    end
+      describe 'received by a :failed job' do
+        let(:state) { :failed }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by an :errored job' do
-      let(:state) { :errored }
-      include_examples 'restarts the job'
-    end
+      describe 'received by an :errored job' do
+        let(:state) { :errored }
+        include_examples 'resets the job'
+      end
 
-    describe 'received by a :canceled job' do
-      let(:state) { :canceled }
-      include_examples 'restarts the job'
+      describe 'received by a :canceled job' do
+        let(:state) { :canceled }
+        include_examples 'resets the job'
+      end
     end
   end
 

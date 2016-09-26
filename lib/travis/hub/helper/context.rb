@@ -22,6 +22,10 @@ module Travis
           context.metrics
         end
 
+        def redis
+          context.redis
+        end
+
         [:info, :warn, :debug, :error, :fatal].each do |level|
           define_method(level) { |msg, *args| log(level, msg, *args) }
         end

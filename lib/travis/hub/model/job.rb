@@ -18,7 +18,7 @@ class Job < ActiveRecord::Base
 
   event :receive
   event :start,   after: :propagate
-  event :finish,  after: :propagate, to: FINISHED_STATES # TODO should not allow canceled?
+  event :finish,  after: :propagate, to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate, if: :restart?
   event :all, after: :notify
@@ -43,12 +43,13 @@ class Job < ActiveRecord::Base
 
   def restart(*)
     self.state = :created
-    %w(started_at queued_at finished_at worker canceled_at).each { |attr| write_attribute(attr, nil) }
-    if log
-      log.clear
-    else
-      build_log
-    end
+    clear_attrs %w(started_at queued_at finished_at worker canceled_at)
+    clear_log
+  end
+
+  def reset!(*)
+    restart
+    save!
   end
 
   def cancel?(*)
@@ -60,6 +61,14 @@ class Job < ActiveRecord::Base
   end
 
   private
+
+    def clear_attrs(attrs)
+      attrs.each { |attr| write_attribute(attr, nil) }
+    end
+
+    def clear_log
+      log ? log.clear : build_log
+    end
 
     def propagate(event, *args)
       build.send(:"#{event}!", *args)

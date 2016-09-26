@@ -186,7 +186,7 @@ describe Build do
       let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
       it 'sets the build as current build' do
         receive
-        repo.reload.current_build_id.should == build.id
+        expect(repo.reload.current_build_id).to eq build.id
       end
     end
 
@@ -196,7 +196,7 @@ describe Build do
       it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
         FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'api')
         receive
-        repo.reload.current_build_id.should_not == build.id
+        expect(repo.reload.current_build_id).to_not eq build.id
       end
     end
   end
