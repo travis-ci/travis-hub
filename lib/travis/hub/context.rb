@@ -17,9 +17,10 @@ module Travis
   module Hub
     class Context
       ADDONS = %w(
-        github_status scheduler email flowdock hipchat irc pusher pushover
-        slack states_cache webhook
-      )
+        github_status email flowdock hipchat irc pusher pushover slack
+        states_cache webhook
+      ) + (ENV['NOTIFY_SCHEDULER'] ? ['scheduler'] : [])
+      # TODO remove the env var once Scheduler 2.0 shipped
 
       attr_reader :config, :logger, :metrics, :exceptions, :redis, :amqp
 
