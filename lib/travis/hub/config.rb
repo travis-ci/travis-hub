@@ -18,7 +18,8 @@ module Travis
              metrics:       { reporter: 'librato' },
              repository:    { ssl_key: { size: 4096 } },
              queue:         'builds',
-             limit:         { resets: { max: 50, after: 6 * 60 * 60 } }
+             limit:         { resets: { max: 50, after: 6 * 60 * 60 } },
+             notifications: []
 
       def logs_database
         config = super

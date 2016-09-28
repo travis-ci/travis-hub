@@ -3,7 +3,6 @@ require 'travis/exceptions'
 require 'travis/instrumentation'
 require 'travis/logger'
 require 'travis/metrics'
-
 require 'travis/addons'
 require 'travis/hub/config'
 require 'travis/hub/event/metrics'
@@ -16,12 +15,6 @@ require 'travis/hub/support/sidekiq'
 module Travis
   module Hub
     class Context
-      ADDONS = %w(
-        github_status email flowdock hipchat irc pusher pushover slack
-        states_cache webhook
-      ) + (ENV['NOTIFY_SCHEDULER'] ? ['scheduler'] : [])
-      # TODO remove the env var once Scheduler 2.0 shipped
-
       attr_reader :config, :logger, :metrics, :exceptions, :redis, :amqp
 
       def initialize(options = {})
@@ -35,7 +28,7 @@ module Travis
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
         Travis::Addons.setup(config, logger)
-        Travis::Event.setup(ADDONS, logger)
+        Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
         # TODO remove, message travis-logs instead
@@ -51,6 +44,11 @@ module Travis
 
 
       private
+
+        def addons
+          # TODO remove the env var once Scheduler 2.0 shipped
+          config.notifications + (ENV['NOTIFY_SCHEDULER'] ? ['scheduler'] : [])
+        end
 
         def test_exception_reporting
           exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
