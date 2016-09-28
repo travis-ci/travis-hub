@@ -16,7 +16,6 @@ module Travis
              logger:        { thread_id: true },
              librato:       {},
              metrics:       { reporter: 'librato' },
-             notifications: [],
              repository:    { ssl_key: { size: 4096 } },
              queue:         'builds',
              limit:         { resets: { max: 50, after: 6 * 60 * 60 } }

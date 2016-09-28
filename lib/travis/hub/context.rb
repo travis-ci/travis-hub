@@ -16,6 +16,11 @@ require 'travis/hub/support/sidekiq'
 module Travis
   module Hub
     class Context
+      ADDONS = %w(
+        github_status scheduler email flowdock hipchat irc pusher pushover
+        slack states_cache webhook
+      )
+
       attr_reader :config, :logger, :metrics, :exceptions, :redis, :amqp
 
       def initialize(options = {})
@@ -25,11 +30,11 @@ module Travis
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
         @amqp       = Travis::Amqp.setup(config.amqp)
+
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
-
         Travis::Addons.setup(config, logger)
-        Travis::Event.setup(config.notifications, logger)
+        Travis::Event.setup(ADDONS, logger)
         Travis::Instrumentation.setup(logger)
 
         # TODO remove, message travis-logs instead
