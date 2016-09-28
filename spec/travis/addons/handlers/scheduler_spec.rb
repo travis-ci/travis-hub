@@ -38,7 +38,7 @@ describe Travis::Addons::Handlers::Scheduler do
         'queue' => 'scheduler-2',
         'class' => 'Travis::Scheduler::Worker',
         'args'  => [:event, 'job:finished', id: job.id],
-        'expires_in' => 2 * 3600
+        'expires_in' => 5 * 60
       )
       handler.handle
     end
