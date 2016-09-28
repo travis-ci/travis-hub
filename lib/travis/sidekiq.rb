@@ -17,7 +17,7 @@ module Travis
         'queue'      => 'scheduler-2', # TODO use 'scheduler' once Scheduler 2.0 is fully rolled out
         'class'      => 'Travis::Scheduler::Worker',
         'args'       => [:event, *args],
-        'expires_in' => 2 * 60 * 60 # TODO can be removed once Scheduler 2.0 picks these up
+        'expires_in' => 5 * 60 # TODO can be removed once Scheduler 2.0 picks these up
       )
     end
 
