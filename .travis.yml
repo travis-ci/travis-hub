@@ -5,6 +5,7 @@ rvm:
   - 2.2
 
 services:
+  - memcached
   - redis
   - rabbitmq
 
@@ -15,7 +16,7 @@ cache:
   - bundler
 
 before_install:
-  - which bundle || gem install bundler
+  - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
 
 before_script:
   - bundle exec rake db:create --trace

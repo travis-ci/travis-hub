@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 626974e5884173c97fdd0876ce51dda5ab3e5542
+  revision: 884b6a2b9c21ca09e7be5f85fb27b6e9aa7711e4
   specs:
     travis-exceptions (0.0.2)
       sentry-raven
@@ -34,73 +34,46 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-migrations.git
-  revision: bf360857ef7830f7e3ff12de181ab58c33fb29f1
+  revision: d50bc1b1e38f5eab1550acbe753bff75602ae778
   specs:
-    travis-migrations (0.0.1)
-
-GIT
-  remote: git://github.com/travis-ci/unlimited-jce-policy-jdk7.git
-  revision: 16230176b2b85f7c569550ce3544b273d77616ee
-  specs:
-    unlimited-jce-policy-jdk7 (0.1.0)
+    travis-migrations (0.0.3)
 
 GEM
   remote: https://rubygems.org/
+  remote: https://gems.contribsys.com/
   specs:
-    activemodel (4.2.5)
-      activesupport (= 4.2.5)
+    activemodel (4.2.7.1)
+      activesupport (= 4.2.7.1)
       builder (~> 3.1)
-    activerecord (4.2.5)
-      activemodel (= 4.2.5)
-      activesupport (= 4.2.5)
+    activerecord (4.2.7.1)
+      activemodel (= 4.2.7.1)
+      activesupport (= 4.2.7.1)
       arel (~> 6.0)
-    activerecord-jdbc-adapter (1.3.18)
-      activerecord (>= 2.2)
-    activerecord-jdbcpostgresql-adapter (1.3.18)
-      activerecord-jdbc-adapter (~> 1.3.18)
-      jdbc-postgres (>= 9.1)
-    activesupport (4.2.5)
+    activesupport (4.2.7.1)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.3.8)
-    amq-protocol (2.0.0)
+    addressable (2.4.0)
+    amq-protocol (2.0.1)
     arel (6.0.3)
     atomic (1.1.99)
-    atomic (1.1.99-java)
     avl_tree (1.2.1)
       atomic (~> 1.1)
-    backports (3.6.6)
+    backports (3.6.8)
     builder (3.2.2)
-    bunny (2.2.0)
-      amq-protocol (>= 2.0.0)
-    celluloid (0.17.2)
-      celluloid-essentials
-      celluloid-extras
-      celluloid-fsm
-      celluloid-pool
-      celluloid-supervision
-      timers (>= 4.1.1)
-    celluloid-essentials (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-extras (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-fsm (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-pool (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-supervision (0.20.5)
-      timers (>= 4.1.1)
+    bunny (2.5.1)
+      amq-protocol (>= 2.0.1)
     coder (0.4.0)
+    concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    dalli (2.7.4)
-    database_cleaner (1.5.1)
+    dalli (2.7.6)
+    database_cleaner (1.5.3)
     diff-lcs (1.2.5)
-    factory_girl (4.5.0)
+    factory_girl (4.7.0)
       activesupport (>= 3.0.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
@@ -113,15 +86,10 @@ GEM
       net-http-pipeline
     hashdiff (0.3.0)
     hashr (2.0.0)
-    hitimes (1.2.3)
-    hitimes (1.2.3-java)
+    hitimes (1.2.4)
     i18n (0.7.0)
-    jdbc-postgres (9.4.1200)
     jemalloc (1.0.1)
-    jruby-openssl (0.9.12-java)
     json (1.8.3)
-    json (1.8.3-java)
-    march_hare (2.15.0-java)
     metaclass (0.0.4)
     metriks (0.9.9.7)
       atomic (~> 1.0)
@@ -129,47 +97,53 @@ GEM
       hitimes (~> 1.1)
     metriks-librato_metrics (1.0.5)
       metriks (>= 0.9.9.6)
-    minitest (5.8.3)
+    minitest (5.9.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    pg (0.18.3)
-    rake (10.4.2)
-    redis (3.2.1)
+    pg (0.19.0)
+    rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
+    rake (11.3.0)
+    redis (3.3.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    redlock (0.1.4)
-      redis (~> 3, >= 3.0.5)
-    rspec (3.3.0)
-      rspec-core (~> 3.3.0)
-      rspec-expectations (~> 3.3.0)
-      rspec-mocks (~> 3.3.0)
-    rspec-core (3.3.2)
-      rspec-support (~> 3.3.0)
-    rspec-expectations (3.3.1)
+    redlock (0.1.8)
+      redis (~> 3, >= 3.0.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.3)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.3.0)
-    rspec-mocks (3.3.2)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.3.0)
-    rspec-support (3.3.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
     safe_yaml (1.0.4)
-    sentry-raven (0.15.2)
-      faraday (>= 0.7.6)
-    sidekiq (3.5.3)
-      celluloid (~> 0.17.2)
+    sentry-raven (2.0.1)
+      faraday (>= 0.7.6, < 0.10.x)
+    sidekiq (4.1.4)
+      concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
-      json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
-      redis-namespace (~> 1.5, >= 1.5.2)
+      sinatra (>= 1.4.7)
+    sidekiq-pro (3.3.3)
+      sidekiq (>= 4.0.0)
     simple_states (2.0.1)
+    sinatra (1.4.7)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     thread_safe (0.3.5)
-    thread_safe (0.3.5-java)
-    timers (4.1.1)
-      hitimes
+    tilt (2.0.5)
     travis-config (1.0.12)
       hashr (~> 2.0.0)
     travis-encrypt (0.0.1)
@@ -181,12 +155,10 @@ GEM
       hashdiff
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
   activerecord
-  activerecord-jdbcpostgresql-adapter
   bunny
   coder
   dalli
@@ -195,18 +167,17 @@ DEPENDENCIES
   faraday
   gh
   jemalloc
-  jruby-openssl
-  march_hare
   metriks-librato_metrics
   mocha
   multi_json
   pg
   rake
   redis
+  redis-namespace
   redlock
   rspec
   sentry-raven
-  sidekiq
+  sidekiq-pro!
   simple_states
   travis-config (~> 1.0.6)
   travis-encrypt
@@ -216,7 +187,6 @@ DEPENDENCIES
   travis-logger!
   travis-metrics!
   travis-migrations!
-  unlimited-jce-policy-jdk7!
   webmock
 
 BUNDLED WITH

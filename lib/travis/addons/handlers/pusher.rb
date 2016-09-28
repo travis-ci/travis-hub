@@ -1,7 +1,7 @@
 require 'travis/addons/handlers/base'
-require 'travis/addons/helpers/task'
 require 'travis/addons/serializer/pusher/build'
 require 'travis/addons/serializer/pusher/job'
+require 'travis/sidekiq'
 
 module Travis
   module Addons
@@ -20,14 +20,7 @@ module Travis
         end
 
         def handle
-          # TODO change live to allow using an alternative worker signature
-          ::Sidekiq::Client.push(
-            'queue'  => QUEUE,
-            'class'  => 'Travis::Async::Sidekiq::Worker',
-            'method' => 'perform',
-            'args'   => [nil, nil, nil, payload, event: event],
-            'retry'  => true
-          )
+          run_task 'pusher-live', payload, event: event
         end
 
         def payload

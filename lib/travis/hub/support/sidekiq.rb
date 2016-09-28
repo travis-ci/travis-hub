@@ -1,11 +1,11 @@
-require 'sidekiq'
+require 'sidekiq-pro'
 require 'travis/exceptions/sidekiq'
 require 'travis/metrics/sidekiq'
 require 'travis/hub/support/sidekiq/log_format'
 
 module Travis
   module Sidekiq
-    def self.setup(config)
+    def setup(config)
       ::Sidekiq::Logging.logger.level = Logger::WARN
 
       ::Sidekiq.configure_server do |c|
@@ -20,6 +20,11 @@ module Travis
         end
 
         c.logger.formatter = Support::Sidekiq::Logging.new(config.logger || {})
+
+        if pro?
+          c.reliable_fetch!
+          c.reliable_scheduler!
+        end
       end
 
       ::Sidekiq.configure_client do |c|
@@ -27,7 +32,17 @@ module Travis
           url: config.redis.url,
           namespace: config.sidekiq.namespace
         }
+
+        if pro?
+          ::Sidekiq::Client.reliable_push!
+        end
       end
     end
+
+    def pro?
+      ::Sidekiq::NAME == 'Sidekiq Pro'
+    end
+
+    extend self
   end
 end
