@@ -8,9 +8,9 @@ module Travis
         include Helpers::Hash
 
         DEFAULTS = {
-          start:   { email: false,   webhooks: false,   campfire: false,   hipchat: false,   irc: false,   flowdock: false,   sqwiggle: false,   slack: false,   pushover: false   },
-          success: { email: :change, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
-          failure: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always }
+          start:   { email: false,   webhooks: false,   campfire: false,   discord: false,   hipchat: false,   irc: false,   flowdock: false,   sqwiggle: false,   slack: false,   pushover: false   },
+          success: { email: :change, webhooks: :always, campfire: :always, discord: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
+          failure: { email: :always, webhooks: :always, campfire: :always, discord: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always }
         }
 
         attr_reader :build, :config
