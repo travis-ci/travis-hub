@@ -1,5 +1,5 @@
 require 'travis/hub'
-require 'time'
+require 'date'
 
 require 'support/factories'
 require 'support/context'

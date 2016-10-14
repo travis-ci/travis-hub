@@ -12,6 +12,7 @@ class Job < ActiveRecord::Base
   Job.inheritance_column = :unused
 
   belongs_to :repository
+  belongs_to :owner, polymorphic: true
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
   has_one    :log
