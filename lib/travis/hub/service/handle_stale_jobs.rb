@@ -2,7 +2,6 @@ require 'travis/instrumentation'
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
-require 'travis/hub/service/notify_workers'
 
 module Travis
   module Hub

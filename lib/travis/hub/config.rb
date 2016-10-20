@@ -5,6 +5,11 @@ module Travis
   module Hub
     class Config < Travis::Config
       class << self
+        def http_basic_auth
+          tokens = ENV['HTTP_BASIC_AUTH'] || ''
+          tokens.split(',').map { |token| token.split(':').map(&:strip) }.to_h
+        end
+
         def logs_api_url
           ENV['TRAVIS_HUB_LOGS_API_URL'] ||
             ENV['LOGS_API_URL'] ||
@@ -18,23 +23,25 @@ module Travis
         end
       end
 
-      define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
-             database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
-             logs_api:      { url: logs_api_url, token: logs_api_auth_token },
-             redis:         { url: 'redis://localhost:6379' },
-             sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
-             lock:          { strategy: :redis },
-             states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
-             name:          'hub',
-             host:          'travis-ci.org',
-             encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
-             logger:        { thread_id: true },
-             librato:       {},
-             metrics:       { reporter: 'librato' },
-             repository:    { ssl_key: { size: 4096 } },
-             queue:         'builds',
-             limit:         { resets: { max: 50, after: 6 * 60 * 60 } },
-             notifications: []
+      define amqp:           { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
+             database:       { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
+             logs_api:       { url: logs_api_url, token: logs_api_auth_token },
+             redis:          { url: 'redis://localhost:6379' },
+             sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
+             lock:           { strategy: :redis },
+             states_cache:   { memcached_servers: 'localhost:11211', memcached_options: {} },
+             logs:           { url: ENV['LOGS_URL'], token: ENV['LOGS_TOKEN'] },
+             name:           'hub',
+             host:           'travis-ci.org',
+             encryption:     env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
+             logger:         { thread_id: true },
+             librato:        {},
+             metrics:        { reporter: 'librato' },
+             repository:     { ssl_key: { size: 4096 } },
+             queue:          'builds',
+             limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
+             notifications:  [],
+             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth }
 
       def metrics
         # TODO cleanup keychain?

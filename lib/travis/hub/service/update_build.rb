@@ -33,6 +33,10 @@ module Travis
 
         private
 
+          def validate
+            EVENTS.include?(event) || unknown_event
+          end
+
           def update_jobs
             build.jobs.each do |job|
               auto_cancel(job) if event == :cancel && auto_cancel?
@@ -61,10 +65,6 @@ module Travis
 
           def notify
             build.jobs.each { |job| NotifyWorkers.new(context).cancel(job) } if event == :cancel
-          end
-
-          def validate
-            EVENTS.include?(event) || unknown_event
           end
 
           def exclusive(&block)
