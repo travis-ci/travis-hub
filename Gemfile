@@ -30,7 +30,11 @@ gem 'simple_states'
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
-gem 'pry'
+
+gem 'puma'
+gem 'rack-ssl'
+gem 'sinatra'
+gem 'jwt'
 
 group :test do
   gem 'rspec'
@@ -39,4 +43,5 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock'
+  gem 'sinatra-contrib'
 end

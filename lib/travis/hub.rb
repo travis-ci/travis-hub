@@ -19,3 +19,5 @@ module Travis
     extend self
   end
 end
+
+require 'travis/hub/api'
