@@ -20,6 +20,20 @@ describe Travis::Hub::Service::UpdateJob do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for repo=travis-ci/travis-core id=#{job.id}")
     end
+
+    describe 'when the job has been canceled meanwhile' do
+      let(:state) { :canceled }
+
+      it 'does not update the job state' do
+        subject.run
+        expect(job.reload.state).to eql(:canceled)
+      end
+
+      it 'broadcasts a cancel message' do
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        subject.run
+      end
+    end
   end
 
   describe 'start event' do
@@ -35,6 +49,20 @@ describe Travis::Hub::Service::UpdateJob do
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for repo=travis-ci/travis-core id=#{job.id}")
+    end
+
+    describe 'when the job has been canceled meanwhile' do
+      let(:state) { :canceled }
+
+      it 'does not update the job state' do
+        subject.run
+        expect(job.reload.state).to eql(:canceled)
+      end
+
+      it 'broadcasts a cancel message' do
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        subject.run
+      end
     end
   end
 
