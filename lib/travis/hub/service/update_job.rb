@@ -38,6 +38,7 @@ module Travis
 
           def update_job
             return error_job if event == :reset && resets.limited? && !job.finished?
+            return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
             resets.record if event == :reset
           end
@@ -47,7 +48,7 @@ module Travis
           end
 
           def notify
-            NotifyWorkers.new(context).cancel(job) if event == :cancel
+            NotifyWorkers.new(context).cancel(job) if job.reload.state == :canceled
           end
 
           def validate
@@ -60,6 +61,10 @@ module Travis
 
           def unknown_event
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def skip_canceled?
+            [:reset, :recieve, :start, :finish].include?(event) && job.canceled?
           end
 
           def skipped
