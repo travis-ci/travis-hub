@@ -42,12 +42,10 @@ module Travis
         # test_exception_reporting
       end
 
-
       private
 
         def addons
-          # TODO remove the env var once Scheduler 2.0 shipped
-          config.notifications + (ENV['NOTIFY_SCHEDULER'] ? ['scheduler'] : [])
+          config.notifications + ['scheduler']
         end
 
         def test_exception_reporting
