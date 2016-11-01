@@ -37,8 +37,7 @@ describe Travis::Addons::Handlers::Scheduler do
       ::Sidekiq::Client.expects(:push).with(
         'queue' => 'scheduler-2',
         'class' => 'Travis::Scheduler::Worker',
-        'args'  => [:event, 'job:finished', id: job.id],
-        'expires_in' => 5 * 60
+        'args'  => [:event, 'job:finished', id: job.id]
       )
       handler.handle
     end
