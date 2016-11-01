@@ -14,10 +14,9 @@ module Travis
 
     def scheduler(*args)
       client.push(
-        'queue'      => 'scheduler-2', # TODO use 'scheduler' once Scheduler 2.0 is fully rolled out
-        'class'      => 'Travis::Scheduler::Worker',
-        'args'       => [:event, *args],
-        'expires_in' => 5 * 60 # TODO can be removed once Scheduler 2.0 picks these up
+        'queue' => ENV['SCHEDULER_SIDEKIQ_QUEUE'] || 'scheduler-2', # TODO use 'scheduler' once Scheduler 2.0 is fully rolled out
+        'class' => 'Travis::Scheduler::Worker',
+        'args'  => [:event, *args]
       )
     end
 
