@@ -56,7 +56,7 @@ class Job < ActiveRecord::Base
     !finished?
   end
 
-  def cancel(*)
+  def cancel(msg)
     self.finished_at = Time.now
   end
 

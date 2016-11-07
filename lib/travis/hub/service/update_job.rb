@@ -55,14 +55,6 @@ module Travis
             EVENTS.include?(event) || unknown_event
           end
 
-          def exclusive(&block)
-            super("hub:build-#{job.source_id}", &block)
-          end
-
-          def unknown_event
-            fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
-          end
-
           def skip_canceled?
             [:reset, :recieve, :start, :finish].include?(event) && job.canceled?
           end
@@ -76,7 +68,15 @@ module Travis
           end
 
           def attrs
-            data.reject { |key, _| key == :id }
+            data.reject { |key, _| key == :id || key == :meta }
+          end
+
+          def unknown_event
+            fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def exclusive(&block)
+            super("hub:build-#{job.source_id}", &block)
           end
 
           class Instrument < Instrumentation::Instrument
