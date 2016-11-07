@@ -63,7 +63,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
   end
 
-  describe 'cancel event' do
+  describe 'cancel event (api, manual)' do
     let(:state) { :started }
     let(:event) { :cancel }
     let(:data)  { { id: build.id } }
@@ -98,6 +98,36 @@ describe Travis::Hub::Service::UpdateBuild do
       subject.run
     end
   end
+
+  describe 'cancel event (gator, auto cancel)' do
+    let(:state) { :created }
+    let(:event) { :cancel }
+    let(:meta)  { { 'event' => 'pull_request', 'number' => '2', 'branch' => 'master', 'pull_request_number' => '1' } }
+    let(:data)  { { id: build.id, meta: meta } }
+    let(:now) { Time.now }
+
+    it 'updates the job' do
+      subject.run
+      expect(job.reload.state).to eql(:canceled)
+      expect(job.reload.canceled_at).to eql(now)
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")
+    end
+
+    it 'notifies workers' do
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+      subject.run
+    end
+
+    it 'adds an additional log line' do
+      subject.run
+      expect(job.log.parts.last.content).to include('Job automatically canceled because the "Auto Cancellation" feature is enabled, and build #2 (pull request #1) came in while this job was waiting to be processed.')
+    end
+  end
+
 
   describe 'restart event' do
     let(:state) { :passed }

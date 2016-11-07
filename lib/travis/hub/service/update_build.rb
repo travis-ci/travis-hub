@@ -29,11 +29,22 @@ module Travis
         private
 
           def update_jobs
-            build.jobs.each { |job| job.reload.send(:"#{event}!", attrs) }
+            build.jobs.each do |job|
+              job.reload.send(:"#{event}!", attrs)
+              update_log(job) if event == :cancel
+            end
+          end
+
+          def update_log(job)
+            job.log.canceled(meta) if meta
+          end
+
+          def meta
+            data[:meta]
           end
 
           def attrs
-            data.reject { |key, _| key == :id }
+            data.reject { |key, _| key == :id || key == :meta }
           end
 
           def notify
