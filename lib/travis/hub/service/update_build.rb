@@ -2,6 +2,7 @@ require 'travis/instrumentation'
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/build'
+require 'travis/hub/service/cancel_log'
 require 'travis/hub/service/notify_workers'
 
 module Travis
@@ -30,13 +31,13 @@ module Travis
 
           def update_jobs
             build.jobs.each do |job|
-              update_log(job) if event == :cancel
+              cancel_log(job) if event == :cancel
               job.reload.send(:"#{event}!", attrs)
             end
           end
 
-          def update_log(job)
-            job.log.canceled(meta) if meta
+          def cancel_log(job)
+            CancelLog.new(context, meta.merge(id: job.id)).run if meta
           end
 
           def meta
