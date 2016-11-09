@@ -124,7 +124,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'adds an additional log line' do
       subject.run
-      expect(job.log.parts.last.content).to include('Job automatically canceled because the "Auto Cancellation" feature is enabled, and build #2 (pull request #1) came in while this job was waiting to be processed.')
+      expect(job.log.parts.last.content).to include('This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#2) for pull request #1 came in while this job was waiting to be processed.')
     end
   end
 

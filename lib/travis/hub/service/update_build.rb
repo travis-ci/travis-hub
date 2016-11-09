@@ -30,8 +30,8 @@ module Travis
 
           def update_jobs
             build.jobs.each do |job|
-              job.reload.send(:"#{event}!", attrs)
               update_log(job) if event == :cancel
+              job.reload.send(:"#{event}!", attrs)
             end
           end
 
