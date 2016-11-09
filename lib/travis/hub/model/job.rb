@@ -14,7 +14,6 @@ class Job < ActiveRecord::Base
   belongs_to :repository
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
-  has_one    :log
 
   event :receive
   event :start,   after: :propagate
@@ -44,7 +43,6 @@ class Job < ActiveRecord::Base
   def restart(*)
     self.state = :created
     clear_attrs %w(started_at queued_at finished_at worker canceled_at)
-    clear_log
   end
 
   def reset!(*)
@@ -64,10 +62,6 @@ class Job < ActiveRecord::Base
 
     def clear_attrs(attrs)
       attrs.each { |attr| write_attribute(attr, nil) }
-    end
-
-    def clear_log
-      log ? log.clear : build_log
     end
 
     def propagate(event, *args)

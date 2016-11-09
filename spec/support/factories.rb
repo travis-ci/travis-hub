@@ -42,13 +42,9 @@ FactoryGirl.define do
     association :repository
     association :commit
     build       { FactoryGirl.build(:build) }
-    log         { FactoryGirl.build(:log) }
     config      { {} }
     number      '1.1'
     state       :created
-  end
-
-  factory :log do
   end
 
   factory :user do

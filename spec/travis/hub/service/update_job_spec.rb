@@ -133,13 +133,22 @@ describe Travis::Hub::Service::UpdateJob do
   end
 
   describe 'reset event' do
+    let(:url)   { 'https://logs.travis-ci.org' }
     let(:state) { :started }
     let(:event) { :reset }
     let(:data)  { { id: job.id } }
 
+    before { stub_request(:put, "#{url}/logs/#{job.id}") }
+    before { context.config[:logs] = { url: url, token: 'token' } }
+
     it 'resets the job' do
       subject.run
       expect(job.reload.state).to eql(:created)
+    end
+
+    it 'clears the log' do
+      subject.run
+      assert_requested(:put, "#{url}/logs/#{job.id}", body: '', headers: { 'Authorization' => 'token token' })
     end
 
     it 'instruments #run' do
@@ -148,13 +157,10 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     describe 'with resets being limited' do
-      let(:url)     { 'http://logs.travis-ci.org/logs' }
       let(:started) { Time.now - 7 * 3600 }
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
-      before { context.config[:logs] = { url: url, token: '1234' } }
-      before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}") }
       before { 50.times { limit.record(started) } }
 
       describe 'sets the job to :errored' do
@@ -164,9 +170,9 @@ describe Travis::Hub::Service::UpdateJob do
 
       it 'PUTs the log message to travis-logs' do
         subject.run
-        assert_requested(:put, "#{url}/#{job.id}",
+        assert_requested(:put, "#{url}/logs/#{job.id}",
           body: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.',
-          headers: { 'Authorization' => 'token 1234' }
+          headers: { 'Authorization' => 'token token' }
         )
       end
 
