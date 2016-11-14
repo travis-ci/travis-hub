@@ -247,6 +247,14 @@ describe Job do
         expect(job.build.reload.finished_at).to be_nil
       end
 
+      it 'clears log' do
+        receive
+        expect(job.log.reload.content).to be_empty
+        expect(job.log.reload.archive_verified).to be_nil
+        expect(job.log.reload.removed_by).to be_nil
+        expect(job.log.reload.removed_at).to be_nil
+      end
+
       it 'does not reset other jobs on the matrix' do
         other = FactoryGirl.create(:job, build: job.build, state: :passed)
         receive

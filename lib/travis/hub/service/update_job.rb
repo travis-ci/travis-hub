@@ -1,11 +1,10 @@
 require 'travis/instrumentation'
 require 'travis/hub/helper/context'
-require 'travis/hub/helper/limit'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/service/error_job'
 require 'travis/hub/service/notify_workers'
-require 'travis/hub/support/logs'
+require 'travis/hub/helper/limit'
 
 module Travis
   module Hub
@@ -41,16 +40,11 @@ module Travis
             return error_job if event == :reset && resets.limited? && !job.finished?
             return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
-            reset if event == :reset
+            resets.record if event == :reset
           end
 
           def error_job
             ErrorJob.new(context, id: job.id, reason: :resets_limited, resets: resets.to_s).run
-          end
-
-          def reset
-            logs.put(job.id, '')
-            resets.record
           end
 
           def notify
@@ -79,10 +73,6 @@ module Travis
 
           def unknown_event
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
-          end
-
-          def logs
-            Logs.new(config[:logs], context.logger)
           end
 
           def exclusive(&block)

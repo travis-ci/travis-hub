@@ -31,6 +31,11 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
+        # TODO remove, message travis-logs instead
+        [Log, Log::Part].each do |const|
+          Travis::Database.connect(const, config.logs_database.to_h, logger)
+        end
+
         # TODO remove Hub.context
         Hub.context = self
 

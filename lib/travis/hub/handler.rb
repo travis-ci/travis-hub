@@ -71,7 +71,11 @@ module Travis
         end
 
         def with_active_record(&block)
-          ActiveRecord::Base.connection_pool.with_connection(&block)
+          ActiveRecord::Base.connection_pool.with_connection do
+            Log.connection_pool.with_connection do
+              Log::Part.connection_pool.with_connection(&block)
+            end
+          end
         rescue ActiveRecord::ActiveRecordError => e
           count ||= 0
           raise e if count > 10

@@ -30,7 +30,7 @@ module Travis
           end
 
           def update_log
-            logs.put(id, LOGS[:resets_limited])
+            logs.update(id, LOGS[:resets_limited])
           end
 
           def job
@@ -47,7 +47,7 @@ module Travis
           end
 
           def logs
-            Logs.new(config[:logs], context.logger)
+            Logs.new(config[:logs])
           end
       end
     end

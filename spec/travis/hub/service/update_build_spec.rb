@@ -6,7 +6,6 @@ describe Travis::Hub::Service::UpdateBuild do
 
   subject     { described_class.new(context, event, data) }
   before      { amqp.stubs(:fanout) }
-    # Travis::Gatekeeper::Context.any_instance.stubs(:logs_http?).returns(true)
 
   describe 'start event' do
     let(:state) { :created }
@@ -105,12 +104,7 @@ describe Travis::Hub::Service::UpdateBuild do
     let(:event) { :cancel }
     let(:meta)  { { 'event' => 'pull_request', 'number' => '2', 'branch' => 'master', 'pull_request_number' => '1' } }
     let(:data)  { { id: build.id, meta: meta } }
-    let(:url)   { 'https://logs.travis-ci.org' }
-    let(:log)   { 'This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#2) for pull request #1 came in while this job was waiting to be processed.' }
-    let(:now)   { Time.now }
-
-    before { context.config[:logs] = { url: url, token: 'token' } }
-    before { stub_request(:put, /#{url}/) }
+    let(:now) { Time.now }
 
     it 'updates the job' do
       subject.run
@@ -130,7 +124,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'adds an additional log line' do
       subject.run
-      expect(WebMock).to have_requested(:put, "#{url}/logs/#{job.id}").with(body: log, headers: { authorization: 'token token' })
+      expect(job.log.parts.last.content).to include('This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#2) for pull request #1 came in while this job was waiting to be processed.')
     end
   end
 
