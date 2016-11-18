@@ -1,11 +1,12 @@
 require 'travis/hub/helper/context'
+require 'travis/hub/helper/hash'
 require 'travis/hub/helper/string'
 require 'travis/hub/service'
 
 module Travis
   module Hub
     class Handler
-      include Helper::Context, Helper::String
+      include Helper::Context, Helper::Hash, Helper::String
 
       attr_reader :context, :type, :event, :payload, :object
 
@@ -31,6 +32,7 @@ module Travis
 
         def handle
           const = Service.const_get("Update#{camelize(type)}")
+          p [event, payload]
           const.new(context, event, payload).run
         end
 
@@ -45,7 +47,7 @@ module Travis
         end
 
         def normalize_payload(payload)
-          payload = payload.symbolize_keys
+          payload = deep_symbolize_keys(payload)
           payload = normalize_state(payload)
           normalize_timestamps(payload)
         end

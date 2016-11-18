@@ -210,4 +210,67 @@ describe Travis::Hub::Service::UpdateJob do
       expect(job.reload.state).to eql :passed
     end
   end
+
+  describe 'state update count' do
+    let(:job)   { FactoryGirl.create(:job, state: :received) }
+    let(:event) { :start }
+    let(:data)  { { id: job.id, state: :started, meta: meta } }
+
+    before { ENV['UPDATE_COUNT'] = 'true' }
+    after  { ENV['UPDATE_COUNT'] = nil }
+
+    describe 'with no count stored' do
+      describe 'given no meta' do
+        let(:meta) { nil }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :started }
+        it { expect(log).to include "W Received state update (:start) with no count for job id=#{job.id}, last known count: 0" }
+      end
+
+      describe 'given no count' do
+        let(:meta) { {} }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :started }
+        it { expect(log).to include "W Received state update (:start) with no count for job id=#{job.id}, last known count: 0" }
+      end
+
+      describe 'given a count' do
+        let(:meta) { { state_update_count: 2 } }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :started }
+        it { expect(log).to include "I Received state update 2 (:start) for job id=#{job.id}, last known count: 0" }
+      end
+    end
+
+    describe 'with a count stored' do
+      before { context.redis.set("job:state_update_count:#{job.id}", 3) }
+
+      describe 'given no meta it skips the message' do
+        let(:meta) { nil }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :started }
+        it { expect(log).to include "W Received state update (:start) with no count for job id=#{job.id}, last known count: 3" }
+      end
+
+      describe 'given no count it skips the message' do
+        let(:meta) { {} }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :started }
+        it { expect(log).to include "W Received state update (:start) with no count for job id=#{job.id}, last known count: 3" }
+      end
+
+      describe 'given a count it skips the message' do
+        let(:meta) { { state_update_count: 2 } }
+        before { subject.run }
+
+        it { expect(job.reload.state).to eq :received }
+        it { expect(log).to include "W Received state update 2 (:start) for job id=#{job.id}, last known count: 3. Skipping the message." }
+      end
+    end
+  end
 end

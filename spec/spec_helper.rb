@@ -75,6 +75,7 @@ RSpec.configure do |c|
     Travis::Event.instance_variable_set(:@subscriptions, nil)
     # Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
     Time.stubs(:now).returns(NOW)
+    context.redis.flushall
   end
 end
 
