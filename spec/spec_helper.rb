@@ -8,18 +8,11 @@ require 'support/database_cleaner'
 require 'webmock'
 require 'webmock/rspec'
 
-context = Travis::Hub::Context.new
+Travis::Hub::Context.new
 
 # Travis::Event.setup
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
-
-logs_config = context.config.logs_database.to_h
-Log.establish_connection(logs_config)
-Log::Part.establish_connection(logs_config)
-
-puts logs_config
-exit 1
 
 NOW = Time.parse('2011-01-01 00:02:00 +0200')
 
