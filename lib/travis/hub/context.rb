@@ -31,9 +31,6 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
-        puts config.logs_database.to_h
-        exit 1
-
         # TODO remove, message travis-logs instead
         [Log, Log::Part].each do |const|
           Travis::Database.connect(const, config.logs_database.to_h, logger)
