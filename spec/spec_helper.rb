@@ -14,7 +14,7 @@ context = Travis::Hub::Context.new
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
-ActiveRecord::Base.configurations[:logs_test] = context.config.logs_database
+ActiveRecord::Base.configurations['logs_test'] = context.config.logs_database
 Log.establish_connection(:logs_test)
 Log::Part.establish_connection(:logs_test)
 
