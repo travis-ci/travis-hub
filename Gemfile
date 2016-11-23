@@ -7,7 +7,7 @@ gem 'travis-logger',          github: 'travis-ci/travis-logger'
 gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
 gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
 
-gem 'travis-config',          '~> 1.0.6'
+gem 'travis-config',          github: 'travis-ci/travis-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            github: 'travis-ci/travis-lock'
 gem 'travis-migrations',      github: 'travis-ci/travis-migrations'

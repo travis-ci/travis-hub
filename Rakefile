@@ -4,6 +4,9 @@ namespace :db do
   desc "Create and migrate the #{env} database"
   task :create do
     sh "createdb travis_#{env}" rescue nil
-    sh "psql -q travis_#{env} < #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/structure.sql"
+    sh "psql -q travis_#{env} < #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/main/structure.sql"
+
+    sh "createdb travis_logs_#{env}" rescue nil
+    sh "psql -q travis_logs_#{env} < #{Gem.loaded_specs['travis-migrations'].full_gem_path}/db/logs/structure.sql"
   end
 end

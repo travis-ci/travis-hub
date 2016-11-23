@@ -8,7 +8,7 @@ require 'support/database_cleaner'
 require 'webmock'
 require 'webmock/rspec'
 
-# Travis::Hub::Context.new
+Travis::Hub::Context.new
 
 # Travis::Event.setup
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)

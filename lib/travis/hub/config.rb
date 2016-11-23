@@ -5,6 +5,7 @@ module Travis
     class Config < Travis::Config
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
+             logs_database: { adapter: 'postgresql', database: "travis_logs_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              lock:          { strategy: :redis },
@@ -20,13 +21,6 @@ module Travis
              queue:         'builds',
              limit:         { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications: []
-
-      def logs_database
-        config = super
-        config.reaping_frequency = 60 if config
-        config.variables.statement_timeout = 10000 if config && config.variables
-        config || database
-      end
 
       def metrics
         # TODO cleanup keychain?
