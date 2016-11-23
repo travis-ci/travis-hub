@@ -5,6 +5,7 @@ module Travis
     class Config < Travis::Config
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
+             logs_database: { adapter: 'postgresql', database: "travis_logs_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              lock:          { strategy: :redis },

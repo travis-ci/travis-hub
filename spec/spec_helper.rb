@@ -1,4 +1,5 @@
 require 'travis/hub'
+require 'travis/hub/config'
 require 'time'
 
 require 'support/factories'
