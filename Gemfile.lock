@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-migrations.git
-  revision: d50bc1b1e38f5eab1550acbe753bff75602ae778
+  revision: 9df23c494c90ed64f5151d4d5009c430b2f8c010
   specs:
     travis-migrations (0.0.3)
 
@@ -190,4 +190,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
