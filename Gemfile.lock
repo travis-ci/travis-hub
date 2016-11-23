@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-config.git
-  revision: 33e6f14965fc759040d8dadb78702578e188fe33
-  branch: igor-rm-logs-database-normalize
+  revision: 1c84b7165bf9900fa8144a3fc92160e9a4000cdc
   specs:
     travis-config (1.0.12)
       hashr (~> 2.0.0)
