@@ -22,13 +22,6 @@ module Travis
              limit:         { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications: []
 
-      def logs_database
-        config = super
-        config.reaping_frequency = 60 if config
-        config.variables.statement_timeout = 10000 if config && config.variables
-        config || database
-      end
-
       def metrics
         # TODO cleanup keychain?
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)
