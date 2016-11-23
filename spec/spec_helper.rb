@@ -1,5 +1,4 @@
 require 'travis/hub'
-require 'travis/hub/config'
 require 'time'
 
 require 'support/factories'
@@ -16,7 +15,7 @@ require 'webmock/rspec'
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
 [Log, Log::Part].each do |model|
-  model.establish_connection(Travis.config.logs_database)
+  model.establish_connection(Travis::Hub.config.logs_database)
 end
 
 NOW = Time.parse('2011-01-01 00:02:00 +0200')
