@@ -14,9 +14,9 @@ context = Travis::Hub::Context.new
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
 
-ActiveRecord::Base.configurations['logs_test'] = context.config.logs_database.to_h
-Log.establish_connection(:logs_test)
-Log::Part.establish_connection(:logs_test)
+logs_config = context.config.logs_database.to_h
+Log.establish_connection(logs_config)
+Log::Part.establish_connection(logs_config)
 
 NOW = Time.parse('2011-01-01 00:02:00 +0200')
 
