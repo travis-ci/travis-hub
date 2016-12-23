@@ -49,12 +49,23 @@ module Travis
             end
           end
 
+          def on_canceled_for?(type)
+            !!if build_canceled?
+              config = with_fallbacks(type, :on_cancel, DEFAULTS[:failure][type])
+              config == :always || config == :change && (previous_build_passed? || initial_build?)
+            end
+          end
+
           def initial_build?
             blank?(build[:previous_state])
           end
 
           def build_passed?
             build[:state].try(:to_sym) == :passed
+          end
+
+          def build_canceled?
+            build[:state].try(:to_sym) == :canceled
           end
 
           def build_failed?
