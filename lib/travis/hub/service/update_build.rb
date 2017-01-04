@@ -15,7 +15,8 @@ module Travis
 
         def run
           exclusive do
-            return if data[:id] == 187764488
+            p data[:id]
+            return if data[:id].to_i == 187764488
             validate
             update_jobs
             notify
