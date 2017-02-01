@@ -38,6 +38,7 @@ module Travis
 
           def update_job
             return error_job if event == :reset && resets.limited? && !job.finished?
+            return recancel if recancel?
             return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
             resets.record if event == :reset
@@ -57,6 +58,14 @@ module Travis
 
           def skip_canceled?
             [:reset, :recieve, :start, :finish].include?(event) && job.canceled?
+          end
+
+          def recancel?
+            [:receive, :start].include?(event) && (job.errored? || job.canceled?)
+          end
+
+          def recancel
+            NotifyWorkers.new(context).cancel(job)
           end
 
           def skipped
