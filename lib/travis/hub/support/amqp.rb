@@ -21,8 +21,10 @@ module Travis
 
     def setup
       # TODO required on enterprise. move details to config?
-      channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
-      channel.queue('builds.linux', durable: true, exclusive: false)
+      if Travis.config.enterprise?
+        channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
+        channel.queue('builds.linux', durable: true, exclusive: false)
+      end
     end
 
     def subscribe(queue, options, &handler)
