@@ -23,7 +23,7 @@ module Travis
         @exceptions = Travis::Exceptions.setup(config, config.env, logger)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
-        @amqp       = Travis::Amqp.setup(config.amqp)
+        @amqp       = Travis::Amqp.setup(config.amqp, @config.enterprise?)
 
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
