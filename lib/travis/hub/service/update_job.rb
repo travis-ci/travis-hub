@@ -60,6 +60,7 @@ module Travis
           end
 
           def skipped
+            NotifyWorkers.new(context).cancel(job)
             warn :skipped, event, job.id, job.state, data[:state], data
           end
 
