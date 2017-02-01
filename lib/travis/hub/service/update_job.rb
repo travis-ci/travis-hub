@@ -61,7 +61,7 @@ module Travis
           end
 
           def recancel?
-            [:receive, :starrt].include?(event) && (job.reload.state == :errored || job.canceled?)
+            [:receive, :start].include?(event) && (job.errored? || job.canceled?)
           end
 
           def recancel
