@@ -4,17 +4,28 @@ require 'multi_json'
 module Travis
   class Amqp
     class << self
-      def setup(config)
-        @instance ||= new(config)
+      def setup(config, enterprise = false)
+        @instance ||= new(config, enterprise).tap do |amqp|
+          amqp.setup
+        end
       end
     end
 
     attr_reader :connection, :channel
 
-    def initialize(config)
+    def initialize(config, enterprise = false)
       @connection = Bunny.new(config.to_h).tap { |connection| connection.start }
       # TODO channels must not be shared across threads, set this to Thread.current?
       @channel = connection.create_channel
+      @enterprise = enterprise
+    end
+
+    def setup
+      # TODO required on enterprise. move details to config?
+      if @enterprise
+        channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
+        channel.queue('builds.linux', durable: true, exclusive: false)
+      end
     end
 
     def subscribe(queue, options, &handler)
@@ -45,11 +56,5 @@ module Travis
     rescue => e
       puts e.message, e.backtrace
     end
-
-    #   TODO
-    #   def declare_exchanges_and_queues
-    #     channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
-    #     channel.queue('builds.linux', durable: true, exclusive: false)
-    #   end
   end
 end
