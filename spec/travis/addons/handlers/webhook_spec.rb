@@ -96,5 +96,10 @@ describe Travis::Addons::Handlers::Webhook do
       config[:webhooks] = { urls: target, on_cancel: 'change' }
       expect(handler.targets).to eql [target]
     end
+
+    it 'returns an array of targets given a string within a hash on_errored' do
+      config[:webhooks] = { urls: target, on_error: 'change' }
+      expect(handler.targets).to eql [target]
+    end
   end
 end

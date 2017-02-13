@@ -60,7 +60,7 @@ module Travis
 
           def on_errored_for?(type)
             !!if build_errored?
-              config = with_fallbacks(type, :on_cancel, DEFAULTS[:errored][type])
+              config = with_fallbacks(type, :on_error, DEFAULTS[:errored][type])
               config == :always || config == :change && (previous_build_passed? || initial_build?)
             end
           end
