@@ -21,6 +21,12 @@ describe Travis::Addons::Handlers::Webhook do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:canceled', id: build.id)
     end
+
+    it 'build:errored notifies' do
+      described_class.new('build:errored', id: build.id)
+      described_class.expects(:notify)
+      Travis::Event.dispatch('build:errored', id: build.id)
+    end
   end
 
   describe 'handle?' do
