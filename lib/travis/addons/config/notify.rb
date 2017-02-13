@@ -10,7 +10,8 @@ module Travis
         DEFAULTS = {
           start:   { email: false,   webhooks: false,   campfire: false,   hipchat: false,   irc: false,   flowdock: false,   sqwiggle: false,   slack: false,   pushover: false   },
           success: { email: :change, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
-          failure: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always }
+          failure: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
+          canceled:{ email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always }
         }
 
         attr_reader :build, :config
@@ -51,7 +52,7 @@ module Travis
 
           def on_canceled_for?(type)
             !!if build_canceled?
-              config = with_fallbacks(type, :on_cancel, DEFAULTS[:failure][type])
+              config = with_fallbacks(type, :on_cancel, DEFAULTS[:canceled][type])
               config == :always || config == :change && (previous_build_passed? || initial_build?)
             end
           end
