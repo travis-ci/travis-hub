@@ -15,6 +15,18 @@ describe Travis::Addons::Handlers::Webhook do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:finished', id: build.id)
     end
+
+    it 'build:canceled notifies' do
+      described_class.new('build:canceled', id: build.id)
+      described_class.expects(:notify)
+      Travis::Event.dispatch('build:canceled', id: build.id)
+    end
+
+    it 'build:errored notifies' do
+      described_class.new('build:errored', id: build.id)
+      described_class.expects(:notify)
+      Travis::Event.dispatch('build:errored', id: build.id)
+    end
   end
 
   describe 'handle?' do
@@ -78,6 +90,11 @@ describe Travis::Addons::Handlers::Webhook do
     it 'returns an array of targets given a comma separated string within a hash' do
       config[:webhooks] = { urls: "#{target}, #{other}", on_success: 'change' }
       expect(handler.targets).to eql [target, other]
+    end
+
+    it 'returns an array of targets given a string within a hash on_cancel' do
+      config[:webhooks] = { urls: target, on_cancel: 'change' }
+      expect(handler.targets).to eql [target]
     end
   end
 end

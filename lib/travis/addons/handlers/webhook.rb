@@ -5,7 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Webhook < Base
-        EVENTS = /build:(started|finished)/
+        EVENTS = /build:(started|finished|canceled|errored)/
 
         def handle?
           targets.present? && config.send_on?(:webhooks, action)
@@ -35,4 +35,3 @@ module Travis
     end
   end
 end
-
