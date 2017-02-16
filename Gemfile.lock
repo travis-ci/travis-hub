@@ -96,7 +96,7 @@ GEM
     hitimes (1.2.4)
     i18n (0.7.0)
     jemalloc (1.0.1)
-    json (1.8.3)
+    json (1.8.6)
     metaclass (0.0.4)
     metriks (0.9.9.7)
       atomic (~> 1.0)
@@ -195,4 +195,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.13.6
+   1.14.4
