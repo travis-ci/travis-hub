@@ -31,7 +31,7 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
-        # TODO remove, message travis-logs instead
+        # TODO remove when HTTP-based fully rolled out
         [Log, Log::Part].each do |const|
           Travis::Database.connect(const, config.logs_database.to_h, logger)
         end

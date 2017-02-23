@@ -47,7 +47,7 @@ module Travis
           end
 
           def logs
-            Logs.new(config[:logs])
+            Travis::Hub::Support::Logs.new(config[:logs_api])
           end
       end
     end

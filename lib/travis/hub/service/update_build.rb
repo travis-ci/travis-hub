@@ -36,6 +36,7 @@ module Travis
           end
 
           def update_log(job)
+            return cancel_log_via_http(meta) if meta && logs_api_enabled?
             job.log.canceled(meta) if meta
           end
 
@@ -61,6 +62,30 @@ module Travis
 
           def unknown_event
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def cancel_log_via_http(meta)
+            logs_api.append_log_part(
+              job.id,
+              Log::MSGS[:canceled] % {
+                number: meta['number'],
+                info: Log::MSGS[meta['event'].to_sym] % {
+                  branch: meta['branch'],
+                  pull_request_number: meta['pull_request_number']
+                }
+              },
+              final: true
+            )
+          end
+
+          def logs_api_enabled?
+            Travis::Hub.context.config.logs_api.enabled?
+          end
+
+          def logs_api
+            @logs_api ||= Travis::Hub::Support::Logs.new(
+              Travis::Hub.context.config.logs_api
+            )
           end
 
           class Instrument < Instrumentation::Instrument

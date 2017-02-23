@@ -3,14 +3,35 @@ require 'travis/config'
 module Travis
   module Hub
     class Config < Travis::Config
+      def self.logs_api_enabled?
+        %w(true on yes 1).include?(
+          (
+            ENV['TRAVIS_HUB_LOGS_API_ENABLED'] ||
+            ENV['LOGS_API_ENABLED']
+          ).to_s.downcase
+        )
+      end
+
+      def self.logs_api_url
+        ENV['TRAVIS_HUB_LOGS_API_URL'] ||
+          ENV['LOGS_API_URL'] ||
+          ENV['LOGS_URL'] || ''
+      end
+
+      def self.logs_api_auth_token
+        ENV['TRAVIS_HUB_LOGS_API_AUTH_TOKEN'] ||
+          ENV['LOGS_API_AUTH_TOKEN'] ||
+          ENV['LOGS_TOKEN'] || ''
+      end
+
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
+             logs_api:      { url: logs_api_url, token: logs_api_auth_token, enabled: logs_api_enabled? },
              logs_database: { adapter: 'postgresql', database: "travis_logs_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },
              lock:          { strategy: :redis },
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
-             logs:          { url: ENV['LOGS_URL'], token: ENV['LOGS_TOKEN'] },
              name:          'hub',
              host:          'travis-ci.org',
              encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
