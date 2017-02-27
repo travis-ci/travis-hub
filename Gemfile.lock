@@ -38,6 +38,11 @@ GIT
   specs:
     travis-migrations (0.0.3)
 
+PATH
+  remote: ../travis-stages
+  specs:
+    travis-stages (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
@@ -187,6 +192,7 @@ DEPENDENCIES
   travis-logger!
   travis-metrics!
   travis-migrations!
+  travis-stages!
   webmock
 
 BUNDLED WITH

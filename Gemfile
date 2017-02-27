@@ -11,6 +11,7 @@ gem 'travis-config',          '~> 1.0.6'
 gem 'travis-encrypt'
 gem 'travis-lock',            github: 'travis-ci/travis-lock'
 gem 'travis-migrations',      github: 'travis-ci/travis-migrations'
+gem 'travis-stages',          path: '../travis-stages'
 
 gem 'rake'
 gem 'redis'
