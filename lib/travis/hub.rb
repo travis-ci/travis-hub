@@ -1,7 +1,7 @@
 require 'unlimited-jce-policy-jdk7' if RUBY_PLATFORM == 'java'
+require 'travis/stages'
 require 'travis/hub/context'
 require 'travis/hub/handler'
-require 'travis/hub/stages'
 
 module Travis
   module Hub
