@@ -12,6 +12,7 @@ gem 'travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-migrations',      git: 'https://github.com/travis-ci/travis-migrations'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
+gem 'travis-stages',          git: 'https://github.com/travis-ci//travis-stages'
 
 gem 'rake'
 gem 'redis'

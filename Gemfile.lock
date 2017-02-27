@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/travis-ci//travis-stages
+  revision: 82f1f9e15f021794af270e9f573aa3c51cbd6d8c
+  specs:
+    travis-stages (0.0.1)
+
+GIT
   remote: https://github.com/travis-ci/travis-config
   revision: a64596623f8f8ee70838a4dc4d7803906a049733
   specs:
@@ -216,6 +222,7 @@ DEPENDENCIES
   travis-logger!
   travis-metrics!
   travis-migrations!
+  travis-stages!
   travis-support!
   webmock
 
