@@ -1,4 +1,4 @@
-require 'simplecov' unless RUBY_PLATFORM == 'java'
+ENV['ENV'] = 'test'
 
 require 'travis/hub'
 require 'date'
