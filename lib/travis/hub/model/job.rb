@@ -14,6 +14,7 @@ class Job < ActiveRecord::Base
   belongs_to :repository
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
+  belongs_to :stage
   has_one    :log
 
   event :receive
@@ -24,6 +25,12 @@ class Job < ActiveRecord::Base
   event :all, after: :notify
 
   serialize :config
+
+  class << self
+    def pending
+      where('state NOT IN (?)', FINISHED_STATES)
+    end
+  end
 
   def config
     super || {}

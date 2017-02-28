@@ -1,3 +1,5 @@
+ENV['ENV'] = 'test'
+
 require 'travis/hub'
 require 'time'
 

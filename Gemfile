@@ -2,16 +2,16 @@ source 'https://rubygems.org'
 
 gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
 
-gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
-gem 'travis-logger',          github: 'travis-ci/travis-logger'
-gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
-gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
+gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'
+gem 'travis-logger',          git: 'https://github.com/travis-ci/travis-logger'
+gem 'travis-metrics',         git: 'https://github.com/travis-ci/travis-metrics'
+gem 'travis-instrumentation', git: 'https://github.com/travis-ci/travis-instrumentation'
 
 gem 'travis-config',          '~> 1.0.6'
 gem 'travis-encrypt'
-gem 'travis-lock',            github: 'travis-ci/travis-lock'
-gem 'travis-migrations',      github: 'travis-ci/travis-migrations'
-gem 'travis-stages',          path: '../travis-stages'
+gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
+gem 'travis-migrations',      git: 'https://github.com/travis-ci/travis-migrations'
+gem 'travis-stages',          git: 'https://github.com/travis-ci/travis-stages'
 
 gem 'rake'
 gem 'redis'
