@@ -1,6 +1,32 @@
 require 'travis/config'
+require 'travis/config/heroku'
 
 module Travis
+  # HACK HACK HACK
+  class Config
+    class Heroku
+      def load
+        compact(
+          database: database,
+          logs_database: logs_database,
+          logs_readonly_database: logs_readonly_database,
+          amqp: amqp,
+          redis: redis,
+          memcached: memcached,
+          sentry: sentry
+        )
+      end
+
+      def logs_readonly_database
+        require 'travis/config/heroku'
+        ::Travis::Config::Heroku::Database.new(
+          prefix: 'logs_readonly'
+        ).config
+      end
+    end
+  end
+  # HACK HACK HACK
+
   module Hub
     class Config < Travis::Config
       def self.logs_api_enabled?
@@ -16,17 +42,20 @@ module Travis
         ENV['TRAVIS_HUB_LOGS_API_URL'] ||
           ENV['LOGS_API_URL'] ||
           ENV['LOGS_URL'] || ''
+          'http://travis-logs-notset.example.com:9753'
       end
 
       def self.logs_api_auth_token
         ENV['TRAVIS_HUB_LOGS_API_AUTH_TOKEN'] ||
           ENV['LOGS_API_AUTH_TOKEN'] ||
           ENV['LOGS_TOKEN'] || ''
+          'baba-dada-fafafaf-travis-logs-notset'
       end
 
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
              database:      { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              logs_api:      { url: logs_api_url, token: logs_api_auth_token, enabled: logs_api_enabled? },
+             logs_readonly_database: { adapter: 'postgresql', database: "travis_logs_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              logs_database: { adapter: 'postgresql', database: "travis_logs_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              redis:         { url: 'redis://localhost:6379' },
              sidekiq:       { namespace: 'sidekiq', pool_size: 1 },

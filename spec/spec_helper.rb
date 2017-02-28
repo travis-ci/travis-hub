@@ -27,4 +27,10 @@ RSpec.configure do |c|
     # Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
     Time.stubs(:now).returns(NOW)
   end
+
+  c.filter_run_excluding(
+    logs_api_enabled: !%w(on true yes 1).include?(
+      ENV['TRAVIS_HUB_LOGS_API_ENABLED']
+    )
+  )
 end

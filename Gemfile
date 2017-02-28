@@ -26,6 +26,7 @@ gem 'simple_states'
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
+gem 'pry'
 
 platform :ruby do
   gem 'jemalloc'
