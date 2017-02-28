@@ -35,7 +35,7 @@ describe Travis::Addons::Handlers::Scheduler do
   describe 'handle' do
     it 'notifies scheduler' do
       ::Sidekiq::Client.expects(:push).with(
-        'queue' => 'scheduler-2',
+        'queue' => 'scheduler',
         'class' => 'Travis::Scheduler::Worker',
         'args'  => [:event, 'job:finished', id: job.id]
       )
