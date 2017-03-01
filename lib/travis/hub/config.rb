@@ -41,14 +41,14 @@ module Travis
       def self.logs_api_url
         ENV['TRAVIS_HUB_LOGS_API_URL'] ||
           ENV['LOGS_API_URL'] ||
-          ENV['LOGS_URL'] || ''
+          ENV['LOGS_URL'] ||
           'http://travis-logs-notset.example.com:9753'
       end
 
       def self.logs_api_auth_token
         ENV['TRAVIS_HUB_LOGS_API_AUTH_TOKEN'] ||
           ENV['LOGS_API_AUTH_TOKEN'] ||
-          ENV['LOGS_TOKEN'] || ''
+          ENV['LOGS_TOKEN'] ||
           'baba-dada-fafafaf-travis-logs-notset'
       end
 
