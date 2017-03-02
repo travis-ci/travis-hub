@@ -11,13 +11,24 @@ describe Stage do
     jobs.map(&:reload)
   end
 
-  describe 'default' do
+  describe 'failure' do
     before { jobs[0].finish!(state: :failed) }
     before { jobs[1].finish!(state: :passed) }
     before { reload }
 
     it { expect(build.state).to eq :failed }
     it { expect(jobs[0].state).to eq :failed }
+    it { expect(jobs[1].state).to eq :passed }
+    it { expect(jobs[2].state).to eq :canceled }
+  end
+
+  describe 'error' do
+    before { jobs[0].finish!(state: :errored) }
+    before { jobs[1].finish!(state: :passed) }
+    before { reload }
+
+    it { expect(build.state).to eq :errored }
+    it { expect(jobs[0].state).to eq :errored }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :canceled }
   end
