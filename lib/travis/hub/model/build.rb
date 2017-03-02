@@ -43,7 +43,7 @@ class Build < ActiveRecord::Base
     !canceled? && matrix.finished?
   end
 
-  def finish(_, attrs = {})
+  def finish(*)
     update_attributes!(state: matrix_state, duration: matrix.duration)
   end
 
@@ -82,10 +82,5 @@ class Build < ActiveRecord::Base
 
     def config_valid?
       not config[:'.result'].to_s.include?('error')
-    end
-
-    def stage
-      return instance_variable_get(:@state) if instance_variable_defined?(:@state)
-      @state = jobs.map(&:stage).compact.detect(&:failed?)
     end
 end

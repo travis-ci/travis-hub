@@ -1,3 +1,5 @@
+require 'travis/hub/model/build/matrix'
+
 class Stage < ActiveRecord::Base
   belongs_to :build
   has_many :jobs
@@ -9,27 +11,23 @@ class Stage < ActiveRecord::Base
   end
 
   def finished?
-    jobs.all?(&:finished?)
+    matrix.finished?
   end
 
   # What's a better name for `[failed|errored|canceled]`
   def failed?
-    finished? && !jobs.all?(&:passed?)
+    matrix.finished? && !matrix.passed?
   end
 
   def state
-    if jobs.any?(&:canceled?)
-      :canceled
-    elsif jobs.any?(&:errored?)
-      :errored
-    elsif jobs.any?(&:failed?)
-      :failed
-    else
-      :passed
-    end
+    matrix.state
   end
 
   private
+
+    def matrix
+      @matrix ||= Build::Matrix.new(jobs, build.config[:matrix])
+    end
 
     def cancel_pending_jobs
       # This would cancel the build several times, because `build.finish?` only
@@ -39,7 +37,7 @@ class Stage < ActiveRecord::Base
       # https://github.com/travis-pro/team-teal/issues/1247)
       # jobs.pending.each(&:cancel!)
 
-      to_cancel = build.jobs.pending
+      to_cancel = build.jobs.pending - jobs
       attrs = { state: :canceled, finished_at: Time.now }
 
       # If we notify early then Scheduler might receive an event and queue jobs
