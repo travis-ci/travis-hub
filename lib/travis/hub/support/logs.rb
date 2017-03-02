@@ -35,11 +35,11 @@ module Travis
         end
 
         private def url
-          config.url || raise('Logs URL not set.')
+          config[:url] || raise('Logs URL not set.')
         end
 
         private def token
-          config.token || raise('Logs token not set.')
+          config[:token] || raise('Logs token not set.')
         end
       end
     end

@@ -4,10 +4,6 @@ language: ruby
 rvm:
   - 2.2
 
-env:
-  - TRAVIS_HUB_LOGS_API_ENABLED=1
-  - TRAVIS_HUB_LOGS_API_ENABLED=0
-
 services:
   - memcached
   - redis

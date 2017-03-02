@@ -28,9 +28,11 @@ RSpec.configure do |c|
     Time.stubs(:now).returns(NOW)
   end
 
-  c.filter_run_excluding(
-    logs_api_enabled: !%w(on true yes 1).include?(
-      ENV['TRAVIS_HUB_LOGS_API_ENABLED']
-    )
-  )
+  c.before :each, logs_api_enabled: true do
+    context.config.logs_api.enabled = true
+  end
+
+  c.before :each, logs_api_enabled: false do
+    context.config.logs_api.enabled = false
+  end
 end

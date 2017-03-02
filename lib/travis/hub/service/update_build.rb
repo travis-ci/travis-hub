@@ -36,7 +36,7 @@ module Travis
           end
 
           def update_log(job)
-            return cancel_log_via_http(meta) if meta && logs_api_enabled?
+            return cancel_log_via_http(job, meta) if meta && logs_api_enabled?
             job.log.canceled(meta) if meta
           end
 
@@ -64,7 +64,7 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
-          def cancel_log_via_http(meta)
+          def cancel_log_via_http(job, meta)
             logs_api.append_log_part(
               job.id,
               Log::MSGS[:canceled] % {
