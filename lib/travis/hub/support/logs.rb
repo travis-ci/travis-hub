@@ -26,21 +26,23 @@ module Travis
           end
         end
 
-        private def http
-          @http ||= Faraday.new(url: url) do |c|
-            c.request :authorization, :token, token
-            c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
-            c.adapter :net_http
+        private
+
+          def http
+            @http ||= Faraday.new(url: url) do |c|
+              c.request :authorization, :token, token
+              c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
+              c.adapter :net_http
+            end
           end
-        end
 
-        private def url
-          config[:url] || raise('Logs URL not set.')
-        end
+          def url
+            config[:url] || raise('Logs URL not set.')
+          end
 
-        private def token
-          config[:token] || raise('Logs token not set.')
-        end
+          def token
+            config[:token] || raise('Logs token not set.')
+          end
       end
     end
   end

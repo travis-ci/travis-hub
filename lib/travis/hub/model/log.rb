@@ -23,10 +23,6 @@ class Log < ActiveRecord::Base
     Part.where(log_id: id).delete_all
   end
 
-  private def clear_via_http
-    logs_api.update(job_id, '', clear: true)
-  end
-
   def canceled(data)
     return canceled_via_http(data) if logs_api_enabled?
 
@@ -36,26 +32,32 @@ class Log < ActiveRecord::Base
     Part.create(log_id: id, content: line, number: number, final: true)
   end
 
-  private def canceled_via_http(data)
-    logs_api.append_log_part(
-      job_id,
-      MSGS[:canceled] % {
-        number: data['number'],
-        info: MSGS[data['event'].to_sym] % {
-          branch: data['branch'],
-          pull_request_number: data['pull_request_number']
+  private
+
+    def clear_via_http
+      logs_api.update(job_id, '', clear: true)
+    end
+
+    def canceled_via_http(data)
+      logs_api.append_log_part(
+        job_id,
+        MSGS[:canceled] % {
+          number: data['number'],
+          info: MSGS[data['event'].to_sym] % {
+            branch: data['branch'],
+            pull_request_number: data['pull_request_number']
+          }
         }
-      }
-    )
-  end
+      )
+    end
 
-  private def logs_api_enabled?
-    Travis::Hub.context.config.logs_api.enabled?
-  end
+    def logs_api_enabled?
+      Travis::Hub.context.config.logs_api.enabled?
+    end
 
-  private def logs_api
-    @logs_api ||= Travis::Hub::Support::Logs.new(
-      Travis::Hub.context.config.logs_api
-    )
-  end
+    def logs_api
+      @logs_api ||= Travis::Hub::Support::Logs.new(
+        Travis::Hub.context.config.logs_api
+      )
+    end
 end

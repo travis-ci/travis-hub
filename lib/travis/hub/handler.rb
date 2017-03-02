@@ -71,7 +71,9 @@ module Travis
         end
 
         def with_active_record(&block)
-          return block.call if context.config.logs_api.enabled?
+          if context.config.logs_api.enabled?
+            return ActiveRecord::Base.connection_pool.with_connection(&block)
+          end
 
           ActiveRecord::Base.connection_pool.with_connection do
             Log.connection_pool.with_connection do

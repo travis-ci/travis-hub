@@ -129,12 +129,11 @@
         subject.run
       end
 
-      it 'adds an additional log line' do
-        if context.config.logs_api.enabled?
-          skip('log persistence not verified when logs_api.enabled?')
+      unless logs_api_enabled
+        it 'adds an additional log line' do
+          subject.run
+          expect(job.log.parts.last.content).to include('This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#2) for pull request #1 came in while this job was waiting to be processed.')
         end
-        subject.run
-        expect(job.log.parts.last.content).to include('This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#2) for pull request #1 came in while this job was waiting to be processed.')
       end
     end
 
