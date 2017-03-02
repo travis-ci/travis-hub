@@ -6,11 +6,13 @@ gem 'travis-exceptions',      github: 'travis-ci/travis-exceptions'
 gem 'travis-logger',          github: 'travis-ci/travis-logger'
 gem 'travis-metrics',         github: 'travis-ci/travis-metrics'
 gem 'travis-instrumentation', github: 'travis-ci/travis-instrumentation'
-
-gem 'travis-config',          github: 'travis-ci/travis-config'
+# TODO: back out travis-config on 'meat-logs-readonly-config' branch
+gem 'travis-config',          github: 'travis-ci/travis-config', branch: 'meat-logs-readonly-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            github: 'travis-ci/travis-lock'
 gem 'travis-migrations',      github: 'travis-ci/travis-migrations'
+# TODO: back out travis-support on 'meat-logs-readonly-config' branch
+gem 'travis-support',         github: 'travis-ci/travis-support', branch: 'meat-logs-readonly-config'
 
 gem 'rake'
 gem 'redis'

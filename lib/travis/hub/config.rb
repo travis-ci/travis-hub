@@ -2,54 +2,29 @@ require 'travis/config'
 require 'travis/config/heroku'
 
 module Travis
-  # HACK HACK HACK
-  class Config
-    class Heroku
-      def load
-        compact(
-          database: database,
-          logs_database: logs_database,
-          logs_readonly_database: logs_readonly_database,
-          amqp: amqp,
-          redis: redis,
-          memcached: memcached,
-          sentry: sentry
-        )
-      end
-
-      def logs_readonly_database
-        require 'travis/config/heroku'
-        ::Travis::Config::Heroku::Database.new(
-          prefix: 'logs_readonly'
-        ).config
-      end
-    end
-  end
-  # HACK HACK HACK
-
   module Hub
     class Config < Travis::Config
-      def self.logs_api_enabled?
-        %w(true on yes 1).include?(
-          (
-            ENV['TRAVIS_HUB_LOGS_API_ENABLED'] ||
-            ENV['LOGS_API_ENABLED']
-          ).to_s.downcase
-        )
-      end
+      class << self
+        def logs_api_enabled?
+          %w(true on yes 1).include?(
+            (
+              ENV['TRAVIS_HUB_LOGS_API_ENABLED'] ||
+              ENV['LOGS_API_ENABLED']
+            ).to_s.downcase
+          )
+        end
 
-      def self.logs_api_url
-        ENV['TRAVIS_HUB_LOGS_API_URL'] ||
-          ENV['LOGS_API_URL'] ||
-          ENV['LOGS_URL'] ||
-          'http://travis-logs-notset.example.com:9753'
-      end
+        def logs_api_url
+          ENV['TRAVIS_HUB_LOGS_API_URL'] ||
+            ENV['LOGS_API_URL'] ||
+            'http://travis-logs-notset.example.com:1234'
+        end
 
-      def self.logs_api_auth_token
-        ENV['TRAVIS_HUB_LOGS_API_AUTH_TOKEN'] ||
-          ENV['LOGS_API_AUTH_TOKEN'] ||
-          ENV['LOGS_TOKEN'] ||
-          'baba-dada-fafafaf-travis-logs-notset'
+        def logs_api_auth_token
+          ENV['TRAVIS_HUB_LOGS_API_AUTH_TOKEN'] ||
+            ENV['LOGS_API_AUTH_TOKEN'] ||
+            'notset'
+        end
       end
 
       define amqp:          { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },

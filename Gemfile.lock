@@ -1,8 +1,9 @@
 GIT
   remote: git://github.com/travis-ci/travis-config.git
-  revision: 1c84b7165bf9900fa8144a3fc92160e9a4000cdc
+  revision: e7c330db9fbfe2ce571ea84f793548121b55bc41
+  branch: meat-logs-readonly-config
   specs:
-    travis-config (1.0.12)
+    travis-config (1.0.13)
       hashr (~> 2.0.0)
 
 GIT
@@ -44,6 +45,13 @@ GIT
   revision: 9df23c494c90ed64f5151d4d5009c430b2f8c010
   specs:
     travis-migrations (0.0.3)
+
+GIT
+  remote: git://github.com/travis-ci/travis-support.git
+  revision: fee7f426ba4914ad5bc688b975a19ad52db83f51
+  branch: meat-logs-readonly-config
+  specs:
+    travis-support (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -200,6 +208,7 @@ DEPENDENCIES
   travis-logger!
   travis-metrics!
   travis-migrations!
+  travis-support!
   webmock
 
 BUNDLED WITH
