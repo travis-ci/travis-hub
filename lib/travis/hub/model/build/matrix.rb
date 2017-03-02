@@ -4,6 +4,10 @@ class Build < ActiveRecord::Base
       jobs.all?(&:finished?) || fast_finish? && required.finished?
     end
 
+    def passed?
+      required.all?(&:passed?)
+    end
+
     def restartable?
       jobs.any?(&:created?)
     end
@@ -28,10 +32,14 @@ class Build < ActiveRecord::Base
       end
     end
 
+    def all?(&block)
+      jobs.all?(&block)
+    end
+
     private
 
       def required
-        @required ||= Matrix.new(jobs.reject { |job| job.allow_failure? })
+        @required ||= Matrix.new(jobs.reject(&:allow_failure?))
       end
 
       def fast_finish?

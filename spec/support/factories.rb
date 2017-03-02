@@ -38,6 +38,9 @@ FactoryGirl.define do
     event_type  :push
   end
 
+  factory :stage do
+  end
+
   factory :job do
     association :repository
     association :commit
