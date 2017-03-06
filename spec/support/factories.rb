@@ -39,6 +39,7 @@ FactoryGirl.define do
   end
 
   factory :stage do
+    state :created
   end
 
   factory :job do

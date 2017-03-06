@@ -91,8 +91,8 @@ class Job < ActiveRecord::Base
     end
 
     def propagate(event, *args)
-      build.send(:"#{event}!", *args)
-      stage.send(:finish!) if stage && event == :finish
+      target = stage && stage.respond_to?(:"#{event}!") ? stage : build
+      target.send(:"#{event}!", *args)
     end
 
     def config_valid?
