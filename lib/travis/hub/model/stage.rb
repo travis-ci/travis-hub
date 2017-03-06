@@ -7,6 +7,7 @@ class Stage < ActiveRecord::Base
   event :start,  if: :start?
   event :finish, if: :finish?, to: Build::FINISHED_STATES
   event :cancel
+  event :restart
   event :all, after: :propagate
 
   belongs_to :build
@@ -29,14 +30,14 @@ class Stage < ActiveRecord::Base
     FINISHED_STATES.include?(state)
   end
 
-  # # What's a better name for `[failed|errored|canceled]`
-  # def failed?
-  #   matrix.finished? && !matrix.passed?
-  # end
+  def cancel(*)
+    self.finished_at = Time.now
+  end
 
-  # def state
-  #   matrix.state
-  # end
+  def restart(*)
+    %w(started_at finished_at).each { |attr| write_attribute(attr, nil) }
+    self.state = :created
+  end
 
   private
 
