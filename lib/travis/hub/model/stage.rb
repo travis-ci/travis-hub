@@ -1,27 +1,42 @@
+require 'simple_states'
 require 'travis/hub/model/build/matrix'
 
 class Stage < ActiveRecord::Base
+  include SimpleStates
+
+  event :start,  if: :start?
+  event :finish, if: :finish?, to: Build::FINISHED_STATES
+  event :cancel
+  event :all, after: :propagate
+
   belongs_to :build
   has_many :jobs
 
-  def finish!(*)
-    return unless failed?
-    cancel_pending_jobs
-    build.finish!(state: state)
+  def start?(*)
+    !started?
   end
 
-  def finished?
+  def finish?(*)
     matrix.finished?
   end
 
-  # What's a better name for `[failed|errored|canceled]`
-  def failed?
-    matrix.finished? && !matrix.passed?
+  def finish(*)
+    update_attributes!(state: matrix.state)
+    cancel_pending_jobs unless passed?
   end
 
-  def state
-    matrix.state
+  def finished?
+    FINISHED_STATES.include?(state)
   end
+
+  # # What's a better name for `[failed|errored|canceled]`
+  # def failed?
+  #   matrix.finished? && !matrix.passed?
+  # end
+
+  # def state
+  #   matrix.state
+  # end
 
   private
 
@@ -47,5 +62,12 @@ class Stage < ActiveRecord::Base
       # and send them only after all DB state has been updated properly.
       to_cancel.each { |job| job.update_attributes!(attrs) }
       to_cancel.each { |job| job.notify(:finish) }
+
+      stages = Stage.where(id: to_cancel.map(&:stage_id))
+      stages.each { |stage| stage.update_attributes!(attrs) }
+    end
+
+    def propagate(event, *args)
+      build.send(:"#{event}!", *args)
     end
 end

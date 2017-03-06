@@ -72,7 +72,7 @@ class Build < ActiveRecord::Base
   private
 
     def matrix_state
-      stage = stages.detect(&:failed?)
+      stage = stages.reject(&:passed?).first
       stage ? stage.state : matrix.state
     end
 
