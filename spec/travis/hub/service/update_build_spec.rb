@@ -1,11 +1,25 @@
 describe Travis::Hub::Service::UpdateBuild do
   let(:now)   { Time.now }
   let(:build) { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
+  let(:bad_build) { FactoryGirl.create(:build, id: 187764488, jobs: [job], state: state, received_at: now - 10) }
   let(:job)   { FactoryGirl.create(:job, state: state) }
   let(:amqp)  { Travis::Amqp.any_instance }
 
   subject     { described_class.new(context, event, data) }
   before      { amqp.stubs(:fanout) }
+
+  # special check to enable cancelation of build with massive matrix
+  describe 'special case - specific build' do
+    let(:state) { :created }
+    let(:event) { :start }
+    let(:data)  { { id: bad_build.id, started_at: now } }
+
+    it 'ignores a specific build' do
+      puts bad_build.id
+      subject.run
+      expect(bad_build.reload.state).to eql(:created)
+    end
+  end
 
   describe 'start event' do
     let(:state) { :created }
