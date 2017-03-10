@@ -37,6 +37,8 @@ module Travis
 
           def update_log(job)
             job.log.canceled(meta) if meta
+          rescue ActiveRecord::StatementInvalid => e
+            logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
 
           def meta
