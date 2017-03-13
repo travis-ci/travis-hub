@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/travis-ci/travis-config.git
-  revision: e7c330db9fbfe2ce571ea84f793548121b55bc41
-  branch: meat-logs-readonly-config
+  revision: 2f43b8052cee02b3064ec82160637c4f69e712bd
   specs:
     travis-config (1.0.13)
       hashr (~> 2.0.0)
@@ -48,8 +47,7 @@ GIT
 
 GIT
   remote: git://github.com/travis-ci/travis-support.git
-  revision: fee7f426ba4914ad5bc688b975a19ad52db83f51
-  branch: meat-logs-readonly-config
+  revision: 113cff17fe383bb72fcfae3a97a8ce98c228342f
   specs:
     travis-support (0.0.1)
 
