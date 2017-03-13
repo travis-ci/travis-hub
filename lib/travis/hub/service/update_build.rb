@@ -38,6 +38,8 @@ module Travis
           def update_log(job)
             return cancel_log_via_http(job, meta) if meta && logs_api_enabled?
             job.log.canceled(meta) if meta
+          rescue ActiveRecord::StatementInvalid => e
+            logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
 
           def meta
