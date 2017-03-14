@@ -53,7 +53,10 @@ module Travis
         end
 
         def normalize_timestamps(payload)
-          payload.reject { |key, value| key.to_s =~ /_at$/ && value.to_s.include?('0001') }
+          payload = payload.reject { |key, value| key.to_s =~ /_at$/ && value.to_s.include?('0001') }
+          queued_at, received_at = payload.values_at(:queued_at, :received_at)
+          payload[:received_at] = queued_at if queued_at && received_at && queued_at > received_at
+          payload
         end
 
         def unknown_event(event)

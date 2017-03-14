@@ -11,6 +11,7 @@ class Build < ActiveRecord::Base
   FINISHED_STATES = [:passed, :failed, :errored, :canceled]
 
   belongs_to :repository
+  belongs_to :owner, polymorphic: true
   has_many   :jobs, -> { order(:id) }, as: :source
 
   event  :start,   if: :start?

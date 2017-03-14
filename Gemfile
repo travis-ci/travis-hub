@@ -21,6 +21,7 @@ gem 'activerecord'
 gem 'faraday'
 
 gem 'gh'
+gem 'keen'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven'
 gem 'simple_states'
