@@ -1,19 +1,19 @@
 GIT
-  remote: git://github.com/travis-ci/travis-config.git
+  remote: https://github.com/travis-ci/travis-config
   revision: 2f43b8052cee02b3064ec82160637c4f69e712bd
   specs:
     travis-config (1.0.13)
       hashr (~> 2.0.0)
 
 GIT
-  remote: git://github.com/travis-ci/travis-exceptions.git
-  revision: 884b6a2b9c21ca09e7be5f85fb27b6e9aa7711e4
+  remote: https://github.com/travis-ci/travis-exceptions
+  revision: 71b11939f1f3b86d1e2fd94f3b9b8f78af290e12
   specs:
     travis-exceptions (0.0.2)
       sentry-raven
 
 GIT
-  remote: git://github.com/travis-ci/travis-instrumentation.git
+  remote: https://github.com/travis-ci/travis-instrumentation
   revision: b068fa1b54752a829ceb35532bf5dda85d947f01
   specs:
     travis-instrumentation (0.0.1)
@@ -21,32 +21,32 @@ GIT
       travis-metrics (~> 0)
 
 GIT
-  remote: git://github.com/travis-ci/travis-lock.git
-  revision: 8aadc4cd7a1c8d89788dfc096507ee96a71fceb6
+  remote: https://github.com/travis-ci/travis-lock
+  revision: b418401c79e082aa53a62364f7b01a9be6f0d768
   specs:
-    travis-lock (0.1.0)
+    travis-lock (0.1.1)
 
 GIT
-  remote: git://github.com/travis-ci/travis-logger.git
+  remote: https://github.com/travis-ci/travis-logger
   revision: 765046a4746617a70395fe2200e8a91dc416f1b3
   specs:
     travis-logger (0.0.1)
 
 GIT
-  remote: git://github.com/travis-ci/travis-metrics.git
+  remote: https://github.com/travis-ci/travis-metrics
   revision: 37eac93bd1e9bd949a9842f28154c335ebeda42a
   specs:
     travis-metrics (0.0.1)
       metriks-librato_metrics (~> 1.0)
 
 GIT
-  remote: git://github.com/travis-ci/travis-migrations.git
-  revision: 9df23c494c90ed64f5151d4d5009c430b2f8c010
+  remote: https://github.com/travis-ci/travis-migrations
+  revision: 70034707d0a44ebc45c92a41c7ec3722f9028fe1
   specs:
     travis-migrations (0.0.3)
 
 GIT
-  remote: git://github.com/travis-ci/travis-support.git
+  remote: https://github.com/travis-ci/travis-support
   revision: 113cff17fe383bb72fcfae3a97a8ce98c228342f
   specs:
     travis-support (0.0.1)
@@ -210,4 +210,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.13.6
+   1.14.6

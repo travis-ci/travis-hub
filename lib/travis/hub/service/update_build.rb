@@ -30,20 +30,25 @@ module Travis
 
           def update_jobs
             build.jobs.each do |job|
-              update_log(job) if event == :cancel
+              auto_cancel(job) if event == :cancel && auto_cancel?
               job.reload.send(:"#{event}!", attrs)
             end
           end
 
-          def update_log(job)
-            return cancel_log_via_http(job, meta) if meta && logs_api_enabled?
-            job.log.canceled(meta) if meta
+          def auto_cancel?
+            !!meta[:auto]
+          end
+
+          def auto_cancel(job)
+            metrics.meter('hub.job.auto_cancel')
+            return cancel_log_via_http(job) if meta && logs_api_enabled?
+            job.log.canceled(meta) if job.log
           rescue ActiveRecord::StatementInvalid => e
             logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
 
           def meta
-            data[:meta]
+            @meta ||= (data[:meta] || {}).symbolize_keys
           end
 
           def attrs
@@ -66,14 +71,14 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
-          def cancel_log_via_http(job, meta)
+          def cancel_log_via_http(job)
             logs_api.append_log_part(
               job.id,
               Log::MSGS[:canceled] % {
-                number: meta['number'],
-                info: Log::MSGS[meta['event'].to_sym] % {
-                  branch: meta['branch'],
-                  pull_request_number: meta['pull_request_number']
+                number: meta[:number],
+                info: Log::MSGS[meta[:event].to_sym] % {
+                  branch: meta[:branch],
+                  pull_request_number: meta[:pull_request_number]
                 }
               },
               final: true

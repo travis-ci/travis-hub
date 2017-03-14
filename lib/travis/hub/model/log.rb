@@ -26,8 +26,8 @@ class Log < ActiveRecord::Base
   def canceled(data)
     return canceled_via_http(data) if logs_api_enabled?
 
-    event, number = data['event'].to_sym, data['number']
-    line = MSGS[:canceled] % { number: number, info: MSGS[event] % { branch: data['branch'], pull_request_number: data['pull_request_number'] } }
+    event, number = data[:event].to_sym, data[:number]
+    line = MSGS[:canceled] % { number: number, info: MSGS[event] % { branch: data[:branch], pull_request_number: data[:pull_request_number] } }
     number = parts.last.try(:number).to_i + 1
     Part.create(log_id: id, content: line, number: number, final: true)
   end
