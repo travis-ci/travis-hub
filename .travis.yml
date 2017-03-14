@@ -4,6 +4,10 @@ language: ruby
 rvm:
   - 2.2
 
+env:
+  global:
+  - COVERAGE=1
+
 services:
   - memcached
   - redis

@@ -42,10 +42,10 @@ class Log < ActiveRecord::Base
       logs_api.append_log_part(
         job_id,
         MSGS[:canceled] % {
-          number: data['number'],
-          info: MSGS[data['event'].to_sym] % {
-            branch: data['branch'],
-            pull_request_number: data['pull_request_number']
+          number: data[:number],
+          info: MSGS[data[:event].to_sym] % {
+            branch: data[:branch],
+            pull_request_number: data[:pull_request_number]
           }
         }
       )

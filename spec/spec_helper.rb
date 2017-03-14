@@ -1,3 +1,5 @@
+require 'simplecov' unless RUBY_PLATFORM == 'java'
+
 require 'travis/hub'
 require 'date'
 
