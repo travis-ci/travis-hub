@@ -41,7 +41,7 @@ module Travis
 
           def auto_cancel(job)
             metrics.meter('hub.job.auto_cancel')
-            job.log.canceled(meta)
+            job.log.canceled(meta) if job.log
           rescue ActiveRecord::StatementInvalid => e
             logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
