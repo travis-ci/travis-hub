@@ -30,19 +30,24 @@ module Travis
 
           def update_jobs
             build.jobs.each do |job|
-              update_log(job) if event == :cancel
+              auto_cancel(job) if event == :cancel && auto_cancel?
               job.reload.send(:"#{event}!", attrs)
             end
           end
 
-          def update_log(job)
-            job.log.canceled(meta) if meta
+          def auto_cancel?
+            !!meta[:auto]
+          end
+
+          def auto_cancel(job)
+            metrics.meter('hub.job.auto_cancel')
+            job.log.canceled(meta)
           rescue ActiveRecord::StatementInvalid => e
             logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
 
           def meta
-            data[:meta]
+            @meta ||= (data[:meta] || {}).symbolize_keys
           end
 
           def attrs

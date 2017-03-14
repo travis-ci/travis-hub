@@ -23,8 +23,8 @@ class Log < ActiveRecord::Base
 
   # TODO message logs instead
   def canceled(data)
-    event, number = data['event'].to_sym, data['number']
-    line = MSGS[:canceled] % { number: number, info: MSGS[event] % { branch: data['branch'], pull_request_number: data['pull_request_number'] } }
+    event, number = data[:event].to_sym, data[:number]
+    line = MSGS[:canceled] % { number: number, info: MSGS[event] % { branch: data[:branch], pull_request_number: data[:pull_request_number] } }
     number = parts.last.try(:number).to_i + 1
     Part.create(log_id: id, content: line, number: number, final: true)
   end
