@@ -30,6 +30,11 @@ class Job < ActiveRecord::Base
     super || {}
   end
 
+  def received_at=(*)
+    super
+    ensure_positive_queue_time
+  end
+
   def duration
     finished_at - started_at if started_at && finished_at
   end
@@ -62,6 +67,12 @@ class Job < ActiveRecord::Base
   end
 
   private
+
+    def ensure_positive_queue_time
+      # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
+      return unless queued_at && received_at && queued_at > received_at
+      self.received_at = queued_at
+    end
 
     def clear_attrs(attrs)
       attrs.each { |attr| write_attribute(attr, nil) }
