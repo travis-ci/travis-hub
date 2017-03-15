@@ -37,7 +37,6 @@ module Travis
         private
 
           def update_job
-            normalize_received_at # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
             return error_job if event == :reset && resets.limited? && !job.finished?
             return recancel if recancel?
             return skipped if skip_canceled?
@@ -55,12 +54,6 @@ module Travis
 
           def validate
             EVENTS.include?(event) || unknown_event
-          end
-
-          def normalize_received_at
-            queued_at, received_at = attrs.values_at(:queued_at, :received_at)
-            queued_at ||= job.queued_at
-            attrs[:received_at] = queued_at if queued_at && received_at && queued_at.to_s > received_at.to_s
           end
 
           def skip_canceled?

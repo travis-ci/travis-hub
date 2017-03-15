@@ -1,8 +1,11 @@
 [true, false].each do |logs_api_enabled|
   describe Travis::Hub::Service::UpdateJob, logs_api_enabled: logs_api_enabled do
-    let(:redis) { Travis::Hub.context.redis }
-    let(:amqp)  { Travis::Amqp.any_instance }
-    let(:job)   { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
+    let(:redis)       { Travis::Hub.context.redis }
+    let(:amqp)        { Travis::Amqp.any_instance }
+    let(:job)         { FactoryGirl.create(:job, state: state, queued_at: queued_at, received_at: received_at) }
+    let(:queued_at)   { now - 20 }
+    let(:received_at) { now - 10 }
+    let(:now)         { Time.now.utc }
 
     subject    { described_class.new(context, event, data) }
     before     { amqp.stubs(:fanout) }
@@ -10,7 +13,7 @@
     describe 'receive event' do
       let(:state) { :queued }
       let(:event) { :receive }
-      let(:data)  { { id: job.id, received_at: Time.now } }
+      let(:data)  { { id: job.id, received_at: now } }
 
       it 'updates the job' do
         subject.run
@@ -20,6 +23,15 @@
       it 'instruments #run' do
         subject.run
         expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for repo=travis-ci/travis-core id=#{job.id}")
+      end
+
+      describe 'with received_at < queued_at (Worker living in the past' do
+        let(:queued_at) { now + 10 }
+
+        it 'sets received_at to queued_at' do
+          subject.run
+          expect(job.reload.received_at).to eq queued_at
+        end
       end
 
       describe 'when the job has been canceled meanwhile' do
@@ -40,7 +52,7 @@
     describe 'start event' do
       let(:state) { :queued }
       let(:event) { :start }
-      let(:data)  { { id: job.id, started_at: Time.now } }
+      let(:data)  { { id: job.id, started_at: now } }
 
       it 'updates the job' do
         subject.run
