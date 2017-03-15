@@ -11,6 +11,7 @@ gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-migrations',      git: 'https://github.com/travis-ci/travis-migrations'
+gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
 
 gem 'rake'
 gem 'redis'
@@ -27,6 +28,7 @@ gem 'simple_states'
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
+gem 'pry'
 
 platform :ruby do
   gem 'jemalloc'
@@ -40,4 +42,5 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock'
+  gem 'simplecov'
 end

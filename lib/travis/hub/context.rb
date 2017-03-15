@@ -31,9 +31,14 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
-        # TODO remove, message travis-logs instead
+        logs_database_config = if config.logs_api.enabled?
+                                 config.logs_readonly_database.to_h
+                               else
+                                 config.logs_database.to_h
+                               end
+        # TODO remove when HTTP-based fully rolled out
         [Log, Log::Part].each do |const|
-          Travis::Database.connect(const, config.logs_database.to_h, logger)
+          Travis::Database.connect(const, logs_database_config, logger)
         end
 
         # TODO remove Hub.context

@@ -79,6 +79,7 @@ class Job < ActiveRecord::Base
     end
 
     def clear_log
+      return clear_log_via_http if logs_api_enabled?
       log ? log.clear : build_log
     end
 
@@ -88,5 +89,19 @@ class Job < ActiveRecord::Base
 
     def config_valid?
       !config[:'.result'].to_s.include?('error')
+    end
+
+    def clear_log_via_http
+      logs_api.update(id, '', clear: true)
+    end
+
+    def logs_api_enabled?
+      Travis::Hub.context.config.logs_api.enabled?
+    end
+
+    def logs_api
+      @logs_api ||= Travis::Hub::Support::Logs.new(
+        Travis::Hub.context.config.logs_api
+      )
     end
 end

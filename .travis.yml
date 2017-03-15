@@ -4,6 +4,10 @@ language: ruby
 rvm:
   - 2.2
 
+env:
+  global:
+  - COVERAGE=1
+
 services:
   - memcached
   - redis
@@ -22,4 +26,4 @@ before_script:
   - bundle exec rake db:create --trace
 
 script:
-  - bundle exec rspec --require spec_helper
+  - bundle exec rspec

@@ -1,3 +1,5 @@
+require 'simplecov' unless RUBY_PLATFORM == 'java'
+
 require 'travis/hub'
 require 'date'
 
@@ -26,5 +28,13 @@ RSpec.configure do |c|
     Travis::Event.instance_variable_set(:@subscriptions, nil)
     # Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
     Time.stubs(:now).returns(NOW)
+  end
+
+  c.before :each, logs_api_enabled: true do
+    context.config.logs_api.enabled = true
+  end
+
+  c.before :each, logs_api_enabled: false do
+    context.config.logs_api.enabled = false
   end
 end
