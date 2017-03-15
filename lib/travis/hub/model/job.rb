@@ -20,7 +20,7 @@ class Job < ActiveRecord::Base
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
 
-  event :create
+  event :create,  after: :propagate
   event :receive
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES

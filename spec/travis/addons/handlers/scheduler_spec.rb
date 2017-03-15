@@ -5,10 +5,10 @@ describe Travis::Addons::Handlers::Scheduler do
   describe 'subscription' do
     before { Travis::Event.setup([:scheduler]) }
 
-    # it 'job:create notifies' do
-    #   described_class.expects(:notify).never
-    #   Travis::Event.dispatch('job:create', id: job.id)
-    # end
+    it 'job:create notifies' do
+      described_class.expects(:notify).never
+      Travis::Event.dispatch('job:create', id: job.id)
+    end
 
     it 'job:started does not notify' do
       described_class.expects(:notify).never
