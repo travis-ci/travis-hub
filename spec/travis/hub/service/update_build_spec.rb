@@ -5,10 +5,12 @@
     let(:job)   { FactoryGirl.create(:job, state ? { state: state } : {}) }
     let(:amqp)  { Travis::Amqp.any_instance }
     let(:metrics) { Travis::Metrics }
+    let(:events)  { Travis::Event }
 
     subject     { described_class.new(context, event, data) }
     before      { amqp.stubs(:fanout) }
     before      { metrics.stubs(:meter) }
+    before      { events.stubs(:dispatch) }
 
     describe 'create event' do
       let(:state) { }
@@ -18,6 +20,21 @@
       it 'updates the build' do
         subject.run
         expect(build.reload.state).to eql(:created)
+      end
+
+      it 'updates the jobs' do
+        subject.run
+        expect(build.reload.jobs.map(&:state)).to eq [:created]
+      end
+
+      it 'dispatches a build:created event' do
+        Travis::Event.expects(:dispatch).with('build:created', id: build.id)
+        subject.run
+      end
+
+      it 'dispatches job:created events' do
+        Travis::Event.expects(:dispatch).with('job:created', id: job.id)
+        subject.run
       end
 
       it 'instruments #run' do

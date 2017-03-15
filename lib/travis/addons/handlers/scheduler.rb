@@ -5,7 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Scheduler < Base
-        EVENTS = ['job:finished', 'job:canceled', 'job:restarted']
+        EVENTS = ['job:created', 'job:finished', 'job:canceled', 'job:restarted']
 
         def handle?
           true
