@@ -11,7 +11,7 @@ module Travis
         include Helper::Context, Helper::Locking
         extend Instrumentation
 
-        EVENTS = [:start, :finish, :cancel, :restart]
+        EVENTS = [:create, :start, :finish, :cancel, :restart]
 
         def run
           exclusive do

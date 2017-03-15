@@ -18,6 +18,9 @@ class Job < ActiveRecord::Base
   belongs_to :stage
   has_one    :log
 
+  self.initial_state = :persisted # TODO go away once there's `queueable`
+
+  event :create
   event :receive
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES

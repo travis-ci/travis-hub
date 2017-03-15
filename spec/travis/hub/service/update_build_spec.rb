@@ -1,14 +1,30 @@
 [true, false].each do |logs_api_enabled|
   describe Travis::Hub::Service::UpdateBuild, logs_api_enabled: logs_api_enabled do
     let(:now)   { Time.now }
-    let(:build) { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
-    let(:job)   { FactoryGirl.create(:job, state: state) }
+    let(:build) { FactoryGirl.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
+    let(:job)   { FactoryGirl.create(:job, state ? { state: state } : {}) }
     let(:amqp)  { Travis::Amqp.any_instance }
     let(:metrics) { Travis::Metrics }
 
     subject     { described_class.new(context, event, data) }
     before      { amqp.stubs(:fanout) }
     before      { metrics.stubs(:meter) }
+
+    describe 'create event' do
+      let(:state) { }
+      let(:event) { :create }
+      let(:data)  { { id: build.id, started_at: now } }
+
+      it 'updates the build' do
+        subject.run
+        expect(build.reload.state).to eql(:created)
+      end
+
+      it 'instruments #run' do
+        subject.run
+        expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: create for repo=travis-ci/travis-core id=#{build.id}")
+      end
+    end
 
     describe 'start event' do
       let(:state) { :created }
