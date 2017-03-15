@@ -15,11 +15,14 @@ class Build < ActiveRecord::Base
   has_many   :jobs, -> { order(:id) }, as: :source
   has_many   :stages, -> { order(:id) }
 
-  event  :start,   if: :start?
-  event  :finish,  if: :finish?, to: FINISHED_STATES
-  event  :cancel,  if: :cancel?
-  event  :restart, if: :restart?
-  event  :all, after: [:denormalize, :notify]
+  self.initial_state = :persisted # TODO go away once there's `queueable`
+
+  event :create,  if: :persisted?
+  event :start,   if: :start?
+  event :finish,  if: :finish?, to: FINISHED_STATES
+  event :cancel,  if: :cancel?
+  event :restart, if: :restart?
+  event :all, after: [:denormalize, :notify]
 
   serialize :config
 
