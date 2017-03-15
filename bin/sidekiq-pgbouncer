@@ -19,7 +19,7 @@ fi
 
 if [ "$PGBOUNCER_ENABLED" = '1' ] || [ "$PGBOUNCER_ENABLED" = 'true' ]; then
   export PGBOUNCER_PREPARED_STATEMENTS=false
-  bin/start-pgbouncer-stunnel bin/sidekiq
+  bin/start-pgbouncer-stunnel bin/sidekiq $@
 else
-  bin/sidekiq
+  bin/sidekiq $@
 fi
