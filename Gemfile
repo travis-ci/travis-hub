@@ -10,7 +10,7 @@ gem 'travis-instrumentation', git: 'https://github.com/travis-ci/travis-instrume
 gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
-gem 'travis-migrations',      git: 'https://github.com/travis-ci/travis-migrations'
+gem 'travis-migrations',      git: 'https://github.com/travis-ci/travis-migrations', ref: 'sf-jobs-queueable'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
 
 gem 'rake'
