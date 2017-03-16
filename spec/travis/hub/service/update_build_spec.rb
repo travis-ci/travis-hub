@@ -17,14 +17,19 @@
       let(:event) { :create }
       let(:data)  { { id: build.id, started_at: now } }
 
-      it 'updates the build' do
+      it 'updates the build state' do
         subject.run
         expect(build.reload.state).to eql(:created)
       end
 
-      it 'updates the jobs' do
+      it 'updates the job states' do
         subject.run
         expect(build.reload.jobs.map(&:state)).to eq [:created]
+      end
+
+      it 'updates the job queueable flags' do
+        subject.run
+        expect(build.reload.jobs.map(&:queueable)).to eq [true]
       end
 
       it 'dispatches a build:created event' do

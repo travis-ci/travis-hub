@@ -41,7 +41,8 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-migrations
-  revision: 70034707d0a44ebc45c92a41c7ec3722f9028fe1
+  revision: 8c06bc950a75aa919d55d382f534646b52dbaa90
+  ref: sf-jobs-queueable
   specs:
     travis-migrations (0.0.3)
 

@@ -53,6 +53,10 @@ class Job < ActiveRecord::Base
     FINISHED_STATES.include?(state.try(:to_sym))
   end
 
+  def create
+    set_queueable
+  end
+
   def restart?(*)
     config_valid?
   end
@@ -61,6 +65,7 @@ class Job < ActiveRecord::Base
     self.state = :created
     clear_attrs %w(started_at queued_at finished_at worker canceled_at)
     clear_log
+    set_queueable
   end
 
   def reset!(*)
@@ -91,6 +96,10 @@ class Job < ActiveRecord::Base
     def clear_log
       return clear_log_via_http if logs_api_enabled?
       log ? log.clear : build_log
+    end
+
+    def set_queueable
+      self.queueable = true if respond_to?(:queueable)
     end
 
     def propagate(event, *args)
