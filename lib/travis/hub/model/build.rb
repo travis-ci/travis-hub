@@ -15,9 +15,7 @@ class Build < ActiveRecord::Base
   has_many   :jobs, -> { order(:id) }, as: :source
   has_many   :stages, -> { order(:id) }
 
-  self.initial_state = :persisted # TODO go away once there's `queueable`
-
-  event :create,  if: :persisted?
+  event :create
   event :start,   if: :start?
   event :finish,  if: :finish?, to: FINISHED_STATES
   event :cancel,  if: :cancel?

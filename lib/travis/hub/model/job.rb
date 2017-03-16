@@ -7,6 +7,10 @@ require 'travis/hub/model/repository'
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
+  def self.queueable_jobs?
+    Job.connection.tables.include?('queueable_jobs')
+  end
+
   FINISHED_STATES = [:passed, :failed, :errored, :canceled]
 
   Job.inheritance_column = :unused
@@ -16,6 +20,7 @@ class Job < ActiveRecord::Base
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
   belongs_to :stage
+  has_one    :queueable
   has_one    :log
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
@@ -54,7 +59,7 @@ class Job < ActiveRecord::Base
   end
 
   def create
-    set_queueable
+    set_queueable if Job.queueable_jobs?
   end
 
   def restart?(*)
@@ -99,7 +104,8 @@ class Job < ActiveRecord::Base
     end
 
     def set_queueable
-      self.queueable = true if respond_to?(:queueable)
+      return unless Job.queueable_jobs?
+      queueable || create_queueable
     end
 
     def propagate(event, *args)

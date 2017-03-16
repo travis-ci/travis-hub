@@ -40,13 +40,6 @@ GIT
       metriks-librato_metrics (~> 1.0)
 
 GIT
-  remote: https://github.com/travis-ci/travis-migrations
-  revision: 8c06bc950a75aa919d55d382f534646b52dbaa90
-  ref: sf-jobs-queueable
-  specs:
-    travis-migrations (0.0.3)
-
-GIT
   remote: https://github.com/travis-ci/travis-support
   revision: 113cff17fe383bb72fcfae3a97a8ce98c228342f
   specs:
@@ -216,7 +209,6 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
-  travis-migrations!
   travis-support!
   webmock
 

@@ -13,7 +13,7 @@
     before      { events.stubs(:dispatch) }
 
     describe 'create event' do
-      let(:state) { }
+      let(:state) { :create }
       let(:event) { :create }
       let(:data)  { { id: build.id, started_at: now } }
 
@@ -29,7 +29,7 @@
 
       it 'updates the job queueable flags' do
         subject.run
-        expect(build.reload.jobs.map(&:queueable)).to eq [true]
+        expect(build.reload.jobs.map { |job| !!job.queueable }).to eq [true] if Job.queueable_jobs?
       end
 
       it 'dispatches a build:created event' do
