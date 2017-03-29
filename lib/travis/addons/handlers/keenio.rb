@@ -13,7 +13,7 @@ module Travis
         }
 
         def handle?
-          ENV['KEEN_PROJECT_ID'] || ENV['ENV'] == 'test'
+          ENV['KEEN_PROJECT_ID']
         end
 
         def handle
