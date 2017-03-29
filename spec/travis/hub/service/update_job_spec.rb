@@ -182,7 +182,7 @@
         let(:state)   { :queued }
 
         before { context.config[:logs_api] = { url: url, token: '1234' } }
-        before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}") }
+        before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}?source=hub") }
         before { 50.times { limit.record(started) } }
 
         describe 'sets the job to :errored' do
