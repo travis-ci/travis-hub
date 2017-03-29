@@ -17,7 +17,8 @@ namespace :db do
     system "curl -fs #{url} -o #{file} --create-dirs"
     abort "failed to download #{url}" unless File.exist?(file)
 
-    sh "psql -q travis_#{env} < #{file}"
+    sh "createdb travis_logs_#{env}" rescue nil
+    sh "psql -q travis_logs_#{env} < #{file}"
   end
 end
 
