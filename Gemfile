@@ -30,7 +30,7 @@ gem 'redlock'
 platform :ruby do
   gem 'jemalloc'
   gem 'pg'
-  gem 'bunny'
+  gem 'bunny', "2.2.0"
 end
 
 group :test do

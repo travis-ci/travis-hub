@@ -70,8 +70,8 @@ GEM
       atomic (~> 1.1)
     backports (3.6.8)
     builder (3.2.2)
-    bunny (2.6.4)
-      amq-protocol (>= 2.0.1)
+    bunny (2.2.0)
+      amq-protocol (>= 2.0.0)
     coder (0.4.0)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
@@ -164,7 +164,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-  bunny
+  bunny (= 2.2.0)
   coder
   dalli
   database_cleaner
