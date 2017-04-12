@@ -28,7 +28,7 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'updates the job queueable flags' do
       subject.run
-      expect(build.reload.jobs.map { |job| !!job.queueable }).to eq [true] if Job.queueable_jobs?
+      expect(build.reload.jobs.map { |job| !!job.queueable }).to eq [true]
     end
 
     it 'dispatches a build:created event' do

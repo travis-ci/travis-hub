@@ -12,6 +12,7 @@ module Travis
         end
 
         def handle
+          puts "[notify-scheduler] After #{event} the job #{object.id} is #{object.reload.queueable ? 'queueable' : 'not queueable'}"
           Travis::Sidekiq.scheduler(event, id: object.id)
         end
 
