@@ -6,10 +6,6 @@ require 'travis/hub/model/repository'
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
-  def self.queueable_jobs?
-    Job.connection.tables.include?('queueable_jobs')
-  end
-
   FINISHED_STATES = [:passed, :failed, :errored, :canceled]
 
   Job.inheritance_column = :unused
@@ -57,7 +53,7 @@ class Job < ActiveRecord::Base
   end
 
   def create
-    set_queueable if Job.queueable_jobs?
+    set_queueable
   end
 
   def restart?(*)
@@ -68,6 +64,7 @@ class Job < ActiveRecord::Base
     self.state = :created
     clear_attrs %w(started_at queued_at finished_at worker canceled_at)
     clear_log
+    save!
     set_queueable
   end
 
@@ -82,6 +79,7 @@ class Job < ActiveRecord::Base
 
   def cancel(msg)
     self.finished_at = Time.now
+    unset_queueable
   end
 
   private
@@ -97,8 +95,11 @@ class Job < ActiveRecord::Base
     end
 
     def set_queueable
-      return unless Job.queueable_jobs?
       queueable || create_queueable
+    end
+
+    def unset_queueable
+      Queueable.where(job_id: id).delete_all
     end
 
     def propagate(event, *args)
