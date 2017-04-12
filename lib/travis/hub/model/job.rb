@@ -1,7 +1,6 @@
 require 'simple_states'
 require 'travis/event'
 require 'travis/hub/model/build'
-require 'travis/hub/model/log'
 require 'travis/hub/model/repository'
 
 class Job < ActiveRecord::Base
@@ -21,7 +20,6 @@ class Job < ActiveRecord::Base
   belongs_to :commit
   belongs_to :stage
   has_one    :queueable
-  has_one    :log
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
 
@@ -98,11 +96,6 @@ class Job < ActiveRecord::Base
       attrs.each { |attr| write_attribute(attr, nil) }
     end
 
-    def clear_log
-      return clear_log_via_http if logs_api_enabled?
-      log ? log.clear : build_log
-    end
-
     def set_queueable
       return unless Job.queueable_jobs?
       queueable || create_queueable
@@ -117,12 +110,8 @@ class Job < ActiveRecord::Base
       !config[:'.result'].to_s.include?('error')
     end
 
-    def clear_log_via_http
+    def clear_log
       logs_api.update(id, '', clear: true)
-    end
-
-    def logs_api_enabled?
-      Travis::Hub.context.config.logs_api.enabled?
     end
 
     def logs_api
