@@ -5,6 +5,13 @@ require 'travis/hub/model/build/denormalize'
 require 'travis/hub/model/build/matrix'
 require 'travis/hub/update_current_build'
 
+SimpleStates.module_eval do
+  def state=(state)
+    state = state.to_sym unless state.nil?
+    super(state)
+  end
+end
+
 class Build < ActiveRecord::Base
   include Denormalize, SimpleStates, Travis::Event
 

@@ -12,9 +12,12 @@ describe Travis::Hub::Service::UpdateBuild do
   before      { events.stubs(:dispatch) }
 
   describe 'create event' do
-    let(:state) { :create }
+    # let(:state) { :create }
+    let(:state) { nil }
     let(:event) { :create }
     let(:data)  { { id: build.id, started_at: now } }
+
+    before { build.reload.update_attributes!(state: nil) }
 
     it 'updates the build state' do
       subject.run
