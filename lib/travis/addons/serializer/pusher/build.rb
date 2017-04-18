@@ -17,16 +17,66 @@ module Travis
 
           def data
             {
-              build: build_data(build),
-              commit: commit_data(build.commit),
-              repository: repository_data(build.repository)
+              repository: repository_data,
+              commit: commit_data,
+              build: build_data,
+              stages: build.stages.map { |stage| stage_data(stage) }
             }
           end
 
           private
 
-            def build_data(build)
-              commit = build.commit
+            def repository_data
+              {
+                id: repository.id,
+                slug: repository.slug,
+                description: repository.description,
+                private: repository.private,
+                last_build_id: repository.last_build_id,
+                last_build_number: repository.last_build_number,
+                last_build_state: repository.last_build_state.to_s,
+                last_build_duration: repository.last_build_duration,
+                last_build_language: nil,
+                last_build_started_at: format_date(repository.last_build_started_at),
+                last_build_finished_at: format_date(repository.last_build_finished_at),
+                github_language: repository.github_language,
+                default_branch: {
+                  name: repository.default_branch,
+                  last_build_id: last_build_on_default_branch_id(repository)
+                },
+                active: repository.active,
+                current_build_id: repository.current_build_id
+              }
+            end
+
+            def commit_data
+              {
+                id: commit.id,
+                sha: commit.commit,
+                branch: commit.branch,
+                message: commit.message,
+                committed_at: format_date(commit.committed_at),
+                author_name: commit.author_name,
+                author_email: commit.author_email,
+                committer_name: commit.committer_name,
+                committer_email: commit.committer_email,
+                compare_url: commit.compare_url,
+              }
+            end
+
+            def stage_data(stage)
+              {
+                id: stage.id,
+                build_id: stage.build.id,
+                number: stage.number,
+                name: stage.name,
+                state: stage.state,
+                started_at: format_date(stage.started_at),
+                finished_at: format_date(stage.finished_at),
+              }
+            end
+
+            def build_data
               {
                 id: build.id,
                 repository_id: build.repository_id,
@@ -55,42 +105,16 @@ module Travis
               }
             end
 
-            def commit_data(commit)
-              {
-                id: commit.id,
-                sha: commit.commit,
-                branch: commit.branch,
-                message: commit.message,
-                committed_at: format_date(commit.committed_at),
-                author_name: commit.author_name,
-                author_email: commit.author_email,
-                committer_name: commit.committer_name,
-                committer_email: commit.committer_email,
-                compare_url: commit.compare_url,
-              }
+            def repository
+              build.repository
             end
 
-            def repository_data(repository)
-              {
-                id: repository.id,
-                slug: repository.slug,
-                description: repository.description,
-                private: repository.private,
-                last_build_id: repository.last_build_id,
-                last_build_number: repository.last_build_number,
-                last_build_state: repository.last_build_state.to_s,
-                last_build_duration: repository.last_build_duration,
-                last_build_language: nil,
-                last_build_started_at: format_date(repository.last_build_started_at),
-                last_build_finished_at: format_date(repository.last_build_finished_at),
-                github_language: repository.github_language,
-                default_branch: {
-                  name: repository.default_branch,
-                  last_build_id: last_build_on_default_branch_id(repository)
-                },
-                active: repository.active,
-                current_build_id: repository.current_build_id
-              }
+            def commit
+              build.commit
+            end
+
+            def stages
+              build.stages
             end
 
             def last_build_on_default_branch_id(repository)

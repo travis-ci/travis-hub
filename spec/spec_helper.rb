@@ -1,13 +1,14 @@
 ENV['ENV'] = 'test'
 
-require 'simplecov'
-
 require 'travis/hub'
 require 'date'
 
 require 'support/factories'
 require 'support/context'
 require 'support/database_cleaner'
+
+require 'mocha'
+require 'bourne' # TODO use rspec stubs/expectations
 
 require 'webmock'
 require 'webmock/rspec'

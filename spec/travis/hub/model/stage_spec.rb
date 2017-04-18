@@ -6,11 +6,31 @@ describe Stage do
   let(:now)    { Time.now }
 
   before { jobs.map(&:reload) } # hmm? why do i need this here??
+  before { Travis::Event.stubs(:dispatch) }
 
   def reload
     build.reload
     stages.map(&:reload)
     jobs.map(&:reload)
+  end
+
+  describe 'success' do
+    before { jobs[0].finish!(state: :passed, finished_at: now) }
+    before { jobs[1].finish!(state: :passed, finished_at: now) }
+    before { jobs[2].finish!(state: :passed, finished_at: now) }
+    before { reload }
+
+    it { expect(build.state).to eq :passed }
+    it { expect(stages[0].state).to eq :passed }
+    it { expect(stages[1].state).to eq :passed }
+    it { expect(stages[0].finished_at).to eq now }
+    it { expect(stages[1].finished_at).to eq now }
+    it { expect(jobs[0].state).to eq :passed }
+    it { expect(jobs[1].state).to eq :passed }
+    it { expect(jobs[2].state).to eq :passed }
+
+    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
+    it { expect(Travis::Event).to have_received(:dispatch).with('job:finished', id: jobs[0].id) }
   end
 
   describe 'failure' do
@@ -26,6 +46,8 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :canceled }
+
+    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
   end
 
   describe 'error' do
@@ -39,6 +61,8 @@ describe Stage do
     it { expect(jobs[0].state).to eq :errored }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :canceled }
+
+    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
   end
 
   describe 'with allow_failure' do
@@ -53,6 +77,8 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :created }
+
+    it { expect(Travis::Event).to have_received(:dispatch).times(2) }
   end
 
   describe 'with allow_failure and fast_finish' do
@@ -69,5 +95,7 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :created }
     it { expect(jobs[2].state).to eq :canceled }
+
+    it { expect(Travis::Event).to have_received(:dispatch).times(3) }
   end
 end

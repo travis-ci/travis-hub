@@ -1,4 +1,5 @@
 require 'simple_states'
+require 'travis/event'
 require 'travis/hub/model/build/matrix'
 
 class Stage < ActiveRecord::Base
