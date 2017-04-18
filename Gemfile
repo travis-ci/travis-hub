@@ -13,6 +13,9 @@ gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
 
 gem 'rake'
+gem 'jemalloc'
+gem 'pg'
+gem 'bunny'
 gem 'redis'
 gem 'redis-namespace'
 gem 'dalli'
@@ -29,17 +32,11 @@ gem 'coder'
 gem 'redlock'
 gem 'pry'
 
-platform :ruby do
-  gem 'jemalloc'
-  gem 'pg'
-  gem 'bunny'
-end
-
 group :test do
   gem 'rspec'
   gem 'mocha'
+  gem 'bourne'
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock'
-  gem 'simplecov'
 end
