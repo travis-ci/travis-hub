@@ -3,23 +3,29 @@ require 'travis/addons/serializer/formats'
 module Travis
   module Addons
     module Serializer
-      module Generic
+      module Tasks
         class Build
           include Formats
 
-          attr_reader :build, :repository, :request, :commit
+          attr_reader :build, :owner, :repository, :request, :pull_request, :tag, :commit
 
           def initialize(build)
             @build = build
             @repository = build.repository
+            @owner = build.owner
             @request = build.request
+            @pull_request = build.pull_request
+            @tag = build.tag
             @commit = build.commit
           end
 
           def data
             {
               repository: repository_data,
+              owner:  owner ? owner_data : {},
               request: request_data,
+              pull_request: pull_request ? pull_request_data : nil,
+              tag: tag ? tag_data : nil,
               commit: commit_data,
               build: build_data,
               jobs: build.jobs.map { |job| job_data(job) }
@@ -36,14 +42,22 @@ module Travis
                 number: build.number,
                 pull_request: build.pull_request?,
                 pull_request_number: build.pull_request_number,
-                config: build.config.try(:except, :source_key),
+                config: build.obfuscated_config.try(:except, :source_key),
                 state: build.state.to_s,
                 previous_state: build.previous_state,
                 started_at: format_date(build.started_at),
                 finished_at: format_date(build.finished_at),
                 duration: build.duration,
                 job_ids: build.jobs.map(&:id),
-                event_type: build.event_type
+                type: request.event_type
+              }
+            end
+
+            def owner_data
+              {
+                id: owner.id,
+                type: owner.class.name,
+                login: owner.login
               }
             end
 
@@ -55,14 +69,15 @@ module Travis
                 name: repository.name,
                 owner_name: repository.owner_name,
                 owner_email: repository.owner_email,
-                owner_avatar_url: repository.owner.try(:avatar_url)
+                owner_avatar_url: repository.owner.try(:avatar_url),
+                url: repository.url
               }
             end
 
             def request_data
               {
                 token: request.token,
-                head_commit: (request.head_commit || '')
+                head_commit: request.head_commit
               }
             end
 
@@ -81,12 +96,27 @@ module Travis
               }
             end
 
+            def pull_request_data
+              {
+                number: pull_request.number,
+                title: pull_request.title
+              }
+            end
+
+            def tag_data
+              {
+                name: tag.name
+              }
+            end
+
             def job_data(job)
               {
                 id: job.id,
                 number: job.number,
                 state: job.state.to_s,
-                tags: job.tags
+                config: job.obfuscated_config.try(:except, :source_key),
+                tags: job.tags,
+                allow_failure: job.allow_failure
              }
             end
         end

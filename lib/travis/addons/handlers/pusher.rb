@@ -20,7 +20,11 @@ module Travis
         end
 
         def handle
-          run_task 'pusher-live', payload, event: event
+          Travis::Sidekiq.live(deep_clean_strings(payload), event: event)
+        end
+
+        def data
+          @data ||= Serializer::Pusher.const_get(object_type.camelize).new(object).data
         end
 
         def payload

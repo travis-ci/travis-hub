@@ -1,9 +1,8 @@
 require 'sidekiq'
-require 'travis/addons/helpers/coder'
 
 module Travis
   module Addons
-    module Helpers
+    module Handlers
       module Task
         class Error < StandardError
           extend Forwardable
@@ -28,14 +27,20 @@ module Travis
           end
         end
 
-        include Coder
+        def run_task(name, *args)
+          Travis::Sidekiq.tasks(name, *deep_clean_strings(args))
+        end
 
-        def run_task(queue, *args)
-          name = self.class.name.split('::').last
-          args = deep_clean_strings(args)
-          Travis::Sidekiq.tasks(queue, name, *args)
-        rescue => e
-          Exceptions.handle(Error.new(e, queue, args)) # TODO pass in
+        def payload
+          @payload ||= Serializer::Tasks::Build.new(object).data
+        end
+
+        def config
+          @config ||= Config.new(payload, secure_key)
+        end
+
+        def secure_key
+          repository.key if respond_to?(:repository)
         end
       end
     end

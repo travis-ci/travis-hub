@@ -1,9 +1,12 @@
 require 'travis/addons/handlers/base'
+require 'travis/addons/handlers/task'
 
 module Travis
   module Addons
     module Handlers
       class Campfire < Base
+        include Handlers::Task
+
         EVENTS = 'build:finished'
 
         def handle?
