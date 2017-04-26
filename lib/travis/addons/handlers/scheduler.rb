@@ -13,7 +13,7 @@ module Travis
 
         def handle
           check_queueuable
-          Travis::Sidekiq.scheduler(event, id: object.id)
+          Travis::Sidekiq.scheduler(event, payload)
         end
 
         def check_queueuable
@@ -22,6 +22,10 @@ module Travis
           level = expected == queueable ? :info : :warn
           msg = "[notify-scheduler] job=#{object.id} event=#{event} state=#{object.state} queueable=#{!!queueable} (#{'NOT ' if level == :warn}expected)"
           Travis::Addons.logger.send(level, msg)
+        end
+
+        def payload
+          { id: object.id }
         end
 
         class Instrument < Addons::Instrument

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Travis::Addons::Config, 'for emails' do
   let(:type)    { :email }
   let(:build)   { FactoryGirl.build(:build) }
-  let(:payload) { Travis::Addons::Serializer::Generic::Build.new(build).data }
+  let(:payload) { Travis::Addons::Serializer::Tasks::Build.new(build).data }
   let(:config)  { described_class.new(payload) }
 
   describe 'send_on_finished_for?' do
