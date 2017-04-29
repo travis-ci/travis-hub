@@ -5,10 +5,10 @@ describe Travis::Addons::Handlers::Scheduler do
   describe 'subscription' do
     before { Travis::Event.setup([:scheduler]) }
 
-    # it 'job:create notifies' do
-    #   described_class.expects(:notify).never
-    #   Travis::Event.dispatch('job:create', id: job.id)
-    # end
+    it 'job:create notifies' do
+      described_class.expects(:notify).never
+      Travis::Event.dispatch('job:create', id: job.id)
+    end
 
     it 'job:started does not notify' do
       described_class.expects(:notify).never
@@ -35,10 +35,9 @@ describe Travis::Addons::Handlers::Scheduler do
   describe 'handle' do
     it 'notifies scheduler' do
       ::Sidekiq::Client.expects(:push).with(
-        'queue' => 'scheduler-2',
+        'queue' => 'scheduler',
         'class' => 'Travis::Scheduler::Worker',
-        'args'  => [:event, 'job:finished', id: job.id],
-        'expires_in' => 5 * 60
+        'args'  => [:event, 'job:finished', id: job.id]
       )
       handler.handle
     end

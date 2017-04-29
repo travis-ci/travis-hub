@@ -11,7 +11,12 @@ module Travis
         include Helper::Context, Helper::Locking
         extend Instrumentation
 
-        EVENTS = [:start, :finish, :cancel, :restart]
+        EVENTS = [:create, :start, :finish, :cancel, :restart]
+        LOG_MSGS = {
+          canceled:     %(This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#%{number}) for %{info} came in while this job was waiting to be processed.\n\n),
+          push:         'branch %{branch}',
+          pull_request: 'pull request #%{pull_request_number}',
+        }
 
         def run
           exclusive do
@@ -29,11 +34,29 @@ module Travis
         private
 
           def update_jobs
-            build.jobs.each { |job| job.reload.send(:"#{event}!", attrs) }
+            build.jobs.each do |job|
+              auto_cancel(job) if event == :cancel && auto_cancel?
+              job.reload.send(:"#{event}!", attrs)
+            end
+          end
+
+          def auto_cancel?
+            !!meta[:auto]
+          end
+
+          def auto_cancel(job)
+            metrics.meter('hub.job.auto_cancel')
+            cancel_log_via_http(job) if meta
+          rescue ActiveRecord::StatementInvalid => e
+            logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
+          end
+
+          def meta
+            @meta ||= (data[:meta] || {}).symbolize_keys
           end
 
           def attrs
-            data.reject { |key, _| key == :id }
+            data.reject { |key, _| key == :id || key == :meta }
           end
 
           def notify
@@ -50,6 +73,26 @@ module Travis
 
           def unknown_event
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def cancel_log_via_http(job)
+            logs_api.append_log_part(
+              job.id,
+              LOG_MSGS[:canceled] % {
+                number: meta[:number],
+                info: LOG_MSGS[meta[:event].to_sym] % {
+                  branch: meta[:branch],
+                  pull_request_number: meta[:pull_request_number]
+                }
+              },
+              final: true
+            )
+          end
+
+          def logs_api
+            @logs_api ||= Travis::Hub::Support::Logs.new(
+              Travis::Hub.context.config.logs_api
+            )
           end
 
           class Instrument < Instrumentation::Instrument

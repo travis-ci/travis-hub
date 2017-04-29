@@ -1,7 +1,6 @@
 require 'simple_states'
 require 'travis/event'
 require 'travis/hub/model/build'
-require 'travis/hub/model/log'
 require 'travis/hub/model/repository'
 
 class Job < ActiveRecord::Base
@@ -12,10 +11,15 @@ class Job < ActiveRecord::Base
   Job.inheritance_column = :unused
 
   belongs_to :repository
+  belongs_to :owner, polymorphic: true
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
-  has_one    :log
+  belongs_to :stage
+  has_one    :queueable
 
+  self.initial_state = :persisted # TODO go away once there's `queueable`
+
+  event :create,  after: :propagate
   event :receive
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES
@@ -25,8 +29,19 @@ class Job < ActiveRecord::Base
 
   serialize :config
 
+  class << self
+    def pending
+      where('state NOT IN (?)', FINISHED_STATES)
+    end
+  end
+
   def config
     super || {}
+  end
+
+  def received_at=(*)
+    super
+    ensure_positive_queue_time
   end
 
   def duration
@@ -37,6 +52,10 @@ class Job < ActiveRecord::Base
     FINISHED_STATES.include?(state.try(:to_sym))
   end
 
+  def create
+    set_queueable
+  end
+
   def restart?(*)
     config_valid?
   end
@@ -45,6 +64,8 @@ class Job < ActiveRecord::Base
     self.state = :created
     clear_attrs %w(started_at queued_at finished_at worker canceled_at)
     clear_log
+    save!
+    set_queueable
   end
 
   def reset!(*)
@@ -56,25 +77,47 @@ class Job < ActiveRecord::Base
     !finished?
   end
 
-  def cancel(*)
+  def cancel(msg)
     self.finished_at = Time.now
+    unset_queueable
   end
 
   private
+
+    def ensure_positive_queue_time
+      # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
+      return unless queued_at && received_at && queued_at > received_at
+      self.received_at = queued_at
+    end
 
     def clear_attrs(attrs)
       attrs.each { |attr| write_attribute(attr, nil) }
     end
 
-    def clear_log
-      log ? log.clear : build_log
+    def set_queueable
+      queueable || create_queueable
+    end
+
+    def unset_queueable
+      Queueable.where(job_id: id).delete_all
     end
 
     def propagate(event, *args)
-      build.send(:"#{event}!", *args)
+      target = stage && stage.respond_to?(:"#{event}!") ? stage : build
+      target.send(:"#{event}!", *args)
     end
 
     def config_valid?
       !config[:'.result'].to_s.include?('error')
+    end
+
+    def clear_log
+      logs_api.update(id, '', clear: true)
+    end
+
+    def logs_api
+      @logs_api ||= Travis::Hub::Support::Logs.new(
+        Travis::Hub.context.config.logs_api
+      )
     end
 end

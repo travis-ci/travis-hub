@@ -1,14 +1,19 @@
+ENV['ENV'] = 'test'
+
 require 'travis/hub'
-require 'time'
+require 'date'
 
 require 'support/factories'
 require 'support/context'
 require 'support/database_cleaner'
 
+require 'mocha'
+require 'bourne' # TODO use rspec stubs/expectations
+
 require 'webmock'
 require 'webmock/rspec'
 
-# Travis::Hub::Context.new
+Travis::Hub::Context.new
 
 # Travis::Event.setup
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)

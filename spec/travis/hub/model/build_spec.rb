@@ -3,6 +3,7 @@ describe Build do
   let(:params) { {} }
   let(:repo)   { FactoryGirl.create(:repository) }
   let(:build)  { FactoryGirl.create(:build, repository: repo, state: state) }
+  let(:job)    { FactoryGirl.create(:job) }
   let(:now)    { Time.now }
   before       { Travis::Event.stubs(:dispatch) }
 
@@ -32,7 +33,7 @@ describe Build do
     end
 
     describe 'with all other jobs being finished' do
-      let(:job)   { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
+      let(:job) { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
 
       it 'sets the build to :canceled' do
         receive
@@ -176,29 +177,6 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'does not apply'
     end
-
-  end
-
-  describe 'a :start event' do
-    let(:event) { :start }
-
-    describe 'a pull request' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
-      it 'sets the build as current build' do
-        receive
-        expect(repo.reload.current_build_id).to eq build.id
-      end
-    end
-
-    describe 'a push build' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
-
-      it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
-        FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'api')
-        receive
-        expect(repo.reload.current_build_id).to_not eq build.id
-      end
-    end
   end
 
   describe 'a :restart event' do
@@ -243,7 +221,43 @@ describe Build do
       let(:state) { :canceled }
       include_examples 'restarts the build'
     end
+  end
 
+  describe 'a :create event' do
+    let(:event) { :create }
+    let(:state) { :persisted }
+
+    it 'sets build.state to :created' do
+      receive
+      expect(build.reload.state).to eql(:created)
+    end
+
+    it 'dispatches a build:created event' do
+      Travis::Event.expects(:dispatch).with('build:created', id: build.id)
+      receive
+    end
+  end
+
+  describe 'a :start event' do
+    let(:event) { :start }
+
+    describe 'a pull request' do
+      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
+      it 'sets the build as current build' do
+        receive
+        expect(repo.reload.current_build_id).to eq build.id
+      end
+    end
+
+    describe 'a push build' do
+      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
+
+      it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
+        FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'api')
+        receive
+        expect(repo.reload.current_build_id).to_not eq build.id
+      end
+    end
   end
 
   describe 'a :finish event' do

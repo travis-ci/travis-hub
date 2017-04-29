@@ -5,19 +5,29 @@ require 'travis/hub/model/build/denormalize'
 require 'travis/hub/model/build/matrix'
 require 'travis/hub/update_current_build'
 
+SimpleStates.module_eval do
+  def state=(state)
+    state = state.to_sym unless state.nil?
+    super(state)
+  end
+end
+
 class Build < ActiveRecord::Base
   include Denormalize, SimpleStates, Travis::Event
 
   FINISHED_STATES = [:passed, :failed, :errored, :canceled]
 
   belongs_to :repository
+  belongs_to :owner, polymorphic: true
   has_many   :jobs, -> { order(:id) }, as: :source
+  has_many   :stages, -> { order(:id) }
 
-  event  :start,   if: :start?
-  event  :finish,  if: :finish?, to: FINISHED_STATES
-  event  :cancel,  if: :cancel?
-  event  :restart, if: :restart?
-  event  :all, after: [:denormalize, :notify]
+  event :create
+  event :start,   if: :start?
+  event :finish,  if: :finish?, to: FINISHED_STATES
+  event :cancel,  if: :cancel?
+  event :restart, if: :restart?
+  event :all, after: [:denormalize, :notify]
 
   serialize :config
 
@@ -38,11 +48,11 @@ class Build < ActiveRecord::Base
   end
 
   def finish?(*)
-    matrix.finished? && !canceled?
+    !canceled? && matrix.finished?
   end
 
   def finish(*)
-    self.attributes = { state: matrix.state, duration: matrix.duration }
+    update_attributes!(state: matrix_state, duration: matrix.duration)
   end
 
   def finished?
@@ -68,6 +78,11 @@ class Build < ActiveRecord::Base
   end
 
   private
+
+    def matrix_state
+      stage = stages.reject(&:passed?).first
+      stage ? stage.state : matrix.state
+    end
 
     def matrix
       Matrix.new(jobs, config[:matrix])

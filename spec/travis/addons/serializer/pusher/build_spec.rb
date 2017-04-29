@@ -1,7 +1,8 @@
 describe Travis::Addons::Serializer::Pusher::Build do
   let(:repo)   { FactoryGirl.create(:repository, active: true) }
   let(:job)    { FactoryGirl.create(:job) }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, jobs: [job]) }
+  let(:build)  { FactoryGirl.create(:build, repository: repo, stages: [stage], jobs: [job]) }
+  let(:stage)  { FactoryGirl.create(:stage, jobs: [job], number: 1, name: 'test') }
   let!(:branch){ FactoryGirl.create(:branch, repository: repo, name: 'master', last_build: build) }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
@@ -9,7 +10,7 @@ describe Travis::Addons::Serializer::Pusher::Build do
   before { repo.update_attribute(:current_build_id, build.id) }
 
   it 'build' do
-    expect(data[:build].except(:matrix)).to eql(
+    expect(data[:build].except(:matrix, :stages)).to eql(
       id: build.id,
       repository_id: build.repository_id,
       number: '1',
@@ -55,6 +56,20 @@ describe Travis::Addons::Serializer::Pusher::Build do
       },
       active: true,
       current_build_id: build.id
+    )
+  end
+
+  it 'stages' do
+    expect(data[:stages]).to eql(
+      [
+        id: stage.id,
+        build_id: stage.build.id,
+        number: 1,
+        name: 'test',
+        state: :created,
+        started_at: nil,
+        finished_at: nil
+      ]
     )
   end
 end

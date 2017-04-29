@@ -8,6 +8,7 @@ module Travis
       require 'travis/addons/handlers/github_status'
       require 'travis/addons/handlers/hipchat'
       require 'travis/addons/handlers/irc'
+      require 'travis/addons/handlers/keenio'
       require 'travis/addons/handlers/pusher'
       require 'travis/addons/handlers/pushover'
       require 'travis/addons/handlers/scheduler'

@@ -1,11 +1,54 @@
 describe Travis::Hub::Service::UpdateBuild do
   let(:now)   { Time.now }
-  let(:build) { FactoryGirl.create(:build, jobs: [job], state: state, received_at: now - 10) }
-  let(:job)   { FactoryGirl.create(:job, state: state) }
+  let(:build) { FactoryGirl.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
+  let(:job)   { FactoryGirl.create(:job, state ? { state: state } : {}) }
   let(:amqp)  { Travis::Amqp.any_instance }
+  let(:metrics) { Travis::Metrics }
+  let(:events)  { Travis::Event }
 
   subject     { described_class.new(context, event, data) }
   before      { amqp.stubs(:fanout) }
+  before      { metrics.stubs(:meter) }
+  before      { events.stubs(:dispatch) }
+
+  describe 'create event' do
+    # let(:state) { :create }
+    let(:state) { nil }
+    let(:event) { :create }
+    let(:data)  { { id: build.id, started_at: now } }
+
+    before { build.reload.update_attributes!(state: nil) }
+
+    it 'updates the build state' do
+      subject.run
+      expect(build.reload.state).to eql(:created)
+    end
+
+    it 'updates the job states' do
+      subject.run
+      expect(build.reload.jobs.map(&:state)).to eq [:created]
+    end
+
+    it 'updates the job queueable flags' do
+      subject.run
+      expect(build.reload.jobs.map { |job| !!job.queueable }).to eq [true]
+    end
+
+    it 'dispatches a build:created event' do
+      Travis::Event.expects(:dispatch).with('build:created', id: build.id)
+      subject.run
+    end
+
+    it 'dispatches job:created events' do
+      Travis::Event.expects(:dispatch).with('job:created', id: job.id)
+      subject.run
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: create for repo=travis-ci/travis-core id=#{build.id}")
+    end
+  end
 
   describe 'start event' do
     let(:state) { :created }
@@ -63,7 +106,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
   end
 
-  describe 'cancel event' do
+  describe 'cancel event (api, manual)' do
     let(:state) { :started }
     let(:event) { :cancel }
     let(:data)  { { id: build.id } }
@@ -99,10 +142,47 @@ describe Travis::Hub::Service::UpdateBuild do
     end
   end
 
+  describe 'cancel event (gator, auto cancel)' do
+    let(:state) { :created }
+    let(:event) { :cancel }
+    let(:meta)  { { 'auto' => true, 'event' => 'pull_request', 'number' => '2', 'branch' => 'master', 'pull_request_number' => '1' } }
+    let(:data)  { { id: build.id, meta: meta } }
+    let(:now) { Time.now }
+
+    before do
+      subject.send(:logs_api).expects(:append_log_part)
+    end
+
+    it 'updates the job' do
+      subject.run
+      expect(job.reload.state).to eql(:canceled)
+      expect(job.reload.canceled_at).to eql(now)
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")
+    end
+
+    it 'notifies workers' do
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+      subject.run
+    end
+
+    it 'meters the event' do
+      metrics.expects(:meter).with('hub.job.auto_cancel')
+      subject.run
+    end
+  end
+
   describe 'restart event' do
     let(:state) { :passed }
     let(:event) { :restart }
     let(:data)  { { id: build.id } }
+
+    before do
+      Job.any_instance.expects(:clear_log)
+    end
 
     it 'updates the build' do
       subject.run
@@ -111,7 +191,10 @@ describe Travis::Hub::Service::UpdateBuild do
 
     it 'instruments #run' do
       subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: restart for repo=travis-ci/travis-core id=#{build.id}")
+      expect(stdout.string).to include(
+        'Travis::Hub::Service::UpdateBuild#run:completed event: ' \
+        "restart for repo=travis-ci/travis-core id=#{build.id}"
+      )
     end
   end
 end

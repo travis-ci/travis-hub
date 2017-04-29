@@ -23,7 +23,7 @@ module Travis
         @exceptions = Travis::Exceptions.setup(config, config.env, logger)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)
         @redis      = Travis::RedisPool.new(config.redis.to_h)
-        @amqp       = Travis::Amqp.setup(config.amqp)
+        @amqp       = Travis::Amqp.setup(config.amqp, @config.enterprise?)
 
         Travis::Database.connect(ActiveRecord::Base, config.database, logger)
         Travis::Sidekiq.setup(config)
@@ -31,23 +31,19 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
-        # TODO remove, message travis-logs instead
-        [Log, Log::Part].each do |const|
-          Travis::Database.connect(const, config.logs_database.to_h, logger)
-        end
-
         # TODO remove Hub.context
         Hub.context = self
 
         # test_exception_reporting
       end
 
-
       private
 
         def addons
-          # TODO remove the env var once Scheduler 2.0 shipped
-          config.notifications + (ENV['NOTIFY_SCHEDULER'] ? ['scheduler'] : [])
+          # TODO move keen to the keychain? it isn't required on enterprise.
+          # then again, it's not active, unless the keen credentials are
+          # present in the env.
+          config.notifications + ['scheduler', 'keenio']
         end
 
         def test_exception_reporting

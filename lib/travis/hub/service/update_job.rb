@@ -38,6 +38,8 @@ module Travis
 
           def update_job
             return error_job if event == :reset && resets.limited? && !job.finished?
+            return recancel if recancel?
+            return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
             resets.record if event == :reset
           end
@@ -47,19 +49,23 @@ module Travis
           end
 
           def notify
-            NotifyWorkers.new(context).cancel(job) if event == :cancel
+            NotifyWorkers.new(context).cancel(job) if job.reload.state == :canceled
           end
 
           def validate
             EVENTS.include?(event) || unknown_event
           end
 
-          def exclusive(&block)
-            super("hub:build-#{job.source_id}", &block)
+          def skip_canceled?
+            [:reset, :recieve, :start, :finish].include?(event) && job.canceled?
           end
 
-          def unknown_event
-            fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          def recancel?
+            [:receive, :start].include?(event) && (job.errored? || job.canceled?)
+          end
+
+          def recancel
+            NotifyWorkers.new(context).cancel(job)
           end
 
           def skipped
@@ -71,7 +77,15 @@ module Travis
           end
 
           def attrs
-            data.reject { |key, _| key == :id }
+            data.reject { |key, _| key == :id || key == :meta }
+          end
+
+          def unknown_event
+            fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
+          end
+
+          def exclusive(&block)
+            super("hub:build-#{job.source_id}", &block)
           end
 
           class Instrument < Instrumentation::Instrument

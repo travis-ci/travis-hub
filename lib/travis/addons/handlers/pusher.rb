@@ -8,7 +8,7 @@ module Travis
     module Handlers
       class Pusher < Base
         EVENTS = [
-          /^build:(created|received|started|finished|canceled|restarted)/,
+          /^build:(created|started|finished|canceled|restarted)/,
           /^job:(created|received|started|finished|canceled|restarted)/
         ]
         QUEUE = :'pusher-live'

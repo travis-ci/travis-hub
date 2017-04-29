@@ -1,7 +1,10 @@
 describe Travis::Hub::Service::UpdateJob do
-  let(:redis) { Travis::Hub.context.redis }
-  let(:amqp)  { Travis::Amqp.any_instance }
-  let(:job)   { FactoryGirl.create(:job, state: state, received_at: Time.now - 10) }
+  let(:redis)       { Travis::Hub.context.redis }
+  let(:amqp)        { Travis::Amqp.any_instance }
+  let(:job)         { FactoryGirl.create(:job, state: state, queued_at: queued_at, received_at: received_at) }
+  let(:queued_at)   { now - 20 }
+  let(:received_at) { now - 10 }
+  let(:now)         { Time.now.utc }
 
   subject    { described_class.new(context, event, data) }
   before     { amqp.stubs(:fanout) }
@@ -9,7 +12,7 @@ describe Travis::Hub::Service::UpdateJob do
   describe 'receive event' do
     let(:state) { :queued }
     let(:event) { :receive }
-    let(:data)  { { id: job.id, received_at: Time.now } }
+    let(:data)  { { id: job.id, received_at: now } }
 
     it 'updates the job' do
       subject.run
@@ -20,12 +23,35 @@ describe Travis::Hub::Service::UpdateJob do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: receive for repo=travis-ci/travis-core id=#{job.id}")
     end
+
+    describe 'with received_at < queued_at (Worker living in the past' do
+      let(:queued_at) { now + 10 }
+
+      it 'sets received_at to queued_at' do
+        subject.run
+        expect(job.reload.received_at).to eq queued_at
+      end
+    end
+
+    describe 'when the job has been canceled meanwhile' do
+      let(:state) { :canceled }
+
+      it 'does not update the job state' do
+        subject.run
+        expect(job.reload.state).to eql(:canceled)
+      end
+
+      it 'broadcasts a cancel message' do
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        subject.run
+      end
+    end
   end
 
   describe 'start event' do
     let(:state) { :queued }
     let(:event) { :start }
-    let(:data)  { { id: job.id, started_at: Time.now } }
+    let(:data)  { { id: job.id, started_at: now } }
 
     it 'updates the job' do
       subject.run
@@ -35,6 +61,20 @@ describe Travis::Hub::Service::UpdateJob do
     it 'instruments #run' do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: start for repo=travis-ci/travis-core id=#{job.id}")
+    end
+
+    describe 'when the job has been canceled meanwhile' do
+      let(:state) { :canceled }
+
+      it 'does not update the job state' do
+        subject.run
+        expect(job.reload.state).to eql(:canceled)
+      end
+
+      it 'broadcasts a cancel message' do
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        subject.run
+      end
     end
   end
 
@@ -83,11 +123,13 @@ describe Travis::Hub::Service::UpdateJob do
     let(:data)  { { id: job.id } }
 
     it 'resets the job' do
+      Job.any_instance.expects(:clear_log)
       subject.run
       expect(job.reload.state).to eql(:created)
     end
 
     it 'instruments #run' do
+      Job.any_instance.expects(:clear_log)
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: restart for repo=travis-ci/travis-core id=#{job.id}")
     end
@@ -99,6 +141,7 @@ describe Travis::Hub::Service::UpdateJob do
     let(:data)  { { id: job.id, state: :created } }
 
     it 'updates the job' do
+      Job.any_instance.expects(:clear_log)
       subject.run
       expect(job.reload.state).to eql(:created)
     end
@@ -110,11 +153,13 @@ describe Travis::Hub::Service::UpdateJob do
     let(:data)  { { id: job.id } }
 
     it 'resets the job' do
+      Job.any_instance.expects(:clear_log)
       subject.run
       expect(job.reload.state).to eql(:created)
     end
 
     it 'instruments #run' do
+      Job.any_instance.expects(:clear_log)
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: reset for repo=travis-ci/travis-core id=#{job.id}")
     end
@@ -125,21 +170,13 @@ describe Travis::Hub::Service::UpdateJob do
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
-      before { context.config[:logs] = { url: url, token: '1234' } }
+      before { context.config[:logs_api] = { url: url, token: '1234' } }
       before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}") }
       before { 50.times { limit.record(started) } }
 
       describe 'sets the job to :errored' do
         before { subject.run }
         it { expect(job.reload.state).to eql(:errored) }
-      end
-
-      it 'PUTs the log message to travis-logs' do
-        subject.run
-        assert_requested(:put, "#{url}/#{job.id}",
-          body: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.',
-          headers: { 'Authorization' => 'token 1234' }
-        )
       end
 
       describe 'logs a message' do

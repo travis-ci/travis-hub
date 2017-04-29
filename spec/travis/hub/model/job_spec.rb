@@ -4,7 +4,11 @@ describe Job do
   let(:build)  { FactoryGirl.create(:build, repository: repo, state: [:received, :queued].include?(state) ? :created : state) }
   let(:job)    { FactoryGirl.create(:job, repository: repo, build: build, state: state) }
   let(:now)    { Time.now }
-  before       { Travis::Event.stubs(:dispatch) }
+
+  before do
+    Travis::Event.stubs(:dispatch)
+    Travis::Hub::Support::Logs.any_instance.stubs(:update)
+  end
 
   def receive
     job.send(:"#{event}!", params)
@@ -248,11 +252,8 @@ describe Job do
       end
 
       it 'clears log' do
+        Travis::Hub::Support::Logs.any_instance.expects(:update).with(job.id, '', clear: true)
         receive
-        expect(job.log.reload.content).to be_empty
-        expect(job.log.reload.archive_verified).to be_nil
-        expect(job.log.reload.removed_by).to be_nil
-        expect(job.log.reload.removed_at).to be_nil
       end
 
       it 'does not reset other jobs on the matrix' do
