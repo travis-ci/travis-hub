@@ -38,17 +38,17 @@ FactoryGirl.define do
     event_type  :push
   end
 
+  factory :stage do
+    state :created
+  end
+
   factory :job do
     association :repository
     association :commit
     build       { FactoryGirl.build(:build) }
-    log         { FactoryGirl.build(:log) }
     config      { {} }
     number      '1.1'
     state       :created
-  end
-
-  factory :log do
   end
 
   factory :user do

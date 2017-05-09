@@ -11,7 +11,12 @@ module Travis
         include Helper::Context, Helper::Locking
         extend Instrumentation
 
-        EVENTS = [:start, :finish, :cancel, :restart]
+        EVENTS = [:create, :start, :finish, :cancel, :restart]
+        LOG_MSGS = {
+          canceled:     %(This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#%{number}) for %{info} came in while this job was waiting to be processed.\n\n),
+          push:         'branch %{branch}',
+          pull_request: 'pull request #%{pull_request_number}',
+        }
 
         def run
           exclusive do
@@ -41,8 +46,7 @@ module Travis
 
           def auto_cancel(job)
             metrics.meter('hub.job.auto_cancel')
-            return cancel_log_via_http(job) if meta && logs_api_enabled?
-            job.log.canceled(meta) if job.log
+            cancel_log_via_http(job) if meta
           rescue ActiveRecord::StatementInvalid => e
             logger.warn "[cancel] failed to update the log due to a db exception: #{e.message}."
           end
@@ -74,19 +78,15 @@ module Travis
           def cancel_log_via_http(job)
             logs_api.append_log_part(
               job.id,
-              Log::MSGS[:canceled] % {
+              LOG_MSGS[:canceled] % {
                 number: meta[:number],
-                info: Log::MSGS[meta[:event].to_sym] % {
+                info: LOG_MSGS[meta[:event].to_sym] % {
                   branch: meta[:branch],
                   pull_request_number: meta[:pull_request_number]
                 }
               },
               final: true
             )
-          end
-
-          def logs_api_enabled?
-            Travis::Hub.context.config.logs_api.enabled?
           end
 
           def logs_api

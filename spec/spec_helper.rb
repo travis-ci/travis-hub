@@ -1,4 +1,4 @@
-require 'simplecov' unless RUBY_PLATFORM == 'java'
+ENV['ENV'] = 'test'
 
 require 'travis/hub'
 require 'date'
@@ -6,6 +6,9 @@ require 'date'
 require 'support/factories'
 require 'support/context'
 require 'support/database_cleaner'
+
+require 'mocha'
+require 'bourne' # TODO use rspec stubs/expectations
 
 require 'webmock'
 require 'webmock/rspec'
@@ -28,13 +31,5 @@ RSpec.configure do |c|
     Travis::Event.instance_variable_set(:@subscriptions, nil)
     # Travis::Addons.setup({ host: 'host.com', encryption: { key: 'secret' * 10 } }, logger)
     Time.stubs(:now).returns(NOW)
-  end
-
-  c.before :each, logs_api_enabled: true do
-    context.config.logs_api.enabled = true
-  end
-
-  c.before :each, logs_api_enabled: false do
-    context.config.logs_api.enabled = false
   end
 end
