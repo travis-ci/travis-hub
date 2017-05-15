@@ -27,7 +27,7 @@ module Travis
              states_cache:  { memcached_servers: 'localhost:11211', memcached_options: {} },
              name:          'hub',
              host:          'travis-ci.org',
-             encryption:    env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
+             encryption:    { key: SecureRandom.hex(64) },
              logger:        { thread_id: true },
              librato:       {},
              metrics:       { reporter: 'librato' },

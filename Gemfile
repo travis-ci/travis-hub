@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.4.1' if ENV['DYNO']
+
 gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
 
 gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'
@@ -8,7 +10,7 @@ gem 'travis-metrics',         git: 'https://github.com/travis-ci/travis-metrics'
 gem 'travis-instrumentation', git: 'https://github.com/travis-ci/travis-instrumentation'
 
 gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
-gem 'travis-encrypt'
+gem 'travis-encrypt',         git: 'https://github.com/travis-ci/travis-encrypt', ref: 'sf-ruby-2.4.1'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
 
@@ -26,7 +28,7 @@ gem 'gh'
 gem 'keen'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven'
-gem 'simple_states'
+gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states', ref: 'sf-ruby-2.4.1'
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
