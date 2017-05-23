@@ -36,6 +36,7 @@ module Travis
              encryption:     env == 'development' || env == 'test' ? { key: 'secret' * 10 } : {},
              logger:         { thread_id: true },
              librato:        {},
+             sentry:         {},
              metrics:        { reporter: 'librato' },
              repository:     { ssl_key: { size: 4096 } },
              queue:          'builds',

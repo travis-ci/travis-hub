@@ -32,19 +32,13 @@ module Travis
           return [403, { 'Content-Type' => 'text/plain', 'Content-Length' => '0' }, []]
         end
 
-        if bearer_valid?(auth)
-          # env['jwt.header'] = auth.jwt_header
-          # env['jwt.payload'] = auth.jwt_payload
-          return @app.call(env)
-        end
-
-        unauthorized
+        bearer_valid?(auth) ? @app.call(env) : unauthorized
       end
 
       private
 
       def challenge
-        'Basic realm="job-board"'
+        'Basic realm="travis-hub"'
       end
 
       def basic_valid?(auth)
@@ -56,7 +50,7 @@ module Travis
       def bearer_valid?(auth)
         return false if auth.job_id.nil?
         return false if auth.params.empty?
-        # return false if auth.jwt_header.nil? || auth.jwt_payload.nil?
+        return false if auth.jwt_header.nil? || auth.jwt_payload.nil?
         true
       end
 
