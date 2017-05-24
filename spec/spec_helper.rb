@@ -45,6 +45,7 @@ KEY
 ENV['JWT_RSA_PUBLIC_KEY'] = JWT_RSA_PUBLIC_KEY
 
 require 'travis/hub'
+require 'travis/hub/api'
 require 'date'
 
 require 'support/factories'
