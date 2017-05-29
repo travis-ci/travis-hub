@@ -19,7 +19,8 @@ describe Travis::Addons::Serializer::Generic::Build do
       previous_state: nil,
       started_at: nil,
       finished_at: nil,
-      duration: nil
+      duration: nil,
+      event_type: 'push'
     )
   end
 
