@@ -9,16 +9,18 @@ require 'travis/hub/event/metrics'
 require 'travis/hub/model'
 require 'travis/hub/support/amqp'
 require 'travis/hub/support/database'
+require 'travis/hub/support/job_board'
 require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
 
 module Travis
   module Hub
     class Context
-      attr_reader :config, :logger, :metrics, :exceptions, :redis, :amqp
+      attr_reader :config, :job_board, :logger, :metrics, :exceptions, :redis, :amqp
 
       def initialize(options = {})
         @config     = Config.load
+        @job_board  = Travis::Hub::Support::JobBoard.new(URI(config.job_board.url))
         @logger     = options[:logger] || Travis::Logger.new(STDOUT, config)
         @exceptions = Travis::Exceptions.setup(config, config.env, logger)
         @metrics    = Travis::Metrics.setup(config.metrics, logger)

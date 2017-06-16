@@ -30,6 +30,7 @@ module Travis
              sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
              lock:           { strategy: :redis },
              states_cache:   { memcached_servers: 'localhost:11211', memcached_options: {} },
+             job_board:      { url: ENV.fetch('JOB_BOARD_URL', 'http://guest:guest@job-board-test.travis-ci.com') },
              logs:           { url: ENV['LOGS_URL'], token: ENV['LOGS_TOKEN'] },
              name:           'hub',
              host:           'travis-ci.org',
