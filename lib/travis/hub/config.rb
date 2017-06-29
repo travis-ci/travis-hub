@@ -27,6 +27,7 @@ module Travis
              database:       { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              logs_api:       { url: logs_api_url, token: logs_api_auth_token },
              redis:          { url: 'redis://localhost:6379' },
+             redis_gatekeeper: { url: ENV['REDIS_GATEKEEPER_URL'] || 'redis://localhost:6379' },
              sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
              lock:           { strategy: :redis },
              states_cache:   { memcached_servers: 'localhost:11211', memcached_options: {} },

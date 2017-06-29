@@ -31,7 +31,10 @@ module Travis
     private
 
       def client
-        ::Sidekiq::Client
+        pool = ::Sidekiq::RedisConnection.create({
+          url: ::Travis::Hub.config.redis.url
+        })
+        ::Sidekiq::Client.new(pool)
       end
   end
 end

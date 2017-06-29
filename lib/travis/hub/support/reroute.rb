@@ -18,7 +18,7 @@ module Travis
 
       class Sidekiq
         def publish(context, queue, event, payload)
-          ::Sidekiq::Client.push(
+          sidekiq_client.push(
             'queue' => queue,
             'class' => 'Travis::Hub::Sidekiq::Worker',
             'args'  => [event, payload]
@@ -87,6 +87,13 @@ module Travis
 
         def name
           "#{config.name}_next"
+        end
+
+        def sidekiq_client
+          pool = ::Sidekiq::RedisConnection.create({
+            url: ::Travis::Hub.config.redis.url
+          })
+          ::Sidekiq::Client.new(pool)
         end
     end
   end
