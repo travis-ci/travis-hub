@@ -9,10 +9,17 @@ module Travis
       ::Sidekiq::Logging.logger.level = Logger::WARN
 
       ::Sidekiq.configure_server do |c|
-        c.redis = {
-          url: config.redis.url,
-          namespace: config.sidekiq.namespace
-        }
+        if ENV['REDIS_GATEKEEPER_ENABLED'] == 'true'
+          c.redis = {
+            url: config.redis_gatekeeper.url,
+            namespace: config.sidekiq.namespace
+          }
+        else
+          c.redis = {
+            url: config.redis.url,
+            namespace: config.sidekiq.namespace
+          }
+        end
 
         c.server_middleware do |chain|
           chain.add Travis::Exceptions::Sidekiq if config.sentry && config.sentry.dsn
