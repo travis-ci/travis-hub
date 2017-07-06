@@ -56,7 +56,8 @@ module Travis
           def handle_exception(e, info, payload)
             super(Error.new(e, nil, payload))
           rescue => e
-            puts "!!!FAILSAFE!!! #{e.message}", e.backtrace
+            info "!!!FAILSAFE!!! #{e.message}"
+            Raven.capture_exception(e)
           end
       end
     end

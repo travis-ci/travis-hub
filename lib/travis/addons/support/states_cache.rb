@@ -83,7 +83,8 @@ module Travis
           true
         end
       rescue => e
-        puts "[states-cache] Exception while checking cache freshness: #{e.message}", e.backtrace
+        logger.info "[states-cache] Exception while checking cache freshness: #{e.message}"
+        Raven.capture_exception(e)
       end
 
       def key(id, branch = nil)

@@ -77,7 +77,7 @@ module Travis
           # metrics.gauge('hub.reroute.percent', percent.to_i) # TODO
           Metriks.gauge('v1.hub.reroute.percent').set(percent.to_i)
         rescue => e
-          puts e.message, e.backtrace
+          Raven.capture_exception(e)
           percent ? percent.to_i : -1
         end
 
