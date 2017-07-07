@@ -165,7 +165,7 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     describe 'with resets being limited' do
-      let(:url)     { 'http://logs.travis-ci.org/logs' }
+      let(:url)     { 'http://logs.travis-ci.org/' }
       let(:started) { Time.now - 7 * 3600 }
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
