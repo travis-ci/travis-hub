@@ -31,7 +31,7 @@ module Travis
         private
 
           def client
-            @client ||= Faraday.new(url: url) do |c|
+            @client ||= Faraday.new(http_options.merge(url: url)) do |c|
               c.request :authorization, :token, token
               c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
               c.response :raise_error
@@ -45,6 +45,10 @@ module Travis
 
           def token
             config[:token] || raise('Logs token not set.')
+          end
+
+          def http_options
+            { ssl: Travis.config.ssl.compact.to_h }
           end
       end
     end
