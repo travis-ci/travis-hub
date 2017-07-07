@@ -48,7 +48,7 @@ module Travis
           end
 
           def http_options
-            { ssl: Travis.config.ssl.compact.to_h }
+            { ssl: config.ssl.compact.to_h }
           end
       end
     end
