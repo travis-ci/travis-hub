@@ -42,7 +42,8 @@ module Travis
              queue:          'builds',
              limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications:  [],
-             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth }
+             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth },
+             ssl:            {}
 
       def metrics
         # TODO cleanup keychain?
