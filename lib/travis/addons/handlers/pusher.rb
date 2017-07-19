@@ -2,6 +2,7 @@ require 'travis/addons/handlers/base'
 require 'travis/addons/serializer/pusher/build'
 require 'travis/addons/serializer/pusher/job'
 require 'travis/sidekiq'
+require 'travis/rollout'
 
 module Travis
   module Addons
@@ -20,7 +21,13 @@ module Travis
         end
 
         def handle
-          Travis::Sidekiq.live(deep_clean_strings(payload), event: event)
+          params = { event: event }
+          uid = "#{object.repository.owner_id}-#{object.repository.owner_type[0]}"
+          Travis::Rollout.run('user-channel', redis: Travis::Hub.context.redis, uid: uid) do
+            params[:user_ids] = user_ids
+          end
+
+          Travis::Sidekiq.live(deep_clean_strings(payload), params)
         end
 
         def data
@@ -29,6 +36,10 @@ module Travis
 
         def payload
           Serializer::Pusher.const_get(object_type.camelize).new(object, params: data).data
+        end
+
+        def user_ids
+          object.repository.permissions.pluck(:user_id)
         end
 
         class Instrument < Addons::Instrument

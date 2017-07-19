@@ -11,6 +11,7 @@ gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
+gem 'travis-rollout',         git: 'https://github.com/travis-ci/travis-rollout', branch: 'sf-refactor'
 
 gem 'rake'
 gem 'jemalloc'
