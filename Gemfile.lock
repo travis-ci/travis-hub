@@ -14,10 +14,9 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-encrypt
-  revision: 06339b9efb2264431acf4b553a99e6e084256b90
-  ref: sf-ruby-2.4.1
+  revision: e1ae0867288bc2a3054ab91f761c11876fca678a
   specs:
-    travis-encrypt (0.0.4)
+    travis-encrypt (0.0.5)
 
 GIT
   remote: https://github.com/travis-ci/travis-exceptions

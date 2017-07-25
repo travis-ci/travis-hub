@@ -10,7 +10,7 @@ gem 'travis-metrics',         git: 'https://github.com/travis-ci/travis-metrics'
 gem 'travis-instrumentation', git: 'https://github.com/travis-ci/travis-instrumentation'
 
 gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
-gem 'travis-encrypt',         git: 'https://github.com/travis-ci/travis-encrypt', ref: 'sf-ruby-2.4.1'
+gem 'travis-encrypt',         git: 'https://github.com/travis-ci/travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
 gem 'travis-rollout',         git: 'https://github.com/travis-ci/travis-rollout', branch: 'sf-refactor'
