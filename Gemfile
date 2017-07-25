@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.4.1'
+
 gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
 
 gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'
@@ -27,7 +29,7 @@ gem 'gh'
 gem 'keen'
 gem 'metriks-librato_metrics'
 gem 'sentry-raven'
-gem 'simple_states'
+gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states'
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
