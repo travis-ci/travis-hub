@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/svenfuchs/simple_states
-  revision: 8dc0a94f0fbe3954bca852169ee0aad6a9ab0dd9
-  ref: sf-ruby-2.4.1
+  revision: 240cebde9178f7e8a520e3566ed9875bf69799ac
   specs:
     simple_states (2.0.1)
 
