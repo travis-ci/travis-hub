@@ -12,12 +12,6 @@ GIT
       hashr (~> 2.0.0)
 
 GIT
-  remote: https://github.com/travis-ci/travis-encrypt
-  revision: e1ae0867288bc2a3054ab91f761c11876fca678a
-  specs:
-    travis-encrypt (0.0.5)
-
-GIT
   remote: https://github.com/travis-ci/travis-exceptions
   revision: 71b11939f1f3b86d1e2fd94f3b9b8f78af290e12
   specs:
@@ -184,6 +178,7 @@ GEM
       tilt (>= 1.3, < 3)
     thread_safe (0.3.6)
     tilt (2.0.8)
+    travis-encrypt (0.0.5)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     webmock (2.1.0)
@@ -224,7 +219,7 @@ DEPENDENCIES
   sinatra
   sinatra-contrib
   travis-config!
-  travis-encrypt!
+  travis-encrypt
   travis-exceptions!
   travis-instrumentation!
   travis-lock!
@@ -233,6 +228,9 @@ DEPENDENCIES
   travis-rollout!
   travis-support!
   webmock
+
+RUBY VERSION
+   ruby 2.4.1p111
 
 BUNDLED WITH
    1.15.3
