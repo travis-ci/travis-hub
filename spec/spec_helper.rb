@@ -60,13 +60,9 @@ require 'webmock/rspec'
 
 Travis::Hub::Context.new
 
-<<<<<<< HEAD
-NOW = Time.parse('2011-01-01 00:02:00 +0200')
-=======
 # Travis::Event.setup
 # Travis::Hub::Database.connect(ActiveRecord::Base, Travis::Hub::Config.new.database.to_h)
 # ActiveRecord::Base.logger = Logger.new('log/test.db.log')
->>>>>>> master
 
 RSpec.configure do |c|
   c.mock_with :mocha
@@ -82,4 +78,3 @@ RSpec.configure do |c|
 end
 
 NOW = Time.parse('2011-01-01 00:02:00 +0200')
-
