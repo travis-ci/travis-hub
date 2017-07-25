@@ -54,6 +54,13 @@ GIT
       metriks-librato_metrics (~> 1.0)
 
 GIT
+  remote: https://github.com/travis-ci/travis-rollout
+  revision: 71cc9102dff01f95c281f99183e54b6695faa7ec
+  branch: sf-refactor
+  specs:
+    travis-rollout (0.0.1)
+
+GIT
   remote: https://github.com/travis-ci/travis-support
   revision: 113cff17fe383bb72fcfae3a97a8ce98c228342f
   specs:
@@ -88,8 +95,7 @@ GEM
     bunny (2.5.1)
       amq-protocol (>= 2.0.1)
     coder (0.4.0)
-    coderay (1.1.1)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -112,10 +118,10 @@ GEM
     hitimes (1.2.4)
     i18n (0.8.1)
     jemalloc (1.0.1)
+    jwt (1.5.4)
     keen (0.7.8)
       multi_json (~> 1.0)
     metaclass (0.0.4)
-    method_source (0.8.2)
     metriks (0.9.9.7)
       atomic (~> 1.0)
       avl_tree (~> 1.2.0)
@@ -130,15 +136,16 @@ GEM
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     pg (0.19.0)
-    pry (0.10.4)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
+    puma (3.6.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
-    rake (12.0.0)
-    redis (3.3.3)
+    rack-ssl (1.4.1)
+      rack
+    rack-test (0.6.3)
+      rack (>= 1.0)
+    rake (11.3.0)
+    redis (3.3.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     redlock (0.1.8)
@@ -170,8 +177,14 @@ GEM
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    slop (3.6.0)
-    thread_safe (0.3.6)
+    sinatra-contrib (1.4.7)
+      backports (>= 2.0)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (>= 1.3, < 3)
+    thread_safe (0.3.5)
     tilt (2.0.5)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
@@ -194,12 +207,14 @@ DEPENDENCIES
   faraday
   gh
   jemalloc
+  jwt
   keen
   metriks-librato_metrics
   mocha
   multi_json
   pg
-  pry
+  puma
+  rack-ssl
   rake
   redis
   redis-namespace
@@ -208,6 +223,8 @@ DEPENDENCIES
   sentry-raven
   sidekiq-pro!
   simple_states!
+  sinatra
+  sinatra-contrib
   travis-config!
   travis-encrypt!
   travis-exceptions!
@@ -215,8 +232,9 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
+  travis-rollout!
   travis-support!
   webmock
 
 BUNDLED WITH
-   1.14.6
+   1.15.1

@@ -13,6 +13,7 @@ gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt',         git: 'https://github.com/travis-ci/travis-encrypt', ref: 'sf-ruby-2.4.1'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
+gem 'travis-rollout',         git: 'https://github.com/travis-ci/travis-rollout', branch: 'sf-refactor'
 
 gem 'rake'
 gem 'jemalloc'
@@ -32,7 +33,11 @@ gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states', ref: 'sf
 gem 'multi_json'
 gem 'coder'
 gem 'redlock'
-gem 'pry'
+
+gem 'puma'
+gem 'rack-ssl'
+gem 'sinatra'
+gem 'jwt'
 
 group :test do
   gem 'rspec'
@@ -41,4 +46,5 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock'
+  gem 'sinatra-contrib'
 end

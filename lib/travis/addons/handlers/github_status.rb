@@ -1,9 +1,12 @@
 require 'travis/addons/handlers/base'
+require 'travis/addons/handlers/task'
 
 module Travis
   module Addons
     module Handlers
       class GithubStatus < Base
+        include Handlers::Task
+
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?

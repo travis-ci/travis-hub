@@ -131,14 +131,14 @@ describe Travis::Hub::Service::UpdateBuild do
       expect(build.reload.canceled_at).to eql(now)
     end
 
-    it 'instruments #run' do
-      subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")
-    end
-
     it 'notifies workers' do
       amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
       subject.run
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: cancel for repo=travis-ci/travis-core id=#{build.id}")
     end
   end
 

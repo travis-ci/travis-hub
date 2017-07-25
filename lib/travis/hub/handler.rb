@@ -21,6 +21,10 @@ module Travis
             handle
           end
         end
+
+        return unless interval = ENV['PAUSE']
+        puts "Pausing for #{interval} seconds."
+        sleep interval.to_i
       end
 
       private

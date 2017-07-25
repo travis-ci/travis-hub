@@ -1,0 +1,8 @@
+#!/bin/bash
+
+[ $PORT ]     || PORT=5555
+[ $RACK_ENV ] || RACK_ENV=development
+
+cmd="puma -I lib -p $PORT -t ${PUMA_MIN_THREADS:-8}:${PUMA_MAX_THREADS:-12}"
+exec $cmd
+

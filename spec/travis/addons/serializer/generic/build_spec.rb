@@ -1,9 +1,15 @@
-describe Travis::Addons::Serializer::Generic::Build do
+describe Travis::Addons::Serializer::Tasks::Build do
+  let(:owner)  { FactoryGirl.create(:user, login: 'login') }
   let(:repo)   { FactoryGirl.create(:repository) }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, jobs: [job]) }
+  let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
   let(:job)    { FactoryGirl.create(:job, repository: repo) }
+  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title') }
+  let(:tag)    { FactoryGirl.create(:tag, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
+
+  # base_commit: request.base_commit,
+  # head_commit: request.head_commit,
 
   it 'build data' do
     expect(data[:build]).to eql(
@@ -19,7 +25,16 @@ describe Travis::Addons::Serializer::Generic::Build do
       previous_state: nil,
       started_at: nil,
       finished_at: nil,
-      duration: nil
+      duration: nil,
+      type: 'push'
+    )
+  end
+
+  it 'owner data' do
+    expect(data[:owner]).to eql(
+      id: owner.id,
+      type: 'User',
+      login: 'login'
     )
   end
 
@@ -31,11 +46,19 @@ describe Travis::Addons::Serializer::Generic::Build do
       owner_name: 'travis-ci',
       owner_avatar_url: nil,
       owner_email: nil,
-      slug: 'travis-ci/travis-core'
+      slug: 'travis-ci/travis-core',
+      url: 'https://github.com/travis-ci/travis-core'
     )
   end
 
-  it 'includes the commit' do
+  it 'request data' do
+    expect(data[:request]).to eql(
+      token: 'token',
+      head_commit: nil
+    )
+  end
+
+  it 'commit data' do
     expect(data[:commit]).to eql(
       id: commit.id,
       sha: '62aae5f70ceee39123ef',
@@ -47,6 +70,19 @@ describe Travis::Addons::Serializer::Generic::Build do
       author_name: 'Sven Fuchs',
       author_email: 'me@svenfuchs.com',
       compare_url: 'https://github.com/travis-ci/travis-core/compare/master...develop',
+    )
+  end
+
+  it 'pull_request data' do
+    expect(data[:pull_request]).to eql(
+      number: 1,
+      title: 'title'
+    )
+  end
+
+  it 'tag data' do
+    expect(data[:tag]).to eql(
+      name: 'v1.0.0'
     )
   end
 

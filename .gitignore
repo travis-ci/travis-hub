@@ -11,3 +11,4 @@ tmp
 /coverage
 *.env
 .jdk-overlay
+/db/main/structure.sql

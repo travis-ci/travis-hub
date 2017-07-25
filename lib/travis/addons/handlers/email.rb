@@ -1,10 +1,13 @@
 require 'travis/addons/handlers/base'
+require 'travis/addons/handlers/task'
 require 'travis/addons/model/broadcast'
 
 module Travis
   module Addons
     module Handlers
       class Email < Base
+        include Handlers::Task
+
         EVENTS = 'build:finished'
 
         def handle?

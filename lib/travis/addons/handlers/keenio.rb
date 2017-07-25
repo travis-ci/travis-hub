@@ -25,7 +25,7 @@ module Travis
           def publish
             ::Keen.publish_batch(data)
           rescue ::Keen::HttpError => e
-            logger.error :failed, e.message
+            logger.error MSGS[:failed] % e.message
           end
 
           def data

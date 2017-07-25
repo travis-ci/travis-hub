@@ -23,7 +23,7 @@ module Travis
           :event => handler.event
         )
 
-        event[:payload]    = handler.payload
+        event[:payload]    = payload
         event[:request_id] = request_id
         event[:repository] = repo
         super(event)
@@ -38,6 +38,10 @@ module Travis
           pairs[:state] = object.state if object.respond_to?(:state)
           pairs[:repo] = repo.slug if repo
           "#<#{object.class.name} #{pairs.map { |key, value| [key, value].join('=') }.join(' ')}>"
+        end
+
+        def payload
+          handler.payload if handler.respond_to?(:payload)
         end
 
         def repo

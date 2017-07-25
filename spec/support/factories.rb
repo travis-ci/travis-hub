@@ -7,6 +7,7 @@ FactoryGirl.define do
     owner_name      'travis-ci'
     name            'travis-core'
     default_branch  'master'
+    url             'https://github.com/travis-ci/travis-core'
   end
 
   factory :request do
@@ -14,6 +15,9 @@ FactoryGirl.define do
     token       'token'
     event_type  'push'
   end
+
+  factory :pull_request
+  factory :tag
 
   factory :commit do
     commit          '62aae5f70ceee39123ef'

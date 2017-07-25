@@ -1,10 +1,12 @@
 require 'travis/addons/handlers/base'
-require 'travis/addons/serializer/webhook/build'
+require 'travis/addons/handlers/task'
 
 module Travis
   module Addons
     module Handlers
       class Webhook < Base
+        include Handlers::Task
+
         EVENTS = /build:(started|finished|canceled|errored)/
 
         def handle?
@@ -17,12 +19,6 @@ module Travis
 
         def targets
           @targets ||= config.values(:webhooks, :urls)
-        end
-
-        def payload
-          Serializer::Webhook::Build.new(object).data
-        rescue Java::OrgBouncycastleCrypto::DataLengthException => e
-          Travis::Addons.logger.info("#{e} caught; object #{object.inspect}")
         end
 
         class Instrument < Addons::Instrument

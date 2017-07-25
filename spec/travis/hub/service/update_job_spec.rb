@@ -6,8 +6,8 @@ describe Travis::Hub::Service::UpdateJob do
   let(:received_at) { now - 10 }
   let(:now)         { Time.now.utc }
 
-  subject    { described_class.new(context, event, data) }
-  before     { amqp.stubs(:fanout) }
+  subject     { described_class.new(context, event, data) }
+  before      { amqp.stubs(:fanout) }
 
   describe 'receive event' do
     let(:state) { :queued }
@@ -106,14 +106,14 @@ describe Travis::Hub::Service::UpdateJob do
       expect(job.reload.canceled_at).to eql(now)
     end
 
-    it 'instruments #run' do
-      subject.run
-      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: cancel for repo=travis-ci/travis-core id=#{job.id}")
-    end
-
     it 'notifies workers' do
       amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
       subject.run
+    end
+
+    it 'instruments #run' do
+      subject.run
+      expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: cancel for repo=travis-ci/travis-core id=#{job.id}")
     end
   end
 
@@ -165,13 +165,13 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     describe 'with resets being limited' do
-      let(:url)     { 'http://logs.travis-ci.org/logs' }
+      let(:url)     { 'http://logs.travis-ci.org/' }
       let(:started) { Time.now - 7 * 3600 }
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
       before { context.config[:logs_api] = { url: url, token: '1234' } }
-      before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}") }
+      before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}?source=hub") }
       before { 50.times { limit.record(started) } }
 
       describe 'sets the job to :errored' do
