@@ -7,7 +7,12 @@ describe Travis::Hub::Service::UpdateJob do
   let(:now)         { Time.now.utc }
 
   subject     { described_class.new(context, event, data) }
-  before      { amqp.stubs(:fanout) }
+
+  before do
+    amqp.stubs(:fanout)
+    stub_request(:delete, %r{https://job-board\.travis-ci\.com/jobs/\d+\?source=hub})
+      .to_return(status: 204)
+  end
 
   describe 'receive event' do
     let(:state) { :queued }
