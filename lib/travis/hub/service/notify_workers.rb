@@ -19,6 +19,8 @@ module Travis
         private
 
           def cancel_via_job_board(job)
+            return if context.config.job_board.url.to_s =~ /not:set/
+
             info :job_board_cancel, job.id, job.state
             job_board.cancel(job.id)
           end
