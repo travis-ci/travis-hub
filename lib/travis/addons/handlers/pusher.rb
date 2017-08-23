@@ -2,7 +2,6 @@ require 'travis/addons/handlers/base'
 require 'travis/addons/serializer/pusher/build'
 require 'travis/addons/serializer/pusher/job'
 require 'travis/sidekiq'
-require 'travis/rollout'
 
 module Travis
   module Addons
@@ -21,12 +20,7 @@ module Travis
         end
 
         def handle
-          params = { event: event }
-          uid = "#{object.repository.owner_id}-#{object.repository.owner_type[0]}"
-          Travis::Rollout.run('user-channel', redis: Travis::Hub.context.redis, uid: uid) do
-            params[:user_ids] = user_ids
-          end
-
+          params = { event: event, user_ids: user_ids }
           Travis::Sidekiq.live(deep_clean_strings(payload), params)
         end
 
