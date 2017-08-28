@@ -34,36 +34,30 @@ describe Travis::Addons::Handlers::Pusher do
 
     describe 'a job event' do
       let(:event) { 'job:finished' }
+      before do
+        user.permissions.create!(repository: repo)
+      end
 
       it 'enqueues a task' do
         ::Sidekiq::Client.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [5])
         end
         handler.handle
       end
 
-      context 'with a per user channel enabled' do
-        before do
-          user.permissions.create!(repository: repo)
-        end
+      it 'sends user_ids along with the request' do
+        repo = job.repository
 
-        it 'sends user_ids along with the request' do
-          redis = Travis::Hub.context.redis
-          repo = job.repository
-          redis.sadd('user-channel.rollout.uids', "#{repo.owner.id}-#{repo.owner_type[0]}")
-          redis.set('user-channel.rollout.enabled', '1')
-
-          ::Sidekiq::Client.expects(:push).with do |payload|
-            expect(payload['queue']).to   eq('pusher-live')
-            expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
-            expect(payload['args'][3]).to be_a(Hash)
-            expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
-          end
-          handler.handle
+        ::Sidekiq::Client.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq('pusher-live')
+          expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
+          expect(payload['args'][3]).to be_a(Hash)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
         end
+        handler.handle
       end
     end
 
@@ -75,7 +69,7 @@ describe Travis::Addons::Handlers::Pusher do
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [])
         end
         handler.handle
       end
