@@ -98,4 +98,18 @@ describe Stage do
 
     it { expect(Travis::Event).to have_received(:dispatch).times(3) }
   end
+
+  describe 'cancel and fail' do
+    before { jobs[0].cancel! }
+    before { jobs[2].cancel! }
+    before { jobs[1].finish!(state: :failed, finished_at: now) }
+    before { reload }
+
+    it { expect(build.state).to eq :canceled }
+    it { expect(stages[0].state).to eq :canceled }
+    it { expect(stages[1].state).to eq :canceled }
+    it { expect(jobs[0].state).to eq :canceled }
+    it { expect(jobs[1].state).to eq :failed }
+    it { expect(jobs[2].state).to eq :canceled }
+  end
 end
