@@ -7,7 +7,7 @@ class Stage < ActiveRecord::Base
 
   event :start,  if: :start?
   event :finish, if: :finish?, to: Build::FINISHED_STATES
-  event :cancel
+  event :cancel, if: :finish?
   event :restart
   event :all, after: :propagate
 
