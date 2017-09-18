@@ -33,7 +33,8 @@ module Travis
           def client
             @client ||= Faraday.new(http_options.merge(url: url)) do |c|
               c.request :authorization, :token, token
-              c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
+              c.request :retry, max: 5, interval: 3, max_interval: 60,
+                                interval_randomness: 0.5, backoff_factor: 2
               c.response :raise_error
               c.adapter :net_http
             end
