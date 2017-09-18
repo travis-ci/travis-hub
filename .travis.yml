@@ -2,7 +2,7 @@ sudo: false
 language: ruby
 
 rvm:
-  - 2.2
+  - 2.2.8
 
 services:
   - memcached
