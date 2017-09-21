@@ -16,7 +16,7 @@ module Travis
 
       define amqp:           { username: 'guest', password: 'guest', host: 'localhost', prefetch: 1 },
              database:       { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
-             logs_api:       { url: 'https://travis-logs-notset.example.com:1234', token: 'notset' },
+             logs_api:       { url: 'https://travis-logs-notset.example.com:1234', token: 'notset', retries: { max: 5, interval: 3, max_interval: 60, interval_randomness: 0.5, backoff_factor: 2 } },
              job_board:      { url: 'https://not:set@job-board.travis-ci.com', site: 'org' },
              redis:          { url: 'redis://localhost:6379' },
              sidekiq:        { namespace: 'sidekiq', pool_size: 1 },

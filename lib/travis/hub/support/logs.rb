@@ -33,7 +33,7 @@ module Travis
           def client
             @client ||= Faraday.new(http_options.merge(url: url)) do |c|
               c.request :authorization, :token, token
-              c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
+              c.request :retry, retry_config
               c.response :raise_error
               c.adapter :net_http
             end
@@ -45,6 +45,10 @@ module Travis
 
           def token
             config[:token] || raise('Logs token not set.')
+          end
+
+          def retry_config
+            config[:retries]
           end
 
           def http_options
