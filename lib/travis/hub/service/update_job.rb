@@ -20,6 +20,7 @@ module Travis
         }
 
         def run
+          puts data
           exclusive do
             validate
             store_instance_id
