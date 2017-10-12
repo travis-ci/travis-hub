@@ -22,6 +22,7 @@ module Travis
         def run
           exclusive do
             validate
+            store_instance_id
             update_job
             notify
           end
@@ -35,6 +36,14 @@ module Travis
         end
 
         private
+
+          def store_instance_id
+            if data[:meta] && data[:meta][:instance_id]
+              key = "hub.instance_id_job.#{data[:meta][:instance_id]}"
+              ttl = 60*60*24*3 # 3 days
+              context.redis.setex(key, ttl, job.id)
+            end
+          end
 
           def update_job
             return error_job if event == :reset && resets.limited? && !job.finished?
