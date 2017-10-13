@@ -43,3 +43,12 @@ jobs:
         - sudo mv ./docker-compose /usr/local/bin/docker-compose
         - sudo chmod +x /usr/local/bin/docker-compose
       script: ./script/docker-build-and-push
+
+    - stage: "trigger automated build on Docker Hub"
+      ruby:
+      services:
+      addons:
+      before_install: skip
+      before_script: skip
+      install: skip
+      script: script/send-docker-hub-trigger
