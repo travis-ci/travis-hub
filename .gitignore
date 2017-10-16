@@ -12,3 +12,4 @@ tmp
 *.env
 .jdk-overlay
 /db/main/structure.sql
+.envrc
