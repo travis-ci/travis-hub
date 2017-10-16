@@ -43,9 +43,9 @@ module Travis
           end
 
           def decode(payload)
+            debug "Raw AMQP payload=#{payload.inspect}"
             cleaned = Coder.clean(payload) # TODO not needed anymore?
-            decoded = MultiJson.decode(cleaned)
-            decoded
+            MultiJson.decode(cleaned)
           rescue StandardError => e
             # TODO use Exceptions.handle
             error '[decode error] payload could not be decoded with engine ' \
