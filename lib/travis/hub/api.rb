@@ -62,7 +62,11 @@ module Travis
         end
 
         def data
-          @data ||= JSON.parse(request.body.read).map { |key, value| [key.to_sym, value] }.to_h
+          @data ||= begin
+            raw = request.body.read
+            Hub.context.logger.debug "Raw HTTP payload=#{raw.inspect}"
+            JSON.parse(raw).map { |key, value| [key.to_sym, value] }.to_h
+          end
         end
 
         def event
