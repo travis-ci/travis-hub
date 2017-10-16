@@ -22,7 +22,7 @@ module Travis
         c.logger.formatter = Support::Sidekiq::Logging.new(config.logger || {})
 
         if pro?
-          c.reliable_fetch!
+          c.super_fetch!
           c.reliable_scheduler!
         end
       end
