@@ -74,6 +74,7 @@ RSpec.configure do |c|
   c.before do
     Travis::Event.instance_variable_set(:@subscriptions, nil)
     Time.stubs(:now).returns(NOW)
+    context.redis.flushall
   end
 end
 

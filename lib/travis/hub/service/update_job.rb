@@ -3,6 +3,7 @@ require 'travis/hub/helper/context'
 require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/service/error_job'
+require 'travis/hub/service/state_update'
 require 'travis/hub/service/notify_workers'
 require 'travis/hub/helper/limit'
 
@@ -16,14 +17,16 @@ module Travis
         EVENTS = [:receive, :reset, :start, :finish, :cancel, :restart]
 
         MSGS = {
-          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %s to %s data=%s',
+          skipped: 'Skipped event job:%s for <Job id=%s> trying to update state from %p to %p data=%s',
         }
 
         def run
           exclusive do
             validate
-            update_job
-            notify
+            with_state_update do
+              update_job
+              notify
+            end
           end
         end
         instrument :run
@@ -70,6 +73,10 @@ module Travis
 
           def skipped
             warn :skipped, event, job.id, job.state, data[:state], data
+          end
+
+          def with_state_update(&block)
+            StateUpdate.new(context, event, data, block).apply
           end
 
           def resets
