@@ -1,0 +1,33 @@
+version: "2"
+services:
+  hub:
+    build:
+      context: .
+      args:
+        bundle_gems__contribsys__com: $bundle_gems__contribsys__com
+    environment:
+      TRAVIS_REDIS_URL: "redis://redis:6379"
+      RABBITMQ_HOST: rabbitmq
+    command: /usr/src/app/entrypoint.sh
+    depends_on:
+      - rabbitmq
+      - redis
+      - postgres
+  rabbitmq:
+    image: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASSWORD: guest
+      DEBUG: 'true'
+    ports:
+      - "80:80"
+      - "443:443"
+      - "15672:15672"
+      - "25672:25672"
+      - "5672:5672"
+  redis:
+    image: redis
+  postgres:
+    image: postgres
+    environment:
+      PGDATABASE: travis_development
