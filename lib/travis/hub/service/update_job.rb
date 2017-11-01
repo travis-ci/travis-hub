@@ -39,7 +39,8 @@ module Travis
 
           def store_instance_id
             if data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != 'unknown instance'
-              key = "hub.instance_id_job.#{data[:meta]['instance_id']}"
+              instance_id = data[:meta]['instance_id']
+              key = "hub:instance_id_job:#{instance_id}"
               ttl = 60*60*24*3 # 3 days
               context.redis.setex(key, ttl, job.id)
             end
