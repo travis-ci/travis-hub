@@ -32,7 +32,8 @@ describe Travis::Addons::Serializer::Pusher::Build do
       pull_request: false,
       pull_request_title: nil,
       pull_request_number: nil,
-      job_ids: [job.id]
+      job_ids: [job.id],
+      updated_at: build.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
     )
   end
 

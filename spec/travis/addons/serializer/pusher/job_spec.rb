@@ -19,7 +19,8 @@ describe Travis::Addons::Serializer::Pusher::Job do
       finished_at: nil,
       state: 'created',
       queue: nil,
-      allow_failure: false
+      allow_failure: false,
+      updated_at: build.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
     )
   end
 
