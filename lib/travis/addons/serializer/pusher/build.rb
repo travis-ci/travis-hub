@@ -91,6 +91,7 @@ module Travis
                 duration: build.duration,
                 job_ids: build.job_ids,
                 event_type: build.event_type,
+                updated_at: format_date_with_ms(build.updated_at),
 
                 # this is a legacy thing, we should think about removing it
                 commit: commit.commit,

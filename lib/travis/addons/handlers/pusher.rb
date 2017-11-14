@@ -20,6 +20,10 @@ module Travis
         end
 
         def handle
+          # we need to always make sure that the data is fresh, because Active
+          # Record doesn't always refresh the updated_at column
+          object.reload
+
           params = { event: event, user_ids: user_ids }
           Travis::Sidekiq.live(deep_clean_strings(payload), params)
         end
