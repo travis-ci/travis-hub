@@ -3,12 +3,11 @@ describe Travis::Hub::Service::UpdateBuild do
   let(:build) { FactoryGirl.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
   let(:job)   { FactoryGirl.create(:job, state ? { state: state } : {}) }
   let(:amqp)  { Travis::Amqp.any_instance }
-  let(:metrics) { Travis::Metrics }
   let(:events)  { Travis::Event }
 
   subject     { described_class.new(context, event, data) }
   before      { amqp.stubs(:fanout) }
-  before      { metrics.stubs(:meter) }
+  before      { context.metrics.stubs(:meter) }
   before      { events.stubs(:dispatch) }
   before do
     stub_request(:delete, %r{https://job-board\.travis-ci\.com/jobs/\d+\?source=hub})
@@ -174,7 +173,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
 
     it 'meters the event' do
-      metrics.expects(:meter).with('hub.job.auto_cancel')
+      context.metrics.expects(:meter).with('hub.job.auto_cancel')
       subject.run
     end
   end

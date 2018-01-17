@@ -7,12 +7,14 @@ gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
 gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'
 gem 'travis-logger',          git: 'https://github.com/travis-ci/travis-logger'
 gem 'travis-metrics',         git: 'https://github.com/travis-ci/travis-metrics'
-gem 'travis-instrumentation', git: 'https://github.com/travis-ci/travis-instrumentation'
 
 gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt'
 gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
 gem 'travis-support',         git: 'https://github.com/travis-ci/travis-support'
+
+gem 'metriks',                 git: 'https://github.com/travis-ci/metriks', ref: 'igor-hdr-histogram'
+gem 'metriks-librato_metrics', git: 'https://github.com/travis-ci/metriks-librato_metrics', ref: 'igor-hdr-histogram'
 
 gem 'rake'
 gem 'jemalloc'
@@ -26,7 +28,6 @@ gem 'faraday'
 
 gem 'gh'
 gem 'keen'
-gem 'metriks-librato_metrics'
 gem 'sentry-raven'
 gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states'
 gem 'multi_json'

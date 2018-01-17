@@ -39,8 +39,12 @@ module Travis
           Exceptions.handle(*args)
         end
 
-        def meter(*args, &block)
-          metrics.meter(*args, &block)
+        def meter(key)
+          metrics.meter(key)
+        end
+
+        def timer(key, duration)
+          Metriks.timer(key).update(duration)
         end
       end
     end
