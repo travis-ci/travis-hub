@@ -44,6 +44,7 @@ module Travis
         end
 
         def timer(key, duration)
+          key = "v1.#{key}"
           Metriks.timer(key).update(duration)
         end
       end
