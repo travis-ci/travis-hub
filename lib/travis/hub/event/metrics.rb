@@ -44,7 +44,6 @@ module Travis
 
           def timer(events, duration)
             events.each do |event|
-              event = "v1.#{event}"
               Metriks.timer(event).update(duration)
             end
           end

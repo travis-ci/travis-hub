@@ -23,7 +23,6 @@ module Travis
       def meter(event, options = {})
         return if options[:level] == :debug
 
-        event = "v1.#{event}"
         started_at, finished_at = options[:started_at], options[:finished_at]
 
         if finished_at
