@@ -70,10 +70,10 @@ module Travis
         def time
           started_at = Time.now
           yield.tap do
-            options = { started_at: started_at, finished_at: Time.now }
-            meter("hub.handle", options)
-            meter("hub.handle.#{type}", options)
-            meter("hub.handle.#{type}.#{event}", options)
+            duration = Time.now - started_at
+            timer("hub.handle", duration)
+            timer("hub.handle.#{type}", duration)
+            timer("hub.handle.#{type}.#{event}", duration)
           end
         end
 

@@ -5,6 +5,25 @@ GIT
     simple_states (2.0.1)
 
 GIT
+  remote: https://github.com/travis-ci/metriks
+  revision: 9b5a34fecebecc741417b25e43c340394aa6cc5e
+  ref: igor-hdr-histogram
+  specs:
+    metriks (0.9.9.8)
+      HDRHistogram (~> 0.1.3)
+      atomic (~> 1.0)
+      avl_tree (~> 1.2.0)
+      hitimes (~> 1.1)
+
+GIT
+  remote: https://github.com/travis-ci/metriks-librato_metrics
+  revision: 7ec1c97f4f6f783d2a04c7922baac98a9fbbba25
+  ref: igor-hdr-histogram
+  specs:
+    metriks-librato_metrics (1.0.6)
+      metriks (>= 0.9.9.6)
+
+GIT
   remote: https://github.com/travis-ci/travis-config
   revision: a64596623f8f8ee70838a4dc4d7803906a049733
   specs:
@@ -17,14 +36,6 @@ GIT
   specs:
     travis-exceptions (0.0.2)
       sentry-raven
-
-GIT
-  remote: https://github.com/travis-ci/travis-instrumentation
-  revision: b068fa1b54752a829ceb35532bf5dda85d947f01
-  specs:
-    travis-instrumentation (0.0.1)
-      activesupport (~> 4)
-      travis-metrics (~> 0)
 
 GIT
   remote: https://github.com/travis-ci/travis-lock
@@ -40,9 +51,9 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-metrics
-  revision: 37eac93bd1e9bd949a9842f28154c335ebeda42a
+  revision: 4bdac5f6d71425ed7ab1f775535db47e84fd141f
   specs:
-    travis-metrics (0.0.1)
+    travis-metrics (2.0.0)
       metriks-librato_metrics (~> 1.0)
 
 GIT
@@ -55,6 +66,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
   specs:
+    HDRHistogram (0.1.3)
     activemodel (4.2.8)
       activesupport (= 4.2.8)
       builder (~> 3.1)
@@ -100,19 +112,13 @@ GEM
       net-http-pipeline
     hashdiff (0.3.0)
     hashr (2.0.0)
-    hitimes (1.2.4)
+    hitimes (1.2.6)
     i18n (0.8.1)
     jemalloc (1.0.1)
     jwt (1.5.4)
     keen (0.7.8)
       multi_json (~> 1.0)
     metaclass (0.0.4)
-    metriks (0.9.9.7)
-      atomic (~> 1.0)
-      avl_tree (~> 1.2.0)
-      hitimes (~> 1.1)
-    metriks-librato_metrics (1.0.5)
-      metriks (>= 0.9.9.6)
     minitest (5.10.2)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
@@ -195,7 +201,8 @@ DEPENDENCIES
   jemalloc
   jwt
   keen
-  metriks-librato_metrics
+  metriks!
+  metriks-librato_metrics!
   mocha
   multi_json
   pg
@@ -214,7 +221,6 @@ DEPENDENCIES
   travis-config!
   travis-encrypt
   travis-exceptions!
-  travis-instrumentation!
   travis-lock!
   travis-logger!
   travis-metrics!
@@ -225,4 +231,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
