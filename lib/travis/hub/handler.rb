@@ -1,6 +1,7 @@
 require 'travis/hub/helper/context'
 require 'travis/hub/helper/string'
 require 'travis/hub/service'
+require 'marginalia'
 
 module Travis
   module Hub
@@ -16,6 +17,8 @@ module Travis
       end
 
       def run
+        ::Marginalia.set('type', type)
+        ::Marginalia.set('event', event)
         with_active_record do
           time do
             handle

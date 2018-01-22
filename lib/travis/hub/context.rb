@@ -11,6 +11,7 @@ require 'travis/hub/support/amqp'
 require 'travis/hub/support/database'
 require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
+require 'travis/marginalia'
 
 module Travis
   module Hub
@@ -30,6 +31,10 @@ module Travis
         Travis::Addons.setup(config, logger)
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
+
+        if ENV['QUERY_COMMENTS_ENABLED'] == 'true'
+          Travis::Marginalia.setup
+        end
 
         # TODO remove Hub.context
         Hub.context = self
