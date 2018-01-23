@@ -14,7 +14,6 @@ GIT
 GIT
   remote: https://github.com/travis-ci/metriks
   revision: 9b5a34fecebecc741417b25e43c340394aa6cc5e
-  ref: igor-hdr-histogram
   specs:
     metriks (0.9.9.8)
       HDRHistogram (~> 0.1.3)
@@ -25,7 +24,6 @@ GIT
 GIT
   remote: https://github.com/travis-ci/metriks-librato_metrics
   revision: 7ec1c97f4f6f783d2a04c7922baac98a9fbbba25
-  ref: igor-hdr-histogram
   specs:
     metriks-librato_metrics (1.0.6)
       metriks (>= 0.9.9.6)
@@ -58,7 +56,7 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-metrics
-  revision: 4bdac5f6d71425ed7ab1f775535db47e84fd141f
+  revision: ce620aecdf179ea82280872ec56aa3095a2e59a5
   specs:
     travis-metrics (2.0.0)
       metriks-librato_metrics (~> 1.0)
