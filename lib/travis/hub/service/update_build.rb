@@ -38,6 +38,10 @@ module Travis
           end
 
           def update_jobs
+            if ENV['CANCELLATION_DISABLED'] == 'true' && :cancel == event
+              raise 'cancellation has been disabled'
+            end
+
             build.jobs.each do |job|
               auto_cancel(job) if event == :cancel && auto_cancel?
               job.reload.send(:"#{event}!", attrs)
