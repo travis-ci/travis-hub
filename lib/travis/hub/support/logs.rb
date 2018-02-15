@@ -53,7 +53,7 @@ module Travis
 
           def http_options
             if config.ssl
-              { ssl: config.ssl.compact.to_h }
+              { ssl: config.ssl.to_h.compact }
             else
               {}
             end
