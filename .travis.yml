@@ -36,8 +36,8 @@ jobs:
       ruby:
       services:
       addons:
-      before_install: skip
-      install: skip
+      before_install: echo "skipping"
+      install: echo "skipping"
       before_script:
         - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > ./docker-compose
         - sudo mv ./docker-compose /usr/local/bin/docker-compose
@@ -48,7 +48,7 @@ jobs:
       ruby:
       services:
       addons:
-      before_install: skip
-      before_script: skip
-      install: skip
+      before_install: echo "skipping"
+      before_script: echo "skipping"
+      install: echo "skipping"
       script: script/send-docker-hub-trigger
