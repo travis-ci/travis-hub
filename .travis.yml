@@ -29,26 +29,26 @@ script:
 
 jobs:
   include:
-#     - stage: "testing time"
-#     - stage: ":ship: it to Quay.io"
-#       sudo: required
-#       dist: trusty
-#       ruby:
-#       services:
-#       addons:
-#       before_install: skip
-#       install: skip
-#       before_script:
-#         - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > ./docker-compose
-#         - sudo mv ./docker-compose /usr/local/bin/docker-compose
-#         - sudo chmod +x /usr/local/bin/docker-compose
-#       script: ./script/docker-build-and-push
+    - stage: "testing time"
+    - stage: ":ship: it to Quay.io"
+      sudo: required
+      dist: trusty
+      ruby:
+      services:
+      addons:
+      before_install: echo "skipping"
+      install: echo "skipping"
+      before_script:
+        - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > ./docker-compose
+        - sudo mv ./docker-compose /usr/local/bin/docker-compose
+        - sudo chmod +x /usr/local/bin/docker-compose
+      script: ./script/docker-build-and-push
 
     - stage: "trigger automated build on Docker Hub"
       ruby:
       services:
       addons:
-      before_install: skip
-      before_script: skip
-      install: skip
+      before_install: echo "skipping"
+      before_script: echo "skipping"
+      install: echo "skipping"
       script: script/send-docker-hub-trigger
