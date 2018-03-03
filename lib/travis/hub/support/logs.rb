@@ -52,8 +52,8 @@ module Travis
           end
 
           def http_options
-            if config.ssl
-              { ssl: config.ssl.to_h }
+            if Travis::Hub.context.config.ssl
+              { ssl: Travis::Hub.context.config.ssl.to_h }
             else
               {}
             end
