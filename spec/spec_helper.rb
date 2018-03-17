@@ -1,4 +1,5 @@
 ENV['ENV'] = 'test'
+ENV.delete('DATABASE_URL')
 
 JWT_RSA_PRIVATE_KEY = <<KEY
 -----BEGIN RSA PRIVATE KEY-----
