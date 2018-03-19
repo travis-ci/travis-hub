@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'travis/hub/context'
 
 require 'libhoney'
 require 'thread'
@@ -61,13 +62,13 @@ module Travis
       def sidekiq_setup
         return unless sidekiq.enabled?
 
-        Travis.logger.info 'honeycomb sidekiq enabled'
+        context.logger.info 'honeycomb sidekiq enabled'
       end
 
       def rpc_setup
         return unless rpc.enabled?
 
-        Travis.logger.info 'honeycomb rpc enabled'
+        context.logger.info 'honeycomb rpc enabled'
 
         ActiveSupport::Notifications.subscribe('sql.active_record') do |name, start, finish, id, payload|
           if rpc.should_sample?
