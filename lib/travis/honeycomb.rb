@@ -63,13 +63,13 @@ module Travis
       def sidekiq_setup
         return unless sidekiq.enabled?
 
-        logger.info 'honeycomb sidekiq enabled'
+        @logger.info 'honeycomb sidekiq enabled'
       end
 
       def rpc_setup
         return unless rpc.enabled?
 
-        logger.info 'honeycomb rpc enabled'
+        @logger.info 'honeycomb rpc enabled'
 
         ActiveSupport::Notifications.subscribe('sql.active_record') do |name, start, finish, id, payload|
           if rpc.should_sample?

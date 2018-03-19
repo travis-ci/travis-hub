@@ -1,6 +1,5 @@
 require 'sidekiq-pro'
 require 'travis/exceptions/sidekiq'
-require 'travis/honeycomb'
 require 'travis/metrics/sidekiq'
 require 'travis/hub/support/sidekiq/honeycomb'
 require 'travis/hub/support/sidekiq/log_format'
