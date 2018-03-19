@@ -4,7 +4,7 @@ require 'travis/honeycomb'
 require 'active_support/core_ext/object/deep_dup'
 
 module Travis
-  module Scheduler
+  module Hub
     module Sidekiq
       class Honeycomb
         def call(worker, job, queue)
