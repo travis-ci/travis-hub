@@ -20,7 +20,7 @@ module Travis
           chain.add Travis::Exceptions::Sidekiq if config.sentry && config.sentry.dsn
           chain.add Travis::Metrics::Sidekiq
           chain.add Travis::Hub::Sidekiq::Marginalia, app: 'hub'
-          chain.add Sidekiq::Honeycomb
+          chain.add Travis::Hub::Sidekiq::Honeycomb
         end
 
         c.logger.formatter = Support::Sidekiq::Logging.new(config.logger || {})
