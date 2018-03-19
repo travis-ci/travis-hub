@@ -10,9 +10,6 @@ module Travis
   module Sidekiq
     def setup(config)
       ::Sidekiq::Logging.logger.level = Logger::WARN
-      Travis::Honeycomb::Context.add_permanent('app', 'hub')
-      Travis::Honeycomb::Context.add_permanent('dyno', ENV['DYNO'])
-      Travis::Honeycomb.setup
 
       ::Sidekiq.configure_server do |c|
         c.redis = {

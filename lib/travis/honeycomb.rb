@@ -11,7 +11,8 @@ module Travis
         Thread.current[:honeycomb_context] ||= Context.new
       end
 
-      def setup
+      def setup(logger)
+        @logger = logger
         honey_setup
         sidekiq_setup
         rpc_setup
@@ -62,13 +63,13 @@ module Travis
       def sidekiq_setup
         return unless sidekiq.enabled?
 
-        context.logger.info 'honeycomb sidekiq enabled'
+        logger.info 'honeycomb sidekiq enabled'
       end
 
       def rpc_setup
         return unless rpc.enabled?
 
-        context.logger.info 'honeycomb rpc enabled'
+        logger.info 'honeycomb rpc enabled'
 
         ActiveSupport::Notifications.subscribe('sql.active_record') do |name, start, finish, id, payload|
           if rpc.should_sample?
