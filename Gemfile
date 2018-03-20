@@ -40,6 +40,7 @@ gem 'puma'
 gem 'rack-ssl'
 gem 'sinatra'
 gem 'jwt'
+gem 'libhoney'
 
 group :test do
   gem 'rspec'

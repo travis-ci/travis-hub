@@ -19,6 +19,8 @@ module Travis
       def run
         ::Marginalia.set('type', type)
         ::Marginalia.set('event', event)
+        Travis::Honeycomb.context.add('type', type)
+        Travis::Honeycomb.context.add('event', event)
         with_active_record do
           time do
             handle

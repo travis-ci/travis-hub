@@ -4,6 +4,7 @@ require 'travis/instrumentation'
 require 'travis/logger'
 require 'travis/metrics'
 require 'travis/addons'
+require 'travis/honeycomb'
 require 'travis/hub/config'
 require 'travis/hub/event/metrics'
 require 'travis/hub/model'
@@ -31,6 +32,10 @@ module Travis
         Travis::Addons.setup(config, logger)
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
+
+        Travis::Honeycomb::Context.add_permanent('app', 'hub')
+        Travis::Honeycomb::Context.add_permanent('dyno', ENV['DYNO'])
+        Travis::Honeycomb.setup(logger)
 
         if ENV['QUERY_COMMENTS_ENABLED'] == 'true'
           Travis::Marginalia.setup
