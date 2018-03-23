@@ -29,6 +29,7 @@ gem 'rollout', '~> 1.1.0'
 gem 'dalli'
 gem 'activerecord'
 gem 'faraday'
+gem 'faraday_middleware'
 
 gem 'gh'
 gem 'keen'

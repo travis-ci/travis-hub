@@ -1,4 +1,4 @@
-require 'sidekiq/pro/expiry'
+require 'faraday_middleware'
 
 module Travis
   module Merge
@@ -16,6 +16,7 @@ module Travis
         Faraday.new(url: URL) do |c|
           c.request :authorization, :token, token
           c.request :retry, max: 5, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2
+          c.request :json
           c.response :raise_error
           c.adapter :net_http
         end
