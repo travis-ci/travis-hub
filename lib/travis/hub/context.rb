@@ -35,6 +35,7 @@ module Travis
 
         Travis::Honeycomb::Context.add_permanent('app', 'hub')
         Travis::Honeycomb::Context.add_permanent('dyno', ENV['DYNO'])
+        Travis::Honeycomb::Context.add_permanent('site', ENV['TRAVIS_SITE'])
         Travis::Honeycomb.setup(logger)
 
         if ENV['QUERY_COMMENTS_ENABLED'] == 'true'
