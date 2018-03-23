@@ -6,7 +6,7 @@ module Travis
 
     URL = 'https://travis-merge-staging.herokuapp.com'
 
-    def import(type, id, *args)
+    def import(type, id, args)
       http.put([type, id].join('/'), args)
     end
 
