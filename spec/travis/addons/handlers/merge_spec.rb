@@ -30,7 +30,7 @@ describe Travis::Addons::Handlers::Merge do
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
     it 'sends a build import request to merge' do
-      assert_requested :put, "https://travis-merge-staging.herokuapp.com/build/#{build.id}"
+      assert_requested :put, "https://travis-merge-staging.herokuapp.com/api/build/#{build.id}"
     end
 
     it 'logs' do
@@ -42,7 +42,7 @@ describe Travis::Addons::Handlers::Merge do
     before { Travis::Event.dispatch('job:started', id: job.id) }
 
     it 'sends a job import request to merge' do
-      assert_requested :put, "https://travis-merge-staging.herokuapp.com/job/#{job.id}"
+      assert_requested :put, "https://travis-merge-staging.herokuapp.com/api/job/#{job.id}"
     end
 
     it 'logs' do
