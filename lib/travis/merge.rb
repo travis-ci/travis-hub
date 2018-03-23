@@ -4,7 +4,7 @@ module Travis
   module Merge
     extend self
 
-    URL = 'https://travis-merge-staging.herokuapp.com'
+    URL = 'https://travis-merge-staging.herokuapp.com/api'
 
     def import(type, id, args)
       http.put([type, id].join('/'), args)
