@@ -1,6 +1,7 @@
 describe Travis::Addons::Handlers::Webhook do
   let(:handler) { described_class.new('build:finished', id: build.id) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: config }) }
+  let(:repo)    { FactoryGirl.create(:repository) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, state: :passed, config: { notifications: config }) }
   let(:config)  { { webhooks: { urls: 'http://host.com/target' } } }
 
   describe 'subscription' do
