@@ -4,7 +4,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
   let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
   let(:job)    { FactoryGirl.create(:job, repository: repo) }
   let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title') }
-  let(:tag)    { FactoryGirl.create(:tag, name: 'v1.0.0') }
+  let(:tag)    { FactoryGirl.create(:tag, repository: repo, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 

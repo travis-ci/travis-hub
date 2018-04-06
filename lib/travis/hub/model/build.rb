@@ -12,6 +12,10 @@ SimpleStates.module_eval do
   end
 end
 
+class BuildConfig < ActiveRecord::Base
+  serialize :config
+end
+
 class Build < ActiveRecord::Base
   include Denormalize, SimpleStates, Travis::Event
 
@@ -19,6 +23,7 @@ class Build < ActiveRecord::Base
 
   belongs_to :repository
   belongs_to :owner, polymorphic: true
+  belongs_to :config, foreign_key: :config_id, class_name: BuildConfig
   has_many   :jobs, -> { order(:id) }, as: :source
   has_many   :stages, -> { order(:id) }
 
@@ -36,7 +41,7 @@ class Build < ActiveRecord::Base
   end
 
   def config
-    super || {}
+    super&.config || read_attribute(:config) || {}
   end
 
   def start?(*)
