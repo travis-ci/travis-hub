@@ -13,7 +13,6 @@ SimpleStates.module_eval do
 end
 
 class BuildConfig < ActiveRecord::Base
-  serialize :config
 end
 
 class Build < ActiveRecord::Base
@@ -41,7 +40,8 @@ class Build < ActiveRecord::Base
   end
 
   def config
-    super&.config || read_attribute(:config) || {}
+    config = super&.config || read_attribute(:config) || {}
+    config.deep_symbolize_keys! if config.respond_to?(:deep_symbolize_keys!)
   end
 
   def start?(*)

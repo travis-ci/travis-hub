@@ -4,7 +4,6 @@ require 'travis/hub/model/build'
 require 'travis/hub/model/repository'
 
 class JobConfig < ActiveRecord::Base
-  serialize :config
 end
 
 class Job < ActiveRecord::Base
@@ -41,7 +40,8 @@ class Job < ActiveRecord::Base
   end
 
   def config
-    super&.config || read_attribute(:config) || {}
+    config = super&.config || read_attribute(:config) || {}
+    config.deep_symbolize_keys! if config.respond_to?(:deep_symbolize_keys!)
   end
 
   def received_at=(*)
