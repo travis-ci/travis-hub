@@ -162,6 +162,8 @@ GEM
       rack
     rack-ssl (1.4.1)
       rack
+    rack-test (1.0.0)
+      rack (>= 1.0, < 3)
     rake (12.3.1)
     redis (4.0.1)
     redis-namespace (1.6.0)
@@ -241,6 +243,7 @@ DEPENDENCIES
   pg
   puma
   rack-ssl
+  rack-test
   rake
   redis
   redis-namespace

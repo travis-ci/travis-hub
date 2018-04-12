@@ -51,4 +51,5 @@ group :test do
   gem 'factory_girl', '~> 4.7.0'
   gem 'webmock'
   gem 'sinatra-contrib'
+  gem 'rack-test'
 end
