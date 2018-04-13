@@ -1,5 +1,6 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
+require 'travis/github_apps'
 
 module Travis
   module Addons
@@ -10,8 +11,12 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
-          tokens.any?
+          if gh_apps_enabled?
+            payload.merge!({installation_id: config.gh_apps_installation_id})
+          else
+            Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
+            tokens.any?
+          end
         end
 
         def handle
@@ -38,6 +43,14 @@ module Travis
 
           def committer
             @committer ||= ::Email.where(email: commit.committer_email).map(&:user).first
+          end
+
+          def gh_apps
+            @gh_apps ||=  Travis::GitHubApps.new
+          end
+
+          def gh_apps_enabled?
+            !! repository.managed_by_installation_at
           end
 
           class Instrument < Addons::Instrument
