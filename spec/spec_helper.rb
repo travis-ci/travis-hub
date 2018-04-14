@@ -45,6 +45,8 @@ KEY
 
 ENV['JWT_RSA_PUBLIC_KEY'] = JWT_RSA_PUBLIC_KEY
 
+ENV['GITHUB_APPS_INSTALLATION_ID'] = '1'
+
 require 'travis/hub'
 require 'travis/hub/api'
 require 'date'

@@ -6,6 +6,9 @@ describe Travis::Addons::Handlers::GithubStatus do
   let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com') }
   let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token') }
 
+  before { ENV['GITHUB_PRIVATE_PEM'] = File.read('spec/fixtures/github_pem.txt') }
+  after  { ENV.delete('GITHUB_PRIVATE_PEM') }
+
   describe 'subscription' do
     before { Travis::Event.setup([:github_status]) }
 
@@ -39,14 +42,35 @@ describe Travis::Addons::Handlers::GithubStatus do
       permissions.create(user: admin, admin: true)
       expect(handler.handle?).to eql(true)
     end
+
+    context "when repo is managed by GitHub Apps" do
+      before { build.repository.managed_by_installation_at = Time.now }
+
+      it 'is true' do
+        expect(handler.handle?).to eql true
+      end
+    end
   end
 
   describe 'handle' do
-    before { permissions.create(user: admin, admin: true) }
+    context "when there is an admion on the repo" do
+      before { permissions.create(user: admin, admin: true) }
 
-    it 'enqueues a task' do
-      handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
-      handler.handle
+      it 'enqueues a task' do
+        handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
+        handler.handle
+      end
+    end
+
+    context "when repo is managed by GitHub Apps" do
+      before do
+        build.repository.managed_by_installation_at = Time.now
+        handler.handle?
+      end
+      it 'enqueues a task' do
+        handler.expects(:run_task).with(:github_status, hash_including(installation_id: 1), tokens: { 'admin' => 'admin-token' })
+        handler.handle
+      end
     end
   end
 
