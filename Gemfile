@@ -48,7 +48,7 @@ group :test do
   gem 'mocha'
   gem 'bourne'
   gem 'database_cleaner'
-  gem 'factory_girl', '~> 4.7.0'
+  gem 'factory_girl'
   gem 'webmock'
   gem 'sinatra-contrib'
   gem 'rack-test'
