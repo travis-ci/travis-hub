@@ -1,6 +1,5 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
-require 'travis/github_apps'
 
 module Travis
   module Addons
@@ -44,10 +43,6 @@ module Travis
 
           def committer
             @committer ||= ::Email.where(email: commit.committer_email).map(&:user).first
-          end
-
-          def gh_apps
-            @gh_apps ||=  Travis::GitHubApps.new
           end
 
           def gh_apps_enabled?

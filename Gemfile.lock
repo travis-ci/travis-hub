@@ -43,15 +43,6 @@ GIT
       sentry-raven
 
 GIT
-  remote: https://github.com/travis-ci/travis-github_apps
-  revision: 76d4465d6d9c0a402ca7572f7f0862aaccb73126
-  specs:
-    travis-github_apps (0.1.0)
-      activesupport (~> 4.2.10)
-      jwt
-      redis
-
-GIT
   remote: https://github.com/travis-ci/travis-lock
   revision: b418401c79e082aa53a62364f7b01a9be6f0d768
   specs:
@@ -255,7 +246,6 @@ DEPENDENCIES
   travis-config!
   travis-encrypt
   travis-exceptions!
-  travis-github_apps!
   travis-lock!
   travis-logger!
   travis-metrics!
