@@ -15,12 +15,11 @@ module Travis
             if installation
               payload.merge!({installation: installation.id})
               true
+            elsif tokens.any?
+              Addons.logger.error "Falling back to user tokens"
+              true
             else
-              if tokens.any?
-                Addons.logger.error "Falling back to user tokens"
-                return true
-              end
-              return false
+              false
             end
           else
             Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
