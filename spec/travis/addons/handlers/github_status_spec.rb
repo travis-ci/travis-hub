@@ -1,13 +1,12 @@
 describe Travis::Addons::Handlers::GithubStatus do
   let(:handler)     { described_class.new('build:finished', id: build.id) }
-  let(:build)       { FactoryGirl.create(:build) }
+  let(:build)       { FactoryGirl.create(:build, repository: repository) }
   let(:permissions) { build.repository.permissions }
+  let(:repository)  { FactoryGirl.create(:repository) }
   let(:admin)       { FactoryGirl.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
-  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com') }
-  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token') }
-
-  before { ENV['GITHUB_PRIVATE_PEM'] = File.read('spec/fixtures/github_pem.txt') }
-  after  { ENV.delete('GITHUB_PRIVATE_PEM') }
+  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installations: []) }
+  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token', installations: []) }
+  let(:gh_apps_installation) { FactoryGirl.create(:installation) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:github_status]) }
@@ -44,9 +43,16 @@ describe Travis::Addons::Handlers::GithubStatus do
     end
 
     context "when repo is managed by GitHub Apps" do
-      before { build.repository.managed_by_installation_at = Time.now }
+      before do
+        build.repository.managed_by_installation_at = Time.now
+        build.repository.owner = admin
+        admin.installations = Array(gh_apps_installation)
+      end
 
       it 'is true' do
+        puts gh_apps_installation.inspect
+        puts build.repository.inspect
+        puts build.repository.owner.inspect
         expect(handler.handle?).to eql true
       end
     end
@@ -65,6 +71,11 @@ describe Travis::Addons::Handlers::GithubStatus do
     context "when repo is managed by GitHub Apps" do
       before do
         build.repository.managed_by_installation_at = Time.now
+        build.repository.owner = admin
+        admin.installations = Array(gh_apps_installation)
+        puts gh_apps_installation.inspect
+        puts build.repository.inspect
+        puts build.repository.owner.inspect
         handler.handle?
       end
       it 'enqueues a task' do

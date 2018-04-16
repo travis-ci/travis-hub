@@ -33,9 +33,7 @@ module Travis
              queue:          'builds',
              limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications:  [],
-             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth },
-             gh_apps_installation_id: ENV['GITHUB_APPS_INSTALLATION_ID'].to_i
-
+             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth }
       def metrics
         # TODO cleanup keychain?
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)
