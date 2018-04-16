@@ -50,9 +50,6 @@ describe Travis::Addons::Handlers::GithubStatus do
       end
 
       it 'is true' do
-        puts gh_apps_installation.inspect
-        puts build.repository.inspect
-        puts build.repository.owner.inspect
         expect(handler.handle?).to eql true
       end
     end
@@ -73,9 +70,6 @@ describe Travis::Addons::Handlers::GithubStatus do
         build.repository.managed_by_installation_at = Time.now
         build.repository.owner = admin
         admin.installations = Array(gh_apps_installation)
-        puts gh_apps_installation.inspect
-        puts build.repository.inspect
-        puts build.repository.owner.inspect
         handler.handle?
       end
       it 'enqueues a task' do

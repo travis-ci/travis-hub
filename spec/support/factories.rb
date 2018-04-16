@@ -61,4 +61,7 @@ FactoryGirl.define do
 
   factory :branch do
   end
+
+  factory :installation do
+  end
 end
