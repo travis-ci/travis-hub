@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   has_many :permissions
   has_many :repositories, through: :permissions
-  has_many :installations, as: :owner
+  has_one :installation, as: :owner
 
   attr_encrypted :github_oauth_token
 end

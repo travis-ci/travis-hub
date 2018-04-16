@@ -4,8 +4,8 @@ describe Travis::Addons::Handlers::GithubStatus do
   let(:permissions) { build.repository.permissions }
   let(:repository)  { FactoryGirl.create(:repository) }
   let(:admin)       { FactoryGirl.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
-  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installations: []) }
-  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token', installations: []) }
+  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installation: nil) }
+  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token', installation: nil) }
   let(:gh_apps_installation) { FactoryGirl.create(:installation) }
 
   describe 'subscription' do
@@ -46,7 +46,7 @@ describe Travis::Addons::Handlers::GithubStatus do
       before do
         build.repository.managed_by_installation_at = Time.now
         build.repository.owner = admin
-        admin.installations = Array(gh_apps_installation)
+        admin.installation = gh_apps_installation
       end
 
       it 'is true' do
@@ -69,7 +69,7 @@ describe Travis::Addons::Handlers::GithubStatus do
       before do
         build.repository.managed_by_installation_at = Time.now
         build.repository.owner = admin
-        admin.installations = Array(gh_apps_installation)
+        admin.installation = gh_apps_installation
         handler.handle?
       end
       it 'enqueues a task' do
