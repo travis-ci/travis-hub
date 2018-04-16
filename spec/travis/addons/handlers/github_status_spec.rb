@@ -44,9 +44,11 @@ describe Travis::Addons::Handlers::GithubStatus do
 
     context "when repo is managed by GitHub Apps" do
       before do
-        build.repository.managed_by_installation_at = Time.now
-        build.repository.owner = admin
-        admin.installation = gh_apps_installation
+        admin.update_attributes(installation: gh_apps_installation)
+        build.repository.update_attributes(
+          owner: admin,
+          managed_by_installation_at: Time.now
+        )
       end
 
       it 'is true' do
@@ -67,13 +69,15 @@ describe Travis::Addons::Handlers::GithubStatus do
 
     context "when repo is managed by GitHub Apps" do
       before do
-        build.repository.managed_by_installation_at = Time.now
-        build.repository.owner = admin
-        admin.installation = gh_apps_installation
+        admin.update_attributes(installation: gh_apps_installation)
+        build.repository.update_attributes(
+          owner: admin,
+          managed_by_installation_at: Time.now
+        )
         handler.handle?
       end
       it 'enqueues a task' do
-        handler.expects(:run_task).with(:github_status, hash_including(installation_id: 1), tokens: { 'admin' => 'admin-token' })
+        handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: {})
         handler.handle
       end
     end

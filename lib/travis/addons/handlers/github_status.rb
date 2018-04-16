@@ -11,8 +11,9 @@ module Travis
 
         def handle?
           if gh_apps_enabled?
-            installation = Installation.where(owner: repository.owner)
+            installation = Installation.where(owner: repository.owner).first
             payload.merge!({installation: installation.id})
+            true
           else
             Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
             tokens.any?
