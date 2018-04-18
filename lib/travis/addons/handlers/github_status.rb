@@ -11,7 +11,7 @@ module Travis
 
         def handle?
           if gh_apps_enabled?
-            installation = Installation.where(owner: repository.owner).first
+            installation = Installation.where(owner: repository.owner, removed_by: nil).first
             if installation
               payload.merge!({installation: installation.id})
               true
