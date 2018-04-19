@@ -41,45 +41,14 @@ describe Travis::Addons::Handlers::GithubStatus do
       permissions.create(user: admin, admin: true)
       expect(handler.handle?).to eql(true)
     end
-
-    context "when repo is managed by GitHub Apps" do
-      before do
-        admin.update_attributes(installation: gh_apps_installation)
-        build.repository.update_attributes(
-          owner: admin,
-          managed_by_installation_at: Time.now
-        )
-      end
-
-      it 'is true' do
-        expect(handler.handle?).to eql true
-      end
-    end
   end
 
   describe 'handle' do
-    context "when there is an admion on the repo" do
-      before { permissions.create(user: admin, admin: true) }
+    before { permissions.create(user: admin, admin: true) }
 
-      it 'enqueues a task' do
-        handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
-        handler.handle
-      end
-    end
-
-    context "when repo is managed by GitHub Apps" do
-      before do
-        admin.update_attributes(installation: gh_apps_installation)
-        build.repository.update_attributes(
-          owner: admin,
-          managed_by_installation_at: Time.now
-        )
-        handler.handle?
-      end
-      it 'enqueues a task' do
-        handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: {})
-        handler.handle
-      end
+    it 'enqueues a task' do
+      handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
+      handler.handle
     end
   end
 

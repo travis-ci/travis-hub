@@ -10,21 +10,8 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if gh_apps_enabled?
-            installation = Installation.where(owner: repository.owner, removed_by_id: nil).first
-            if installation
-              payload.merge!({installation: installation.id})
-              true
-            elsif tokens.any?
-              Addons.logger.error "Falling back to user tokens"
-              true
-            else
-              false
-            end
-          else
-            Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
-            tokens.any?
-          end
+          Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
+          tokens.any?
         end
 
         def handle
@@ -51,10 +38,6 @@ module Travis
 
           def committer
             @committer ||= ::Email.where(email: commit.committer_email).map(&:user).first
-          end
-
-          def gh_apps_enabled?
-            !! repository.managed_by_installation_at
           end
 
           class Instrument < Addons::Instrument
