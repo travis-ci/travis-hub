@@ -8,6 +8,8 @@ module Travis
       class GithubCheckStatus < GithubStatus
         include Handlers::Task
 
+        EVENTS = /build:(created|started|finished|canceled|restarted)/
+
         def handle?
           if gh_apps_enabled?
             installation = Installation.where(owner: repository.owner, removed_by_id: nil).first
