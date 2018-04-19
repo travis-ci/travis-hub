@@ -1,5 +1,11 @@
 require 'factory_girl'
 
+Build.class_eval do
+  def config=(config)
+    super(build_config(repository_id: repository_id, key: 'key', config: config))
+  end
+end
+
 FactoryGirl.define do
   factory :repository do
     description     'the repo description'
@@ -36,7 +42,6 @@ FactoryGirl.define do
     association :repository
     association :request
     association :commit
-    config      { {} }
     number      1
     state       :created
     branch      'master'
@@ -51,7 +56,6 @@ FactoryGirl.define do
     association :repository
     association :commit
     build       { FactoryGirl.build(:build) }
-    config      { {} }
     number      '1.1'
     state       :created
   end

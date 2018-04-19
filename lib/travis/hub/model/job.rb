@@ -3,6 +3,9 @@ require 'travis/event'
 require 'travis/hub/model/build'
 require 'travis/hub/model/repository'
 
+class JobConfig < ActiveRecord::Base
+end
+
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
@@ -15,6 +18,7 @@ class Job < ActiveRecord::Base
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
   belongs_to :stage
+  belongs_to :config, foreign_key: :config_id, class_name: JobConfig
   has_one    :queueable
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
@@ -24,7 +28,7 @@ class Job < ActiveRecord::Base
   event :start,   after: :propagate
   event :finish,  after: :propagate, to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
-  event :restart, after: :propagate, if: :restart?
+  event :restart, after: :propagate
   event :all, after: :notify
 
   serialize :config
@@ -36,7 +40,8 @@ class Job < ActiveRecord::Base
   end
 
   def config
-    super || {}
+    config = super&.config || read_attribute(:config) || {}
+    config.deep_symbolize_keys! if config.respond_to?(:deep_symbolize_keys!)
   end
 
   def received_at=(*)
@@ -54,10 +59,6 @@ class Job < ActiveRecord::Base
 
   def create
     set_queueable
-  end
-
-  def restart?(*)
-    config_valid?
   end
 
   def restart(*)
@@ -105,10 +106,6 @@ class Job < ActiveRecord::Base
     def propagate(event, *args)
       target = stage && stage.respond_to?(:"#{event}!") ? stage : build
       target.send(:"#{event}!", *args)
-    end
-
-    def config_valid?
-      !config[:'.result'].to_s.include?('error')
     end
 
     def clear_log
