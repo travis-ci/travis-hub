@@ -11,8 +11,13 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if gh_apps_enabled? && github_apps_instllation
-            true
+          if github_apps_instllation
+            if gh_apps_enabled?
+              true
+            else
+              Addons.logger.error "GitHub Apps installation found, but disabled"
+              false
+            end
           else
             Addons.logger.error "No GitHub Apps installation found"
             false
