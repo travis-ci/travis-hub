@@ -14,11 +14,11 @@ module Travis
           if gh_apps_enabled?
             installation = Installation.where(owner: repository.owner, removed_by_id: nil).first
             if installation
-              payload.merge!({installation: installation.id})
+              @args = {installation: installation.id}
               true
             elsif tokens.any?
               Addons.logger.error "Falling back to user tokens"
-              payload.merge!({tokens: tokens})
+              @args = {tokens: tokens}
               true
             else
               false
@@ -30,7 +30,7 @@ module Travis
         end
 
         def handle
-          run_task(:github_check_status, payload, {})
+          run_task(:github_check_status, payload, @args)
         end
 
         def gh_apps_enabled?
