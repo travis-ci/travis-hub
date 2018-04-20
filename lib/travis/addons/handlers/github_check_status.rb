@@ -11,30 +11,24 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if gh_apps_enabled?
-            installation = Installation.where(owner: repository.owner, removed_by_id: nil).first
-            if installation
-              @args = {installation: installation.id}
-              true
-            elsif tokens.any?
-              Addons.logger.error "Falling back to user tokens"
-              @args = {tokens: tokens}
-              true
-            else
-              false
-            end
+          if gh_apps_enabled? && github_apps_instllation
+            true
           else
-            Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
-            tokens.any?
+            Addons.logger.error "No GitHub Apps installation found"
+            false
           end
         end
 
         def handle
-          run_task(:github_check_status, payload, @args)
+          run_task(:github_check_status, payload, installation: github_apps_instllation.id)
         end
 
         def gh_apps_enabled?
           !! repository.managed_by_installation_at
+        end
+
+        def github_apps_instllation
+          @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
         end
 
         class Instrument < Addons::Instrument
