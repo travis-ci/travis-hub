@@ -18,6 +18,7 @@ module Travis
               true
             elsif tokens.any?
               Addons.logger.error "Falling back to user tokens"
+              payload.merge!({tokens: tokens})
               true
             else
               false
