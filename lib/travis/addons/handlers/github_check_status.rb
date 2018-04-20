@@ -30,7 +30,7 @@ module Travis
         end
 
         def handle
-          run_task(:github_check_status, payload)
+          run_task(:github_check_status, payload, {})
         end
 
         def gh_apps_enabled?
