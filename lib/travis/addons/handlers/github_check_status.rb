@@ -11,7 +11,7 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if github_apps_instllation
+          if github_apps_installation
             if gh_apps_enabled?
               true
             else
@@ -25,14 +25,14 @@ module Travis
         end
 
         def handle
-          run_task(:github_check_status, payload, installation: github_apps_instllation.id)
+          run_task(:github_check_status, payload, installation: github_apps_installation.id)
         end
 
         def gh_apps_enabled?
           !! repository.managed_by_installation_at
         end
 
-        def github_apps_instllation
+        def github_apps_installation
           @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
         end
 
