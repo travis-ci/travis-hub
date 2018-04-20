@@ -28,9 +28,20 @@ module Travis
           end
         end
 
+        def handle
+          run_task(:github_check_status, payload)
+        end
+
         def gh_apps_enabled?
           !! repository.managed_by_installation_at
         end
+
+        class Instrument < Addons::Instrument
+          def notify_completed
+            publish
+          end
+        end
+        Instrument.attach_to(self)
       end
     end
   end
