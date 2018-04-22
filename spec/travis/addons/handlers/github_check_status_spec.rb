@@ -35,7 +35,7 @@ describe Travis::Addons::Handlers::GithubCheckStatus do
         handler.handle?
       end
       it 'enqueues a task' do
-        handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: {})
+        handler.expects(:run_task).with(:github_check_status, is_a(Hash), installation: 1)
         handler.handle
       end
     end

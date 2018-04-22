@@ -67,5 +67,6 @@ FactoryGirl.define do
   end
 
   factory :installation do
+    github_id 1
   end
 end
