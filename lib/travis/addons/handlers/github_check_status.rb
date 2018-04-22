@@ -25,7 +25,7 @@ module Travis
         end
 
         def handle
-          run_task(:github_check_status, payload, installation: github_apps_installation.id)
+          run_task(:github_check_status, payload, installation: github_apps_installation.github_id)
         end
 
         def gh_apps_enabled?
