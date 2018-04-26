@@ -3,7 +3,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
   let(:repo)   { FactoryGirl.create(:repository) }
   let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
   let(:job)    { FactoryGirl.create(:job, repository: repo) }
-  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title') }
+  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
   let(:tag)    { FactoryGirl.create(:tag, repository: repo, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
@@ -76,7 +76,8 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'pull_request data' do
     expect(data[:pull_request]).to eql(
       number: 1,
-      title: 'title'
+      title: 'title',
+      head_ref: 'svenfuchs-patch-1'
     )
   end
 

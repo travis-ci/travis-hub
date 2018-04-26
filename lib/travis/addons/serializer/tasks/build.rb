@@ -99,7 +99,8 @@ module Travis
             def pull_request_data
               {
                 number: pull_request.number,
-                title: pull_request.title
+                title: pull_request.title,
+                head_ref: pull_request.head_ref,
               }
             end
 
