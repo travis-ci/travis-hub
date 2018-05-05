@@ -1,6 +1,7 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
 require 'travis/addons/handlers/github_status'
+require 'travis/rollout'
 
 module Travis
   module Addons
@@ -11,28 +12,22 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if github_apps_installation
-            if gh_apps_enabled?
-              true
-            else
-              Addons.logger.error "GitHub Apps installation found, but disabled"
-              false
-            end
-          else
-            Addons.logger.error "No GitHub Apps installation found"
-            false
-          end
+          enabled? && installation?
         end
 
         def handle
-          run_task(:github_check_status, payload, installation: github_apps_installation.github_id)
+          run_task(:github_check_status, payload, installation: installation.github_id)
         end
 
-        def gh_apps_enabled?
-          !! repository.managed_by_installation_at
+        def enabled?
+          ENV['ENV'] == 'test' || Travis::Rollout.matches?(:evergreen, owner: repository.owner_name)
         end
 
-        def github_apps_installation
+        def installation?
+          !!repository.managed_by_installation_at && !!installation
+        end
+
+        def installation
           @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
         end
 

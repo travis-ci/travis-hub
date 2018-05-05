@@ -197,6 +197,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     travis-encrypt (0.0.5)
+    travis-rollout (0.0.2)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -249,6 +250,7 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
+  travis-rollout (~> 0.0.2)
   travis-support!
   webmock
 
