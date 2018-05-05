@@ -18,9 +18,7 @@ module Travis
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore
-          Event::Handler.register(name, handler).tap do |name|
-            logger.info "Registered handler: #{name}" unless ENV['ENV'] == 'test'
-          end
+          Event::Handler.register(name, handler)
           handler.setup(config, logger) if handler.respond_to?(:setup)
         end
 
