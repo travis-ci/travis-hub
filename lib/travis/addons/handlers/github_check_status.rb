@@ -12,15 +12,11 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          enabled? && installation?
+          installation?
         end
 
         def handle
           run_task(:github_check_status, payload, installation: installation.github_id)
-        end
-
-        def enabled?
-          ENV['ENV'] == 'test' || Travis::Rollout.matches?(:evergreen, owner: repository.owner_name)
         end
 
         def installation?
