@@ -14,6 +14,7 @@ FactoryGirl.define do
     name            'travis-core'
     default_branch  'master'
     url             'https://github.com/travis-ci/travis-core'
+    managed_by_installation_at nil
   end
 
   factory :request do
@@ -63,5 +64,9 @@ FactoryGirl.define do
   end
 
   factory :branch do
+  end
+
+  factory :installation do
+    github_id 1
   end
 end

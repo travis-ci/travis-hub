@@ -99,13 +99,25 @@ module Travis
             def pull_request_data
               {
                 number: pull_request.number,
-                title: pull_request.title
+                title: pull_request.title,
+                head_ref: pull_request.head_ref,
               }
             end
 
             def tag_data
               {
                 name: tag.name
+              }
+            end
+
+            def stage_data(stage)
+              return nil unless stage
+              {
+                number: stage.number,
+                name: stage.name,
+                state: stage.state.to_s,
+                started_at: format_date(build.started_at),
+                finished_at: format_date(build.finished_at),
               }
             end
 
@@ -116,7 +128,11 @@ module Travis
                 state: job.state.to_s,
                 config: job.obfuscated_config.try(:except, :source_key),
                 tags: job.tags,
-                allow_failure: job.allow_failure
+                allow_failure: job.allow_failure,
+                started_at: format_date(build.started_at),
+                finished_at: format_date(build.finished_at),
+                duration: job.duration,
+                stage: stage_data(job.stage),
              }
             end
         end

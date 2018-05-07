@@ -2,8 +2,9 @@ describe Travis::Addons::Serializer::Tasks::Build do
   let(:owner)  { FactoryGirl.create(:user, login: 'login') }
   let(:repo)   { FactoryGirl.create(:repository) }
   let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
-  let(:job)    { FactoryGirl.create(:job, repository: repo) }
-  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title') }
+  let(:stage)  { FactoryGirl.create(:stage, number: 1, name: 'example') }
+  let(:job)    { FactoryGirl.create(:job, repository: repo, stage: stage) }
+  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
   let(:tag)    { FactoryGirl.create(:tag, repository: repo, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
@@ -76,13 +77,35 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'pull_request data' do
     expect(data[:pull_request]).to eql(
       number: 1,
-      title: 'title'
+      title: 'title',
+      head_ref: 'svenfuchs-patch-1'
     )
   end
 
   it 'tag data' do
     expect(data[:tag]).to eql(
       name: 'v1.0.0'
+    )
+  end
+
+  it 'job data' do
+    expect(data[:jobs][0]).to eql(
+      id: job.id,
+      number: '1.1',
+      state: 'created',
+      config: {},
+      tags: nil,
+      allow_failure: false,
+      started_at: nil,
+      finished_at: nil,
+      duration: nil,
+      stage: {
+        number: 1,
+        name: 'example',
+        state: 'created',
+        started_at: nil,
+        finished_at: nil,
+      },
     )
   end
 

@@ -5,6 +5,7 @@ module Travis
       require 'travis/addons/handlers/email'
       require 'travis/addons/handlers/flowdock'
       require 'travis/addons/handlers/github_status'
+      require 'travis/addons/handlers/github_check_status'
       require 'travis/addons/handlers/hipchat'
       require 'travis/addons/handlers/irc'
       require 'travis/addons/handlers/keenio'
