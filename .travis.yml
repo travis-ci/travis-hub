@@ -52,3 +52,4 @@ jobs:
       before_script: echo "skipping"
       install: echo "skipping"
       script: script/send-docker-hub-trigger
+      if: (NOT type IN (pull_request)) AND (branch = master)

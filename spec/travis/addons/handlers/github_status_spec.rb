@@ -1,10 +1,12 @@
 describe Travis::Addons::Handlers::GithubStatus do
   let(:handler)     { described_class.new('build:finished', id: build.id) }
-  let(:build)       { FactoryGirl.create(:build) }
+  let(:build)       { FactoryGirl.create(:build, repository: repository) }
   let(:permissions) { build.repository.permissions }
+  let(:repository)  { FactoryGirl.create(:repository) }
   let(:admin)       { FactoryGirl.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
-  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com') }
-  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token') }
+  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installation: nil) }
+  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token', installation: nil) }
+  let(:gh_apps_installation) { FactoryGirl.create(:installation) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:github_status]) }
