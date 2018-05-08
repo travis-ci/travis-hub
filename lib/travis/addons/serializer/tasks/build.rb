@@ -64,6 +64,7 @@ module Travis
             def repository_data
               {
                 id: repository.id,
+                github_id: repository.github_id,
                 key: repository.key.try(:public_key),
                 slug: repository.slug,
                 name: repository.name,

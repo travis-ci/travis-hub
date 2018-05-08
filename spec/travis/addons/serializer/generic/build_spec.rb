@@ -42,6 +42,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'repository data' do
     expect(data[:repository]).to eql(
       id: repo.id,
+      github_id: repo.github_id,
       key: nil,
       name: 'travis-core',
       owner_name: 'travis-ci',
