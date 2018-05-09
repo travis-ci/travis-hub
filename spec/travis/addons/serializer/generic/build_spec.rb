@@ -1,6 +1,6 @@
 describe Travis::Addons::Serializer::Tasks::Build do
   let(:owner)  { FactoryGirl.create(:user, login: 'login') }
-  let(:repo)   { FactoryGirl.create(:repository) }
+  let(:repo)   { FactoryGirl.create(:repository, github_id: 12345) }
   let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
   let(:stage)  { FactoryGirl.create(:stage, number: 1, name: 'example') }
   let(:job)    { FactoryGirl.create(:job, repository: repo, stage: stage) }
@@ -42,6 +42,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'repository data' do
     expect(data[:repository]).to eql(
       id: repo.id,
+      github_id: 12345,
       key: nil,
       name: 'travis-core',
       owner_name: 'travis-ci',
