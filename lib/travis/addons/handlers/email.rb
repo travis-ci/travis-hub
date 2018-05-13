@@ -29,28 +29,33 @@ module Travis
 
           def creator
             unless sender.is_a?(User)
-              warn "no recipient found: build creator was not a user"
+              no_recipient_warning "build creator was not a user"
               return
             end
 
             unless sender.first_logged_in_at?
-              warn "no recipient found: build creator (#{sender.login}) has not signed up"
+              no_recipient_warning "build creator (#{sender.login}) has not signed up"
               return
             end
 
             unless permissions?
-              warn "no recipient found: build creator (#{sender.login}) does not have permissions on this repository"
+              no_recipient_warning "build creator (#{sender.login}) does not have permissions on this repository"
               return
             end
 
             unless sender.email?
-              warn "no recipient found: build creator (#{sender.login}) do not have an email in the system"
+              no_recipient_warning "build creator (#{sender.login}) do not have an email in the system"
               return
             end
 
             sender.email
           end
 
+          def no_recipient_warning(desc)
+            msg = "#{self.class.to_s} build=#{object.id} status=no_recipient message=\"#{desc}\""
+            Addons.logger.warn(msg)
+          end
+          
           def sender
             object.sender
           end
