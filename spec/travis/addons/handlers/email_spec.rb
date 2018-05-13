@@ -66,7 +66,7 @@ describe Travis::Addons::Handlers::Email do
     end
   end
 
-  describe 'recipients' do
+  describe '#recipients' do
     let(:user)    { FactoryGirl.create(:user, first_logged_in_at: Time.now, email: "josh@travis-ci.com") }
     let(:address) { 'me@email.com' }
     let(:other)   { 'other@email.com' }
@@ -78,31 +78,35 @@ describe Travis::Addons::Handlers::Email do
         build.save
       end
 
-      describe 'creator is not a user' do
-        before { build.sender = nil }
-        it 'returns no email address' do
-          expect(handler.recipients.sort).to eql [nil]
+      context 'when creator is not a user' do
+        before do 
+          build.sender = nil
+          build.save
         end
+        
+        it { expect(handler.recipients.sort).to eql [nil] }
       end
 
-      describe 'creator has not signed in' do
-        before { user.first_logged_in_at = nil }
-        it 'returns no email address' do
-          expect(handler.recipients.sort).to eql [nil]
+      context 'when creator has not signed in' do
+        before do
+          user.first_logged_in_at = nil
+          user.save
         end
+
+        it { expect(handler.recipients.sort).to eql [nil] }
       end
 
-      describe 'creator does not have an email address in the system' do
-        before { user.email = nil }
-        it 'returns no email address' do
-          expect(handler.recipients.sort).to eql [nil]
+      context 'when creator does not have an email address in the system' do
+        before do
+          user.email = nil
+          user.save
         end
+
+        it { expect(handler.recipients.sort).to eql [nil] }
       end
 
-      describe 'creator has a email address in the system' do
-        it 'returns the creators email address' do
-          expect(handler.recipients.sort).to eql [user.email]
-        end
+      context 'creator has a email address in the system' do
+        it { expect(handler.recipients.sort).to eql [user.email] }
       end
     end
 
