@@ -78,25 +78,26 @@ describe Travis::Addons::Handlers::Email do
       describe 'creator is not a user' do
         before { build.sender = nil }
         it 'returns no email address' do
-          expect(handler.recipients.sort).to eql nil
+          expect(handler.recipients.sort).to eql [nil]
         end
       end
 
       describe 'creator has not signed in' do
         before { user.first_logged_in_at = nil }
         it 'returns no email address' do
-          expect(handler.recipients.sort).to eql nil
+          expect(handler.recipients.sort).to eql [nil]
         end
       end
 
       describe 'creator does not have an email address in the system' do
         before { user.email = nil }
         it 'returns no email address' do
-          expect(handler.recipients.sort).to eql nil
+          expect(handler.recipients.sort).to eql [nil]
         end
       end
 
       describe 'creator has a email address in the system' do
+        before { user.reload }
         it 'returns the creators email address' do
           expect(handler.recipients.sort).to eql [user.email]
         end
