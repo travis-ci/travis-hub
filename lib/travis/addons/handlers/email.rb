@@ -28,8 +28,6 @@ module Travis
         private
 
           def creator
-            sender = object.sender
-
             unless sender.is_a?(User)
               warn "no recipient found: build creator was not a user"
               return
@@ -40,7 +38,7 @@ module Travis
               return
             end
 
-            unless object.permissions.where(user_id: sender.id).exists?
+            unless permissions?
               warn "no recipient found: build creator (#{sender.login}) does not have permissions on this repository"
               return
             end
@@ -51,6 +49,14 @@ module Travis
             end
 
             sender.email
+          end
+
+          def sender
+            object.sender
+          end
+
+          def permissions?
+            object.repository.permissions.where(user_id: object.sender.id).exists?
           end
 
           def broadcasts
