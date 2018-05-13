@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Email do
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:repo)    { FactoryGirl.create(:repository) }
-  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: config }) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, config: { notifications: config }) }
   let(:config)  { { email: address } }
   let(:address) { 'me@email.com' }
 
