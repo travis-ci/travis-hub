@@ -67,7 +67,7 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe '#recipients' do
-    let(:user)    { FactoryGirl.create(:user, first_logged_in_at: Time.now, email: "josh@travis-ci.com") }
+    let(:user)    { FactoryGirl.create(:user, login: 'joshk', first_logged_in_at: Time.now, email: "josh@travis-ci.com") }
     let(:address) { 'me@email.com' }
     let(:other)   { 'other@email.com' }
 
