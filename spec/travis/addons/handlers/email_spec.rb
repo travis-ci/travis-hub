@@ -73,7 +73,10 @@ describe Travis::Addons::Handlers::Email do
 
     describe 'no addresses given in config' do
       let(:config)  { { email: true } }
-      before { build.sender = user }
+      before do
+        build.sender = user
+        build.save
+      end
 
       describe 'creator is not a user' do
         before { build.sender = nil }
@@ -97,7 +100,6 @@ describe Travis::Addons::Handlers::Email do
       end
 
       describe 'creator has a email address in the system' do
-        before { user.reload }
         it 'returns the creators email address' do
           expect(handler.recipients.sort).to eql [user.email]
         end
