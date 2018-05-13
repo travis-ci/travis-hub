@@ -75,6 +75,7 @@ describe Travis::Addons::Handlers::Email do
       let(:config)  { { email: true } }
       before do
         build.sender = user
+        build.repository.permissions.create(user_id: user.id, admin: true, push: true, pull: true)
         build.save
       end
 
@@ -101,6 +102,12 @@ describe Travis::Addons::Handlers::Email do
           user.email = nil
           user.save
         end
+
+        it { expect(handler.recipients.sort).to eql [nil] }
+      end
+
+      context 'when creator no longer has any permissions on the repo' do
+        before { build.repository.permissions.clear }
 
         it { expect(handler.recipients.sort).to eql [nil] }
       end

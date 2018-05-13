@@ -31,17 +31,22 @@ module Travis
             sender = object.sender
 
             unless sender.is_a?(User)
-              warn "no recipient found: build event creator was not a user"
+              warn "no recipient found: build creator was not a user"
               return
             end
 
             unless sender.first_logged_in_at?
-              warn "no recipient found: build event creator (#{sender.login}) has not signed up"
+              warn "no recipient found: build creator (#{sender.login}) has not signed up"
+              return
+            end
+
+            unless object.permissions.where(user_id: sender.id).exists?
+              warn "no recipient found: build creator (#{sender.login}) does not have permissions on this repository"
               return
             end
 
             unless sender.email?
-              warn "no recipient found: build event creator (#{sender.login}) do not have an email in the system"
+              warn "no recipient found: build creator (#{sender.login}) do not have an email in the system"
               return
             end
 
