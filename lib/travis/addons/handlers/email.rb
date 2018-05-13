@@ -21,16 +21,31 @@ module Travis
         def recipients
           @recipients ||= begin
             recipients = config.values(:email, :recipients)
-            recipients.try(:any?) ? recipients : default_recipients
+            recipients.try(:any?) ? recipients : [creator]
           end
         end
 
         private
 
-          def default_recipients
-            emails = [commit.author_email, commit.committer_email]
-            user_ids = object.repository.permissions.pluck(:user_id)
-            ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
+          def creator
+            sender = object.sender
+
+            unless sender.is_a?(User)
+              warn "no recipient found: build event creator was not a user"
+              return
+            end
+
+            unless sender.first_logged_in_at?
+              warn "no recipient found: build event creator (#{sender.login}) has not signed up"
+              return
+            end
+
+            unless sender.email?
+              warn "no recipient found: build event creator (#{sender.login}) do not have an email in the system"
+              return
+            end
+
+            sender.email
           end
 
           def broadcasts
