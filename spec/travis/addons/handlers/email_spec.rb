@@ -1,9 +1,7 @@
 describe Travis::Addons::Handlers::Email do
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:repo)    { FactoryGirl.create(:repository) }
-  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: config }) }
-  let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
-  let!(:email)  { Email.create(email: address) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, config: { notifications: config }) }
   let(:config)  { { email: address } }
   let(:address) { 'me@email.com' }
 
@@ -68,30 +66,54 @@ describe Travis::Addons::Handlers::Email do
     end
   end
 
-  describe 'recipients' do
-    let(:user)      { FactoryGirl.create(:user) }
-    let(:address)   { 'me@email.com' }
-    let(:other)     { 'other@email.com' }
-    let(:author)    { 'author@email.com' }
-    let(:committer) { 'committer@email.com' }
+  describe '#recipients' do
+    let(:user)    { FactoryGirl.create(:user, login: 'joshk', first_logged_in_at: Time.now, email: "josh@travis-ci.com") }
+    let(:address) { 'me@email.com' }
+    let(:other)   { 'other@email.com' }
 
     describe 'no addresses given in config' do
       let(:config)  { { email: true } }
-      before { repo.permissions.create(user: user) }
-
-      it 'returns permitted and known committer and author addresses' do
-        [committer, author].each { |address| Email.create(user: user, email: address) }
-        expect(handler.recipients.sort).to eql [author, committer]
+      before do
+        build.sender = user
+        build.repository.permissions.create(user_id: user.id, admin: true, push: true, pull: true)
+        build.save
       end
 
-      it 'returns permitted and known author address' do
-        Email.create(user: user, email: author)
-        expect(handler.recipients).to eql [author]
+      context 'when creator is not a user' do
+        before do 
+          build.sender = nil
+          build.save
+        end
+        
+        it { expect(handler.recipients.sort).to eql [nil] }
       end
 
-      it 'returns permitted and known committer address' do
-        Email.create(user: user, email: committer)
-        expect(handler.recipients).to eql [committer]
+      context 'when creator has not signed in' do
+        before do
+          user.first_logged_in_at = nil
+          user.save
+        end
+
+        it { expect(handler.recipients.sort).to eql [nil] }
+      end
+
+      context 'when creator does not have an email address in the system' do
+        before do
+          user.email = nil
+          user.save
+        end
+
+        it { expect(handler.recipients.sort).to eql [nil] }
+      end
+
+      context 'when creator no longer has any permissions on the repo' do
+        before { build.repository.permissions.clear }
+
+        it { expect(handler.recipients.sort).to eql [nil] }
+      end
+
+      context 'creator has a email address in the system' do
+        it { expect(handler.recipients.sort).to eql [user.email] }
       end
     end
 

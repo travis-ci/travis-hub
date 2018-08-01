@@ -21,16 +21,47 @@ module Travis
         def recipients
           @recipients ||= begin
             recipients = config.values(:email, :recipients)
-            recipients.try(:any?) ? recipients : default_recipients
+            recipients.try(:any?) ? recipients : [creator]
           end
         end
 
         private
 
-          def default_recipients
-            emails = [commit.author_email, commit.committer_email]
-            user_ids = object.repository.permissions.pluck(:user_id)
-            ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
+          def creator
+            unless sender.is_a?(User)
+              no_recipient_warning "build creator was not a user"
+              return
+            end
+
+            unless sender.first_logged_in_at?
+              no_recipient_warning "build creator (#{sender.login}) has not signed up"
+              return
+            end
+
+            unless permissions?
+              no_recipient_warning "build creator (#{sender.login}) does not have permissions on this repository"
+              return
+            end
+
+            unless sender.email?
+              no_recipient_warning "build creator (#{sender.login}) do not have an email in the system"
+              return
+            end
+
+            sender.email
+          end
+
+          def no_recipient_warning(desc)
+            msg = "#{self.class.to_s} build=#{object.id} status=no_recipient message=\"#{desc}\""
+            Addons.logger.warn(msg)
+          end
+          
+          def sender
+            object.sender
+          end
+
+          def permissions?
+            object.repository.permissions.where(user_id: object.sender.id).exists?
           end
 
           def broadcasts
