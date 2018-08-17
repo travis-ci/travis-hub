@@ -6,8 +6,8 @@ describe Travis::Addons::Handlers::Scheduler do
     before { Travis::Event.setup([:scheduler]) }
 
     it 'job:create notifies' do
-      described_class.expects(:notify).never
-      Travis::Event.dispatch('job:create', id: job.id)
+      described_class.expects(:notify).once
+      Travis::Event.dispatch('job:created', id: job.id)
     end
 
     it 'job:started does not notify' do
@@ -18,6 +18,11 @@ describe Travis::Addons::Handlers::Scheduler do
     it 'job:finished notifies' do
       described_class.expects(:notify).once
       Travis::Event.dispatch('job:finished', id: job.id)
+    end
+
+    it 'job:canceled notifies' do
+      described_class.expects(:notify).once
+      Travis::Event.dispatch('job:canceled', id: job.id)
     end
 
     it 'job:restarted notifies' do

@@ -36,6 +36,14 @@ module Travis
       )
     end
 
+    def insights(event, data)
+      client.push(
+        'queue' => ENV['INSIGHTS_SIDEKIQ_QUEUE'] || 'insights',
+        'class' => 'Travis::Insights::Worker',
+        'args'  => [:event, { event: event, data: data }]
+      )
+    end
+
     private
 
       def client
