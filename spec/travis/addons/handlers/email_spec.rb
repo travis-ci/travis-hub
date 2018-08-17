@@ -59,11 +59,11 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'handle' do
-    let!(:broadcast) { Broadcast.create(message: 'message') }
+    let!(:broadcast) { Broadcast.create(message: 'message', category: 'announcement') }
     let(:recipient)  { 'me@email.com' }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message' }])
+      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}])
       handler.handle
     end
   end
