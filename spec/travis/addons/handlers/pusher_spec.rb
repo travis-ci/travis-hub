@@ -43,7 +43,7 @@ describe Travis::Addons::Handlers::Pusher do
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event, user_ids: [5])
+          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
         end
         handler.handle
       end
