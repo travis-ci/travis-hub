@@ -33,7 +33,12 @@ describe Travis::Addons::Serializer::Pusher::Build do
       pull_request_title: nil,
       pull_request_number: nil,
       job_ids: [job.id],
-      updated_at: build.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
+      updated_at: build.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%3NZ'),
+      created_by: {
+        login: 'svenfuchs',
+        name: 'Sven Fuchs',
+        avatar_url: 'https://avatars2.githubusercontent.com/u/2208'
+      }
     )
   end
 
