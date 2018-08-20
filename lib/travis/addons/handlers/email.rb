@@ -34,8 +34,8 @@ module Travis
           end
 
           def broadcasts
-            msgs = Broadcast.by_repo(object.repository).pluck(:message)
-            msgs.map { |msg| { message: msg } }
+            msgs = Broadcast.by_repo(object.repository).pluck(:message, :category)
+            msgs.map { |msg, cat| { message: msg, category: cat } }
           end
 
           def normalize_array(array)
