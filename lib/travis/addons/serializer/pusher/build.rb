@@ -125,6 +125,7 @@ module Travis
 
               if sender
                 {
+                  id: sender.id,
                   name: sender.name,
                   login: sender.login,
                   avatar_url: sender.avatar_url
