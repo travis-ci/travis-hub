@@ -121,18 +121,14 @@ module Travis
             end
 
             def created_by
-              sender = build.sender
+              return unless sender = build.sender
 
-              if sender
-                {
-                  id: sender.id,
-                  name: sender.name,
-                  login: sender.login,
-                  avatar_url: sender.avatar_url
-                }
-              else
-                nil
-              end
+              {
+                id: sender.id,
+                name: sender.name,
+                login: sender.login,
+                avatar_url: sender.avatar_url
+              }
             end
 
             def last_build_on_default_branch_id(repository)
