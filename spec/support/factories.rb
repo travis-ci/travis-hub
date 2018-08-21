@@ -42,6 +42,7 @@ FactoryGirl.define do
     association :repository
     association :request
     association :commit
+    association :sender, factory: :user
     number      1
     state       :created
     branch      'master'
