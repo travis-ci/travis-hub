@@ -19,7 +19,7 @@ module Travis
         end
 
         def event
-          super.sub(/(canceled|errored)/, 'finished')
+          @event ||= super.sub(/(canceled|errored)/, 'finished')
         end
 
         private
@@ -31,11 +31,19 @@ module Travis
               owner_type: object.owner_type,
               owner_id: object.owner_id,
               repository_id: object.repository_id,
-              state: object.state,
+              state: state,
               created_at: object.created_at,
               started_at: object.started_at,
               finished_at: object.finished_at
             }
+          end
+
+          def state
+            case event
+            when 'job:created' then :created
+            when 'job:started' then :started
+            else object.state
+            end
           end
 
           class EventHandler < Addons::Instrument
