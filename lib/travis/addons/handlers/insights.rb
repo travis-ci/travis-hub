@@ -8,7 +8,7 @@ module Travis
       class Insights < Base
         include Handlers::Task
 
-        EVENTS = /(build|job):.*/
+        EVENTS = /(job):(created|started|finished|canceled|errored)/
 
         def handle?
           !!ENV['INSIGHTS_ENABLED']
@@ -16,6 +16,10 @@ module Travis
 
         def handle
           Travis::Sidekiq.insights(event, payload)
+        end
+
+        def event
+          super.sub(/(canceled|errored)/, 'finished')
         end
 
         private
@@ -27,10 +31,10 @@ module Travis
               owner_type: object.owner_type,
               owner_id: object.owner_id,
               repository_id: object.repository_id,
+              state: object.state,
               created_at: object.created_at,
               started_at: object.started_at,
-              finished_at: object.finished_at,
-              state: object.state
+              finished_at: object.finished_at
             }
           end
 

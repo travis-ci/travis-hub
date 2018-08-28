@@ -1,36 +1,41 @@
 describe Travis::Addons::Handlers::Insights do
   let(:build)   { FactoryGirl.create(:build) }
-  let(:job)     { FactoryGirl.create(:job) }
+  let(:job)     { FactoryGirl.create(:job, owner_id: 1, owner_type: 'User', repository_id: 1) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:insights]) }
 
-    it 'build:create notifies' do
-      described_class.expects(:notify).once
-      Travis::Event.dispatch('build:create', id: build.id)
+    it 'build:created does not notify' do
+      described_class.expects(:notify).never
+      Travis::Event.dispatch('build:created', id: build.id)
     end
 
     it 'build:started does not notify' do
-      described_class.expects(:notify).once
+      described_class.expects(:notify).never
       Travis::Event.dispatch('build:started', id: build.id)
     end
 
-    it 'build:finished notifies' do
-      described_class.expects(:notify).once
+    it 'build:finished does not notify' do
+      described_class.expects(:notify).never
       Travis::Event.dispatch('build:finished', id: build.id)
     end
 
-    it 'build:restarted notifies' do
-      described_class.expects(:notify).once
+    it 'build:restarted does not notify' do
+      described_class.expects(:notify).never
       Travis::Event.dispatch('build:restarted', id: build.id)
     end
 
-    it 'job:create notifies' do
+    it 'job:created notifies' do
       described_class.expects(:notify).once
-      Travis::Event.dispatch('job:create', id: job.id)
+      Travis::Event.dispatch('job:created', id: job.id)
     end
 
-    it 'job:started does not notify' do
+    it 'job:received does not notify' do
+      described_class.expects(:notify).never
+      Travis::Event.dispatch('job:received', id: job.id)
+    end
+
+    it 'job:started notifies' do
       described_class.expects(:notify).once
       Travis::Event.dispatch('job:started', id: job.id)
     end
@@ -41,7 +46,7 @@ describe Travis::Addons::Handlers::Insights do
     end
 
     it 'job:restarted notifies' do
-      described_class.expects(:notify).once
+      described_class.expects(:notify).never # TODO
       Travis::Event.dispatch('job:restarted', id: job.id)
     end
   end
@@ -57,10 +62,10 @@ describe Travis::Addons::Handlers::Insights do
       owner_type: job.owner_type,
       owner_id: job.owner_id,
       repository_id: job.repository_id,
+      state: :created,
       created_at: job.created_at,
       started_at: nil,
-      finished_at: nil,
-      state: :created
+      finished_at: nil
     }
   end
 
