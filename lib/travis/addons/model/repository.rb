@@ -5,6 +5,7 @@ Repository.class_eval do
   has_many   :permissions
   has_many   :users, through: :permissions
   has_one    :key, class_name: 'SslKey'
+  has_many   :email_unsubscribes
 
   def slug
     @slug ||= [owner_name, name].join('/')

@@ -93,6 +93,12 @@ describe Travis::Addons::Handlers::Email do
         Email.create(user: user, email: committer)
         expect(handler.recipients).to eql [committer]
       end
+
+      it 'does not return users who have unsubscribed' do
+        Email.create(user: user, email: committer)
+        EmailUnsubscribe.create(user: user, repository: repo)
+        expect(handler.recipients).to be_empty
+      end
     end
 
     it 'returns an array of addresses when given a string' do
