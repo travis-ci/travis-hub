@@ -6,6 +6,10 @@ require 'travis/hub/model/repository'
 class JobConfig < ActiveRecord::Base
 end
 
+class JobVersion < ActiveRecord::Base
+  belongs_to :job
+end
+
 class Job < ActiveRecord::Base
   include SimpleStates, Travis::Event
 
@@ -19,6 +23,7 @@ class Job < ActiveRecord::Base
   belongs_to :commit
   belongs_to :stage
   belongs_to :config, foreign_key: :config_id, class_name: JobConfig
+  has_many   :versions, class_name: JobVersion
   has_one    :queueable
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
@@ -29,6 +34,7 @@ class Job < ActiveRecord::Base
   event :finish,  after: :propagate, to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate
+  event :reset,   after: :propagate
   event :all, after: :notify
 
   serialize :config
@@ -62,16 +68,12 @@ class Job < ActiveRecord::Base
   end
 
   def restart(*)
-    self.state = :created
-    clear_attrs %w(started_at queued_at finished_at worker canceled_at)
-    clear_log
-    save!
-    set_queueable
+    create_version
+    clear
   end
 
-  def reset!(*)
-    restart
-    save!
+  def reset(*)
+    clear
   end
 
   def cancel?(*)
@@ -83,16 +85,40 @@ class Job < ActiveRecord::Base
     unset_queueable
   end
 
+  def notify(event, *args)
+    event = :restart if event == :reset
+    super
+  end
+
   private
 
-    def ensure_positive_queue_time
-      # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
-      return unless queued_at && received_at && queued_at > received_at
-      self.received_at = queued_at
+    VERSION_ATTRS = %w(created_at queued_at received_at started_at finished_at restarted_at)
+    CLEAR_ATTRS   = %w(queued_at received_at started_at finished_at canceled_at)
+
+    def create_version
+      attrs = attributes.slice(*VERSION_ATTRS)
+      attrs = attrs.merge(state: state_was, number: next_version_number)
+      versions.create!(attrs)
     end
 
-    def clear_attrs(attrs)
-      attrs.each { |attr| write_attribute(attr, nil) }
+    def next_version_number
+      versions.maximum(:number).try(:+, 1) || 1
+    end
+
+    def clear
+      self.state = :created
+      clear_attrs
+      clear_log
+      save!
+      set_queueable
+    end
+
+    def clear_attrs
+      CLEAR_ATTRS.each { |attr| write_attribute(attr, nil) }
+    end
+
+    def clear_log
+      logs_api.update(id, '', clear: true)
     end
 
     def set_queueable
@@ -103,13 +129,15 @@ class Job < ActiveRecord::Base
       Queueable.where(job_id: id).delete_all
     end
 
+    def ensure_positive_queue_time
+      # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
+      return unless queued_at && received_at && queued_at > received_at
+      self.received_at = queued_at
+    end
+
     def propagate(event, *args)
       target = stage && stage.respond_to?(:"#{event}!") ? stage : build
       target.send(:"#{event}!", *args)
-    end
-
-    def clear_log
-      logs_api.update(id, '', clear: true)
     end
 
     def logs_api

@@ -295,6 +295,36 @@ describe Job do
     end
   end
 
+  shared_examples 'creates a job version' do
+    let(:created_at)  { Time.now - 60 }
+    let(:queued_at)   { Time.now - 45 }
+    let(:received_at) { Time.now - 30 }
+    let(:started_at)  { Time.now - 15 }
+    let(:finished_at) { Time.now }
+
+    let(:job) do
+      FactoryGirl.create(:job,
+        repository: repo,
+        build: build,
+        state: state,
+        created_at: created_at,
+        queued_at: queued_at,
+        received_at: received_at,
+        started_at: started_at,
+        finished_at: finished_at
+      )
+    end
+
+    let(:version) { job.versions.first }
+
+    it { expect(version.state).to eq 'passed' }
+    it { expect(version.created_at).to eq created_at }
+    it { expect(version.queued_at).to eq queued_at }
+    it { expect(version.received_at).to eq received_at }
+    it { expect(version.started_at).to eq started_at }
+    it { expect(version.finished_at).to eq finished_at }
+  end
+
   describe 'a :receive event' do
     let(:event)  { :receive }
     let(:params) { { state: 'received', received_at: now.to_s } }
@@ -474,6 +504,16 @@ describe Job do
         include_examples 'resets the job'
       end
     end
+  end
+
+  describe 'a :restart event sets restarted_at and creates a job version' do
+    let(:event) { :restart }
+    let(:state) { :passed }
+
+    before { receive }
+
+    it { expect(job.reload.restarted_at).to_not be_nil }
+    include_examples 'creates a job version'
   end
 
   describe 'a :cancel event' do

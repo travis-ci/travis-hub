@@ -97,6 +97,11 @@ describe Build do
       expect(build.reload.canceled_at).to be_nil
     end
 
+    it 'sets :restarted_at' do
+      receive
+      expect(build.reload.restarted_at).to_not be_nil
+    end
+
     it 'dispatches a build:restarted event' do
       Travis::Event.expects(:dispatch).with('build:restarted', id: build.id)
       receive
