@@ -70,6 +70,7 @@ class Job < ActiveRecord::Base
   def restart(*)
     create_version
     clear
+    self.restarted_at = Time.now
   end
 
   def reset(*)
@@ -92,12 +93,12 @@ class Job < ActiveRecord::Base
 
   private
 
-    VERSION_ATTRS = %w(created_at queued_at received_at started_at finished_at restarted_at)
     CLEAR_ATTRS   = %w(queued_at received_at started_at finished_at canceled_at)
+    VERSION_ATTRS = %w(created_at queued_at received_at started_at finished_at restarted_at)
 
     def create_version
       attrs = attributes.slice(*VERSION_ATTRS)
-      attrs = attrs.merge(state: state_was, number: next_version_number)
+      attrs = attrs.merge(number: next_version_number, state: state_was, restarted_at: restarted_at_was)
       versions.create!(attrs)
     end
 

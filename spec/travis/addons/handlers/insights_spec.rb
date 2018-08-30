@@ -51,9 +51,7 @@ describe Travis::Addons::Handlers::Insights do
     end
   end
 
-  env INSIGHTS_ENABLED: true
-
-  let(:handler) { described_class.new('job:created', id: job.id) }
+  let(:handler) { described_class.new(event, id: job.id) }
 
   let(:data) do
     {
@@ -69,14 +67,41 @@ describe Travis::Addons::Handlers::Insights do
     }
   end
 
-  it { expect(handler.handle?).to be true }
+  describe 'job:created' do
+    let(:event) { 'job:created' }
+    it 'handle' do
+      ::Sidekiq::Client.expects(:push).with(
+        'queue' => 'insights',
+        'class' => 'Travis::Insights::Worker',
+        'args'  => [:event, event: 'job:created', data: data]
+      )
+      handler.handle
+    end
+  end
 
-  it 'handle' do
-    ::Sidekiq::Client.expects(:push).with(
-      'queue' => 'insights',
-      'class' => 'Travis::Insights::Worker',
-      'args'  => [:event, event: 'job:created', data: data]
-    )
-    handler.handle
+  describe 'job:canceled' do
+    let(:event) { 'job:canceled' }
+    it 'handle' do
+      ::Sidekiq::Client.expects(:push).with(
+        'queue' => 'insights',
+        'class' => 'Travis::Insights::Worker',
+        'args'  => [:event, event: 'job:finished', data: data]
+      )
+      handler.handle
+    end
+  end
+
+  describe 'sends restarted_at if present' do
+    let(:event) { 'job:created' }
+    let(:restarted_at) { Time.now + 120  }
+    before { job.update_attributes(restarted_at: restarted_at) }
+    it 'handle' do
+      ::Sidekiq::Client.expects(:push).with(
+        'queue' => 'insights',
+        'class' => 'Travis::Insights::Worker',
+        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)]
+      )
+      handler.handle
+    end
   end
 end
