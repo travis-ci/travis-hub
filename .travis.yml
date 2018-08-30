@@ -21,7 +21,8 @@ before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
 
 before_script:
-  - bundle exec rake db:create --trace
+  - createdb travis_test || true
+  - curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/sf-restarts/db/main/structure.sql | psql travis_test
 
 script:
   - bundle exec rspec
