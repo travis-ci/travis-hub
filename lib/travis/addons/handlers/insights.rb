@@ -10,16 +10,17 @@ module Travis
 
         EVENTS = /(job):(created|started|finished|canceled|errored)/
 
+        def initialize(event, params = {})
+          super
+          @event = event.sub(/(canceled|errored)/, 'finished')
+        end
+
         def handle?
           !!ENV['INSIGHTS_ENABLED']
         end
 
         def handle
           Travis::Sidekiq.insights(event, payload)
-        end
-
-        def event
-          @event ||= super.sub(/(canceled|errored)/, 'finished')
         end
 
         private
@@ -32,7 +33,7 @@ module Travis
               owner_id: object.owner_id,
               repository_id: object.repository_id,
               state: state,
-              created_at: object.created_at,
+              created_at: object.restarted_at || object.created_at,
               started_at: object.started_at,
               finished_at: object.finished_at
             }
