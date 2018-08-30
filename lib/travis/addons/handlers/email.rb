@@ -31,6 +31,7 @@ module Travis
             emails = [commit.author_email, commit.committer_email]
             user_ids = object.repository.permissions.pluck(:user_id)
             user_ids -= object.repository.email_unsubscribes.pluck(:user_id)
+            user_ids -= User.where(id: user_ids).with_preference(:build_emails, false).pluck(:id)
             ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
           end
 
