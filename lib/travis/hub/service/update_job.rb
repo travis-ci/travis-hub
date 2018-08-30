@@ -4,6 +4,7 @@ require 'travis/hub/helper/locking'
 require 'travis/hub/model/job'
 require 'travis/hub/service/error_job'
 require 'travis/hub/service/notify_workers'
+require 'travis/hub/service/notify_trace_processor'
 require 'travis/hub/helper/limit'
 
 module Travis
@@ -65,6 +66,9 @@ module Travis
 
           def notify
             NotifyWorkers.new(context).cancel(job) if job.reload.state == :canceled
+            NotifyTraceProcessor.new(context).notify(data) if event == :finish
+
+            # notify traceproc
           end
 
           def validate
