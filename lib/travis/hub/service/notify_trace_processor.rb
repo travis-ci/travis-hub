@@ -10,8 +10,6 @@ module Travis
         }
 
         def notify(data)
-          puts [config[:url], data[:trace]].inspect
-
           return unless config[:url]
           return unless data[:trace]
 
