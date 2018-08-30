@@ -1,5 +1,3 @@
-require 'travis/hub/support/job_board'
-
 module Travis
   module Hub
     module Service
@@ -12,7 +10,7 @@ module Travis
         }
 
         def notify(data)
-          return unless config[:enabled]
+          return unless config[:url]
           return unless data[:trace]
 
           info :notify, data[:id]
@@ -21,7 +19,6 @@ module Travis
             req.url "/trace"
             req.params['source'] = 'hub'
             req.headers['Content-Type'] = 'application/json'
-            req.headers['Authorization'] = "token #{config[:token]}"
             req.body = { job_id: data[:id] }.to_json
           end
         rescue => e
@@ -33,6 +30,7 @@ module Travis
 
           def client
             @client ||= Faraday.new(url: url) do |c|
+              c.basic_auth(*basic_auth)
               c.request :retry, max: 3, interval: 0.1, backoff_factor: 2
               c.adapter :net_http
             end
@@ -44,6 +42,17 @@ module Travis
 
           def config
             @config ||= context.config.trace_processor.to_h
+          end
+
+          def basic_auth
+            @basic_auth ||= begin
+              parsed = URI(url)
+              if parsed.user.nil? && parsed.password.nil?
+                raise StandardError, 'Trace processor basic auth not set.'
+              end
+
+              [parsed.user, parsed.password]
+            end
           end
       end
     end
