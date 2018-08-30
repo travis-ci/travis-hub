@@ -32,6 +32,7 @@ class Build < ActiveRecord::Base
   event :finish,  if: :finish?, to: FINISHED_STATES
   event :cancel,  if: :cancel?
   event :restart, if: :restart?
+  event :reset
   event :all, after: [:denormalize, :notify]
 
   serialize :config
@@ -70,8 +71,11 @@ class Build < ActiveRecord::Base
   end
 
   def restart(*)
-    %w(duration started_at finished_at canceled_at).each { |attr| write_attribute(attr, nil) }
-    self.state = :created
+    clear
+  end
+
+  def reset(*)
+    clear
   end
 
   def cancel?(*)
@@ -84,6 +88,11 @@ class Build < ActiveRecord::Base
   end
 
   private
+
+    def clear
+      %w(duration started_at finished_at canceled_at).each { |attr| write_attribute(attr, nil) }
+      self.state = :created
+    end
 
     def matrix_state
       stage = stages.reject(&:passed?).first
