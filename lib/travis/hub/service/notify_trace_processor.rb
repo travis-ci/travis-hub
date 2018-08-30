@@ -15,6 +15,8 @@ module Travis
           return unless config[:enabled]
           return unless data[:trace]
 
+          info :notify, data[:id]
+
           client.post do |req|
             req.url "/trace"
             req.params['source'] = 'hub'
