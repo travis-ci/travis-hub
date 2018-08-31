@@ -94,9 +94,15 @@ describe Travis::Addons::Handlers::Email do
         expect(handler.recipients).to eql [committer]
       end
 
-      it 'does not return users who have unsubscribed' do
+      it 'does not return users who have unsubscribed from this repo' do
         Email.create(user: user, email: committer)
         EmailUnsubscribe.create(user: user, repository: repo)
+        expect(handler.recipients).to be_empty
+      end
+
+      it 'does not return users who have the no emails global preference' do
+        user.update_attributes!(preferences: JSON.dump(build_emails: false))
+        Email.create(user: user, email: committer)
         expect(handler.recipients).to be_empty
       end
     end
