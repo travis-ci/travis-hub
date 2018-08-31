@@ -10,7 +10,8 @@ module Travis
         }
 
         def notify(data)
-          return unless config[:url]
+          return unless ENV['TRACEPROC_ENABLED'] == 'true'
+          return unless ENV['TRACEPROC_URL']
           return unless data[:trace]
 
           info :notify, data[:id]
@@ -37,11 +38,7 @@ module Travis
           end
 
           def url
-            config[:url]
-          end
-
-          def config
-            @config ||= context.config.trace_processor.to_h
+            ENV['TRACEPROC_URL']
           end
 
           def basic_auth
