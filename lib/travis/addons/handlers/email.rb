@@ -15,19 +15,23 @@ module Travis
         end
 
         def handle
-          run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
+          run_task(:email, payload, recipients: recipients, broadcasts: broadcasts, configured: !!configured_emails)
         end
 
         def recipients
-          @recipients ||= begin
-            recipients = config.values(:email, :recipients)
-            recipients.try(:any?) ? recipients : default_recipients
-          end
+          configured_emails || subscribed_emails
         end
 
         private
 
-          def default_recipients
+          def configured_emails
+            @recipients ||= begin
+              recipients = config.values(:email, :recipients)
+              recipients.try(:any?) && recipients
+            end
+          end
+
+          def subscribed_emails
             emails = [commit.author_email, commit.committer_email]
             user_ids = object.repository.permissions.pluck(:user_id)
             user_ids -= object.repository.email_unsubscribes.pluck(:user_id)

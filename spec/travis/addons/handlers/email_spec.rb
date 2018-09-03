@@ -63,8 +63,20 @@ describe Travis::Addons::Handlers::Email do
     let(:recipient)  { 'me@email.com' }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}])
+      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}], configured: true)
       handler.handle
+    end
+
+    context 'without configuring recipients' do
+      before do
+        config[:email] = true
+        handler.stubs(subscribed_emails: [recipient])
+      end
+
+      it 'enqueues a task' do
+        handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}], configured: false)
+        handler.handle
+      end
     end
   end
 
