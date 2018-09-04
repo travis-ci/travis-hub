@@ -52,4 +52,5 @@ group :test do
   gem 'webmock'
   gem 'sinatra-contrib'
   gem 'rack-test'
+  gem 'pry'
 end
