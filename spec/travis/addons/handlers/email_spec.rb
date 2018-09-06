@@ -136,5 +136,21 @@ describe Travis::Addons::Handlers::Email do
       config[:email] = { recipients: "#{address}, #{other}", on_success: 'change' }
       expect(handler.recipients).to eql [address, other]
     end
+
+    it 'ignores repo-level unsubscribe' do
+      config[:email] = address
+      Email.create(user: user, email: address)
+      EmailUnsubscribe.create(user: user, repository: repo)
+
+      expect(handler.recipients).to eql [address]
+    end
+
+    it 'observes user-level no emails preference' do
+      config[:email] = address
+      Email.create(user: user, email: address)
+      user.update_attributes!(preferences: JSON.dump(build_emails: false))
+
+      expect(handler.recipients).to be_empty
+    end
   end
 end

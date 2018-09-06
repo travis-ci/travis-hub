@@ -97,6 +97,7 @@ GEM
     bunny (2.9.2)
       amq-protocol (~> 2.3.0)
     coder (0.4.0)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crack (0.4.3)
@@ -138,6 +139,7 @@ GEM
     libhoney (1.4.1)
       http (~> 2.0)
     metaclass (0.0.4)
+    method_source (0.9.0)
     minitest (5.11.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
@@ -146,6 +148,9 @@ GEM
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     pg (0.19.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     puma (3.6.0)
     rack (1.6.10)
     rack-protection (1.5.5)
@@ -231,6 +236,7 @@ DEPENDENCIES
   mocha
   multi_json
   pg
+  pry
   puma
   rack-ssl
   rack-test
