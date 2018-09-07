@@ -78,7 +78,8 @@ module Travis
             def request_data
               {
                 token: request.token,
-                head_commit: request.head_commit
+                head_commit: request.head_commit,
+                base_commit: request.base_commit
               }
             end
 
