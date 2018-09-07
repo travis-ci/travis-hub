@@ -8,9 +8,6 @@ describe Travis::Addons::Serializer::Tasks::Build do
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 
-  # base_commit: request.base_commit,
-  # head_commit: request.head_commit,
-
   it 'build data' do
     expect(data[:build]).to eql(
       id: build.id,
@@ -54,7 +51,8 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'request data' do
     expect(data[:request]).to eql(
       token: 'token',
-      head_commit: nil
+      head_commit: nil,
+      base_commit: nil
     )
   end
 
