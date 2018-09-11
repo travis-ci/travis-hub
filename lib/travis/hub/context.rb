@@ -54,7 +54,7 @@ module Travis
           # TODO move keen to the keychain? it isn't required on enterprise.
           # then again, it's not active, unless the keen credentials are
           # present in the env.
-          config.notifications.flatten + ['insights', 'log_search', 'scheduler', 'keenio']
+          config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio']
         end
 
         def test_exception_reporting
