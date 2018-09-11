@@ -8,6 +8,9 @@ module Travis
       class LogSearch < Base
         include Handlers::Task
 
+        # alias log_search => logsearch
+        register('logsearch', self)
+
         EVENTS = 'job:finished'
 
         def handle?
