@@ -44,6 +44,14 @@ module Travis
       )
     end
 
+    def logsearch(*args)
+      client.push(
+        'queue' => ENV['LOGSEARCH_SIDEKIQ_QUEUE'] || 'logsearch',
+        'class' => 'Travis::LogSearch::Worker',
+        'args'  => args
+      )
+    end
+
     private
 
       def client
