@@ -22,7 +22,7 @@ module Travis
             uid:   SecureRandom.hex,
             owner: object.repository.owner.login,
             repo:  object.repository.slug,
-            redis: Scheduler.redis
+            redis: Travis::Hub.context.redis
           })
         end
 
