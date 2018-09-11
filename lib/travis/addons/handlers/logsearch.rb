@@ -23,6 +23,10 @@ module Travis
 
         private
 
+          def payload
+            object.id
+          end
+
           class EventHandler < Addons::Instrument
             def notify_completed
               publish
