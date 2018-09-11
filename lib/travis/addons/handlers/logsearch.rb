@@ -1,6 +1,7 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
 require 'travis/addons/model/broadcast'
+require 'travis/rollout'
 
 module Travis
   module Addons
@@ -14,7 +15,15 @@ module Travis
         EVENTS = 'job:finished'
 
         def handle?
-          ENV['LOGSEARCH_ENABLED'] == 'true'
+          return false unless ENV['LOGSEARCH_ENABLED'] == 'true'
+
+          # random uid to sample randomly (not tied to user)
+          Rollout.matches?(:logsearch, {
+            uid:   SecureRandom.hex,
+            owner: object.repository.owner.login,
+            repo:  object.repository.slug,
+            redis: Scheduler.redis
+          })
         end
 
         def handle
