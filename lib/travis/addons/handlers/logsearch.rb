@@ -9,7 +9,7 @@ module Travis
         include Handlers::Task
 
         # alias log_search => logsearch
-        register('logsearch', self)
+        Event::Handler.register('logsearch', self)
 
         EVENTS = 'job:finished'
 
