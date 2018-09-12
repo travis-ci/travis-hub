@@ -48,7 +48,8 @@ module Travis
       client.push(
         'queue' => ENV['LOGSEARCH_SIDEKIQ_QUEUE'] || 'logsearch',
         'class' => 'Travis::LogSearch::Worker',
-        'args'  => args
+        'args'  => args,
+        'at'    => Time.now.to_f + (ENV['LOGSEARCH_SIDEKIQ_DELAY']&.to_i || 60)
       )
     end
 
