@@ -47,7 +47,7 @@ describe Travis::Addons::Handlers::GithubStatus do
     before { permissions.create(user: admin, admin: true) }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' })
+      handler.expects(:run_task).with(:github_status, is_a(Hash), tokens: { 'admin' => 'admin-token' }, installation: nil)
       handler.handle
     end
   end
@@ -73,6 +73,23 @@ describe Travis::Addons::Handlers::GithubStatus do
 
     it 'includes a known committer token, admin tokens, and (push) user tokens' do
       expect(tokens).to eq('committer' => 'committer-token', 'admin' => 'admin-token', 'user' => 'user-token')
+    end
+  end
+
+  describe 'installation' do
+    let(:installation) { handler.send(:installation) }
+
+    before do
+      gh_apps_installation.update(owner: repository.owner, removed_by_id: nil)
+    end
+
+    it 'includes the installation id' do
+      handler.expects(:run_task).with(
+        :github_status, is_a(Hash),
+        tokens: {},
+        installation: gh_apps_installation.github_id
+      )
+      handler.handle
     end
   end
 end
