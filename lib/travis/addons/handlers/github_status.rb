@@ -10,12 +10,13 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
+          return true if installation?
           Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
           tokens.any?
         end
 
         def handle
-          run_task(:github_status, payload, tokens: tokens)
+          run_task(:github_status, payload, tokens: tokens, installation: installation_github_id)
         end
 
         private
@@ -38,6 +39,18 @@ module Travis
 
           def committer
             @committer ||= ::Email.where(email: commit.committer_email).map(&:user).first
+          end
+
+          def installation?
+            !!repository.managed_by_installation_at && !!installation
+          end
+
+          def installation_github_id
+            !installation.nil? ? installation.github_id : nil
+          end
+
+          def installation
+            @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
           end
 
           class Instrument < Addons::Instrument
