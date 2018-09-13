@@ -16,7 +16,7 @@ module Travis
         end
 
         def handle
-          run_task(:github_status, payload, tokens: tokens, installation: installation_github_id)
+          run_task(:github_status, payload, tokens: tokens, installation: github_apps_installation_id)
         end
 
         private
@@ -45,7 +45,7 @@ module Travis
             !!repository.managed_by_installation_at && !!installation
           end
 
-          def installation_github_id
+          def github_apps_installation_id
             !installation.nil? ? installation.github_id : nil
           end
 
