@@ -23,7 +23,7 @@ module Travis
             req.body = {
               job_id:    job.id,
               repo_slug: job.repository.slug,
-              owner:     job.owner.name,
+              owner:     job.owner.login,
               queue:     job.queue,
               state:     job.state
             }.to_json
