@@ -9,21 +9,27 @@ module Travis
           notify_failed: 'Trace processor notify failed for <Job id=%s> with error %s'
         }
 
-        def notify(data)
+        def notify(job, data)
           return unless ENV['TRACEPROC_ENABLED'] == 'true'
           return unless ENV['TRACEPROC_URL']
           return unless data[:trace]
 
-          info :notify, data[:id]
+          info :notify, job.id
 
           client.post do |req|
             req.url "/trace"
             req.params['source'] = 'hub'
             req.headers['Content-Type'] = 'application/json'
-            req.body = { job_id: data[:id] }.to_json
+            req.body = {
+              job_id:    job.id,
+              repo_slug: job.repository.slug,
+              owner:     job.owner.login,
+              queue:     job.queue,
+              state:     job.state
+            }.to_json
           end
         rescue => e
-          info :notify_failed, data[:id], e
+          info :notify_failed, job.id, e
           Raven.capture_exception(e)
         end
 
