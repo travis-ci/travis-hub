@@ -1,6 +1,6 @@
 # Contributing to Travis CI
 
-Issues for any Travis CI repo should be submitted to https://github.com/travis-ci/travis-ci/issues
+Issues for any Travis CI repo should be submitted to [travis-ci/travis-ci issues](https://github.com/travis-ci/travis-ci/issues)
 
 ## Security Issues
 
@@ -15,4 +15,4 @@ Issues for any Travis CI repo should be submitted to https://github.com/travis-c
 
 ## Submitting a PR to Travis-Hub
 
-See testing and setup notes in the base [README](https://github.com/travis-ci/travis-hub)
+See [setup](https://github.com/travis-ci/travis-hub#setup) and [testing](https://github.com/travis-ci/travis-hub#testing) and notes in the base [README](https://github.com/travis-ci/travis-hub)

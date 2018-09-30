@@ -36,8 +36,41 @@ Processing these messages Hub will change the job's `state` in the database,
 set attributes such as `received_at`, potentially change the respective build's
 state as well. It will then emit events such as `job:started` or
 `build:finished` which will send out notifications to other parties (such as
-the web UI via Pusher, GitHub commit status updates, email, IRC, webhook
-notifications etc).
+the web UI via Pusher, GitHub commit status or check run updates, email, 
+IRC, webhook notifications etc).
+
+## Setup 
+
+First, run `bundle install` to retrieve dependencies from rubygems. Once key dependency, Sidekiq Pro required additional username/password config:
+
+```bash
+BUNDLE_GEMS__CONTRIBSYS__COM=username:password
+bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM 
+```
+
+Then, you'll need to install:
+ * postgresql
+ * rabbitmq
+ * redis 
+
+### Database Config
+
+Once postgresql is installed, you'll need to setup a local test database: 
+```bash
+createdb travis_test
+curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/master/db/main/structure.sql | psql travis_test
+```
+### Testing
+
+Once everything is [setup](#setup), start the following services:
+* postgresql
+* rabbitmq 
+* redis
+
+run tests with: 
+```bash
+bundle exec rspec
+```
 
 ## History
 
@@ -49,9 +82,7 @@ our core models directly.
 
 ## Contributing
 
-See the CONTRIBUTING.md file for information on how to contribute to travis-hub.
-Note that we're using a [central issue tracker]
-(https://github.com/travis-ci/travis-ci/issues) for all the Travis projects.
+We appreciate suggestions and contributions! See the [CONTRIBUTING.md](/CONTRIBUTING.md) file for information on how to contribute to travis-hub. To chat about improvements, check out our community forum [travis-ci.community](https://travis-ci.community/) and [central issue tracker, travis-ci/travis-ci](https://github.com/travis-ci/travis-ci/issues). 
 
 ## License & copyright
 
