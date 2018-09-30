@@ -60,6 +60,9 @@ Once postgresql is installed, you'll need to setup a local test database:
 createdb travis_test
 curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/master/db/main/structure.sql | psql travis_test
 ```
+Make sure you can use `postgresql` as the database adapter, i.e. if you're 
+using homebrew, your `postgresql@x.y` should be `brew link`ed to `postgresql`. 
+
 ### Testing
 
 Once everything is [setup](#setup), start the following services:
