@@ -10,9 +10,15 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          return true if installation?
-          Addons.logger.error "No GitHub OAuth tokens found for #{object.repository.slug}" unless tokens.any?
-          tokens.any?
+          if installation?
+            Addons.logger.info "No Commit Status because #{object.repository.slug} is managed by a GitHub Apps installation"
+            false
+          elsif tokens.empty?
+            Addons.logger.error "No Commit Status because no GitHub OAuth tokens found for #{object.repository.slug}"
+            false
+          else
+            true
+          end
         end
 
         def handle
