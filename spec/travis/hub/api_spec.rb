@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Travis::Hub::Api, :include_sinatra_helpers do
   let(:logs)  { Travis::Hub::Support::Logs }
-  let(:job)   { FactoryGirl.create(:job, state: state) }
+  let(:build) { FactoryGirl.create(:build) }
+  let(:job)   { FactoryGirl.create(:job, state: state, build: build) }
   let(:key)   { OpenSSL::PKey.read(JWT_RSA_PRIVATE_KEY) }
   let(:token) { JWT.encode({ sub: job.id.to_s }, key, 'RS512') }
   let(:auth)  { "Bearer #{token}" }
@@ -16,7 +17,7 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
 
   def patch(path, body)
     super(path, JSON.dump(body))
-  end
+  end 
 
   shared_examples_for 'successfully updates the state' do |state|
     describe "given the state #{state}" do
