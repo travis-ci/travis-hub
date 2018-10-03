@@ -165,6 +165,7 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     redlock (0.1.8)
       redis (~> 3, >= 3.0.0)
+    rollout (1.1.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -244,6 +245,7 @@ DEPENDENCIES
   redis
   redis-namespace
   redlock
+  rollout (~> 1.1.0)
   rspec
   sentry-raven
   sidekiq-pro!
@@ -264,4 +266,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

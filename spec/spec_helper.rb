@@ -10,6 +10,7 @@ require 'support/context'
 require 'support/database_cleaner'
 require 'support/env'
 require 'support/factories'
+require 'support/features'
 
 require 'mocha'
 require 'bourne' # TODO use rspec stubs/expectations
@@ -29,6 +30,7 @@ RSpec.configure do |c|
   c.include Support::Context
   c.include Support::DatabaseCleaner
   c.include Support::Env
+  c.include Support::Features
   c.include Sinatra::TestHelpers, :include_sinatra_helpers
 
   c.before do
