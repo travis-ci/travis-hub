@@ -1,5 +1,6 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
+require 'travis/hub/support/features'
 
 module Travis
   module Addons
@@ -11,8 +12,12 @@ module Travis
 
         def handle?
           if installation?
-            Addons.logger.info "No Commit Status because #{object.repository.slug} is managed by a GitHub Apps installation"
-            false
+            if github_status_for_apps?
+              true
+            else
+              Addons.logger.info "No Commit Status because #{object.repository.slug} is managed by a GitHub Apps installation"
+              false
+            end
           elsif tokens.empty?
             Addons.logger.error "No Commit Status because no GitHub OAuth tokens found for #{object.repository.slug}"
             false
@@ -59,12 +64,17 @@ module Travis
             @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
           end
 
+          def github_status_for_apps?
+            Travis::Features.owner_active?(:use_commit_status, repository.owner) || Travis::Features.repository_active?(:use_commit_status, repository.id)
+          end
+
           class Instrument < Addons::Instrument
             def notify_completed
               publish
             end
           end
           Instrument.attach_to(self)
+
       end
     end
   end

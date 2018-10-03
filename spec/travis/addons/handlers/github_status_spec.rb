@@ -33,6 +33,9 @@ describe Travis::Addons::Handlers::GithubStatus do
   end
 
   describe 'handle?' do
+    before do 
+      build.repository.update_attributes(owner: admin)
+    end
 
     context 'when repo is not managed by GitHub Apps' do
       it 'is true if a token can be found' do
@@ -45,11 +48,10 @@ describe Travis::Addons::Handlers::GithubStatus do
       end
     end
 
-    context 'when repo is managed by GitHub Apps' do
+    context 'when a repo is managed by GitHub Apps' do
       before do
         admin.update_attributes(installation: gh_apps_installation)
         build.repository.update_attributes(
-          owner: admin,
           managed_by_installation_at: Time.now
         )
       end
@@ -62,6 +64,73 @@ describe Travis::Addons::Handlers::GithubStatus do
         permissions.create(user: admin, admin: true)
         expect(handler.handle?).to eql(false)
       end
+    end
+
+    context 'when a repo is managed by GitHub Apps' do
+      before do
+        admin.update_attributes(installation: gh_apps_installation)
+        build.repository.update_attributes(
+          managed_by_installation_at: Time.now
+        )
+      end
+
+      it 'is false if a repo flag use_commit_status doesn"t exist' do
+        expect(handler.handle?).to eql(false)
+      end
+      
+      it 'is false if repo flag use_commit_status is false' do 
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+        expect(handler.handle?).to eql(false)
+      end
+
+      it 'is false if the owner flag use_commit_status is false' do 
+        Travis::Features.deactivate_repository(:use_commit_status, repository.owner)
+        expect(handler.handle?).to eql(false)
+      end
+
+      it 'is false if both owner and repo flag use_commit_status is false' do
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+        Travis::Features.deactivate_repository(:use_commit_status, repository.owner)
+        expect(handler.handle?).to eql(false)
+      end
+    end
+
+    context 'when a repo is managed by GitHub Apps' do
+      before do
+        admin.update_attributes(installation: gh_apps_installation)
+        build.repository.update_attributes(
+          managed_by_installation_at: Time.now
+        )
+      end
+      
+      it 'is true if repo flag use_commit_status is true' do 
+        Travis::Features.activate_repository(:use_commit_status, repository.id)
+        expect(handler.handle?).to eql(true)
+      end
+
+      after do
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+      end
+
+      it 'is true if the owner flag use_commit_status is true' do 
+        Travis::Features.activate_owner(:use_commit_status, repository.owner)
+        expect(handler.handle?).to eql(true)
+      end
+
+      after do
+        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
+      end
+
+      it 'is true if both owner and repo flag use_commit_status is true' do
+        Travis::Features.activate_repository(:use_commit_status, repository.id)
+        Travis::Features.activate_repository(:use_commit_status, repository.owner)
+        expect(handler.handle?).to eql(true)
+      end
+
+      after do 
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
+      end 
     end
   end
 
