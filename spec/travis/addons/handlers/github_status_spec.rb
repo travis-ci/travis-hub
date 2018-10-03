@@ -38,7 +38,7 @@ describe Travis::Addons::Handlers::GithubStatus do
     end
 
     context 'when repo is not managed by GitHub Apps' do
-      it 'is true if a token can be found' do
+      it 'is false if a token can be found' do
         permissions.create(user: admin, admin: true)
         expect(handler.handle?).to eql(true)
       end
@@ -63,15 +63,6 @@ describe Travis::Addons::Handlers::GithubStatus do
       it 'is false if a token can be found' do
         permissions.create(user: admin, admin: true)
         expect(handler.handle?).to eql(false)
-      end
-    end
-
-    context 'when a repo is managed by GitHub Apps' do
-      before do
-        admin.update_attributes(installation: gh_apps_installation)
-        build.repository.update_attributes(
-          managed_by_installation_at: Time.now
-        )
       end
 
       it 'is false if a repo flag use_commit_status doesn"t exist' do

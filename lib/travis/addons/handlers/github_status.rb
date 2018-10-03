@@ -11,15 +11,13 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if installation?
-            if github_status_for_apps?
-              true
-            else
-              Addons.logger.info "No Commit Status because #{object.repository.slug} is managed by a GitHub Apps installation"
-              false
-            end
+          if installation? && !github_status_for_apps?
+            false
+          elsif installation? && github_status_for_apps?
+            Addons.logger.info "Commit Status posted for GitHub-Apps managed repo because of repo- or owner-level feature flag"
+            true
           elsif tokens.empty?
-            Addons.logger.error "No Commit Status because no GitHub OAuth tokens found for #{object.repository.slug}"
+            Addons.logger.error "No Commit or Check Run Status because no GitHub Apps installation or OAuth tokens found for #{object.repository.slug}"
             false
           else
             true
