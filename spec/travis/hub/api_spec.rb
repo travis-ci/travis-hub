@@ -16,7 +16,7 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
 
   def patch(path, body)
     super(path, JSON.dump(body))
-  end 
+  end
 
   shared_examples_for 'successfully updates the state' do |state|
     describe "given the state #{state}" do
