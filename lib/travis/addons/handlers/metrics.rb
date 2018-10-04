@@ -9,8 +9,6 @@ module Travis
       class Metrics < Base
         include Handlers::Task
 
-        Event::Handler.register('metrics', self)
-
         EVENTS = /job:(received|started|finished)/
 
         def handle?
