@@ -27,7 +27,7 @@
 * ~~EncryptedColumn~~ (travis-encrypt)
 * ~~Notification~~ (travis-support)
 * ~~StatesCache~~ (travis-support)
-* ~~Features~~ (not used for now)
+* Features
 * ~~RedisPool~~ (not used)
 
 # CAN WE REMOVE THESE FROM HUB?

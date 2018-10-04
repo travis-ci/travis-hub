@@ -13,6 +13,7 @@ require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
 require 'travis/marginalia'
 
+
 module Travis
   module Hub
     class Context

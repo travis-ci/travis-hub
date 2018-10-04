@@ -22,6 +22,20 @@ describe Travis::Addons::Handlers::GithubCheckStatus do
         expect(handler.handle?).to eql true
       end
     end
+
+    context "when a repo is not managed by GitHub Apps" do
+      before do
+        admin.update_attributes(installation: gh_apps_installation)
+        build.repository.update_attributes(
+          owner: admin,
+          managed_by_installation_at: nil
+      )
+      end 
+
+      it 'is false' do
+        expect(handler.handle?).to eql false
+      end
+    end
   end
 
   describe 'handle' do
@@ -40,4 +54,6 @@ describe Travis::Addons::Handlers::GithubCheckStatus do
       end
     end
   end
+
+
 end
