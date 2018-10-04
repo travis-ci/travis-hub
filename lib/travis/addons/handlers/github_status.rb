@@ -11,8 +11,8 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          # true for repos that use legacy/service hooks or OAuth or 
-          # are featured flagged and managed by github apps installations 
+          # true for repos that use legacy service hooks/OAuth 
+          # or are featured flagged and managed by github apps installations 
           installation? ? handle_installation? : handle_legacy?
         end
 
