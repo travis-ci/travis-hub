@@ -1,11 +1,13 @@
-require 'travis/metrics'
-require 'travis/event/handler'
+require 'travis/addons/handlers/base'
+require 'travis/addons/handlers/task'
+require 'travis/addons/model/broadcast'
+require 'travis/rollout'
 
 module Travis
-  module Hub
-    module Event
-      class Metrics < Travis::Event::Handler
-        register :metrics, self
+  module Addons
+    module Handlers
+      class Metrics < Base
+        include Handlers::Task
 
         EVENTS = /job:(received|started|finished)/
 
@@ -19,6 +21,10 @@ module Travis
         end
 
         private
+
+          def payload
+            object.id
+          end
 
           def handle_received
             return unless object.queued_at && object.received_at
@@ -36,6 +42,8 @@ module Travis
             return unless object.started_at && object.finished_at
             events = %W(job.duration job.duration.#{queue})
             timer(events, object.finished_at - object.started_at)
+            events = %W(job.total_processing_time job.total_processing_time.#{queue})
+            timer(events, object.finished_at - object.received_at)
           end
 
           def queue
@@ -47,6 +55,13 @@ module Travis
               Metriks.timer(event).update(duration)
             end
           end
+
+          class EventHandler < Addons::Instrument
+            def notify_completed
+              publish
+            end
+          end
+          EventHandler.attach_to(self)
       end
     end
   end

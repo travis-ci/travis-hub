@@ -6,7 +6,6 @@ require 'travis/metrics'
 require 'travis/addons'
 require 'travis/honeycomb'
 require 'travis/hub/config'
-require 'travis/hub/event/metrics'
 require 'travis/hub/model'
 require 'travis/hub/support/amqp'
 require 'travis/hub/support/database'
@@ -54,7 +53,7 @@ module Travis
           # TODO move keen to the keychain? it isn't required on enterprise.
           # then again, it's not active, unless the keen credentials are
           # present in the env.
-          config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio']
+          config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio', 'metrics']
         end
 
         def test_exception_reporting
