@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Travis::Hub::Api, :include_sinatra_helpers do
   let(:logs)  { Travis::Hub::Support::Logs }
-  let(:build) { FactoryGirl.create(:build) }
-  let(:job)   { FactoryGirl.create(:job, state: state, build: build) }
+  let(:job)   { FactoryGirl.create(:job, state: state) }
   let(:key)   { OpenSSL::PKey.read(JWT_RSA_PRIVATE_KEY) }
   let(:token) { JWT.encode({ sub: job.id.to_s }, key, 'RS512') }
   let(:auth)  { "Bearer #{token}" }
