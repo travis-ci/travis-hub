@@ -44,6 +44,8 @@ module Travis
             return unless object.started_at && object.finished_at
             events = %W(job.duration job.duration.#{queue})
             timer(events, object.finished_at - object.started_at)
+            events = %W(job.total_processing_time job.total_processing_time.#{queue})
+            timer(events, object.finished_at - object.received_at)
           end
 
           def queue
