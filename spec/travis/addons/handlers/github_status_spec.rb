@@ -84,6 +84,11 @@ describe Travis::Addons::Handlers::GithubStatus do
         Travis::Features.deactivate_repository(:use_commit_status, repository.owner)
         expect(handler.handle?).to eql(false)
       end
+
+      it 'is false if use_commit_status is disabled globally' do
+        Travis::Features.disable_for_all(:use_commit_status)
+        expect(handler.handle?).to eql(false)
+      end
     end
 
     context 'when a repo is managed by GitHub Apps' do
@@ -122,6 +127,15 @@ describe Travis::Addons::Handlers::GithubStatus do
         Travis::Features.deactivate_repository(:use_commit_status, repository.id)
         Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
       end 
+
+      it 'is true if the use_commit_status feature flag is enabled globally' do 
+        Travis::Features.enable_for_all(:use_commit_status)
+        expect(handler.handle?).to eql(true)
+      end 
+
+      after do
+        Travis::Features.disable_for_all(:use_commit_status)
+      end
     end
   end
 

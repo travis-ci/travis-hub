@@ -23,7 +23,7 @@ module Travis
         private
 
           def handle_installation?
-            return false unless github_status_for_apps?
+            return false unless github_status_for_installation?
             Addons.logger.info "Commit Status posted for GitHub-Apps managed repo because of repo- or owner-level feature flag"
             true
           end
@@ -66,8 +66,10 @@ module Travis
             @installation ||= Installation.where(owner: repository.owner, removed_by_id: nil).first
           end
 
-          def github_status_for_apps?
-            Travis::Features.owner_active?(:use_commit_status, repository.owner) || Travis::Features.repository_active?(:use_commit_status, repository.id)
+          def github_status_for_installation?
+            Travis::Features.owner_active?(:use_commit_status, repository.owner) || 
+            Travis::Features.repository_active?(:use_commit_status, repository.id) || 
+            Travis::Features.enabled_for_all?(:use_commit_status)
           end
 
           class Instrument < Addons::Instrument
