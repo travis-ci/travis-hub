@@ -11,17 +11,9 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          if installation? && !github_status_for_apps?
-            false
-          elsif installation? && github_status_for_apps?
-            Addons.logger.info "Commit Status posted for GitHub-Apps managed repo because of repo- or owner-level feature flag"
-            true
-          elsif tokens.empty?
-            Addons.logger.error "No Commit or Check Run Status because no GitHub Apps installation or OAuth tokens found for #{object.repository.slug}"
-            false
-          else
-            true
-          end
+          # true for repos that use legacy/service hooks or OAuth or 
+          # are featured flagged and managed by github apps installations 
+          installation? ? handle_installation? : handle_legacy?
         end
 
         def handle
@@ -29,6 +21,18 @@ module Travis
         end
 
         private
+
+          def handle_installation?
+            return false unless github_status_for_apps?
+            Addons.logger.info "Commit Status posted for GitHub-Apps managed repo because of repo- or owner-level feature flag"
+            true
+          end
+
+          def handle_legacy?
+            return true if tokens.any?
+            Addons.logger.error "No Commit or Check Run Status because no GitHub Apps installation or OAuth tokens found for #{object.repository.slug}"
+            false
+          end
 
           def tokens
             @tokens ||= users.inject({}) do |tokens, user|
