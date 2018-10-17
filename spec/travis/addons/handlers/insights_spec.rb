@@ -5,23 +5,23 @@ describe Travis::Addons::Handlers::Insights do
   describe 'subscription' do
     before { Travis::Event.setup([:insights]) }
 
-    it 'build:created does not notify' do
-      described_class.expects(:notify).never
+    it 'build:created notifies' do
+      described_class.expects(:notify).once
       Travis::Event.dispatch('build:created', id: build.id)
     end
 
-    it 'build:started does not notify' do
-      described_class.expects(:notify).never
+    it 'build:started notifies' do
+      described_class.expects(:notify).once
       Travis::Event.dispatch('build:started', id: build.id)
     end
 
-    it 'build:finished does not notify' do
-      described_class.expects(:notify).never
+    it 'build:finished notifies' do
+      described_class.expects(:notify).once
       Travis::Event.dispatch('build:finished', id: build.id)
     end
 
-    it 'build:restarted does not notify' do
-      described_class.expects(:notify).never
+    it 'build:restarted notifies' do
+      described_class.expects(:notify).once
       Travis::Event.dispatch('build:restarted', id: build.id)
     end
 
@@ -46,7 +46,7 @@ describe Travis::Addons::Handlers::Insights do
     end
 
     it 'job:restarted notifies' do
-      described_class.expects(:notify).never # TODO
+      described_class.expects(:notify).once
       Travis::Event.dispatch('job:restarted', id: job.id)
     end
   end

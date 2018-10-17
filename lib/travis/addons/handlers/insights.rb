@@ -8,7 +8,7 @@ module Travis
       class Insights < Base
         include Handlers::Task
 
-        EVENTS = /(job):(created|started|finished|canceled|errored)/
+        EVENTS = /(build|job):(created|started|finished|canceled|errored|restarted)/
 
         def initialize(event, params = {})
           super
