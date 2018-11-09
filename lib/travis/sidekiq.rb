@@ -5,7 +5,7 @@ module Travis
     extend self
 
     def hub(*args)
-      client.push(
+      default_client.push(
         'queue' => 'hub',
         'class' => 'Travis::Hub::Sidekiq::Worker',
         'args'  => args
@@ -13,7 +13,7 @@ module Travis
     end
 
     def scheduler(*args)
-      client.push(
+      default_client.push(
         'queue' => ENV['SCHEDULER_SIDEKIQ_QUEUE'] || 'scheduler',
         'class' => 'Travis::Scheduler::Worker',
         'args'  => [:event, *args]
@@ -21,7 +21,7 @@ module Travis
     end
 
     def tasks(queue, *args)
-      client.push(
+      default_client.push(
         'queue'   => ENV['TASKS_SIDEKIQ_QUEUE'] || queue.to_s,
         'class'   => 'Travis::Tasks::Worker',
         'args'    => [nil, "Travis::Addons::#{queue.to_s.camelize}::Task", 'perform', *args]
@@ -29,7 +29,7 @@ module Travis
     end
 
     def live(*args)
-      client.push(
+      default_client.push(
         'queue'   => 'pusher-live',
         'class'   => 'Travis::Async::Sidekiq::Worker',
         'args'    => [nil, "Travis::Addons::Pusher::Task", 'perform', *args]
@@ -37,7 +37,7 @@ module Travis
     end
 
     def insights(event, data)
-      client.push(
+      insights_client.push(
         'queue' => ENV['INSIGHTS_SIDEKIQ_QUEUE'] || 'insights',
         'class' => 'Travis::Insights::Worker',
         'args'  => [:event, { event: event, data: data }]
@@ -45,7 +45,7 @@ module Travis
     end
 
     def logsearch(*args)
-      client.push(
+      default_client.push(
         'queue' => ENV['LOGSEARCH_SIDEKIQ_QUEUE'] || 'logsearch',
         'class' => 'Travis::LogSearch::Worker',
         'args'  => args,
@@ -55,8 +55,36 @@ module Travis
 
     private
 
-      def client
-        ::Sidekiq::Client
+      def default_client
+        @default_client ||= ::Sidekiq::Client.new(default_pool)
+      end
+
+      def default_pool
+        ::Sidekiq::RedisConnection.create(
+          url: config.redis.url,
+          namespace: config.redis.namespace,
+          pool_size: config.redis.pool_size
+        )
+      end
+
+      def insights_client
+        @insights_client ||= if ENV['INSIGHTS_REDIS_ENABLED'] == 'true'
+          ::Sidekiq::Client.new(insights_pool)
+        else
+          default_client
+        end
+      end
+
+      def insights_pool
+        ::Sidekiq::RedisConnection.create(
+          url: config.redis.insights_url,
+          namespace: config.redis.namespace,
+          pool_size: config.redis.pool_size
+        )
+      end
+
+      def config
+        @config ||= Travis::Hub::Config.load
       end
   end
 end

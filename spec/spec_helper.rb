@@ -17,6 +17,7 @@ require 'bourne' # TODO use rspec stubs/expectations
 require 'sinatra/test_helpers'
 require 'webmock'
 require 'webmock/rspec'
+require 'pry'
 
 Travis::Hub::Context.new
 

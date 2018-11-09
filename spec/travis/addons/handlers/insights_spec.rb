@@ -70,7 +70,7 @@ describe Travis::Addons::Handlers::Insights do
   describe 'job:created' do
     let(:event) { 'job:created' }
     it 'handle' do
-      ::Sidekiq::Client.expects(:push).with(
+      ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
         'args'  => [:event, event: 'job:created', data: data]
@@ -82,7 +82,7 @@ describe Travis::Addons::Handlers::Insights do
   describe 'job:canceled' do
     let(:event) { 'job:canceled' }
     it 'handle' do
-      ::Sidekiq::Client.expects(:push).with(
+      ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
         'args'  => [:event, event: 'job:finished', data: data]
@@ -96,7 +96,7 @@ describe Travis::Addons::Handlers::Insights do
     let(:restarted_at) { Time.now + 120  }
     before { job.update_attributes(restarted_at: restarted_at) }
     it 'handle' do
-      ::Sidekiq::Client.expects(:push).with(
+      ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
         'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)]
