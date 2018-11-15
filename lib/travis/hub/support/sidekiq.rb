@@ -32,6 +32,11 @@ module Travis
       end
 
       ::Sidekiq.configure_client do |c|
+        c.redis = {
+          url: config.redis.url,
+          namespace: config.sidekiq.namespace
+        }
+
         if pro?
           ::Sidekiq::Client.reliable_push!
         end
