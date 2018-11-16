@@ -10,7 +10,7 @@ module Travis
           end
 
           def store(count)
-            redis.setex(key, count, TTL)
+            redis.setex(key, TTL, count)
           end
 
           private
