@@ -1,6 +1,8 @@
 describe Travis::Addons::Handlers::Pusher do
-  let(:build)   { FactoryGirl.create(:build, config: { notifications: config }) }
-  let(:job)     { FactoryGirl.create(:job) }
+  let(:user)    { FactoryGirl.create(:user) }
+  let(:repo)    { FactoryGirl.create(:repository, owner: user) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, config: { notifications: config }) }
+  let(:job)     { FactoryGirl.create(:job, repository: repo) }
   let(:config)  { { pusher: 'room' } }
 
   describe 'subscription' do
@@ -32,13 +34,28 @@ describe Travis::Addons::Handlers::Pusher do
 
     describe 'a job event' do
       let(:event) { 'job:finished' }
+      before do
+        user.permissions.create!(repository: repo)
+      end
 
       it 'enqueues a task' do
         ::Sidekiq::Client.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
+        end
+        handler.handle
+      end
+
+      it 'sends user_ids along with the request' do
+        repo = job.repository
+
+        ::Sidekiq::Client.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq('pusher-live')
+          expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
+          expect(payload['args'][3]).to be_a(Hash)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
         end
         handler.handle
       end
@@ -52,7 +69,7 @@ describe Travis::Addons::Handlers::Pusher do
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event)
+          expect(payload['args'][4]).to eq(event: event, user_ids: [])
         end
         handler.handle
       end

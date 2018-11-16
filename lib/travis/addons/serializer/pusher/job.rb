@@ -37,6 +37,7 @@ module Travis
                 finished_at: format_date(job.finished_at),
                 queue: job.queue,
                 allow_failure: job.allow_failure,
+                updated_at: format_date_with_ms(job.updated_at)
               }
             end
 

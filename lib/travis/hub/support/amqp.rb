@@ -34,7 +34,7 @@ module Travis
       queue.subscribe(options, &handler)
       sleep
     rescue => e
-      puts e.message, e.backtrace
+      Raven.capture_exception(e)
     end
 
     def ack(info)
@@ -46,7 +46,7 @@ module Travis
       exchange = channel.topic('reporting', durable: true, auto_delete: false)
       exchange.publish(payload, type: type, routing_key: "reporting.jobs.#{key}")
     rescue => e
-      puts e.message, e.backtrace
+      Raven.capture_exception(e)
     end
 
     def fanout(key, payload)
@@ -54,7 +54,7 @@ module Travis
       exchange = channel.exchange(key, type: :fanout)
       exchange.publish(payload)
     rescue => e
-      puts e.message, e.backtrace
+      Raven.capture_exception(e)
     end
   end
 end

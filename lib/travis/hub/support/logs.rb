@@ -6,7 +6,7 @@ module Travis
       class Logs < Struct.new(:config)
         def update(id, msg, clear: false)
           client.put do |req|
-            req.url "/logs/#{id}"
+            req.url "logs/#{id}"
             req.params['source'] = 'hub'
             req.params['clear'] = '1' if clear
             req.headers['Content-Type'] = 'application/octet-stream'
@@ -16,7 +16,7 @@ module Travis
 
         def append_log_part(id, part, final: false)
           client.put do |req|
-            req.url "/log-parts/#{id}/last"
+            req.url "log-parts/#{id}/last"
             req.params['source'] = 'hub'
             req.headers['Content-Type'] = 'application/json'
             req.body = JSON.dump(
@@ -31,9 +31,9 @@ module Travis
         private
 
           def client
-            @client ||= Faraday.new(url: url) do |c|
+            @client ||= Faraday.new(http_options.merge(url: url)) do |c|
               c.request :authorization, :token, token
-              c.request :retry, max: 5, interval: 0.1, backoff_factor: 2
+              c.request :retry, retry_config
               c.response :raise_error
               c.adapter :net_http
             end
@@ -45,6 +45,18 @@ module Travis
 
           def token
             config[:token] || raise('Logs token not set.')
+          end
+
+          def retry_config
+            config[:retries]
+          end
+
+          def http_options
+            if Travis::Hub.context.config.ssl
+              { ssl: Travis::Hub.context.config.ssl.to_h }
+            else
+              {}
+            end
           end
       end
     end

@@ -59,11 +59,11 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'handle' do
-    let!(:broadcast) { Broadcast.create(message: 'message') }
+    let!(:broadcast) { Broadcast.create(message: 'message', category: 'announcement') }
     let(:recipient)  { 'me@email.com' }
 
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message' }])
+      handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}])
       handler.handle
     end
   end
@@ -92,6 +92,18 @@ describe Travis::Addons::Handlers::Email do
       it 'returns permitted and known committer address' do
         Email.create(user: user, email: committer)
         expect(handler.recipients).to eql [committer]
+      end
+
+      it 'does not return users who have unsubscribed from this repo' do
+        Email.create(user: user, email: committer)
+        EmailUnsubscribe.create(user: user, repository: repo)
+        expect(handler.recipients).to be_empty
+      end
+
+      it 'does not return users who have the no emails global preference' do
+        user.update_attributes!(preferences: JSON.dump(build_emails: false))
+        Email.create(user: user, email: committer)
+        expect(handler.recipients).to be_empty
       end
     end
 
@@ -123,6 +135,22 @@ describe Travis::Addons::Handlers::Email do
     it 'returns an array of addresses given a comma separated string within a hash' do
       config[:email] = { recipients: "#{address}, #{other}", on_success: 'change' }
       expect(handler.recipients).to eql [address, other]
+    end
+
+    it 'ignores repo-level unsubscribe' do
+      config[:email] = address
+      Email.create(user: user, email: address)
+      EmailUnsubscribe.create(user: user, repository: repo)
+
+      expect(handler.recipients).to eql [address]
+    end
+
+    it 'observes user-level no emails preference' do
+      config[:email] = address
+      Email.create(user: user, email: address)
+      user.update_attributes!(preferences: JSON.dump(build_emails: false))
+
+      expect(handler.recipients).to be_empty
     end
   end
 end

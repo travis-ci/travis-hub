@@ -91,6 +91,7 @@ module Travis
                 duration: build.duration,
                 job_ids: build.job_ids,
                 event_type: build.event_type,
+                updated_at: format_date_with_ms(build.updated_at),
 
                 # this is a legacy thing, we should think about removing it
                 commit: commit.commit,
@@ -101,7 +102,9 @@ module Travis
                 author_name: commit.author_name,
                 author_email: commit.author_email,
                 committer_name: commit.committer_name,
-                committer_email: commit.committer_email
+                committer_email: commit.committer_email,
+
+                created_by: created_by
               }
             end
 
@@ -115,6 +118,17 @@ module Travis
 
             def stages
               build.stages
+            end
+
+            def created_by
+              return unless sender = build.sender
+
+              {
+                id: sender.id,
+                name: sender.name,
+                login: sender.login,
+                avatar_url: sender.avatar_url
+              }
             end
 
             def last_build_on_default_branch_id(repository)

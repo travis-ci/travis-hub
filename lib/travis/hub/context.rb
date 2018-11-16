@@ -4,13 +4,15 @@ require 'travis/instrumentation'
 require 'travis/logger'
 require 'travis/metrics'
 require 'travis/addons'
+require 'travis/honeycomb'
 require 'travis/hub/config'
-require 'travis/hub/event/metrics'
 require 'travis/hub/model'
 require 'travis/hub/support/amqp'
 require 'travis/hub/support/database'
 require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
+require 'travis/marginalia'
+
 
 module Travis
   module Hub
@@ -31,6 +33,15 @@ module Travis
         Travis::Event.setup(addons, logger)
         Travis::Instrumentation.setup(logger)
 
+        Travis::Honeycomb::Context.add_permanent('app', 'hub')
+        Travis::Honeycomb::Context.add_permanent('dyno', ENV['DYNO'])
+        Travis::Honeycomb::Context.add_permanent('site', ENV['TRAVIS_SITE'])
+        Travis::Honeycomb.setup(logger)
+
+        if ENV['QUERY_COMMENTS_ENABLED'] == 'true'
+          Travis::Marginalia.setup
+        end
+
         # TODO remove Hub.context
         Hub.context = self
 
@@ -43,7 +54,7 @@ module Travis
           # TODO move keen to the keychain? it isn't required on enterprise.
           # then again, it's not active, unless the keen credentials are
           # present in the env.
-          config.notifications + ['scheduler', 'keenio']
+          config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio', 'metrics']
         end
 
         def test_exception_reporting

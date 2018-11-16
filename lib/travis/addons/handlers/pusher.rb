@@ -20,7 +20,12 @@ module Travis
         end
 
         def handle
-          Travis::Sidekiq.live(deep_clean_strings(payload), event: event)
+          # we need to always make sure that the data is fresh, because Active
+          # Record doesn't always refresh the updated_at column
+          object.reload
+
+          params = { event: event, user_ids: user_ids }
+          Travis::Sidekiq.live(deep_clean_strings(payload), params)
         end
 
         def data
@@ -29,6 +34,10 @@ module Travis
 
         def payload
           Serializer::Pusher.const_get(object_type.camelize).new(object, params: data).data
+        end
+
+        def user_ids
+          object.repository.permissions.pluck(:user_id)
         end
 
         class Instrument < Addons::Instrument

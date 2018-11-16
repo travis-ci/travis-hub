@@ -7,8 +7,9 @@ class Stage < ActiveRecord::Base
 
   event :start,  if: :start?
   event :finish, if: :finish?, to: Build::FINISHED_STATES
-  event :cancel
+  event :cancel, if: :finish?
   event :restart
+  event :reset
   event :all, after: :propagate
 
   belongs_to :build
@@ -36,14 +37,22 @@ class Stage < ActiveRecord::Base
   end
 
   def restart(*)
-    %w(started_at finished_at).each { |attr| write_attribute(attr, nil) }
-    self.state = :created
+    clear
+  end
+
+  def reset(*)
+    clear
   end
 
   private
 
     def matrix
       @matrix ||= Build::Matrix.new(jobs, build.config[:matrix])
+    end
+
+    def clear
+      %w(started_at finished_at).each { |attr| write_attribute(attr, nil) }
+      self.state = :created
     end
 
     def cancel_pending_jobs

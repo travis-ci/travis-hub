@@ -20,22 +20,28 @@ module Travis
 
         def recipients
           @recipients ||= begin
-            recipients = config.values(:email, :recipients)
-            recipients.try(:any?) ? recipients : default_recipients
+            emails = configured_emails || default_emails
+            emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
           end
         end
 
         private
 
-          def default_recipients
+          def configured_emails
+            emails = config.values(:email, :recipients)
+            emails.try(:any?) && emails
+          end
+
+          def default_emails
             emails = [commit.author_email, commit.committer_email]
             user_ids = object.repository.permissions.pluck(:user_id)
+            user_ids -= object.repository.email_unsubscribes.pluck(:user_id)
             ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
           end
 
           def broadcasts
-            msgs = Broadcast.by_repo(object.repository).pluck(:message)
-            msgs.map { |msg| { message: msg } }
+            msgs = Broadcast.by_repo(object.repository).pluck(:message, :category)
+            msgs.map { |msg, cat| { message: msg, category: cat } }
           end
 
           def normalize_array(array)

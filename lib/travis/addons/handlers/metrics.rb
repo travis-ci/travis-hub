@@ -1,11 +1,13 @@
-require 'travis/metrics'
-require 'travis/event/handler'
+require 'travis/addons/handlers/base'
+require 'travis/addons/handlers/task'
+require 'travis/addons/model/broadcast'
+require 'travis/rollout'
 
 module Travis
-  module Hub
-    module Event
-      class Metrics < Travis::Event::Handler
-        register :metrics, self
+  module Addons
+    module Handlers
+      class Metrics < Base
+        include Handlers::Task
 
         EVENTS = /job:(received|started|finished)/
 
@@ -20,35 +22,47 @@ module Travis
 
         private
 
+          def payload
+            object.id
+          end
+
           def handle_received
             return unless object.queued_at && object.received_at
             events = %W(job.queue.wait_time job.queue.wait_time.#{queue})
-            meter(events, object.queued_at, object.received_at)
+            timer(events, object.received_at - object.queued_at)
           end
 
           def handle_started
             return unless object.received_at && object.started_at
             events = %W(job.boot.wait_time job.boot.wait_time.#{queue})
-            meter(events, object.created_at, object.received_at)
+            timer(events, object.received_at - object.created_at)
           end
 
           def handle_finished
             return unless object.started_at && object.finished_at
             events = %W(job.duration job.duration.#{queue})
-            meter(events, object.started_at, object.finished_at)
+            timer(events, object.finished_at - object.started_at)
+            events = %W(job.total_processing_time job.total_processing_time.#{queue})
+            timer(events, object.finished_at - object.received_at)
           end
 
           def queue
             object.queue.to_s.gsub('.', '-')
           end
 
-          def meter(events, started_at, finished_at)
+          def timer(events, duration)
             events.each do |event|
-              Travis::Metrics.meter(event, started_at: started_at, finished_at: finished_at)
+              Metriks.timer(event).update(duration)
             end
           end
+
+          class EventHandler < Addons::Instrument
+            def notify_completed
+              publish
+            end
+          end
+          EventHandler.attach_to(self)
       end
     end
   end
 end
-

@@ -40,12 +40,13 @@ module Travis
       private
 
         EVENTS = {
-          created:  :reset,
-          received: :receive,
-          started:  :start,
-          passed:   :finish,
-          failed:   :finish,
-          errored:  :finish
+          created:   :reset,
+          received:  :receive,
+          started:   :start,
+          passed:    :finish,
+          failed:    :finish,
+          errored:   :finish,
+          cancelled: :cancel
         }
 
         def update_state

@@ -5,6 +5,7 @@ require 'travis/hub/model/job'
 require 'travis/hub/service/error_job'
 require 'travis/hub/service/state_update'
 require 'travis/hub/service/notify_workers'
+require 'travis/hub/service/notify_trace_processor'
 require 'travis/hub/helper/limit'
 
 module Travis
@@ -23,6 +24,7 @@ module Travis
         def run
           exclusive do
             validate
+            store_instance_id
             with_state_update do
               update_job
               notify
@@ -39,8 +41,22 @@ module Travis
 
         private
 
+          def store_instance_id
+            if data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != 'unknown instance'
+              instance_id = data[:meta]['instance_id']
+              key = "hub:instance_id_job:#{instance_id}"
+              ttl = 60*60*24*3 # 3 days
+              context.redis.setex(key, ttl, job.id)
+            end
+          end
+
           def update_job
             return error_job if event == :reset && resets.limited? && !job.finished?
+
+            if ENV['CANCELLATION_DISABLED'] == 'true' && (event == :cancel || recancel?)
+              raise 'cancellation has been disabled'
+            end
+
             return recancel if recancel?
             return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
@@ -53,6 +69,7 @@ module Travis
 
           def notify
             NotifyWorkers.new(context).cancel(job) if job.reload.state == :canceled
+            NotifyTraceProcessor.new(context).notify(job, data) if event == :finish
           end
 
           def validate

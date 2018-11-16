@@ -1,5 +1,11 @@
 require 'factory_girl'
 
+Build.class_eval do
+  def config=(config)
+    super(build_config(repository_id: repository_id, key: 'key', config: config))
+  end
+end
+
 FactoryGirl.define do
   factory :repository do
     description     'the repo description'
@@ -8,6 +14,7 @@ FactoryGirl.define do
     name            'travis-core'
     default_branch  'master'
     url             'https://github.com/travis-ci/travis-core'
+    managed_by_installation_at nil
   end
 
   factory :request do
@@ -35,7 +42,7 @@ FactoryGirl.define do
     association :repository
     association :request
     association :commit
-    config      { {} }
+    association :sender, factory: :user
     number      1
     state       :created
     branch      'master'
@@ -50,7 +57,6 @@ FactoryGirl.define do
     association :repository
     association :commit
     build       { FactoryGirl.build(:build) }
-    config      { {} }
     number      '1.1'
     state       :created
   end
@@ -59,5 +65,9 @@ FactoryGirl.define do
   end
 
   factory :branch do
+  end
+
+  factory :installation do
+    github_id 1
   end
 end

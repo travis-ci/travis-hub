@@ -7,7 +7,12 @@ describe Travis::Hub::Service::UpdateJob do
   let(:now)         { Time.now.utc }
 
   subject     { described_class.new(context, event, data) }
-  before      { amqp.stubs(:fanout) }
+
+  before do
+    amqp.stubs(:fanout)
+    stub_request(:delete, %r{https://job-board\.travis-ci\.com/jobs/\d+\?source=hub})
+      .to_return(status: 204)
+  end
 
   describe 'receive event' do
     let(:state) { :queued }
@@ -165,7 +170,7 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     describe 'with resets being limited' do
-      let(:url)     { 'http://logs.travis-ci.org/logs' }
+      let(:url)     { 'http://logs.travis-ci.org/' }
       let(:started) { Time.now - 7 * 3600 }
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
