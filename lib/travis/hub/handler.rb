@@ -37,7 +37,6 @@ module Travis
 
         def handle
           const = Service.const_get("Update#{camelize(type)}")
-          p [event, payload]
           const.new(context, event, payload).run
         end
 
