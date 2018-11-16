@@ -10,8 +10,7 @@ module Travis
           end
 
           def store(count)
-            redis.set(key, count)
-            redis.expire(key, TTL)
+            redis.setex(key, count, TTL)
           end
 
           private
@@ -50,7 +49,7 @@ module Travis
           end
 
           def enabled?
-            !!ENV['UPDATE_COUNT']
+            ENV['UPDATE_COUNT'] == 'true'
           end
 
           def out_of_band?
