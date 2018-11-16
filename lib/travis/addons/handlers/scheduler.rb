@@ -25,7 +25,7 @@ module Travis
         end
 
         def payload
-          { id: object.id }
+          { id: object.id, meta: params[:meta] }
         end
 
         class Instrument < Addons::Instrument
