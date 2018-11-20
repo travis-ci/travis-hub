@@ -71,16 +71,8 @@ module Travis
             build.jobs.each { |job| NotifyWorkers.new(context).cancel(job) } if event == :cancel
           end
 
-          def lock_key
-            @lock_key ||= "hub:build-#{build.id}"
-          end
-
           def exclusive(&block)
-            super(lock_key, config.lock) do
-              logger.debug "Locking #{lock_key}"
-              block.call
-              logger.debug "Releasing #{lock_key}"
-            end
+            super("hub:build-#{build.id}", config.lock, &block)
           end
 
           def unknown_event

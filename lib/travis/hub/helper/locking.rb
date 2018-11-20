@@ -7,7 +7,13 @@ module Travis
         def exclusive(key, options = nil, &block)
           options ||= config.lock.to_h
           options[:url] ||= config.redis.url if options[:strategy] == :redis
-          Lock.exclusive(key, options, &block)
+
+          Lock.exclusive(key, options) do
+            logger.debug "Locking #{key}"
+            block.call
+            logger.debug "Releasing #{key}"
+          end
+
         # TODO move this to travis-locks
         rescue Redis::TimeoutError => e
           count ||= 0
