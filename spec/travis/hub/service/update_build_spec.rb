@@ -38,12 +38,12 @@ describe Travis::Hub::Service::UpdateBuild do
     end
 
     it 'dispatches a build:created event' do
-      Travis::Event.expects(:dispatch).with('build:created', id: build.id)
+      Travis::Event.expects(:dispatch).with('build:created', anything)
       subject.run
     end
 
     it 'dispatches job:created events' do
-      Travis::Event.expects(:dispatch).with('job:created', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:created', anything)
       subject.run
     end
 

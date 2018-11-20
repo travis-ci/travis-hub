@@ -37,7 +37,11 @@ module Travis
       instrument :notify, on: [:completed, :failed]
 
       def object
-        Kernel.const_get(object_type.camelize).find(params[:id])
+        @object ||= begin
+          obj = Kernel.const_get(object_type.camelize).find(params[:id])
+          obj.assign_attributes(params[:attrs]) if params[:attrs]
+          obj
+        end
       end
 
       private

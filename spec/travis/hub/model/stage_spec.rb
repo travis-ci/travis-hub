@@ -30,7 +30,8 @@ describe Stage do
     it { expect(jobs[2].state).to eq :passed }
 
     it { expect(Travis::Event).to have_received(:dispatch).times(4) }
-    it { expect(Travis::Event).to have_received(:dispatch).with('job:finished', id: jobs[0].id) }
+    it { expect(Travis::Event).to have_received(:dispatch).with('job:finished', anything).times(3) }
+    it { expect(Travis::Event).to have_received(:dispatch).with('build:finished', anything).once }
   end
 
   describe 'failure' do
