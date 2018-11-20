@@ -5,7 +5,7 @@ describe Build do
   let(:build)  { FactoryGirl.create(:build, repository: repo, state: state) }
   let(:job)    { FactoryGirl.create(:job) }
   let(:now)    { Time.now }
-  before       { Travis::Event.stubs(:dispatch) }
+  # before       { Travis::Event.stubs(:dispatch) }
 
   def receive
     build.send(:"#{event}!", params)
@@ -28,7 +28,7 @@ describe Build do
     end
 
     it 'dispatches a build:canceled event' do
-      Travis::Event.expects(:dispatch).with('build:canceled', id: build.id)
+      Travis::Event.expects(:dispatch).with('build:canceled', anything)
       receive
     end
 
@@ -103,7 +103,7 @@ describe Build do
     end
 
     it 'dispatches a build:restarted event' do
-      Travis::Event.expects(:dispatch).with('build:restarted', id: build.id)
+      Travis::Event.expects(:dispatch).with('build:restarted', anything)
       receive
     end
 
@@ -238,7 +238,7 @@ describe Build do
     end
 
     it 'dispatches a build:created event' do
-      Travis::Event.expects(:dispatch).with('build:created', id: build.id)
+      Travis::Event.expects(:dispatch).with('build:created', anything)
       receive
     end
   end

@@ -30,7 +30,7 @@ describe Job do
     end
 
     it 'dispatches a job:received event' do
-      Travis::Event.expects(:dispatch).with('job:received', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:received', anything)
       receive
     end
   end
@@ -51,7 +51,7 @@ describe Job do
     end
 
     it 'dispatches a job:started event' do
-      Travis::Event.expects(:dispatch).with('job:started', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:started', anything)
       receive
     end
 
@@ -93,7 +93,7 @@ describe Job do
     end
 
     it 'dispatches a job:finished event' do
-      Travis::Event.expects(:dispatch).with('job:finished', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:finished', anything)
       receive
     end
 
@@ -158,7 +158,7 @@ describe Job do
     end
 
     it 'dispatches a job:canceled event' do
-      Travis::Event.expects(:dispatch).with('job:canceled', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:canceled', anything)
       receive
     end
 
@@ -226,7 +226,7 @@ describe Job do
     end
 
     it 'dispatches a job:restarted event' do
-      Travis::Event.expects(:dispatch).with('job:restarted', id: job.id)
+      Travis::Event.expects(:dispatch).with('job:restarted', anything)
       receive
     end
 
