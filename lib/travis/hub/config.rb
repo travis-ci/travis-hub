@@ -20,7 +20,7 @@ module Travis
              job_board:      { url: 'https://not:set@job-board.travis-ci.com', site: 'org' },
              redis:          { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379' },
              sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
-             lock:           { strategy: :redis },
+             lock:           { strategy: :redis, ttl: 30000 },
              states_cache:   { memcached_servers: 'localhost:11211', memcached_options: {} },
              name:           'hub',
              host:           'travis-ci.org',
