@@ -101,8 +101,16 @@ module Travis
             fail ArgumentError, "Unknown event: #{event.inspect}, data: #{data}"
           end
 
+          def lock_key
+            @lock_key ||= "hub:build-#{job.source_id}"
+          end
+
           def exclusive(&block)
-            super("hub:build-#{job.source_id}", &block)
+            super(lock_key, config.lock) do
+              logger.debug "Locking #{lock_key}"
+              block.call
+              logger.debug "Releasing #{lock_key}"
+            end
           end
 
           class Instrument < Instrumentation::Instrument
