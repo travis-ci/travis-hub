@@ -1,6 +1,7 @@
 describe Travis::Addons::Handlers::Insights do
-  let(:build)   { FactoryGirl.create(:build) }
-  let(:job)     { FactoryGirl.create(:job, owner_id: 1, owner_type: 'User', repository_id: 1) }
+  let(:build)   { FactoryGirl.create(:build, repository: repository) }
+  let(:job)     { FactoryGirl.create(:job, owner_id: 1, owner_type: 'User', repository: repository) }
+  let(:repository) { FactoryGirl.create(:repository) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:insights]) }
@@ -60,6 +61,7 @@ describe Travis::Addons::Handlers::Insights do
       owner_type: job.owner_type,
       owner_id: job.owner_id,
       repository_id: job.repository_id,
+      private: !!job.private?,
       state: :created,
       created_at: job.created_at,
       started_at: nil,
