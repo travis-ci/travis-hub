@@ -56,6 +56,7 @@ module Travis
             # when the worker actually finished the job.
             stored_count = context.redis.get(key)
             if stored_count && stored_count.to_i > state_update_count
+              context.logger.warn "stored state_update_count for key #{key} (#{stored_count}) was higher than in event (#{state_update_count})"
               return
             end
 
