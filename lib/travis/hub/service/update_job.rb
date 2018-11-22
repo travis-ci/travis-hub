@@ -46,6 +46,17 @@ module Travis
               return
             end
 
+            enabled = Rollout.matches?(:state_update_count, {
+              uid:   job.repository.id,
+              owner: job.repository.owner.login,
+              repo:  job.repository.slug,
+              redis: context.redis
+            })
+            unless enabled
+              yield
+              return
+            end
+
             # uuid is unique to the worker job run
             uuid = data[:meta]['uuid']
             state_update_count = data[:meta]['state_update_count']
