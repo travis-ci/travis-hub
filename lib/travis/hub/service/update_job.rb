@@ -55,7 +55,7 @@ module Travis
             # followed by "job started", leaving the job in a "started" state,
             # when the worker actually finished the job.
             stored_count = context.redis.get(key)
-            if stored_count && stored_count > state_update_count
+            if stored_count && stored_count.to_i > state_update_count
               return
             end
 
