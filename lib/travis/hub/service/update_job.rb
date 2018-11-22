@@ -41,7 +41,10 @@ module Travis
         private
 
           def with_state_update_count_check
-            yield unless data[:meta] && data[:meta]['uuid'] && data[:meta]['state_update_count']
+            unless data[:meta] && data[:meta]['uuid'] && data[:meta]['state_update_count']
+              yield
+              return
+            end
 
             # uuid is unique to the worker job run
             uuid = data[:meta]['uuid']
