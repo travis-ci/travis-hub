@@ -41,11 +41,12 @@ module Travis
         private
 
           def with_state_update_count_check
-            return unless data[:meta] && data[:meta]['instance_id'] && data[:meta]['state_update_count']
+            yield unless data[:meta] && data[:meta]['uuid'] && data[:meta]['state_update_count']
 
-            instance_id = data[:meta]['instance_id']
+            # uuid is unique to the worker job run
+            uuid = data[:meta]['uuid']
             state_update_count = data[:meta]['state_update_count']
-            key = "hub:instance_id_job:#{job.id}:#{instance_id}"
+            key = "hub:state_update_count:#{job.id}:#{uuid}"
 
             # if the last event we received from this job run had a higher
             # state_update_count, discard the event to prevent out-of-order
@@ -68,7 +69,7 @@ module Travis
           end
 
           def store_instance_id
-            return unless data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != 'unknown instance'
+            return unless data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != '{unidentified}'
 
             instance_id = data[:meta]['instance_id']
             key = "hub:instance_id_job:#{instance_id}"
