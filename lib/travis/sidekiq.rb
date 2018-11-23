@@ -62,8 +62,8 @@ module Travis
       def default_pool
         ::Sidekiq::RedisConnection.create(
           url: config.redis.url,
-          namespace: config.redis.namespace,
-          pool_size: config.redis.pool_size
+          namespace: config.sidekiq.namespace,
+          pool_size: config.sidekiq.pool_size
         )
       end
 
@@ -78,8 +78,8 @@ module Travis
       def insights_pool
         ::Sidekiq::RedisConnection.create(
           url: config.redis.insights_url,
-          namespace: config.redis.namespace,
-          pool_size: config.redis.pool_size
+          namespace: config.sidekiq.namespace,
+          pool_size: config.sidekiq.pool_size
         )
       end
 
