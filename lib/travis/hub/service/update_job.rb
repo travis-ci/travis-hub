@@ -24,8 +24,10 @@ module Travis
           exclusive do
             validate
             store_instance_id
-            update_job
-            notify
+            with_state_update_count_check do
+              update_job
+              notify
+            end
           end
         end
         instrument :run
@@ -38,13 +40,55 @@ module Travis
 
         private
 
-          def store_instance_id
-            if data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != 'unknown instance'
-              instance_id = data[:meta]['instance_id']
-              key = "hub:instance_id_job:#{instance_id}"
-              ttl = 60*60*24*3 # 3 days
-              context.redis.setex(key, ttl, job.id)
+          def with_state_update_count_check
+            unless data[:meta] && data[:meta]['uuid'] && data[:meta]['uuid'] != '' && data[:meta]['state_update_count']
+              yield
+              return
             end
+
+            enabled = Rollout.matches?(:state_update_count, {
+              uid:   job.repository.id,
+              owner: job.repository.owner.login,
+              repo:  job.repository.slug,
+              redis: context.redis
+            })
+            unless enabled
+              yield
+              return
+            end
+
+            # uuid is unique to the worker job run
+            uuid = data[:meta]['uuid']
+            state_update_count = data[:meta]['state_update_count']
+            key = "hub:state_update_count:#{job.id}:#{uuid}"
+
+            # if the last event we received from this job run had a higher
+            # state_update_count, discard the event to prevent out-of-order
+            # processing.
+            #
+            # this prevents a scenario where we first process "job finished"
+            # followed by "job started", leaving the job in a "started" state,
+            # when the worker actually finished the job.
+            stored_count = context.redis.get(key)
+            if stored_count && stored_count.to_i > state_update_count
+              context.logger.warn "stored state_update_count for key was higher than event key=#{key} stored=#{stored_count} event=#{state_update_count}"
+              return
+            end
+
+            # set the new state_update_count ahead of time to mitigate racey
+            # execution.
+            context.redis.setex(key, 3600, state_update_count)
+
+            yield
+          end
+
+          def store_instance_id
+            return unless data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != '{unidentified}'
+
+            instance_id = data[:meta]['instance_id']
+            key = "hub:instance_id_job:#{instance_id}"
+            ttl = 60*60*24*3 # 3 days
+            context.redis.setex(key, ttl, job.id)
           end
 
           def update_job
