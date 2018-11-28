@@ -22,7 +22,7 @@ before_install:
 
 before_script:
   - createdb travis_test || true
-  - curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/master/db/main/structure.sql | psql travis_test
+  - curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/ps-add-constraints-2/db/main/structure.sql | psql travis_test
 
 script:
   - bundle exec rspec
