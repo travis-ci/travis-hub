@@ -40,6 +40,10 @@ module Travis
           value = config.values(sym, :on_pull_requests)
           value.nil? || value
         end
+
+        def silent?
+          !!params[:silent]
+        end
       end
     end
   end

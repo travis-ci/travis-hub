@@ -11,7 +11,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && config.enabled?(:email) && config.send_on?(:email, action) && recipients.present?
+          !pull_request? && config.enabled?(:email) && config.send_on?(:email, action) && recipients.present? && !silent?
         end
 
         def handle

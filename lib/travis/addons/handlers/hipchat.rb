@@ -10,7 +10,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          enabled?(:hipchat) && targets.present? && config.send_on?(:hipchat, action)
+          enabled?(:hipchat) && targets.present? && config.send_on?(:hipchat, action) && !silent?
         end
 
         def handle

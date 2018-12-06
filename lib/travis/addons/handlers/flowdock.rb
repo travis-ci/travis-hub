@@ -10,7 +10,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && targets.present? && config.send_on?(:flowdock, action)
+          !pull_request? && targets.present? && config.send_on?(:flowdock, action) && !silent?
         end
 
         def handle

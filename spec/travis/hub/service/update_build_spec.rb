@@ -51,6 +51,14 @@ describe Travis::Hub::Service::UpdateBuild do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateBuild#run:completed event: create for repo=travis-ci/travis-core id=#{build.id}")
     end
+
+    context 'when silent' do
+      let(:data) { { id: build.id, started_at: now, silent: true } }
+
+      it 'does something?' do
+        subject.run
+      end
+    end
   end
 
   describe 'start event' do

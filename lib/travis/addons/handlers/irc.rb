@@ -10,7 +10,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && channels.present? && config.send_on?(:irc, action)
+          !pull_request? && channels.present? && config.send_on?(:irc, action) && !silent?
         end
 
         def handle

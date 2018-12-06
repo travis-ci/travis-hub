@@ -10,7 +10,7 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && users.present? && api_key.present? && config.send_on?(:pushover, action)
+          !pull_request? && users.present? && api_key.present? && config.send_on?(:pushover, action) && !silent?
         end
 
         def handle

@@ -1,5 +1,6 @@
 describe Travis::Addons::Handlers::Email do
-  let(:handler) { described_class.new('build:finished', id: build.id) }
+  let(:params)  { { id: build.id } }
+  let(:handler) { described_class.new('build:finished', params) }
   let(:repo)    { FactoryGirl.create(:repository) }
   let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: config }) }
   let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
@@ -55,6 +56,14 @@ describe Travis::Addons::Handlers::Email do
     it 'is false if the config specifies so based on the build result' do
       Travis::Addons::Config.any_instance.stubs(:send_on?).with(:email, :finished).returns(false)
       expect(handler.handle?).to eql(false)
+    end
+
+    context 'silent' do
+      let(:params) { { id: build.id, silent: true } }
+
+      it 'is false' do
+        expect(handler.handle?).to eq(false)
+      end
     end
   end
 
