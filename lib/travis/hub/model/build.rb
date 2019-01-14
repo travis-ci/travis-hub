@@ -72,6 +72,7 @@ class Build < ActiveRecord::Base
 
   def restart(*)
     clear
+    self.restarted_at = Time.now
   end
 
   def reset(*)
