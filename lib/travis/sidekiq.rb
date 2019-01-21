@@ -40,7 +40,8 @@ module Travis
       insights_client.push(
         'queue' => ENV['INSIGHTS_SIDEKIQ_QUEUE'] || 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, { event: event, data: data }]
+        'args'  => [:event, { event: event, data: data }],
+        'dead'  => false
       )
     end
 

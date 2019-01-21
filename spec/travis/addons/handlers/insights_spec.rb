@@ -75,7 +75,8 @@ describe Travis::Addons::Handlers::Insights do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data]
+        'args'  => [:event, event: 'job:created', data: data],
+        'dead'  => false
       )
       handler.handle
     end
@@ -87,7 +88,8 @@ describe Travis::Addons::Handlers::Insights do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:finished', data: data]
+        'args'  => [:event, event: 'job:finished', data: data],
+        'dead'  => false
       )
       handler.handle
     end
@@ -101,7 +103,8 @@ describe Travis::Addons::Handlers::Insights do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)]
+        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)],
+        'dead'  => false
       )
       handler.handle
     end
