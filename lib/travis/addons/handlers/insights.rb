@@ -1,6 +1,7 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
-require 'travis/addons/model/broadcast'
+require 'travis/addons/support/insights'
+require 'travis/rollout'
 
 module Travis
   module Addons
@@ -20,12 +21,24 @@ module Travis
         end
 
         def handle
-          Travis::Sidekiq.insights(event, payload)
+          post? ? post : enqueue
         end
 
         private
 
-          def payload
+          def post?
+            Rollout.matches?(:insights_http, owner: owner_name)
+          end
+
+          def post
+            insights.post(event: event, data: data)
+          end
+
+          def enqueue
+            Travis::Sidekiq.insights(event, data)
+          end
+
+          def data
             {
               type: object.class.name,
               id: object.id,
@@ -39,6 +52,7 @@ module Travis
               finished_at: object.finished_at
             }
           end
+          alias payload data
 
           def state
             case event
@@ -46,6 +60,14 @@ module Travis
             when 'job:started' then :started
             else object.state
             end
+          end
+
+          def owner_name
+            object.owner&.login
+          end
+
+          def insights
+            Travis::Insights.new(Hub.context.config)
           end
 
           class EventHandler < Addons::Instrument

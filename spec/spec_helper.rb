@@ -6,6 +6,7 @@ require 'travis/hub'
 require 'travis/hub/api'
 require 'date'
 
+require 'support/config'
 require 'support/context'
 require 'support/database_cleaner'
 require 'support/env'
@@ -28,6 +29,7 @@ Travis::Hub::Context.new
 RSpec.configure do |c|
   c.mock_with :mocha
   c.filter_run_excluding pending: true
+  c.include Support::Config
   c.include Support::Context
   c.include Support::DatabaseCleaner
   c.include Support::Env
