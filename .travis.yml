@@ -1,6 +1,9 @@
 dist: trusty
 sudo: false
 
+import:
+  - travis-ci/build-configs/db-setup.yml
+
 rvm: 2.4.2
 
 cache: bundler
@@ -19,10 +22,6 @@ addons:
 
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
-
-before_script:
-  - createdb travis_test || true
-  - curl -fs https://raw.githubusercontent.com/travis-ci/travis-migrations/master/db/main/structure.sql | psql travis_test
 
 script:
   - bundle exec rspec
