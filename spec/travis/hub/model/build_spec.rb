@@ -258,7 +258,7 @@ describe Build do
       let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
 
       it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
-        FactoryGirl.create(:build, repository: repo, state: :started, event_type: 'api')
+        FactoryGirl.create(:build, repository: repo, number: 2, state: :started, event_type: 'api')
         receive
         expect(repo.reload.current_build_id).to_not eq build.id
       end
