@@ -17,9 +17,6 @@ services:
   - redis
   - rabbitmq
 
-addons:
-  postgresql: 9.6
-
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
 
