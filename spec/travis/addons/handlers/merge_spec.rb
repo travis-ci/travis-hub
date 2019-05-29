@@ -1,5 +1,5 @@
 describe Travis::Addons::Handlers::Merge do
-  let(:repo)    { FactoryGirl.create(:repository, migrating: true) }
+  let(:repo)    { FactoryGirl.create(:repository, migration_status: 'migrating') }
   let(:job)     { FactoryGirl.create(:job, state: :created, repository: repo) }
   let(:build)   { FactoryGirl.create(:build, state: :created, repository: repo) }
   let(:handler) { described_class.new('build:finished', id: build.id) }
@@ -30,7 +30,7 @@ describe Travis::Addons::Handlers::Merge do
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
     it 'sends a build import request to merge' do
-      assert_requested :put, "https://travis-merge-staging.herokuapp.com/api/build/#{build.id}"
+      assert_requested :post, "https://travis-merge-pipe-staging.herokuapp.com/api/build/#{build.id}/import"
     end
 
     it 'logs' do
@@ -42,7 +42,7 @@ describe Travis::Addons::Handlers::Merge do
     before { Travis::Event.dispatch('job:started', id: job.id) }
 
     it 'sends a job import request to merge' do
-      assert_requested :put, "https://travis-merge-staging.herokuapp.com/api/job/#{job.id}"
+      assert_requested :post, "https://travis-merge-pipe-staging.herokuapp.com/api/job/#{job.id}/import"
     end
 
     it 'logs' do

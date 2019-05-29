@@ -1,4 +1,5 @@
 ENV['ENV'] = 'test'
+ENV['NOTIFY_MERGE'] = 'true'
 ENV.delete('DATABASE_URL')
 
 require 'support/keys'

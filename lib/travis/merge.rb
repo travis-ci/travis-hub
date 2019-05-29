@@ -5,7 +5,7 @@ module Travis
     extend self
 
     def import(type, id, args)
-      http.put([type, id].join('/'), args)
+      http.post([type, id, 'import'].join('/'), args)
     end
 
     private
@@ -21,7 +21,7 @@ module Travis
       end
 
       def url
-        ENV['MERGE_API_URL'] || 'https://travis-merge-staging.herokuapp.com/api'
+        ENV['MERGE_API_URL'] || 'https://travis-merge-pipe-staging.herokuapp.com/api'
       end
 
       def token

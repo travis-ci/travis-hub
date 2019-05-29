@@ -55,7 +55,7 @@ module Travis
           # then again, it's not active, unless the keen credentials are
           # present in the env.
           addons = config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio', 'metrics']
-          addons << ['merge'] if ENV['NOTIFY_MERGE']
+          addons << 'merge' if ENV['NOTIFY_MERGE']
           addons
         end
 
