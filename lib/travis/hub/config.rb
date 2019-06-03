@@ -18,6 +18,7 @@ module Travis
              database:       { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              logs_api:       { url: 'https://travis-logs-notset.example.com:1234', token: 'notset', retries: { max: 5, interval: 3, max_interval: 60, interval_randomness: 0.5, backoff_factor: 2 } },
              job_board:      { url: 'https://not:set@job-board.travis-ci.com', site: 'org' },
+             insights:       { url: ENV['INSIGHTS_URL'], token: ENV['INSIGHTS_TOKEN'] },
              redis:          { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379', insights_url: ENV['INSIGHTS_REDIS_URL'] || 'redis://localhost:6379' },
              sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
              lock:           { strategy: :redis, ttl: 30000 },
@@ -34,6 +35,7 @@ module Travis
              limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications:  [],
              auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth }
+
       def metrics
         # TODO cleanup keychain?
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)

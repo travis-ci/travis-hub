@@ -1,6 +1,7 @@
 describe Travis::Addons::Handlers::Insights do
-  let(:build)   { FactoryGirl.create(:build, repository: repository) }
-  let(:job)     { FactoryGirl.create(:job, owner_id: 1, owner_type: 'User', repository: repository) }
+  let(:owner)   { FactoryGirl.create(:user, login: 'user') }
+  let(:build)   { FactoryGirl.create(:build, owner: owner, repository: repository) }
+  let(:job)     { FactoryGirl.create(:job, owner: owner, repository: repository) }
   let(:repository) { FactoryGirl.create(:repository) }
 
   describe 'subscription' do
@@ -69,7 +70,7 @@ describe Travis::Addons::Handlers::Insights do
     }
   end
 
-  describe 'job:created' do
+  describe 'job:created via Sidekiq' do
     let(:event) { 'job:created' }
     it 'handle' do
       ::Sidekiq::Client.any_instance.expects(:push).with(
@@ -78,6 +79,24 @@ describe Travis::Addons::Handlers::Insights do
         'args'  => [:event, event: 'job:created', data: data],
         'dead'  => false
       )
+      handler.handle
+    end
+  end
+
+  describe 'job:created via HTTP' do
+    config insights: { url: 'https://insights.travis-ci.com', token: 'token' }
+
+    env ROLLOUT: 'insights_http'
+    env ROLLOUT_INSIGHTS_HTTP_OWNERS: 'user'
+
+    let(:event) { 'job:created' }
+
+    it 'handle' do
+      stub_request(:post, 'https://insights.travis-ci.com/events?source=hub').with do |r|
+        expect(JSON.parse(r.body)['event']).to eq 'job:created'
+        expect(r.headers['Authorization']).to eq 'Token token="token"'
+        expect(r.headers['Content-Type']).to eq 'application/json'
+      end
       handler.handle
     end
   end
