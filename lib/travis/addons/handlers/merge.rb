@@ -9,7 +9,7 @@ module Travis
         EVENTS = /(build|job):(created|received|started|finished|canceled|errored)/
 
         def handle?
-          repository.migrating? || repository.migrated_at
+          repository.migrated_at
         end
 
         def handle
