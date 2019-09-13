@@ -16,6 +16,7 @@ require 'support/features'
 require 'mocha'
 require 'bourne' # TODO use rspec stubs/expectations
 require 'sinatra/test_helpers'
+require 'sidekiq/testing'
 require 'webmock'
 require 'webmock/rspec'
 require 'pry'

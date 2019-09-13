@@ -1,3 +1,4 @@
+require 'base64'
 require 'hashr'
 require 'travis/config'
 require 'travis/config/heroku'
@@ -11,6 +12,11 @@ module Travis
         def http_basic_auth
           tokens = ENV['HTTP_BASIC_AUTH'] || ''
           tokens.split(',').map { |token| token.split(':').map(&:strip) }.to_h
+        end
+
+        def jwt_key(type)
+          key = ENV["JWT_RSA_#{type.upcase}_KEY"]
+          Base64.decode64(key) if key
         end
       end
 
@@ -33,7 +39,8 @@ module Travis
              queue:          'builds',
              limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
              notifications:  [],
-             auth:           { jwt_public_key: ENV['JWT_RSA_PUBLIC_KEY'], http_basic_auth: http_basic_auth }
+             auth:           { jwt_private_key: jwt_key(:private), jwt_public_key: jwt_key(:public), http_basic_auth: http_basic_auth }
+
       def metrics
         # TODO cleanup keychain?
         super.to_h.merge(librato: librato.to_h.merge(source: librato_source), graphite: graphite)

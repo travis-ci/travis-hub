@@ -1,10 +1,13 @@
 # frozen_string_literal: true
+require 'base64'
 require 'rack/auth/abstract/handler'
 require 'rack/auth/abstract/request'
 
 module Travis
   module Hub
     class Auth < Rack::Auth::AbstractHandler
+      include Base64
+
       attr_reader :tokens
 
       def initialize(app, config = {}, alg = 'RS512')
@@ -12,16 +15,15 @@ module Travis
         @alg = alg
         @key = OpenSSL::PKey::RSA.new(config[:jwt_public_key])
         @tokens = config[:http_basic_auth]
-        @verify = true
       end
 
-      attr_reader :alg, :key, :verify
+      attr_reader :alg, :key
 
       def call(env)
         auth = Request.new(env)
 
         return unauthorized unless auth.provided?
-        return bad_request  unless auth.basic? || auth.bearer?
+        return bad_request  unless auth.basic? || auth.bearer? || auth.refresh? || auth.access?
 
         if basic_valid?(auth)
           env['REMOTE_USER'] = auth.basic_username
@@ -32,7 +34,9 @@ module Travis
           return [403, { 'Content-Type' => 'text/plain', 'Content-Length' => '0' }, []]
         end
 
-        bearer_valid?(auth) ? @app.call(env) : unauthorized
+        unauthorized unless bearer_valid?(auth)
+        env = env.merge(jwt_payload: auth.jwt_payload, jwt_token: auth.params, jwt_auth: auth)
+        @app.call(env)
       end
 
       private
@@ -56,15 +60,11 @@ module Travis
 
       def decode_jwt(auth)
         auth.jwt_payload, auth.jwt_header = JWT.decode(
-          auth.params, key, verify,
+          auth.params, key, true,
           algorithm: alg, verify_sub: true, 'sub' => auth.job_id
         )
         true
-      rescue JWT::InvalidSubError
-        false
-      rescue JWT::DecodeError
-        false
-      rescue JWT::ExpiredSignature
+      rescue JWT::InvalidSubError, JWT::DecodeError, JWT::ExpiredSignature => e
         false
       end
 
@@ -79,6 +79,14 @@ module Travis
 
         def bearer?
           'bearer' == scheme
+        end
+
+        def refresh?
+          'refresh' == scheme
+        end
+
+        def access?
+          'access' == scheme
         end
 
         def basic_credentials
