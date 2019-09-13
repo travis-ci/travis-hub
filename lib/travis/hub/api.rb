@@ -5,7 +5,9 @@ require 'sinatra/base'
 require 'openssl'
 require 'travis/hub/context'
 require 'travis/hub/api/auth'
+require 'travis/hub/api/jwt'
 require 'travis/hub/api/sentry'
+require 'travis/sidekiq'
 
 module Travis
   module Hub
@@ -32,6 +34,26 @@ module Travis
         body JSON.dump(state: job.state)
       end
 
+      # generates an JWT access token from the given refresh token, but only
+      # does so once, based on a unique key stored in Redis by travis-build
+      post '/jobs/:id/token' do
+        validate_jwt!
+        halt 401 unless refresh_token?
+        token = Jwt::Refresh.new(config[:auth], request.env[:jwt_token], redis).run
+        halt 403 unless token
+        status 200
+        body token
+      end
+
+      post '/jobs/:id/events' do
+        validate_jwt!
+        halt 401 unless access_token?
+        data = JSON.parse(request.body.read)
+        event, payload = data.values_at('event', 'payload')
+        Travis::Sidekiq.hub(event, payload)
+        status 200
+      end
+
       get '/uptime' do
         status 200
         uptime.to_s
@@ -56,6 +78,19 @@ module Travis
           state != job.reload.state
         end
 
+        def refresh_token?
+          request.env[:jwt_auth].refresh?
+        end
+
+        def access_token?
+          request.env[:jwt_auth].access?
+        end
+
+        def validate_jwt!
+          ids = [request.env[:jwt_payload]['sub'], params[:id]]
+          halt 403 unless ids.map(&:to_i).uniq.size == 1
+        end
+
         def job
           @job ||= Job.find(params[:id])
         rescue ActiveRecord::RecordNotFound => e
@@ -77,6 +112,14 @@ module Travis
         def uptime
           sec = Time.now - STARTED_AT
           sec.round
+        end
+
+        def config
+          context.config
+        end
+
+        def redis
+          context.redis
         end
 
         def context
