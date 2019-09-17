@@ -54,7 +54,7 @@ module Travis
         MSG = 'dpl `%{name}` has been in %{status} since %{date}, and can be updated (%{url})'
 
         def run
-          notify_slack if edge? && provider.update_status?
+          notify_slack if edge? && provider&.update_status?
         end
         instrument :run
 
