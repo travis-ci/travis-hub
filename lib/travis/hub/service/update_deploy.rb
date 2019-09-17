@@ -24,7 +24,7 @@ module Travis
             end
 
             def name
-              data[:name]
+              [data[:name], data[:strategy]].compact.join(':')
             end
 
             def success?
@@ -81,7 +81,13 @@ module Travis
           end
 
           def provider
-            @provider ||= Dpl.providers[data[:provider]]
+            @provider ||= Dpl.providers[provider_name].tap do |provider|
+              error "Unable to find provider #{provider_name}" if provider.nil?
+            end
+          end
+
+          def provider_name
+            [data[:provider], data[:strategy]].compact.join(':')
           end
 
           def edge?
