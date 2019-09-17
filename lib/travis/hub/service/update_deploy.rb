@@ -53,6 +53,11 @@ module Travis
 
         MSG = 'dpl `%{name}` has been in %{status} since %{date}, and can be updated (%{url})'
 
+        STRATEGY = {
+          heroku: :api,
+          pages: :git
+        }
+
         def run
           notify_slack if edge? && provider&.update_status?
         end
@@ -60,6 +65,12 @@ module Travis
 
         def job
           @job ||= Job.find(job_id)
+        end
+
+        def data
+          @data ||= super.tap do |data|
+            data[:strategy] ||= STRATEGY[data[:provider]&.to_sym]
+          end
         end
 
         private
@@ -86,8 +97,8 @@ module Travis
             end
           end
 
-          def provider_name
-            [data[:provider], data[:strategy]].compact.join(':')
+          def provider_name(strategy = data[:strategy])
+            [data[:provider], strategy].compact.join(':')
           end
 
           def edge?
