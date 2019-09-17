@@ -15,8 +15,8 @@ module Travis
         end
 
         def jwt_key(type)
-          key = ENV["JWT_RSA_#{type.upcase}_KEY"]
-          Base64.decode64(key) if key
+          return unless key = ENV["JWT_RSA_#{type.upcase}_KEY"]
+          key.starts_with?('--') ? key : Base64.decode64(key)
         end
       end
 
