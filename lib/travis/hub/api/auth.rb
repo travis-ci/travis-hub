@@ -65,6 +65,7 @@ module Travis
         )
         true
       rescue JWT::InvalidSubError, JWT::DecodeError, JWT::ExpiredSignature => e
+        puts e.message
         false
       end
 
