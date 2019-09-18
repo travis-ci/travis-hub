@@ -59,7 +59,7 @@ module Travis
         }
 
         def run
-          notify_slack if edge? && provider&.update_status?
+          notify_slack if notify_slack?
         end
         instrument :run
 
@@ -75,6 +75,10 @@ module Travis
 
         private
 
+          def notify_slack?
+            edge? && provider&.update_status? && slug != 'travis-ci/dpl'
+          end
+
           def notify_slack
             Faraday.post(slack_url, JSON.dump(text: msg)) if slack_url
           end
@@ -89,6 +93,10 @@ module Travis
 
           def job_id
             data[:job_id]
+          end
+
+          def slug
+            job.repository.slug
           end
 
           def provider
