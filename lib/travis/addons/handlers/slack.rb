@@ -25,7 +25,9 @@ module Travis
 
         class Instrument < Addons::Instrument
           def notify_completed
-            publish(targets: handler.targets)
+            handler.targets.each do |target|
+              publish(targets: target)
+            end
           end
         end
         Instrument.attach_to(self)
