@@ -60,6 +60,21 @@ describe Travis::Addons::Handlers::Slack do
       handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'])
       handler.handle
     end
+
+    context 'when multiple notifications are defined' do
+      let(:config) {
+        [
+          { slack: 'room' },
+          { slack: 'room2' }
+        ]
+      }
+
+      it 'enqueues multiple tasks' do
+        handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'])
+        handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room2'])
+        handler.handle
+      end
+    end
   end
 
   describe 'targets' do
