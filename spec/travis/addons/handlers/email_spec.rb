@@ -66,6 +66,21 @@ describe Travis::Addons::Handlers::Email do
       handler.expects(:run_task).with(:email, is_a(Hash), recipients: [recipient], broadcasts: [{ message: 'message', category: 'announcement'}])
       handler.handle
     end
+
+    context "when 2 email notifications are configured" do
+      let(:config) {
+        [
+          {email: address},
+          {email: ["joe@example.com"]},
+        ]
+      }
+
+      it 'enqueues 2 distinct email tasks' do
+        handler.expects(:run_task).with(:email, is_a(Hash), recipients: [address], broadcasts: [{ message: 'message', category: 'announcement'}])
+        handler.expects(:run_task).with(:email, is_a(Hash), recipients: ["joe@example.com"], broadcasts: [{ message: 'message', category: 'announcement'}])
+        handler.handle
+      end
+    end
   end
 
   describe 'recipients' do

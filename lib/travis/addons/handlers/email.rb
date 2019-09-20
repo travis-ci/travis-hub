@@ -21,10 +21,8 @@ module Travis
         end
 
         def recipients(cfg)
-          @recipients ||= begin
-            emails = configured_emails(cfg) || default_emails(cfg)
-            emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
-          end
+          emails = configured_emails(cfg) || default_emails(cfg)
+          emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
         end
 
         private
