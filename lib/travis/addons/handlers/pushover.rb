@@ -10,19 +10,29 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && users.present? && api_key.present? && config.send_on?(:pushover, action)
+          !pull_request? && config.values(:pushover, :users).any?(&:present?) && config.notifications.any? { |cfg| cfg[:pushover] && cfg[:pushover][:api_key].present? } && config.send_on?(:pushover, action)
         end
 
         def handle
-          run_task(:pushover, payload, users: users, api_key: api_key)
+          config.notifications.each do |cfg|
+            run_task(:pushover, payload, users: users(cfg), api_key: api_key(cfg))
+          end
         end
 
-        def users
-          @users ||= config.values(:pushover, :users)
+        def users(cfg)
+          config = cfg[:pushover] rescue {}
+          value  = config.is_a?(Hash) ? config[:users] : config
+          value.is_a?(Array) || value.is_a?(String) ? normalize_array(value) : value
         end
 
-        def api_key
-          @api_key ||= config.notifications[:pushover][:api_key]
+        def api_key(cfg)
+          decrypted = Travis::SecureConfig.decrypt(cfg, secure_key)
+          if decrypted.is_a? Hash
+            notifications = [decrypted]
+          else
+            notifications = Array(decrypted)
+          end
+          decrypted[:pushover][:api_key]
         end
 
         class Instrument < Addons::Instrument
@@ -31,6 +41,13 @@ module Travis
           end
         end
         Instrument.attach_to(self)
+
+        private
+        def normalize_array(values)
+          values = Array(values).compact
+          values = values.map { |value| value.split(',') if value.is_a?(String) }
+          values.compact.flatten.map(&:strip).reject(&:blank?)
+        end
       end
     end
   end

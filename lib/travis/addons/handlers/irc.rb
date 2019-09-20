@@ -10,11 +10,13 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && channels.present? && config.send_on?(:irc, action)
+          !pull_request? && channels.any?(&:present?) && config.send_on?(:irc, action)
         end
 
         def handle
-          run_task(:irc, payload, channels: channels)
+          channels.each do |ch|
+            run_task(:irc, payload, channels: ch)
+          end
         end
 
         def channels
@@ -31,4 +33,3 @@ module Travis
     end
   end
 end
-

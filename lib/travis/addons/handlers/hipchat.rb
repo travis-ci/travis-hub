@@ -10,11 +10,13 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          enabled?(:hipchat) && targets.present? && config.send_on?(:hipchat, action)
+          enabled?(:hipchat) && targets.any?(&:present?) && config.send_on?(:hipchat, action)
         end
 
         def handle
-          run_task(:hipchat, payload, targets: targets)
+          targets.each do |target|
+            run_task(:hipchat, payload, targets: target)
+          end
         end
 
         def targets

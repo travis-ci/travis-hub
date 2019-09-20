@@ -10,11 +10,13 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && targets.present? && config.send_on?(:campfire, action)
+          !pull_request? && targets.any?(&:present?) && config.send_on?(:campfire, action)
         end
 
         def handle
-          run_task(:campfire, payload, targets: targets)
+          targets.each do |target|
+            run_task(:campfire, payload, targets: target)
+          end
         end
 
         def targets

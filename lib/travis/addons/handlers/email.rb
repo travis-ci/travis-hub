@@ -11,28 +11,30 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && config.enabled?(:email) && config.send_on?(:email, action) && recipients.present?
+          !pull_request? && config.enabled?(:email) && config.send_on?(:email, action) && config.notifications.any? {|cfg| recipients(cfg).present?}
         end
 
         def handle
-          run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
+          config.notifications.each do |cfg|
+            run_task(:email, payload, recipients: recipients(cfg), broadcasts: broadcasts)
+          end
         end
 
-        def recipients
+        def recipients(cfg)
           @recipients ||= begin
-            emails = configured_emails || default_emails
+            emails = configured_emails(cfg) || default_emails(cfg)
             emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
           end
         end
 
         private
 
-          def configured_emails
-            emails = config.values(:email, :recipients)
+          def configured_emails(cfg)
+            emails = read_recipients(cfg, :email, :recipients)
             emails.try(:any?) && emails
           end
 
-          def default_emails
+          def default_emails(cfg)
             emails = [commit.author_email, commit.committer_email]
             user_ids = object.repository.permissions.pluck(:user_id)
             user_ids -= object.repository.email_unsubscribes.pluck(:user_id)
@@ -46,6 +48,14 @@ module Travis
 
           def normalize_array(array)
             Array(array).join(',').split(',').map(&:strip).select(&:present?).uniq
+          end
+
+          def read_recipients(cfg, type, key)
+            # notifications.map do |notifier|
+              config = cfg[type] rescue {}
+              value  = config.is_a?(Hash) ? config[key] : config
+              value.is_a?(Array) || value.is_a?(String) ? normalize_array(value) : value
+            # end
           end
 
           class EventHandler < Addons::Instrument

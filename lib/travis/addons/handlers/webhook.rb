@@ -10,11 +10,13 @@ module Travis
         EVENTS = /build:(started|finished|canceled|errored)/
 
         def handle?
-          targets.present? && config.send_on?(:webhooks, action)
+          targets.any?(&:present?) && config.send_on?(:webhooks, action)
         end
 
         def handle
-          run_task(:webhook, payload, targets: targets, token: request.token)
+          targets.each do |target|
+            run_task(:webhook, payload, targets: target, token: request.token)
+          end
         end
 
         def targets

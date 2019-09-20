@@ -62,17 +62,17 @@ describe Travis::Addons::Handlers::Pushover do
 
     it 'returns an array of users when given a string' do
       config[:pushover][:users] = user
-      expect(handler.users).to eql [user]
+      expect(handler.users(config)).to eql [user]
     end
 
     it 'returns an array of user when given an array' do
       config[:pushover][:users] = [user]
-      expect(handler.users).to eql [user]
+      expect(handler.users(config)).to eql [user]
     end
 
     it 'returns an array of user when given a comma separated string' do
       config[:pushover][:users] = "#{user}, #{other}"
-      expect(handler.users).to eql [user, other]
+      expect(handler.users(config)).to eql [user, other]
     end
   end
 end

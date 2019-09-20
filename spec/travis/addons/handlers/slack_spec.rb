@@ -68,32 +68,32 @@ describe Travis::Addons::Handlers::Slack do
 
     it 'returns an array of rooms when given a string' do
       config[:slack] = room
-      expect(handler.targets).to eql [room]
+      expect(handler.targets).to eql [[room]]
     end
 
     it 'returns an array of rooms when given an array' do
       config[:slack] = [room]
-      expect(handler.targets).to eql [room]
+      expect(handler.targets).to eql [[room]]
     end
 
     it 'returns an array of rooms when given a comma separated string' do
       config[:slack] = "#{room}, #{other}"
-      expect(handler.targets).to eql [room, other]
+      expect(handler.targets).to eql [[room, other]]
     end
 
     it 'returns an array of rooms given a string within a hash' do
       config[:slack] = { rooms: room, on_success: 'change' }
-      expect(handler.targets).to eql [room]
+      expect(handler.targets).to eql [[room]]
     end
 
     it 'returns an array of rooms given an array within a hash' do
       config[:slack] = { rooms: [room], on_success: 'change' }
-      expect(handler.targets).to eql [room]
+      expect(handler.targets).to eql [[room]]
     end
 
     it 'returns an array of rooms given a comma separated string within a hash' do
       config[:slack] = { rooms: "#{room}, #{other}", on_success: 'change' }
-      expect(handler.targets).to eql [room, other]
+      expect(handler.targets).to eql [[room, other]]
     end
   end
 end

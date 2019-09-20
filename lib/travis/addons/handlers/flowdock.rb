@@ -10,11 +10,13 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
-          !pull_request? && targets.present? && config.send_on?(:flowdock, action)
+          !pull_request? && targets.any?(&:present?) && config.send_on?(:flowdock, action)
         end
 
         def handle
-          run_task(:flowdock, payload, targets: targets)
+          targets.each do |target|
+            run_task(:flowdock, payload, targets: target)
+          end
         end
 
         def targets
@@ -31,4 +33,3 @@ module Travis
     end
   end
 end
-

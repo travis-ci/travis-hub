@@ -62,32 +62,32 @@ describe Travis::Addons::Handlers::Irc do
 
     it 'returns an array of channels when given a string' do
       config[:irc] = channel
-      expect(handler.channels).to eql [channel]
+      expect(handler.channels).to eql [[channel]]
     end
 
     it 'returns an array of channels when given an array' do
       config[:irc] = [channel]
-      expect(handler.channels).to eql [channel]
+      expect(handler.channels).to eql [[channel]]
     end
 
     it 'returns an array of channels when given a comma separated string' do
       config[:irc] = "#{channel}, #{other}"
-      expect(handler.channels).to eql [channel, other]
+      expect(handler.channels).to eql [[channel, other]]
     end
 
     it 'returns an array of channels given a string within a hash' do
       config[:irc] = { channels: channel, on_success: 'change' }
-      expect(handler.channels).to eql [channel]
+      expect(handler.channels).to eql [[channel]]
     end
 
     it 'returns an array of channels given an array within a hash' do
       config[:irc] = { channels: [channel], on_success: 'change' }
-      expect(handler.channels).to eql [channel]
+      expect(handler.channels).to eql [[channel]]
     end
 
     it 'returns an array of channels given a comma separated string within a hash' do
       config[:irc] = { channels: "#{channel}, #{other}", on_success: 'change' }
-      expect(handler.channels).to eql [channel, other]
+      expect(handler.channels).to eql [[channel, other]]
     end
   end
 end

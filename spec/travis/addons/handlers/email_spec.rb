@@ -81,60 +81,60 @@ describe Travis::Addons::Handlers::Email do
 
       it 'returns permitted and known committer and author addresses' do
         [committer, author].each { |address| Email.create(user: user, email: address) }
-        expect(handler.recipients.sort).to eql [author, committer]
+        expect(handler.recipients(config).sort).to eql [author, committer]
       end
 
       it 'returns permitted and known author address' do
         Email.create(user: user, email: author)
-        expect(handler.recipients).to eql [author]
+        expect(handler.recipients(config)).to eql [author]
       end
 
       it 'returns permitted and known committer address' do
         Email.create(user: user, email: committer)
-        expect(handler.recipients).to eql [committer]
+        expect(handler.recipients(config)).to eql [committer]
       end
 
       it 'does not return users who have unsubscribed from this repo' do
         Email.create(user: user, email: committer)
         EmailUnsubscribe.create(user: user, repository: repo)
-        expect(handler.recipients).to be_empty
+        expect(handler.recipients(config)).to be_empty
       end
 
       it 'does not return users who have the no emails global preference' do
         user.update_attributes!(preferences: JSON.dump(build_emails: false))
         Email.create(user: user, email: committer)
-        expect(handler.recipients).to be_empty
+        expect(handler.recipients(config)).to be_empty
       end
     end
 
     it 'returns an array of addresses when given a string' do
       config[:email] = address
-      expect(handler.recipients).to eql [address]
+      expect(handler.recipients(config)).to eql [address]
     end
 
     it 'returns an array of addresses when given an array' do
       config[:email] = [address]
-      expect(handler.recipients).to eql [address]
+      expect(handler.recipients(config)).to eql [address]
     end
 
     it 'returns an array of addresses when given a comma separated string' do
       config[:email] = "#{address}, #{other}"
-      expect(handler.recipients).to eql [address, other]
+      expect(handler.recipients(config)).to eql [address, other]
     end
 
     it 'returns an array of addresses given a string within a hash' do
       config[:email] = { recipients: address, on_success: 'change' }
-      expect(handler.recipients).to eql [address]
+      expect(handler.recipients(config)).to eql [address]
     end
 
     it 'returns an array of addresses given an array within a hash' do
       config[:email] = { recipients: [address], on_success: 'change' }
-      expect(handler.recipients).to eql [address]
+      expect(handler.recipients(config)).to eql [address]
     end
 
     it 'returns an array of addresses given a comma separated string within a hash' do
       config[:email] = { recipients: "#{address}, #{other}", on_success: 'change' }
-      expect(handler.recipients).to eql [address, other]
+      expect(handler.recipients(config)).to eql [address, other]
     end
 
     it 'ignores repo-level unsubscribe' do
@@ -142,7 +142,7 @@ describe Travis::Addons::Handlers::Email do
       Email.create(user: user, email: address)
       EmailUnsubscribe.create(user: user, repository: repo)
 
-      expect(handler.recipients).to eql [address]
+      expect(handler.recipients(config)).to eql [address]
     end
 
     it 'observes user-level no emails preference' do
@@ -150,7 +150,7 @@ describe Travis::Addons::Handlers::Email do
       Email.create(user: user, email: address)
       user.update_attributes!(preferences: JSON.dump(build_emails: false))
 
-      expect(handler.recipients).to be_empty
+      expect(handler.recipients(config)).to be_empty
     end
   end
 end
