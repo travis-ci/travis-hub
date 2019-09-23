@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Travis::Addons::Config, 'for webhooks' do
-  let(:type)    { :webhooks }
-  let(:build)   { FactoryGirl.build(:build) }
-  let(:payload) { Travis::Addons::Serializer::Tasks::Build.new(build).data }
-  let(:config)  { described_class.new(payload) }
+  let(:build) { FactoryGirl.build(:build) }
+  let(:type)  { :webhooks }
+
+  subject { described_class.new(build, config) }
 
   describe 'send_on_finished_for?' do
     # previous | current | config[:notifications] | result
@@ -53,13 +53,14 @@ describe Travis::Addons::Config, 'for webhooks' do
     ]
 
     combinations.each do |previous, current, notifications, result|
-      it "returns #{result.inspect.ljust(5)} if previous_state is #{"#{previous.inspect},".ljust(8)} the current state is #{current.inspect}, and config[:notifications] is #{notifications}" do
-        build.stubs(
-          config: build.config.deep_merge(notifications: notifications),
-          state: current,
-          previous_state: previous
-        )
-        expect(config.send_on?(type, :finished)).to eql(result)
+      context do
+        let(:config) { notifications }
+
+        before { build.stubs(state: current, previous_state: previous) }
+
+        it "returns #{result.inspect.ljust(5)} if previous_state is #{"#{previous.inspect},".ljust(8)} current state is #{current.inspect}, and config[:notifications] is #{notifications}" do
+          expect(subject.send_on?(type, :finished)).to be result
+        end
       end
     end
   end

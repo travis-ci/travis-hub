@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Pushover do
-  let(:handler) { described_class.new('build:finished', id: build.id) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: config }) }
-  let(:config)  { { pushover: { users: 'user', api_key: 'api_key' } } }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { pushover: config } }) }
+  let(:config)  { { users: 'user', api_key: 'api_key' } }
 
   describe 'subscription' do
     before { Travis::Event.setup([:pushover]) }
@@ -29,12 +29,12 @@ describe Travis::Addons::Handlers::Pushover do
     end
 
     it 'is true if users are present' do
-      config[:pushover][:users] = 'user'
+      config[:users] = 'user'
       expect(handler.handle?).to eql(true)
     end
 
     it 'is false if no users are present' do
-      config[:pushover][:users] = []
+      config[:users] = []
       expect(handler.handle?).to eql(false)
     end
 
@@ -61,17 +61,17 @@ describe Travis::Addons::Handlers::Pushover do
     let(:other) { 'other' }
 
     it 'returns an array of users when given a string' do
-      config[:pushover][:users] = user
+      config[:users] = user
       expect(handler.users).to eql [user]
     end
 
     it 'returns an array of user when given an array' do
-      config[:pushover][:users] = [user]
+      config[:users] = [user]
       expect(handler.users).to eql [user]
     end
 
     it 'returns an array of user when given a comma separated string' do
-      config[:pushover][:users] = "#{user}, #{other}"
+      config[:users] = "#{user}, #{other}"
       expect(handler.users).to eql [user, other]
     end
   end

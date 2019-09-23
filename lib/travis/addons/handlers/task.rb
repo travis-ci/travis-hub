@@ -34,14 +34,6 @@ module Travis
         def payload
           @payload ||= Serializer::Tasks::Build.new(object).data
         end
-
-        def config
-          @config ||= Config.new(payload, secure_key)
-        end
-
-        def secure_key
-          repository.key if respond_to?(:repository)
-        end
       end
     end
   end

@@ -1,10 +1,10 @@
 describe Travis::Addons::Handlers::Email do
-  let(:handler) { described_class.new('build:finished', id: build.id) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
   let(:repo)    { FactoryGirl.create(:repository) }
-  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: config }) }
+  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: { email: config } }) }
   let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
   let!(:email)  { Email.create(email: address) }
-  let(:config)  { { email: address } }
+  let(:config)  { address }
   let(:address) { 'me@email.com' }
 
   describe 'subscription' do
@@ -32,19 +32,14 @@ describe Travis::Addons::Handlers::Email do
       expect(handler.handle?).to eql(false)
     end
 
-    it 'is false if no email config is present' do
-      config[:email] = nil
-      expect(handler.handle?).to eql(false)
+    describe 'is false if no email config is present' do
+      let(:config) { nil }
+      it { expect(handler.handle?).to eql(false) }
     end
 
-    it 'is true if recipients are given in the config' do
-      config[:email] = { recipients: address }
-      expect(handler.handle?).to eql(true)
-    end
-
-    it 'is false if email config is not present' do
-      config[:email] = nil
-      expect(handler.handle?).to eql(false)
+    describe 'is true if recipients are given in the config' do
+      let(:config) { { recipients: address } }
+      it { expect(handler.handle?).to eql(true) }
     end
 
     it 'is true if the config specifies so based on the build result' do
@@ -76,7 +71,7 @@ describe Travis::Addons::Handlers::Email do
     let(:committer) { 'committer@email.com' }
 
     describe 'no addresses given in config' do
-      let(:config)  { { email: true } }
+      let(:config)  { true }
       before { repo.permissions.create(user: user) }
 
       it 'returns permitted and known committer and author addresses' do
@@ -107,50 +102,48 @@ describe Travis::Addons::Handlers::Email do
       end
     end
 
-    it 'returns an array of addresses when given a string' do
-      config[:email] = address
-      expect(handler.recipients).to eql [address]
+    describe 'returns an array of addresses when given a string' do
+      let(:config) { address }
+      it { expect(handler.recipients).to eql [address] }
     end
 
-    it 'returns an array of addresses when given an array' do
-      config[:email] = [address]
-      expect(handler.recipients).to eql [address]
+    describe 'returns an array of addresses when given an array' do
+      let(:config) { [address] }
+      it { expect(handler.recipients).to eql [address] }
     end
 
-    it 'returns an array of addresses when given a comma separated string' do
-      config[:email] = "#{address}, #{other}"
-      expect(handler.recipients).to eql [address, other]
+    describe 'returns an array of addresses when given a comma separated string' do
+      let(:config) { "#{address}, #{other}" }
+      it { expect(handler.recipients).to eql [address, other] }
     end
 
-    it 'returns an array of addresses given a string within a hash' do
-      config[:email] = { recipients: address, on_success: 'change' }
-      expect(handler.recipients).to eql [address]
+    describe 'returns an array of addresses given a string within a hash' do
+      let(:config) { { recipients: address, on_success: 'change' } }
+      it { expect(handler.recipients).to eql [address] }
     end
 
-    it 'returns an array of addresses given an array within a hash' do
-      config[:email] = { recipients: [address], on_success: 'change' }
-      expect(handler.recipients).to eql [address]
+    describe 'returns an array of addresses given an array within a hash' do
+      let(:config) { { recipients: [address], on_success: 'change' } }
+      it { expect(handler.recipients).to eql [address] }
     end
 
-    it 'returns an array of addresses given a comma separated string within a hash' do
-      config[:email] = { recipients: "#{address}, #{other}", on_success: 'change' }
-      expect(handler.recipients).to eql [address, other]
+    describe 'returns an array of addresses given a comma separated string within a hash' do
+      let(:config) { { recipients: "#{address}, #{other}", on_success: 'change' } }
+      it { expect(handler.recipients).to eql [address, other] }
     end
 
-    it 'ignores repo-level unsubscribe' do
-      config[:email] = address
-      Email.create(user: user, email: address)
-      EmailUnsubscribe.create(user: user, repository: repo)
-
-      expect(handler.recipients).to eql [address]
+    describe 'ignores repo-level unsubscribe' do
+      let(:config) { address }
+      before { Email.create(user: user, email: address) }
+      before { EmailUnsubscribe.create(user: user, repository: repo) }
+      it { expect(handler.recipients).to eql [address] }
     end
 
-    it 'observes user-level no emails preference' do
-      config[:email] = address
-      Email.create(user: user, email: address)
-      user.update_attributes!(preferences: JSON.dump(build_emails: false))
-
-      expect(handler.recipients).to be_empty
+    describe 'observes user-level no emails preference' do
+      let(:config) { address }
+      before { Email.create(user: user, email: address) }
+      before { user.update_attributes!(preferences: JSON.dump(build_emails: false)) }
+      it { expect(handler.recipients).to be_empty }
     end
   end
 end
