@@ -66,15 +66,15 @@ module Travis
           end
 
           def initial_build?
-            blank?(build[:previous_state])
+            blank?(build.previous_state)
           end
 
           def build_passed?
-            build[:state].try(:to_sym) == :passed
+            build.state.try(:to_sym) == :passed
           end
 
           def build_canceled?
-            build[:state].try(:to_sym) == :canceled
+            build.state.try(:to_sym) == :canceled
           end
 
           def build_failed?
@@ -82,7 +82,7 @@ module Travis
           end
 
           def previous_build_passed?
-            build[:previous_state].try(:to_sym) == :passed
+            build.previous_state.try(:to_sym) == :passed
           end
 
           def previous_build_failed?

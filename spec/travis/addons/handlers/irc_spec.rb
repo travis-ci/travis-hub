@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Irc do
-  let(:handler) { described_class.new('build:finished', id: build.id) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: config }) }
-  let(:config)  { { irc: 'channel' } }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { irc: config } }) }
+  let(:config)  { 'channel' }
 
   describe 'subscription' do
     before { Travis::Event.setup([:irc]) }
@@ -28,14 +28,14 @@ describe Travis::Addons::Handlers::Irc do
       expect(handler.handle?).to eql(false)
     end
 
-    it 'is true if channels are present' do
-      config[:irc] = 'channel'
-      expect(handler.handle?).to eql(true)
+    describe 'is true if channels are present' do
+      let(:config) { 'channel' }
+      it { expect(handler.handle?).to eql(true) }
     end
 
-    it 'is false if no channels are present' do
-      config[:irc] = []
-      expect(handler.handle?).to eql(false)
+    describe 'is false if no channels are present' do
+      let(:config) { [] }
+      it { expect(handler.handle?).to eql(false) }
     end
 
     it 'is true if the config specifies so based on the build result' do
@@ -60,34 +60,34 @@ describe Travis::Addons::Handlers::Irc do
     let(:channel) { 'travis@freenode' }
     let(:other)   { 'evome@freenode' }
 
-    it 'returns an array of channels when given a string' do
-      config[:irc] = channel
-      expect(handler.channels).to eql [channel]
+    describe 'returns an array of channels when given a string' do
+      let(:config) { channel }
+      it { expect(handler.channels).to eql [channel] }
     end
 
-    it 'returns an array of channels when given an array' do
-      config[:irc] = [channel]
-      expect(handler.channels).to eql [channel]
+    describe 'returns an array of channels when given an array' do
+      let(:config) { [channel] }
+      it { expect(handler.channels).to eql [channel] }
     end
 
-    it 'returns an array of channels when given a comma separated string' do
-      config[:irc] = "#{channel}, #{other}"
-      expect(handler.channels).to eql [channel, other]
+    describe 'returns an array of channels when given a comma separated string' do
+      let(:config) { "#{channel}, #{other}" }
+      it { expect(handler.channels).to eql [channel, other] }
     end
 
-    it 'returns an array of channels given a string within a hash' do
-      config[:irc] = { channels: channel, on_success: 'change' }
-      expect(handler.channels).to eql [channel]
+    describe 'returns an array of channels given a string within a hash' do
+      let(:config) { { channels: channel, on_success: 'change' } }
+      it { expect(handler.channels).to eql [channel] }
     end
 
-    it 'returns an array of channels given an array within a hash' do
-      config[:irc] = { channels: [channel], on_success: 'change' }
-      expect(handler.channels).to eql [channel]
+    describe 'returns an array of channels given an array within a hash' do
+      let(:config) { { channels: [channel], on_success: 'change' } }
+      it { expect(handler.channels).to eql [channel] }
     end
 
-    it 'returns an array of channels given a comma separated string within a hash' do
-      config[:irc] = { channels: "#{channel}, #{other}", on_success: 'change' }
-      expect(handler.channels).to eql [channel, other]
+    describe 'returns an array of channels given a comma separated string within a hash' do
+      let(:config) { { channels: "#{channel}, #{other}", on_success: 'change' } }
+      it { expect(handler.channels).to eql [channel, other] }
     end
   end
 end

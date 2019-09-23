@@ -59,6 +59,12 @@ module Travis
           addons
         end
 
+        def pluralize_addons(addons, names)
+          names.each do |name|
+            addons << "#{name}s" if addons.delete(name)
+          end
+        end
+
         def test_exception_reporting
           exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
         end

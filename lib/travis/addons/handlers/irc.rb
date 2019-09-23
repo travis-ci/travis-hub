@@ -4,31 +4,31 @@ require 'travis/addons/handlers/task'
 module Travis
   module Addons
     module Handlers
-      class Irc < Base
-        include Handlers::Task
-
+      class Irc < Notifiers
         EVENTS = 'build:finished'
+        KEY = :irc
 
-        def handle?
-          !pull_request? && channels.present? && config.send_on?(:irc, action)
-        end
-
-        def handle
-          run_task(:irc, payload, channels: channels)
-        end
-
-        def channels
-          @channels ||= config.values(:irc, :channels)
-        end
-
-        class Instrument < Addons::Instrument
-          def notify_completed
-            publish(channels: handler.channels)
+        class Notifier < Notifier
+          def handle?
+            !pull_request? && channels.present? && config.send_on?(:irc, action)
           end
+
+          def handle
+            run_task(:irc, payload, channels: channels)
+          end
+
+          def channels
+            @channels ||= config.values(:channels)
+          end
+
+          class Instrument < Addons::Instrument
+            def notify_completed
+              publish(channels: handler.channels)
+            end
+          end
+          Instrument.attach_to(self)
         end
-        Instrument.attach_to(self)
       end
     end
   end
 end
-

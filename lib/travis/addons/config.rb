@@ -7,34 +7,32 @@ module Travis
     class Config
       include Helpers::Hash
 
-      attr_reader :payload, :build, :secure_key, :config
+      attr_reader :build, :config
 
-      def initialize(payload, secure_key = nil)
-        @payload = payload
-        @build = payload[:build]
-        @config = deep_symbolize_keys(build.fetch(:config, {}))
-        @secure_key = secure_key
+      def initialize(build, config)
+        @build = build
+        @config = config.is_a?(Hash) ? deep_symbolize_keys(config) : config
       end
 
-      def enabled?(key)
-        return false unless notifications.respond_to?(:has_key?)
-        return !!notifications[key] if notifications.has_key?(key) # TODO this seems inconsistent. what if email: { disabled: true }
-        [:disabled, :disable].each { |key| return !notifications[key] if notifications.has_key?(key) } # TODO deprecate disabled and disable
+      def [](key)
+        config[key]
+      end
+
+      def enabled?
+        return false unless config
+        return true unless config.respond_to?(:key?)
+        [:disabled, :disable].each { |key| return !config[key] if config.key?(key) } # TODO deprecate disabled and disable
         true
       end
 
       def send_on?(type, event)
-        Notify.new(build, notifications).on?(type, event)
+        Notify.new(build, config.is_a?(Hash) ? config : {}).on?(type, event)
       end
 
-      def values(type, key)
-        config = notifications[type] rescue {}
-        value  = config.is_a?(Hash) ? config[key] : config
+      def values(key)
+        value = config
+        value = value.is_a?(Hash) ? value[key] : value
         value.is_a?(Array) || value.is_a?(String) ? normalize_array(value) : value
-      end
-
-      def notifications
-        @notifications ||= Travis::SecureConfig.decrypt(config.fetch(:notifications, {}) || {}, secure_key)
       end
 
       private

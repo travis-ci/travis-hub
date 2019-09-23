@@ -4,29 +4,30 @@ require 'travis/addons/handlers/task'
 module Travis
   module Addons
     module Handlers
-      class Hipchat < Base
-        include Handlers::Task
-
+      class Hipchat < Notifiers
         EVENTS = 'build:finished'
+        KEY = :hipchat
 
-        def handle?
-          enabled?(:hipchat) && targets.present? && config.send_on?(:hipchat, action)
-        end
-
-        def handle
-          run_task(:hipchat, payload, targets: targets)
-        end
-
-        def targets
-          @targets ||= config.values(:hipchat, :rooms)
-        end
-
-        class Instrument < Addons::Instrument
-          def notify_completed
-            publish(targets: handler.targets)
+        class Notifier < Notifier
+          def handle?
+            enabled? && targets.present? && config.send_on?(:hipchat, action)
           end
+
+          def handle
+            run_task(:hipchat, payload, targets: targets)
+          end
+
+          def targets
+            @targets ||= config.values(:rooms)
+          end
+
+          class Instrument < Addons::Instrument
+            def notify_completed
+              publish(targets: handler.targets)
+            end
+          end
+          Instrument.attach_to(self)
         end
-        Instrument.attach_to(self)
       end
     end
   end

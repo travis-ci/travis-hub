@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Campfire do
-  let(:handler) { described_class.new('build:finished', id: build.id) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: config }) }
-  let(:config)  { { campfire: 'room' } }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { campfire: config } }) }
+  let(:config)  { 'room' }
 
   describe 'subscription' do
     before { Travis::Event.setup([:campfire]) }
@@ -28,14 +28,14 @@ describe Travis::Addons::Handlers::Campfire do
       expect(handler.handle?).to eql(false)
     end
 
-    it 'is true if rooms are present' do
-      config[:campfire] = 'room'
-      expect(handler.handle?).to eql(true)
+    describe 'is true if rooms are present' do
+      let(:config) { 'room' }
+      it { expect(handler.handle?).to eql(true) }
     end
 
-    it 'is false if no rooms are present' do
-      config[:campfire] = []
-      expect(handler.handle?).to eql(false)
+    describe 'is false if no rooms are present' do
+      let(:config) { [] }
+      it { expect(handler.handle?).to eql(false) }
     end
 
     it 'is true if the config specifies so based on the build result' do
@@ -60,34 +60,34 @@ describe Travis::Addons::Handlers::Campfire do
     let(:room)  { 'travis:apitoken@42' }
     let(:other) { 'evome:apitoken@44' }
 
-    it 'returns an array of rooms when given a string' do
-      config[:campfire] = room
-      expect(handler.targets).to eql [room]
+    describe 'returns an array of rooms when given a string' do
+      let(:config) { room }
+      it { expect(handler.targets).to eql [room] }
     end
 
-    it 'returns an array of rooms when given an array' do
-      config[:campfire] = [room]
-      expect(handler.targets).to eql [room]
+    describe 'returns an array of rooms when given an array' do
+      let(:config) { [room] }
+      it { expect(handler.targets).to eql [room] }
     end
 
-    it 'returns an array of rooms when given a comma separated string' do
-      config[:campfire] = "#{room}, #{other}"
-      expect(handler.targets).to eql [room, other]
+    describe 'returns an array of rooms when given a comma separated string' do
+      let(:config) { "#{room}, #{other}" }
+      it { expect(handler.targets).to eql [room, other] }
     end
 
-    it 'returns an array of rooms given a string within a hash' do
-      config[:campfire] = { rooms: room, on_success: 'change' }
-      expect(handler.targets).to eql [room]
+    describe 'returns an array of rooms given a string within a hash' do
+      let(:config) { { rooms: room, on_success: 'change' } }
+      it { expect(handler.targets).to eql [room] }
     end
 
-    it 'returns an array of rooms given an array within a hash' do
-      config[:campfire] = { rooms: [room], on_success: 'change' }
-      expect(handler.targets).to eql [room]
+    describe 'returns an array of rooms given an array within a hash' do
+      let(:config) { { rooms: [room], on_success: 'change' } }
+      it { expect(handler.targets).to eql [room] }
     end
 
-    it 'returns an array of rooms given a comma separated string within a hash' do
-      config[:campfire] = { rooms: "#{room}, #{other}", on_success: 'change' }
-      expect(handler.targets).to eql [room, other]
+    describe 'returns an array of rooms given a comma separated string within a hash' do
+      let(:config) { { rooms: "#{room}, #{other}", on_success: 'change' } }
+      it { expect(handler.targets).to eql [room, other] }
     end
   end
 end
