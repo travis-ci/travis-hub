@@ -29,7 +29,8 @@ module Travis
           @configs ||= begin
             config = object.config.fetch(:notifications, {})
             config = config.is_a?(Hash) ? config.fetch(key, {}) : config
-            wrap(decrypt(config))
+            config = wrap(config)
+            config.map { |config| decrypt(config) }
           end
         end
 
