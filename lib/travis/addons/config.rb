@@ -32,12 +32,12 @@ module Travis
       def values(key)
         value = config
         value = value.is_a?(Hash) ? value[key] : value
-        value.is_a?(Array) || value.is_a?(String) ? normalize_array(value) : value
+        value.is_a?(Array) || value.is_a?(String) ? normalize_strings(value) : value
       end
 
       private
 
-        def normalize_array(values)
+        def normalize_strings(values)
           values = Array(values).compact
           values = values.map { |value| value.split(',') if value.is_a?(String) }
           values.compact.flatten.map(&:strip).reject(&:blank?)
