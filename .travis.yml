@@ -20,23 +20,14 @@ services:
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
 
-script:
-  - bundle exec rspec
-
-
 jobs:
   include:
     - stage: "testing time"
-    - stage: ":ship: it to Quay.io"
-      sudo: required
-      dist: trusty
+      script: bundle exec rspec
+    - stage: ":ship: it to quay.io"
       ruby:
       services:
       addons:
       before_install: echo "skipping"
       install: echo "skipping"
-      before_script:
-        - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > ./docker-compose
-        - sudo mv ./docker-compose /usr/local/bin/docker-compose
-        - sudo chmod +x /usr/local/bin/docker-compose
-      script: ./script/docker-build-and-push
+      script: make ship
