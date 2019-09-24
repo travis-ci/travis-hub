@@ -14,11 +14,15 @@ module Travis
           end
 
           def handle
-            run_task(:slack, payload, targets: targets)
+            run_task(:slack, payload, targets: targets, template: template)
           end
 
           def targets
             @targets ||= config.values(:rooms)
+          end
+
+          def template
+            config.values(:template)
           end
 
           class Instrument < Addons::Instrument

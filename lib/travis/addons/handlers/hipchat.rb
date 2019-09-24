@@ -14,11 +14,19 @@ module Travis
           end
 
           def handle
-            run_task(:hipchat, payload, targets: targets)
+            run_task(:hipchat, payload, targets: targets, template: template, format: format)
           end
 
           def targets
             @targets ||= config.values(:rooms)
+          end
+
+          def template
+            config.values(:template)
+          end
+
+          def format
+            config.values(:format)
           end
 
           class Instrument < Addons::Instrument

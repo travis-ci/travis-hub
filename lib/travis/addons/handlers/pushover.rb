@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:pushover, payload, users: users, api_key: api_key)
+            run_task(:pushover, payload, users: users, api_key: api_key, template: template)
           end
 
           def users
@@ -23,6 +23,10 @@ module Travis
 
           def api_key
             @api_key ||= config[:api_key]
+          end
+
+          def template
+            config.values(:template)
           end
 
           class Instrument < Addons::Instrument
