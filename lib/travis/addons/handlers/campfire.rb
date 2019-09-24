@@ -14,11 +14,15 @@ module Travis
           end
 
           def handle
-            run_task(:campfire, payload, targets: targets)
+            run_task(:campfire, payload, targets: targets, template: template)
           end
 
           def targets
             config.values(:rooms)
+          end
+
+          def template
+            config.values(:template)
           end
 
           class Instrument < Addons::Instrument
