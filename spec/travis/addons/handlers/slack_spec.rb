@@ -57,7 +57,7 @@ describe Travis::Addons::Handlers::Slack do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'])
+      handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'], template: ['room'])
       handler.handle
     end
   end

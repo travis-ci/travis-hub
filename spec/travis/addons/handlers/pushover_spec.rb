@@ -51,7 +51,7 @@ describe Travis::Addons::Handlers::Pushover do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:pushover, is_a(Hash), users: ['user'], api_key: 'api_key')
+      handler.expects(:run_task).with(:pushover, is_a(Hash), users: ['user'], api_key: 'api_key', template: nil)
       handler.handle
     end
   end

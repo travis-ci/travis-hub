@@ -57,7 +57,7 @@ describe Travis::Addons::Handlers::Hipchat do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:hipchat, is_a(Hash), targets: ['room'])
+      handler.expects(:run_task).with(:hipchat, is_a(Hash), targets: ['room'], format: ['room'], template: ['room'])
       handler.handle
     end
   end
