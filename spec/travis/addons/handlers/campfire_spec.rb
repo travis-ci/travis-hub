@@ -3,9 +3,9 @@ describe Travis::Addons::Handlers::Campfire do
   let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { campfire: config } }) }
   let(:config)  { 'room' }
 
-  describe 'subscription' do
-    before { Travis::Event.setup([:campfire]) }
+  before { Travis::Event.setup([:campfire]) }
 
+  describe 'subscription' do
     it 'build:started does not notify' do
       described_class.expects(:notify).never
       Travis::Event.dispatch('build:started', id: build.id)
@@ -15,6 +15,17 @@ describe Travis::Addons::Handlers::Campfire do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:finished', id: build.id)
     end
+  end
+
+  describe 'multiple configs' do
+    let(:config)  { [{ rooms: 'one' }, { rooms: 'two' }] }
+    let(:jobs)    { Sidekiq::Queues.jobs_by_queue['campfire'] }
+    let(:targets) { jobs.map { |job| job['args'].last['targets'] } }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(jobs.size).to eq 2 }
+    it { expect(targets).to eq [['one'], ['two']] }
   end
 
   describe 'handle?' do

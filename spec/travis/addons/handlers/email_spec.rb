@@ -7,9 +7,9 @@ describe Travis::Addons::Handlers::Email do
   let(:config)  { address }
   let(:address) { 'me@email.com' }
 
-  describe 'subscription' do
-    before { Travis::Event.setup([:email]) }
+  before { Travis::Event.setup([:email]) }
 
+  describe 'subscription' do
     it 'build:started does not notify' do
       described_class.expects(:notify).never
       Travis::Event.dispatch('build:started', id: build.id)
@@ -19,6 +19,17 @@ describe Travis::Addons::Handlers::Email do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:finished', id: build.id)
     end
+  end
+
+  describe 'multiple configs' do
+    let(:config) { [{ recipients: 'one@email.com' }, { recipients: 'two@email.com' }] }
+    let(:jobs)   { Sidekiq::Queues.jobs_by_queue['email'] }
+    let(:recipients) { jobs.map { |job| job['args'].last['recipients'] } }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(jobs.size).to eq 2 }
+    it { expect(recipients).to eq [['one@email.com'], ['two@email.com']] }
   end
 
   describe 'handle?' do
