@@ -21,10 +21,6 @@ module Travis
             @targets ||= config.values(:rooms)
           end
 
-          def template
-            config.values(:template)
-          end
-
           class Instrument < Addons::Instrument
             def notify_completed
               publish(targets: handler.targets)

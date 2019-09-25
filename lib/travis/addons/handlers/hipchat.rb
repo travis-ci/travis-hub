@@ -21,10 +21,6 @@ module Travis
             @targets ||= config.values(:rooms)
           end
 
-          def template
-            config.values(:template)
-          end
-
           def format
             config.values(:format)
           end

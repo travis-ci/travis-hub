@@ -25,10 +25,6 @@ module Travis
             @api_key ||= config[:api_key]
           end
 
-          def template
-            config.values(:template)
-          end
-
           class Instrument < Addons::Instrument
             def notify_completed
               publish(users: handler.users, api_key: handler.api_key)

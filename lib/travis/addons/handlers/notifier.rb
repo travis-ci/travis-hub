@@ -55,6 +55,10 @@ module Travis
       class Notifier < Base
         include Handlers::Task
 
+        def template
+          config[:template]
+        end
+
         def config
           @config ||= Config.new(object, params[:config])
         end

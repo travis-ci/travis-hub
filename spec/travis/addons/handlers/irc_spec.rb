@@ -28,6 +28,16 @@ describe Travis::Addons::Handlers::Irc do
     it { expect(channels).to eq [['one'], ['two']] }
   end
 
+  describe 'given a plain string' do
+    let(:params) { Sidekiq::Queues.jobs_by_queue['irc'][0]['args'].last }
+    let(:config) { 'channel' }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(params['channels']).to eq ['channel'] }
+    it { expect(params['template']).to be_nil }
+  end
+
   describe 'handle?' do
     it 'is true if the build is a push request' do
       build.update_attributes(event_type: 'push')
@@ -62,7 +72,7 @@ describe Travis::Addons::Handlers::Irc do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:irc, is_a(Hash), channels: ['channel'], template: ['channel'])
+      handler.expects(:run_task).with(:irc, is_a(Hash), channels: ['channel'], template: nil)
       handler.handle
     end
   end

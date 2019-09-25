@@ -28,6 +28,16 @@ describe Travis::Addons::Handlers::Slack do
     it { expect(targets).to eq [['one'], ['two']] }
   end
 
+  describe 'given a plain string' do
+    let(:params) { Sidekiq::Queues.jobs_by_queue['slack'][0]['args'].last }
+    let(:config) { 'room' }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(params['targets']).to eq ['room'] }
+    it { expect(params['template']).to be_nil }
+  end
+
   describe 'handle?' do
     it 'is true if the build is a push request' do
       build.update_attributes(event_type: 'push')
@@ -68,7 +78,7 @@ describe Travis::Addons::Handlers::Slack do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'], template: ['room'])
+      handler.expects(:run_task).with(:slack, is_a(Hash), targets: ['room'], template: nil)
       handler.handle
     end
   end

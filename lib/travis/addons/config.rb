@@ -15,7 +15,7 @@ module Travis
       end
 
       def [](key)
-        config[key]
+        config[key] if config.is_a?(Hash)
       end
 
       def enabled?

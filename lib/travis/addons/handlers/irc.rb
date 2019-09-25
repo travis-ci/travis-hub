@@ -21,10 +21,6 @@ module Travis
             @channels ||= config.values(:channels)
           end
 
-          def template
-            config.values(:template)
-          end
-
           class Instrument < Addons::Instrument
             def notify_completed
               publish(channels: handler.channels)
