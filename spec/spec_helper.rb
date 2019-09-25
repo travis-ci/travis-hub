@@ -40,6 +40,7 @@ RSpec.configure do |c|
     Travis::Event.instance_variable_set(:@subscriptions, nil)
     Time.stubs(:now).returns(NOW)
     Time.stubs(:new).returns(NOW)
+    Sidekiq::Queues.clear_all
   end
 end
 

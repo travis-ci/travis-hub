@@ -3,9 +3,9 @@ describe Travis::Addons::Handlers::Pushover do
   let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { pushover: config } }) }
   let(:config)  { { users: 'user', api_key: 'api_key' } }
 
-  describe 'subscription' do
-    before { Travis::Event.setup([:pushover]) }
+  before { Travis::Event.setup([:pushover]) }
 
+  describe 'subscription' do
     it 'build:started does not notify' do
       described_class.expects(:notify).never
       Travis::Event.dispatch('build:started', id: build.id)
@@ -15,6 +15,17 @@ describe Travis::Addons::Handlers::Pushover do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:finished', id: build.id)
     end
+  end
+
+  describe 'multiple configs' do
+    let(:config) { [{ api_key: 'one', users: 'one' }, { api_key: 'two', users: 'two' }] }
+    let(:jobs)   { Sidekiq::Queues.jobs_by_queue['pushover'] }
+    let(:keys)   { jobs.map { |job| job['args'].last['api_key'] } }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(jobs.size).to eq 2 }
+    it { expect(keys).to eq ['one', 'two'] }
   end
 
   describe 'handle?' do

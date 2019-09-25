@@ -4,9 +4,9 @@ describe Travis::Addons::Handlers::Webhook do
   let(:build)   { FactoryGirl.create(:build, repository: repo, state: :passed, config: { notifications: { webhooks: config } }) }
   let(:config)  { { urls: 'http://host.com/target' } }
 
-  describe 'subscription' do
-    before { Travis::Event.setup([:webhook]) }
+  before { Travis::Event.setup([:webhook]) }
 
+  describe 'subscription' do
     it 'build:started notifies' do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:started', id: build.id)
@@ -28,6 +28,17 @@ describe Travis::Addons::Handlers::Webhook do
       described_class.expects(:notify)
       Travis::Event.dispatch('build:errored', id: build.id)
     end
+  end
+
+  describe 'multiple configs' do
+    let(:config)  { [{ urls: 'one' }, { urls: 'two' }] }
+    let(:jobs)    { Sidekiq::Queues.jobs_by_queue['webhook'] }
+    let(:targets) { jobs.map { |job| job['args'].last['targets'] } }
+
+    before { Travis::Event.dispatch('build:finished', id: build.id) }
+
+    it { expect(jobs.size).to eq 2 }
+    it { expect(targets).to eq [['one'], ['two']] }
   end
 
   describe 'handle?' do
