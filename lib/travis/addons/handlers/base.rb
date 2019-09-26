@@ -36,8 +36,7 @@ module Travis
         end
 
         def on_pull_request?
-          value = config.values(:on_pull_requests)
-          value.nil? || value
+          config.key?(:on_pull_requests) ? !!config[:on_pull_requests] : true
         end
       end
     end
