@@ -12,7 +12,7 @@
   {
     "name": "bintray",
     "status": "alpha",
-    "date": "2019-05-20"
+    "date": "2019-08-05"
   },
   {
     "name": "bluemixcloudfoundry",
@@ -32,7 +32,7 @@
   {
     "name": "chef_supermarket",
     "status": "alpha",
-    "date": "2019-05-20"
+    "date": "2019-08-05"
   },
   {
     "name": "cloud66",
@@ -57,7 +57,7 @@
   {
     "name": "codedeploy",
     "status": "alpha",
-    "date": "2019-05-16"
+    "date": "2019-08-05"
   },
   {
     "name": "convox",
@@ -92,7 +92,7 @@
   {
     "name": "gcs",
     "status": "beta",
-    "date": "2019-05-07"
+    "date": "2019-09-26"
   },
   {
     "name": "gleis",
@@ -112,17 +112,17 @@
   {
     "name": "heroku:api",
     "status": "beta",
-    "date": "2019-05-07"
+    "date": "2019-09-26"
   },
   {
     "name": "heroku:git",
     "status": "alpha",
-    "date": "2019-05-07"
+    "date": "2019-08-05"
   },
   {
     "name": "lambda",
     "status": "beta",
-    "date": "2019-05-07"
+    "date": "2019-09-26"
   },
   {
     "name": "launchpad",
@@ -152,17 +152,17 @@
   {
     "name": "packagecloud",
     "status": "alpha",
-    "date": "2019-05-07"
+    "date": "2019-08-05"
   },
   {
     "name": "pages:api",
     "status": "dev",
-    "date": "2019-08-21"
+    "date": "2019-09-10"
   },
   {
     "name": "pages:git",
     "status": "beta",
-    "date": "2019-08-21"
+    "date": "2019-09-26"
   },
   {
     "name": "puppetforge",
@@ -187,7 +187,7 @@
   {
     "name": "s3",
     "status": "beta",
-    "date": "2019-05-07"
+    "date": "2019-09-26"
   },
   {
     "name": "scalingo",
@@ -207,12 +207,12 @@
   {
     "name": "surge",
     "status": "alpha",
-    "date": "2019-05-07"
+    "date": "2019-08-05"
   },
   {
     "name": "testfairy",
     "status": "alpha",
-    "date": "2019-05-07"
+    "date": "2019-08-05"
   },
   {
     "name": "transifex",
@@ -220,4 +220,3 @@
     "date": "2019-08-05"
   }
 ]
-
