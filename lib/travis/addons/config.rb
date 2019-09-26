@@ -18,6 +18,10 @@ module Travis
         config[key] if config.is_a?(Hash)
       end
 
+      def key?(key)
+        config.key?(key) if config.is_a?(Hash)
+      end
+
       def enabled?
         return false unless config
         return true unless config.respond_to?(:key?)
