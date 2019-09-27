@@ -10,6 +10,8 @@ module Travis
 
         class Notifier < Notifier
           def handle?
+            Addons.logger.info("config=#{config.to_s}")
+            Addons.logger.info("on_pull_request?=#{on_pull_request?.to_s}")
             enabled? && targets.present? && config.send_on?(:slack, action)
           end
 
