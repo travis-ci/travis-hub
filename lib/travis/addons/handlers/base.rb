@@ -28,6 +28,8 @@ module Travis
         end
 
         def pull_request?
+          Addons.logger.info "object=#{object}"
+          Addons.logger.info "config=#{config}"
           object.pull_request?
         end
 
