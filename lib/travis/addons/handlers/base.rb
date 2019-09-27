@@ -28,8 +28,7 @@ module Travis
         end
 
         def pull_request?
-          Addons.logger.info "object=#{object.inspect}"
-          Addons.logger.info "config=#{config.inspect}"
+          Addons.logger.info("config=#{config.to_s}") if config
           object.pull_request?
         end
 

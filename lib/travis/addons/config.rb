@@ -39,6 +39,10 @@ module Travis
         value.is_a?(Array) || value.is_a?(String) ? normalize_strings(value) : value
       end
 
+      def to_s
+        "build=#{build};config=#{config.to_s}"
+      end
+
       private
 
         def normalize_strings(values)
