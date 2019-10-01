@@ -27,13 +27,12 @@ module Travis
       end
     end
 
-    def decrypt(config)
+    def decrypt(config, &block)
       return config if config.nil? || config.is_a?(String)
 
       config.inject(config.class.new) do |result, element|
         key, element = element if result.is_a?(Hash)
-        value = process(result, key, decrypt_element(key, element))
-        block_given? ? yield(value) : value
+        value = process(result, key, decrypt_element(key, element, &block))
       end
     end
 
@@ -46,11 +45,12 @@ module Travis
 
     private
 
-      def decrypt_element(key, element)
+      def decrypt_element(key, element, &block)
         if element.is_a?(Array) || element.is_a?(Hash)
-          decrypt(element)
+          decrypt(element, &block)
         elsif secure_key?(key) && element
-          decrypt_value(element)
+          value = decrypt_value(element)
+          block ? yield(value) : value
         else
           element
         end

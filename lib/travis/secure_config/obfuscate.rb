@@ -10,6 +10,7 @@ module Travis
       def run
         config = self.config.except(:source_key)
         config[:env] = obfuscate(config[:env]) if config[:env]
+        config[:global_env] = obfuscate(config[:global_env]) if config[:global_env]
         config
       end
 
@@ -23,7 +24,9 @@ module Travis
 
         def obfuscate_values(values)
           Array.wrap(values).compact.map do |value|
-            obfuscate_value(value)
+            value = obfuscate_value(value)
+            value = value.map { |key, value| [key, value].join('=') } if value.is_a?(Hash)
+            value
           end
         end
 
@@ -33,9 +36,12 @@ module Travis
           end
         end
 
-        def obfuscate_env_vars(line)
-          if line.respond_to?(:gsub)
-            line.gsub(ENV_VAR_PATTERN) { |val| '[secure]' }
+        def obfuscate_env_vars(vars)
+          case vars
+          when Hash
+            vars.map { |key, var| [key, obfuscate_env_vars(var)] }.to_h
+          when String
+            vars =~ ENV_VAR_PATTERN ? vars.gsub(ENV_VAR_PATTERN) { |*| '[secure]' } : '[secure]'
           else
             '[One of the secure variables in your .travis.yml has an invalid format.]'
           end
