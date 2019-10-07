@@ -1,0 +1,9 @@
+*.md
+.dockerignore
+.env
+.git
+.travis.yml
+Dockerfile
+spec
+#IDEs folders
+.idea

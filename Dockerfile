@@ -1,23 +1,26 @@
-FROM ruby:2.4.2
+FROM ruby:2.4.2-slim
 
-LABEL maintainer Travis CI GmbH <support+travis-app-docker-images@travis-ci.com>
+LABEL maintainer Travis CI GmbH <support+travis-hub-docker-images@travis-ci.com>
 
-RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
+# packages required for bundle install
+RUN ( \
+   apt-get update ; \
+   apt-get install -y --no-install-recommends git make gcc g++ libpq-dev \
+   && rm -rf /var/lib/apt/lists/* \
+)
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY Gemfile      /usr/src/app
-COPY Gemfile.lock /usr/src/app
+COPY Gemfile      /app
+COPY Gemfile.lock /app
 
 ARG bundle_gems__contribsys__com
 RUN bundle config https://gems.contribsys.com/ $bundle_gems__contribsys__com \
       && bundle install --deployment \
       && bundle config --delete https://gems.contribsys.com/
 
-COPY . /usr/src/app
-
-CMD /bin/bash
+COPY . /app

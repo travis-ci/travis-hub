@@ -13,3 +13,5 @@ tmp
 .jdk-overlay
 /db/main/structure.sql
 .envrc
+#IDEs folders
+.idea
