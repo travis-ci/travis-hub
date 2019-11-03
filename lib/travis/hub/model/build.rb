@@ -101,7 +101,8 @@ class Build < ActiveRecord::Base
     end
 
     def matrix
-      Matrix.new(jobs, config[:matrix])
+      # merging jobs and matrix can be removed once all configs go through travis-yml
+      Matrix.new(jobs, config.values_at(:jobs, :matrix).select { |obj| obj.is_a?(Hash) }.inject(&:merge))
     end
 
     def config_valid?
