@@ -3,6 +3,8 @@ sudo: false
 
 import:
   - travis-ci/build-configs:db-setup.yml
+  - source: travis-ci/build-configs:ship-docker.yml
+    if: branch = master
 
 rvm: 2.4.2
 
@@ -20,14 +22,4 @@ services:
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
 
-jobs:
-  include:
-    - stage: "testing time"
-      script: bundle exec rspec
-    - stage: ":ship: it to quay.io"
-      ruby:
-      services:
-      addons:
-      before_install: echo "skipping"
-      install: echo "skipping"
-      script: make ship
+script: bundle exec rspec
