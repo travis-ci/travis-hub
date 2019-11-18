@@ -70,11 +70,11 @@ module Travis
           end
 
           def build_passed?
-            build.state.try(:to_sym) == :passed
+            build.state.try(:to_sym) == :passed && all_jobs_finished?
           end
 
           def build_canceled?
-            build.state.try(:to_sym) == :canceled
+            build.state.try(:to_sym) == :canceled && all_jobs_finished?
           end
 
           def build_failed?
@@ -87,6 +87,11 @@ module Travis
 
           def previous_build_failed?
             !previous_build_passed?
+          end
+
+          def all_jobs_finished?
+            finish_states = [:passed, :failed, :errored, :canceled]
+            build.jobs.all? { |job| finish_states.includes?(job.state) }
           end
 
           # Based on the given config (.travis.yml) we
