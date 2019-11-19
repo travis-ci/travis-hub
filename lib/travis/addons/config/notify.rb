@@ -89,12 +89,6 @@ module Travis
             !previous_build_passed?
           end
 
-          def all_jobs_finished?
-            finish_states = [:passed, :failed, :errored, :canceled]
-            puts build.jobs.to_json
-            build.jobs.all? { |job| finish_states.includes?(job.state) }
-          end
-
           # Based on the given config (.travis.yml) we
           #
           # * first check for the given notification type (e.g. { notifications: { email: :on_success } })
