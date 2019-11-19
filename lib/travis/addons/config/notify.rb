@@ -70,15 +70,15 @@ module Travis
           end
 
           def build_passed?
-            build.state.try(:to_sym) == :passed && all_jobs_finished?
+            build.state.try(:to_sym) == :passed
           end
 
           def build_canceled?
-            build.state.try(:to_sym) == :canceled && all_jobs_finished?
+            build.state.try(:to_sym) == :canceled
           end
 
           def build_failed?
-            !build_passed?
+            !build_passed? && all_jobs_finished?
           end
 
           def previous_build_passed?
