@@ -78,7 +78,7 @@ module Travis
           end
 
           def build_failed?
-            !build_passed? && all_jobs_finished?
+            !build_passed?
           end
 
           def previous_build_passed?
