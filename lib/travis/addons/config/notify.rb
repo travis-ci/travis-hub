@@ -92,7 +92,7 @@ module Travis
           def all_jobs_finished?
             finish_states = [:passed, :failed, :errored, :canceled]
             puts "build.jobs: #{build.jobs.to_json}"
-            build.jobs.all? { |job| finish_states.includes?(job.state) }
+            build.jobs.all? { |job| finish_states.include?(job.state) }
           end
 
           # Based on the given config (.travis.yml) we
