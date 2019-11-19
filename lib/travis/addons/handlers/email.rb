@@ -11,7 +11,7 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present? && all_jobs_finished?
+            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
           def handle
@@ -26,12 +26,6 @@ module Travis
           end
 
           private
-
-            def all_jobs_finished?
-              finish_states = [:passed, :failed, :errored, :canceled]
-              info "Buidd.jobs: #{build.jobs.to_json}"
-              build.jobs.all? { |job| finish_states.includes?(job.state) }
-            end
 
             def configured_emails
               emails = config.values(:recipients)

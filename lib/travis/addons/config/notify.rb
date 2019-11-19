@@ -78,7 +78,7 @@ module Travis
           end
 
           def build_failed?
-            !build_passed?
+            !build_passed? && all_jobs_finished?
           end
 
           def previous_build_passed?
@@ -87,6 +87,12 @@ module Travis
 
           def previous_build_failed?
             !previous_build_passed?
+          end
+
+          def all_jobs_finished?
+            finish_states = [:passed, :failed, :errored, :canceled]
+            info "build.jobs: #{build.jobs.to_json}"
+            build.jobs.all? { |job| finish_states.includes?(job.state) }
           end
 
           # Based on the given config (.travis.yml) we
