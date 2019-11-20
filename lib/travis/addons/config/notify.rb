@@ -28,6 +28,8 @@ module Travis
 
         private
 
+          FINISH_STATES = %i[passed failed errored canceled].freeze
+
           def on_started_for?(type)
             config = with_fallbacks(type, :on_start, DEFAULTS[:start][type])
             config == true || config == :always
@@ -90,8 +92,7 @@ module Travis
           end
 
           def all_jobs_finished?
-            finish_states = %i[passed failed errored canceled].freeze
-            build.jobs.all? { |job| finish_states.include?(job.state) }
+            build.jobs.all? { |job| FINISH_STATES.include?(job.state) }
           end
 
           # Based on the given config (.travis.yml) we

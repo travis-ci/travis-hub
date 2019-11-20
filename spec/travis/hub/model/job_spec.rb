@@ -125,6 +125,18 @@ describe Job do
           expect(job.build.reload.finished_at).to be_nil
         end
       end
+
+      describe 'with one job failed and other jobs being pending' do
+        before do
+          FactoryGirl.create(:job, build: build, state: :started)
+          FactoryGirl.create(:job, build: build, state: :failed)
+        end
+
+        it 'does not set :state to :failed' do
+          receive
+          expect(job.build.reload.state).to_not eql(:failed)
+        end
+      end
     end
 
     describe 'it denormalizes to the repository' do
