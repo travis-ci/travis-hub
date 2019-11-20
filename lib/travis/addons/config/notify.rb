@@ -90,7 +90,7 @@ module Travis
           end
 
           def all_jobs_finished?
-            finish_states = [:passed, :failed, :errored, :canceled]
+            finish_states = %i[passed failed errored canceled]
             build.jobs.all? { |job| finish_states.include?(job.state) }
           end
 
