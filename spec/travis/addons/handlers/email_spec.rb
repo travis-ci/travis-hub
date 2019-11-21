@@ -76,6 +76,7 @@ describe Travis::Addons::Handlers::Email do
 
   describe 'recipients' do
     let(:user)      { FactoryGirl.create(:user) }
+    let(:user2)     { FactoryGirl.create(:user) }
     let(:address)   { 'me@email.com' }
     let(:other)     { 'other@email.com' }
     let(:author)    { 'author@email.com' }
@@ -143,11 +144,18 @@ describe Travis::Addons::Handlers::Email do
       it { expect(handler.recipients).to eql [address, other] }
     end
 
-    describe 'ignores repo-level unsubscribe' do
+    describe 'filters out unsubscribed users' do
       let(:config) { address }
-      before { Email.create(user: user, email: address) }
-      before { EmailUnsubscribe.create(user: user, repository: repo) }
-      it { expect(handler.recipients).to eql [address] }
+
+      before {
+        Email.create(user: user, email: address)
+        Email.create(user: user2, email: other)
+        EmailUnsubscribe.create(user: user2, repository: repo)
+      }
+
+      it {
+        expect(handler.recipients).to eql [address]
+      }
     end
 
     describe 'observes user-level no emails preference' do

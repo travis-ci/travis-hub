@@ -21,6 +21,7 @@ module Travis
           def recipients
             @recipients ||= begin
               emails = configured_emails || default_emails
+              emails -= unsubscribed_emails
               emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
             end
           end
@@ -35,8 +36,12 @@ module Travis
             def default_emails
               emails = [commit.author_email, commit.committer_email]
               user_ids = object.repository.permissions.pluck(:user_id)
-              user_ids -= object.repository.email_unsubscribes.pluck(:user_id)
               ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
+            end
+
+            def unsubscribed_emails
+              user_ids = object.repository.email_unsubscribes.pluck(:user_id)
+              ::Email.where(user_id: user_ids).pluck(:email).uniq
             end
 
             def broadcasts
