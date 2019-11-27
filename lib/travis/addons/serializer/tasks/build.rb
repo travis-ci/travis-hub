@@ -22,7 +22,7 @@ module Travis
           def data
             {
               repository: repository_data,
-              owner:  owner ? owner_data : {},
+              owner: owner ? owner_data : {},
               request: request_data,
               pull_request: pull_request ? pull_request_data : nil,
               tag: tag ? tag_data : nil,
@@ -65,6 +65,8 @@ module Travis
               {
                 id: repository.id,
                 github_id: repository.github_id,
+                vcs_id: repository.vcs_id,
+                vcs_type: repository.vcs_type,
                 key: repository.key.try(:public_key),
                 slug: repository.slug,
                 name: repository.name,
