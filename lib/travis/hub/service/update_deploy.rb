@@ -20,6 +20,7 @@ module Travis
             attr_reader :data
 
             def initialize(data)
+              p [:dpl_provider, data]
               @data = data.map { |key, value| [key.to_sym, value] }.to_h
             end
 
@@ -27,12 +28,12 @@ module Travis
               [data[:name], data[:strategy]].compact.join(':')
             end
 
-            def success?
-              data[:status].to_i == 0
+            def status?
+              %w(dev alpha beta).include?(data[:status])
             end
 
             def update_status?
-              success? && (Date.today - 30 > Date.parse(data[:date]))
+              status? && (Date.today - 30 > Date.parse(data[:date]))
             end
           end
 
@@ -64,6 +65,7 @@ module Travis
         instrument :run
 
         def job
+          p [:dpl_service, data]
           @job ||= Job.find(job_id)
         end
 
@@ -76,7 +78,7 @@ module Travis
         private
 
           def notify_slack?
-            edge? && provider&.update_status? && slug != 'travis-ci/dpl'
+            success? && edge? && provider&.update_status? && slug != 'travis-ci/dpl'
           end
 
           def notify_slack
@@ -107,6 +109,10 @@ module Travis
 
           def provider_name(strategy = data[:strategy])
             [data[:provider], strategy].compact.join(':')
+          end
+
+          def success?
+            data[:status] == '0'
           end
 
           def edge?
