@@ -20,7 +20,6 @@ module Travis
             attr_reader :data
 
             def initialize(data)
-              p [:dpl_provider, data]
               @data = data.map { |key, value| [key.to_sym, value] }.to_h
             end
 
@@ -65,7 +64,6 @@ module Travis
         instrument :run
 
         def job
-          p [:dpl_service, data]
           @job ||= Job.find(job_id)
         end
 
