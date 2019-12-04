@@ -12,6 +12,8 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
+          return true if repository.vcs_type != 'GithubRepository'
+
           installation?
         end
 

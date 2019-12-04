@@ -11,8 +11,10 @@ module Travis
         EVENTS = /build:(created|started|finished|canceled|restarted)/
 
         def handle?
-          # true for repos that use legacy service hooks/OAuth 
-          # or are featured flagged and managed by github apps installations 
+          return true if repository.vcs_type != 'GithubRepository'
+
+          # true for repos that use legacy service hooks/OAuth
+          # or are featured flagged and managed by github apps installations
           installation? ? handle_installation? : handle_legacy?
         end
 
@@ -67,8 +69,8 @@ module Travis
           end
 
           def github_status_for_installation?
-            Travis::Features.owner_active?(:use_commit_status, repository.owner) || 
-            Travis::Features.repository_active?(:use_commit_status, repository.id) || 
+            Travis::Features.owner_active?(:use_commit_status, repository.owner) ||
+            Travis::Features.repository_active?(:use_commit_status, repository.id) ||
             Travis::Features.enabled_for_all?(:use_commit_status)
           end
 
