@@ -1,8 +1,7 @@
-dist: trusty
-sudo: false
+language: ruby
 
 import:
-  - travis-ci/build-configs:db-setup.yml@postgres-9.6
+  - travis-ci/build-configs:db-setup.yml
 
 rvm: 2.4.2
 
@@ -12,6 +11,11 @@ env:
   global:
   - COVERAGE=1
 
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
 services:
   - memcached
   - redis
@@ -19,6 +23,7 @@ services:
 
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
+  - 'gem install bundler:1.16.2'
 
 jobs:
   include:
