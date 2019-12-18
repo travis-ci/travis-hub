@@ -2,7 +2,7 @@ dist: trusty
 sudo: false
 
 import:
-  - travis-ci/build-configs:db-setup.yml
+  - travis-ci/build-configs:db-setup.yml@postgres-9.6
 
 rvm: 2.4.2
 
