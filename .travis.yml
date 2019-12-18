@@ -1,5 +1,4 @@
-dist: trusty
-sudo: false
+language: ruby
 
 import:
   - travis-ci/build-configs:db-setup.yml
