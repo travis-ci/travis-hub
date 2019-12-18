@@ -18,6 +18,7 @@ services:
 
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
+  - 'gem install bundler:1.16.2'
 
 jobs:
   include:
