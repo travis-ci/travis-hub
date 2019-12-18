@@ -1,8 +1,7 @@
-dist: trusty
-sudo: false
+language: ruby
 
 import:
-  - travis-ci/build-configs:db-setup.yml@postgres-9.6
+  - travis-ci/build-configs:db-setup.yml
 
 rvm: 2.4.2
 
