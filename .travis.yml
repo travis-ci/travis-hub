@@ -11,6 +11,11 @@ env:
   global:
   - COVERAGE=1
 
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
 services:
   - memcached
   - redis
