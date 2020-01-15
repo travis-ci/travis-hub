@@ -15,6 +15,8 @@ module Travis
             Travis::Addons.logger.send(:info, "Email < Notifiers - configured_emails: #{configured_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers - default_emails: #{default_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers - unsubscribed_emails: #{unsubscribed_emails.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - config.values(:recipients): #{config.values(:recipients).to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - [commit.author_email, commit.committer_email]: #{[commit.author_email, commit.committer_email].to_s}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
