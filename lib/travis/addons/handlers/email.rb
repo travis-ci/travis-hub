@@ -12,7 +12,10 @@ module Travis
         class Notifier < Notifier
           def handle?
             Travis::Addons.logger.send(:info, "Email < Notifiers - recipients: #{recipients.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - config: #{config.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - configured_emails: #{configured_emails.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - default_emails: #{default_emails.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - unsubscribed_emails: #{unsubscribed_emails.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - config: #{config.to_h}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
