@@ -11,8 +11,8 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            Travis::Addons.logger.send(:info, "Email<Notifiers: #{recipients.to_s}")
-            puts("Email<Notifiers: #{recipients.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - recipients: #{recipients.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - config: #{config.to_s}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
