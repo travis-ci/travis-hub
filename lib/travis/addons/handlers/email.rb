@@ -40,7 +40,7 @@ module Travis
             end
 
             def default_emails
-              emails = [commit.author_email, commit.committer_email]
+              emails = [commit.author_email, commit.committer_email].compact
               user_ids = object.repository.permissions.pluck(:user_id)
               Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - emails: #{emails.to_s}")
               Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - user_ids: #{user_ids.to_s}")
