@@ -1,0 +1,2 @@
+echo 'updating dpl.json ...'
+curl -s https://raw.githubusercontent.com/travis-ci/dpl/master/status.json > dpl.json
