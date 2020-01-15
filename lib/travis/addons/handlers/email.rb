@@ -11,7 +11,7 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            Travis::Addons.logger.send(:info, "Email < Notifiers - recipients: #{recipients.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers - recipients.present?: #{recipients.present?}")
             Travis::Addons.logger.send(:info, "Email < Notifiers - configured_emails: #{configured_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers - default_emails: #{default_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers - unsubscribed_emails: #{unsubscribed_emails.to_s}")
@@ -42,6 +42,8 @@ module Travis
             def default_emails
               emails = [commit.author_email, commit.committer_email]
               user_ids = object.repository.permissions.pluck(:user_id)
+              Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - emails: #{emails.to_s}")
+              Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - user_ids: #{user_ids.to_s}")
               ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
             end
 
