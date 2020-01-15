@@ -11,6 +11,8 @@ module Travis
 
         class Notifier < Notifier
           def handle?
+            logger.info("Email<Notifiers: #{recipients.to_s}")
+            puts("Email<Notifiers: #{recipients.to_s}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
