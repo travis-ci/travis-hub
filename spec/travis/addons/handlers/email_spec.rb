@@ -48,6 +48,11 @@ describe Travis::Addons::Handlers::Email do
       it { expect(handler.handle?).to eql(false) }
     end
 
+    describe 'is false if enabled is false' do
+      let(:config) { { enabled: false, recipients: address } }
+      it { expect(handler.handle?).to eql(false) }
+    end
+
     describe 'is true if recipients are given in the config' do
       let(:config) { { recipients: address } }
       it { expect(handler.handle?).to eql(true) }

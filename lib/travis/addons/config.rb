@@ -25,6 +25,7 @@ module Travis
       def enabled?
         return false unless config
         return true unless config.respond_to?(:key?)
+        return false if config.key?(:enabled) && !config[:enabled]
         [:disabled, :disable].each { |key| return !config[key] if config.key?(key) } # TODO deprecate disabled and disable
         true
       end
