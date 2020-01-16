@@ -11,16 +11,12 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            Travis::Addons.logger.send(:info, "Email < Notifiers - recipients.present?: #{recipients.present?}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - configured_emails: #{configured_emails.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - default_emails: #{default_emails.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - unsubscribed_emails: #{unsubscribed_emails.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - config.values(:recipients): #{config.values(:recipients).to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers - [commit.author_email, commit.committer_email]: #{[commit.author_email, commit.committer_email].to_s}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
           def handle
+            Travis::Addons.logger.send(:info, "Email < Notifiers, handle payload: #{payload.to_s}")
+            Travis::Addons.logger.send(:info, "Email < Notifiers, handle broadcasts: #{broadcasts.to_s}")
             run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
           end
 
@@ -40,10 +36,8 @@ module Travis
             end
 
             def default_emails
-              emails = [commit.author_email, commit.committer_email].compact
+              emails = [commit.author_email, commit.committer_email]
               user_ids = object.repository.permissions.pluck(:user_id)
-              Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - emails: #{emails.to_s}")
-              Travis::Addons.logger.send(:info, "Email < Notifiers / default_emails - user_ids: #{user_ids.to_s}")
               ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
             end
 
