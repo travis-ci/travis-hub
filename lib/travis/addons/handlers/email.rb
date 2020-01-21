@@ -43,7 +43,7 @@ module Travis
               emails = [commit.author_email, commit.committer_email]
               Travis::Addons.logger.send(:info, "Email < Notifiers, emails: #{commit.author_email.to_s}, #{commit.committer_email.to_s}")
               user_ids = object.repository.permissions.pluck(:user_id)
-              Travis::Addons.logger.send(:info, "Email < Notifiers, user_ids: #{commit.author_email.to_s}, #{commit.committer_email.to_s}")
+              Travis::Addons.logger.send(:info, "Email < Notifiers, user_ids: #{user_ids}")
               Travis::Addons.logger.send(:info, "Email < Notifiers, result: #{::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq.to_s}")
               ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
             end
