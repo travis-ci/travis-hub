@@ -21,6 +21,7 @@ module Travis
           end
 
           def recipients
+            Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>config: #{config.values(:recipients)}")
             Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>configured_emails: #{configured_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>default_emails: #{default_emails.to_s}")
             Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>unsubscribed_emails: #{unsubscribed_emails.to_s}")
