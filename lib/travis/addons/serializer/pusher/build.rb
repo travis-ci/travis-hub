@@ -13,6 +13,7 @@ module Travis
           def initialize(build, options = {})
             @build = build
             @options = options
+            Travis::Addons.logger.send(:info, "Serializer::Pusher::Build build: #{build.to_s}")
           end
 
           def data
