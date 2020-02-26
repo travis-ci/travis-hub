@@ -42,13 +42,13 @@ describe Travis::Addons::Serializer::Tasks::Build do
       github_id: 12345,
       vcs_id: '12345',
       vcs_type: 'GithubRepository',
-      vcs_slug: 'travis-ci/travis-core',
       key: nil,
       name: 'travis-core',
       owner_name: 'travis-ci',
       owner_avatar_url: nil,
       owner_email: nil,
       slug: 'travis-ci/travis-core',
+      vcs_slug: 'travis-ci/travis-core',
       url: 'https://github.com/travis-ci/travis-core'
     )
   end
