@@ -13,7 +13,8 @@ module Travis
           def handle?
             Travis::Addons.logger.send(:info, "Email < Notifiers, handle? #{!pull_request?} #{config.enabled?} #{config.send_on?(:email, action)} #{recipients.present?}")
             Travis::Addons.logger.send(:info, "action: #{action}, payload: #{payload.to_s}")
-            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
+            #!pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
+            !pull_request? && config.enabled? && recipients.present?
           end
 
           def handle
