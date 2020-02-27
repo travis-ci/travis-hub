@@ -30,6 +30,7 @@ module Travis
       end
 
       def send_on?(type, event)
+        Travis::Addons.logger.send(:info, "Travis::Addons::Config config: #{config.to_s}")
         Notify.new(build, config.is_a?(Hash) ? config : {}).on?(type, event)
       end
 
