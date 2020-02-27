@@ -29,8 +29,6 @@ module Travis
             failsafe(info, properties, payload) do
               event = properties[:type] || fail("No type given on #{properties.inspect} (payload: #{payload.inspect})")
               payload = decode(payload) || fail("No payload given: #{payload.inspect}")
-              Travis::Addons.logger.send(:info, "Hub::Amqp::queue payload: #{payload.to_s}")
-              Travis::Addons.logger.send(:info, "Hub::Amqp::queue event: #{event.to_s}")
               payload.delete('uuid') # TODO seems useless atm, and pollutes the log. decide what to do with these.
               handler.call(event, payload)
             end

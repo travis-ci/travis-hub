@@ -11,22 +11,14 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            Travis::Addons.logger.send(:info, "Email < Notifiers, handle? #{!pull_request?} #{config.enabled?} #{config.send_on?(:email, action)} #{recipients.present?}")
-            Travis::Addons.logger.send(:info, "action: #{action}, payload: #{payload.to_s}")
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
           def handle
-            Travis::Addons.logger.send(:info, "Email < Notifiers, handle payload: #{payload.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers, handle broadcasts: #{broadcasts.to_s}")
             run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
           end
 
           def recipients
-            Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>config: #{config.values(:recipients)}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>configured_emails: #{configured_emails.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>default_emails: #{default_emails.to_s}")
-            Travis::Addons.logger.send(:info, "Email < Notifiers, recipients>unsubscribed_emails: #{unsubscribed_emails.to_s}")
             @recipients ||= begin
               emails = configured_emails || default_emails
               emails -= unsubscribed_emails
@@ -43,10 +35,7 @@ module Travis
 
             def default_emails
               emails = [commit.author_email, commit.committer_email]
-              Travis::Addons.logger.send(:info, "Email < Notifiers, emails: #{commit.author_email.to_s}, #{commit.committer_email.to_s}")
               user_ids = object.repository.permissions.pluck(:user_id)
-              Travis::Addons.logger.send(:info, "Email < Notifiers, user_ids: #{user_ids}")
-              Travis::Addons.logger.send(:info, "Email < Notifiers, result: #{::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq.to_s}")
               ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
             end
 
