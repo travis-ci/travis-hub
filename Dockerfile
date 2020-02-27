@@ -1,4 +1,4 @@
-FROM ruby:2.4.2-stretch
+FROM ruby:2.4.9
 
 LABEL maintainer Travis CI GmbH <support+travis-hub-docker-images@travis-ci.com>
 
