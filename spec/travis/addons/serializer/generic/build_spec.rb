@@ -48,6 +48,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
       owner_avatar_url: nil,
       owner_email: nil,
       slug: 'travis-ci/travis-core',
+      vcs_slug: 'travis-ci/travis-core',
       url: 'https://github.com/travis-ci/travis-core'
     )
   end
