@@ -69,6 +69,7 @@ module Travis
                 vcs_type: repository.vcs_type,
                 key: repository.key.try(:public_key),
                 slug: repository.slug,
+                vcs_slug: repository.vcs_slug,
                 name: repository.name,
                 owner_name: repository.owner_name,
                 owner_email: repository.owner_email,

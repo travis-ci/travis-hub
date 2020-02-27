@@ -10,4 +10,8 @@ Repository.class_eval do
   def slug
     @slug ||= [owner_name, name].join('/')
   end
+
+  def vcs_slug
+    self['vcs_slug'] || slug
+  end
 end
