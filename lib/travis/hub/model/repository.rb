@@ -2,7 +2,7 @@ class Repository < ActiveRecord::Base
   has_many :builds
 
   def slug
-    [owner_name, name].join('/')
+    vcs_slug || [owner_name, name].join('/')
   end
 
   def migrating?

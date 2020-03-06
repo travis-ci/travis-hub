@@ -7,11 +7,9 @@ Repository.class_eval do
   has_one    :key, class_name: 'SslKey'
   has_many   :email_unsubscribes
 
-  def slug
-    @slug ||= [owner_name, name].join('/')
-  end
+  alias_method :vcs_slug, :slug
 
-  def vcs_slug
-    self['vcs_slug'] || slug
+  def slug
+    @slug ||= self['vcs_slug'] || [owner_name, name].join('/')
   end
 end
