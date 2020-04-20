@@ -40,4 +40,4 @@ jobs:
       before_install: echo "skipping"
       install: echo "skipping"
       script: make ship
-      if: type = cron OR commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
+      if: commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
