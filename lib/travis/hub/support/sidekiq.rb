@@ -34,7 +34,8 @@ module Travis
       ::Sidekiq.configure_client do |c|
         c.redis = {
           url: config.redis.url,
-          namespace: config.sidekiq.namespace
+          namespace: config.sidekiq.namespace,
+          id: nil
         }
 
         if pro?
