@@ -64,7 +64,8 @@ module Travis
         ::Sidekiq::RedisConnection.create(
           url: config.redis.url,
           namespace: config.sidekiq.namespace,
-          pool_size: config.sidekiq.pool_size
+          pool_size: config.sidekiq.pool_size,
+          id: nil
         )
       end
 
