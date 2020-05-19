@@ -41,3 +41,10 @@ jobs:
       install: echo "skipping"
       script: make ship
       if: commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: make ship
+    on:
+      branch: master
