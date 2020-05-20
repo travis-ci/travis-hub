@@ -9,12 +9,16 @@ cache: bundler
 
 env:
   global:
-  - COVERAGE=1
+    - PATH=/snap/bin:$PATH
+    - COVERAGE=1
 
 addons:
-  apt:
-    packages:
-      - rabbitmq-server
+  - snaps:
+    - name: docker
+      channel: latest/beta
+  - apt:
+      packages:
+        - rabbitmq-server
 
 services:
   - memcached
