@@ -9,9 +9,13 @@ cache: bundler
 
 env:
   global:
-  - COVERAGE=1
+    - PATH=/snap/bin:$PATH
+    - COVERAGE=1
 
 addons:
+  snaps:
+  - name: docker
+    channel: latest/beta
   apt:
     packages:
       - rabbitmq-server
@@ -41,3 +45,9 @@ jobs:
       install: echo "skipping"
       script: make ship
       if: commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
+
+deploy:
+  - provider: script
+    script: make ship
+    on:
+      branch: master
