@@ -10,7 +10,7 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            true
+            payload.owner && payload.owner.type.downcase == 'user'
           end
 
           def handle
@@ -19,7 +19,7 @@ module Travis
 
           class Instrument < Addons::Instrument
             def notify_completed
-              publish(targets: handler.targets)
+              publish
             end
           end
           Instrument.attach_to(self)
