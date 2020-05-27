@@ -10,7 +10,7 @@ module Travis
 
         class Notifier < Notifier
           def handle?
-            payload.owner && payload.owner.type.downcase == 'user'
+            payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
           end
 
           def handle
