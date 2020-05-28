@@ -5,7 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Intercom < Notifiers
-        EVENTS = 'build:created'
+        EVENTS = 'build:finished'
         KEY = :intercom
 
         class Notifier < Notifier
