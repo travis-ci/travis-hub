@@ -9,6 +9,12 @@ module Travis
         KEY = :intercom
 
         class Notifier < Notifier
+          def setup
+            Raven.capture do
+              "Intercom addon setup"
+            end
+          end
+
           def handle?
             p "handle? call"
             p payload
