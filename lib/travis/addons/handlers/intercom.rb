@@ -10,15 +10,19 @@ module Travis
 
         class Notifier < Notifier
           def handle?
+            p "handle? call"
+            p payload
             payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
           end
 
           def handle
+            p "handle call"
             run_task(:intercom, payload)
           end
 
           class Instrument < Addons::Instrument
             def notify_completed
+              p "publish call"
               publish
             end
           end
