@@ -20,7 +20,6 @@ module Travis
         end
 
         def handle
-          puts "handle_insights_debugging"
           Travis::Sidekiq.insights(event, payload)
         end
 

@@ -15,17 +15,11 @@ module Travis
         @config = config
         @logger = logger
 
-        handlers = []
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore
           Event::Handler.register(name, handler)
           handler.setup(config, logger) if handler.respond_to?(:setup)
-          handlers.push name
-        end
-
-        Raven.capture do
-          handlers
         end
 
         Travis::Encrypt.setup(key: config[:encryption][:key])
