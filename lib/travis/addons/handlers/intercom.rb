@@ -7,20 +7,22 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = 'build:created'
+        EVENTS = 'build:finished'
 
         def handle?
-          puts "handle? call"
-          p payload
-          payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
+          owner_type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
         end
 
         def handle
-          puts "handle call"
           run_task(:intercom, payload)
         end
 
         private
+
+        def owner_type
+          owner = object.owner || {}
+          owner.class.name || ''
+        end
 
         class Instrument < Addons::Instrument
           def notify_completed
