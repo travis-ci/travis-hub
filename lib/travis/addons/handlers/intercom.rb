@@ -7,17 +7,17 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = 'build:finished'
+        EVENTS = 'build:created'
 
         class Notifier < Notifier
           def handle?
-            p "handle? call"
+            puts "handle? call"
             p payload
             payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
           end
 
           def handle
-            p "handle call"
+            puts "handle call"
             run_task(:intercom, payload)
           end
 
