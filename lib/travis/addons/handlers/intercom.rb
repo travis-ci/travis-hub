@@ -4,17 +4,12 @@ require 'travis/addons/handlers/task'
 module Travis
   module Addons
     module Handlers
-      class Intercom < Notifiers
+      class Intercom < Base
+        include Handlers::Task
+
         EVENTS = 'build:finished'
-        KEY = :intercom
 
         class Notifier < Notifier
-          def setup
-            Raven.capture do
-              "Intercom addon setup"
-            end
-          end
-
           def handle?
             p "handle? call"
             p payload
@@ -28,7 +23,6 @@ module Travis
 
           class Instrument < Addons::Instrument
             def notify_completed
-              p "publish call"
               publish
             end
           end
