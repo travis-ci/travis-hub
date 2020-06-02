@@ -10,6 +10,9 @@ module Travis
         EVENTS = 'build:finished'
 
         def handle?
+          puts "Intercom debugging: handle?"
+          puts owner_type
+          puts "------------------"
           owner_type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
         end
 
