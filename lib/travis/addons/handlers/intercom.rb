@@ -9,25 +9,26 @@ module Travis
 
         EVENTS = 'build:created'
 
-        class Notifier < Notifier
-          def handle?
-            puts "handle? call"
-            p payload
-            payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
-          end
-
-          def handle
-            puts "handle call"
-            run_task(:intercom, payload)
-          end
-
-          class Instrument < Addons::Instrument
-            def notify_completed
-              publish
-            end
-          end
-          Instrument.attach_to(self)
+        def handle?
+          puts "handle? call"
+          p payload
+          payload.owner && payload.owner.type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
         end
+
+        def handle
+          puts "handle call"
+          run_task(:intercom, payload)
+        end
+
+        private
+
+        class Instrument < Addons::Instrument
+          def notify_completed
+            publish
+          end
+        end
+        Instrument.attach_to(self)
+
       end
     end
   end
