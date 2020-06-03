@@ -7,7 +7,7 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = 'build:finished'
+        EVENTS = 'build:created'
 
         def handle?
           puts "Intercom debugging: handle?"
