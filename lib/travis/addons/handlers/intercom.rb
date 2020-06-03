@@ -7,24 +7,14 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = 'build:created'
+        EVENTS = ['build:created']
 
         def handle?
-          puts "Intercom debugging: handle?"
-          puts owner_type
-          puts "------------------"
-          owner_type.downcase == 'user' # currently Intercom makes sense only for users, not for orgs
+          true
         end
 
         def handle
           run_task(:intercom, payload)
-        end
-
-        private
-
-        def owner_type
-          owner = object.owner || {}
-          owner.class.name || ''
         end
 
         class Instrument < Addons::Instrument
@@ -33,6 +23,13 @@ module Travis
           end
         end
         Instrument.attach_to(self)
+
+        private
+
+        def owner_type
+          owner = object.owner || {}
+          owner.class.name || ''
+        end
 
       end
     end
