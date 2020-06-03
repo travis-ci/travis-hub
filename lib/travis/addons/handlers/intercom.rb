@@ -7,7 +7,7 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = ['build:created']
+        EVENTS = 'build:created'
 
         def handle?
           true
