@@ -7,9 +7,10 @@ module Travis
       class Intercom < Base
         include Handlers::Task
 
-        EVENTS = 'build:finished'
+        EVENTS = /(build):(created|started|restarted)/
 
         def handle?
+          puts owner_type
           true
         end
 
