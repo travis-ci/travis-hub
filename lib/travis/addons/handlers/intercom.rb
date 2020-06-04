@@ -10,8 +10,7 @@ module Travis
         EVENTS = /(build):(created|started|restarted)/
 
         def handle?
-          puts owner_type
-          true
+          owner_type.downcase == 'user'
         end
 
         def handle
