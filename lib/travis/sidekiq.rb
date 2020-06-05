@@ -21,6 +21,9 @@ module Travis
     end
 
     def tasks(queue, *args)
+      puts "Debugging queue: #{queue.to_s}"
+      p *args
+      puts "------------------------------"
       default_client.push(
         'queue'   => ENV['TASKS_SIDEKIQ_QUEUE'] || queue.to_s,
         'class'   => 'Travis::Tasks::Worker',
