@@ -8,7 +8,7 @@ GIT
   remote: https://github.com/travis-ci/marginalia
   revision: 1733a09de1dd8a4e9b6d92cee7413eacb38f0db1
   specs:
-    marginalia (1.5.0)
+    marginalia (1.6.0)
       activerecord (>= 2.3)
 
 GIT
@@ -132,7 +132,7 @@ GEM
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     pg (0.19.0)
-    puma (3.6.0)
+    puma (3.7.0)
     rack (1.6.8)
     rack-protection (1.5.3)
       rack
@@ -140,7 +140,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (11.3.0)
+    rake (12.3.3)
     redis (3.3.5)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
