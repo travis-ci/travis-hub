@@ -8,7 +8,7 @@ GIT
   remote: https://github.com/travis-ci/marginalia
   revision: 1733a09de1dd8a4e9b6d92cee7413eacb38f0db1
   specs:
-    marginalia (1.6.0)
+    marginalia (1.5.0)
       activerecord (>= 2.3)
 
 GIT
