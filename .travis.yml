@@ -43,5 +43,6 @@ jobs:
             channel: latest/beta
       before_install: echo "skipping"
       install: echo "skipping"
+      before_sript: skip
       script: make ship
       if: (branch = master and type = push ) OR commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
