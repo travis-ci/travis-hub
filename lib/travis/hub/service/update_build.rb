@@ -25,6 +25,7 @@ module Travis
             notify
           end
         end
+        
         instrument :run
 
         def build
