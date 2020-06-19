@@ -33,7 +33,7 @@ class Build < ActiveRecord::Base
   event :cancel,  if: :cancel?
   event :restart, if: :restart?
   event :reset
-  event :all, after: [:denormalize, :notify]
+  event :all, after: [:denormalize]
 
   serialize :config
 
