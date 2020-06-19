@@ -20,6 +20,7 @@ module Travis
           handler = new(event, params)
           p 'debugging handler notify'
           p event, params, handler.handle?
+          
           handler.notify if handler.handle?
         end
       end
