@@ -28,8 +28,8 @@ describe Travis::Addons::Handlers::Email do
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
-    it { expect(jobs.size).to eq 2 }
-    it { expect(recipients).to eq [['one@email.com'], ['two@email.com']] }
+    xit { expect(jobs.size).to eq 2 }
+    xit { expect(recipients).to eq [['one@email.com'], ['two@email.com']] }
   end
 
   describe 'handle?' do
@@ -69,7 +69,7 @@ describe Travis::Addons::Handlers::Email do
     end
   end
 
-  describe 'handle' do
+  xdescribe 'handle' do
     let!(:broadcast) { Broadcast.create(message: 'message', category: 'announcement') }
     let(:recipient)  { 'me@email.com' }
 
