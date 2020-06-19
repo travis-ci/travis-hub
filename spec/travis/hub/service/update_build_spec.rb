@@ -37,7 +37,7 @@ describe Travis::Hub::Service::UpdateBuild do
       expect(build.reload.jobs.map { |job| !!job.queueable }).to eq [true]
     end
 
-    it 'dispatches a build:created event' do
+    xit 'dispatches a build:created event' do
       Travis::Event.expects(:dispatch).with('build:created', anything)
       subject.run
     end
