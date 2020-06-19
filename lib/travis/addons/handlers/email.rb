@@ -11,6 +11,12 @@ module Travis
 
         class Notifier < Notifier
           def handle?
+            p 'debuging email handler?'
+            p !pull_request?
+            p config.enabled?
+            p config.send_on?(:email, action), action
+            p recipients.present?
+            p recipients
             !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
           end
 
