@@ -15,6 +15,8 @@ module Travis
           end
 
           def handle
+            p 'cancel email debugging'
+            p.payload
             run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
           end
 
