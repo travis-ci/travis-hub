@@ -107,6 +107,7 @@ module Travis
             p '-----------------'
             p '-----------------'
             p '-----------------'
+            p '-----------------'
             return recancel if recancel?
             return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)
