@@ -15,9 +15,11 @@ module Travis
         @config = config
         @logger = logger
 
+        p 'debugging addons'
         Handlers.constants(false).each do |name|
           handler = Handlers.const_get(name)
           name    = name.to_s.underscore
+          p handler, name, handler.respond_to?(:setup)
           Event::Handler.register(name, handler)
           handler.setup(config, logger) if handler.respond_to?(:setup)
         end
