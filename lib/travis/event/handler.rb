@@ -18,6 +18,8 @@ module Travis
 
         def notify(event, params = {})
           handler = new(event, params)
+          p 'debugging handler notify'
+          p event, params
           handler.notify if handler.handle?
         end
       end
