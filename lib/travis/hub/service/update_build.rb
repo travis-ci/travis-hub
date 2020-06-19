@@ -34,6 +34,8 @@ module Travis
         private
 
           def validate
+            p "debugging:update_build #{event}"
+            p event
             EVENTS.include?(event) || unknown_event
           end
 
