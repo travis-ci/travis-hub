@@ -102,6 +102,8 @@ module Travis
             p '-----------------'
             p recancel?
             p skip_canceled?
+            p event
+            p attrs
             p '-----------------'
             return recancel if recancel?
             return skipped if skip_canceled?
