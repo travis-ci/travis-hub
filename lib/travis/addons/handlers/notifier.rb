@@ -13,9 +13,9 @@ module Travis
         end
 
         def handle
-          # p 'debuging notifiers handle'
+          p 'debuging notifiers handle'
           handlers.each do |handler|
-            # p handler.class
+            p " handler is: #{handler.class}"
             handler.class.notify(handler.event, handler.params)
           end
         end
