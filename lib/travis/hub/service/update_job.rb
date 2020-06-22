@@ -98,17 +98,17 @@ module Travis
               raise 'cancellation has been disabled'
             end
 
-            # p 'debug update_job'
-            # p '-----------------'
-            # p recancel?
-            # p skip_canceled?
-            # p event
-            # p attrs
-            # p '-----------------'
-            # p '-----------------'
-            # p '-----------------'
-            # p '-----------------'
-            # p '-----------------'
+            if attrs[:state] == 'canceled'
+              p 'debug update_job'
+              p '-----------------'
+              p recancel?
+              p skip_canceled?
+              p event
+              p attrs
+              p job
+              p '-----------------'
+            end
+
             return recancel if recancel?
             return skipped if skip_canceled?
             return skipped unless job.reload.send(:"#{event}!", attrs)

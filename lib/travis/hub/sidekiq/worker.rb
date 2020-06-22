@@ -9,6 +9,7 @@ module Travis
 
         sidekiq_options queue: :hub
 
+        # job:test:finish, 518257
         def perform(event, payload)
           Handler.new(Hub.context, event, payload).run
         end

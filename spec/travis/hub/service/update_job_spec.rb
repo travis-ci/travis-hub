@@ -97,7 +97,34 @@ describe Travis::Hub::Service::UpdateJob do
       subject.run
       expect(stdout.string).to include("Travis::Hub::Service::UpdateJob#run:completed event: finish for repo=travis-ci/travis-core id=#{job.id}")
     end
+
+    describe 'when job has been cancelled' do
+      let(:state) { :created }
+      let(:event) { :cancel }
+      let(:data)  { { id: job.id } }
+      let(:now) { Time.now }
+      it 'checks email' do
+        subject.run
+      end
+    end
+
   end
+
+# # Build
+# [ id: 172433521, repository_id: 14719283, number: "12", started_at: "2020-06-22 06:43:49", finished_at: "2020-06-22 06:43:49", created_at: "2020-06-22 06:43:33", updated_at: "2020-06-22 06:43:49", commit_id: 365385606, request_id: 367572412, state: "canceled", duration: 0,  owner_id: 591138, owner_type: "Organization", event_type: "push", previous_state: "failed",  pull_request_title: nil, pull_request_number: nil, branch: "master", canceled_at: "2020-06-22 06:43:49", cached_matrix_ids: [352016388, 352016389, 352016390, 352016391, 352016392], received_at: "2020-06-22 06:43:48", private: false, pull_request_id: nil, branch_id: 720644360, tag_id: nil, sender_id: 113940, sender_type: "User", org_id: nil, com_id: nil, config_id: 11350071, restarted_at: nil,                   unique_number: 12 ]
+# [ id: 517658,    repository_id: 115741,   number: "2",  started_at: "2020-06-19 14:51:22", finished_at: "2020-06-19 14:51:39", created_at: "2020-06-09 05:23:15", updated_at: "2020-06-19 14:51:39", commit_id: 238904,    request_id: 171655,    state: "canceled", duration: 17, owner_id: 124513, owner_type: "User",         event_type: "push", previous_state: "errored", pull_request_title: nil, pull_request_number: nil, branch: "master", canceled_at: "2020-06-19 14:51:39", cached_matrix_ids: [517659],                                                received_at: "2020-06-09 05:23:16", private: false, pull_request_id: nil, branch_id: 267961,    tag_id: nil, sender_id: 124951, sender_type: "User", org_id: nil, com_id: nil, config_id: 35666,    restarted_at: "2020-06-19 14:51:03", unique_number: 2, tag: nil]
+#
+#
+#
+# # Job
+# [id: 352016388, repository_id: 14719283, commit_id: 365385606, source_id: 172433521, source_type: "Build", queue: "builds.gce", type: "Job::Test", state: "canceled", number: "12.1", worker: nil, started_at: nil,                   finished_at: "2020-06-22 06:43:46", created_at: "2020-06-22 06:43:33", updated_at: "2020-06-22 06:43:46", tags: nil, allow_failure: nil,   owner_id: 591138, owner_type: "Organization", result: nil, queued_at: "2020-06-22 06:43:33", canceled_at: "2020-06-22 06:43:46", received_at: "2020-06-22 06:43:33", debug_options: nil, private: false, stage_id: 25238866,     stage_number: "1.1", org_id: nil, com_id: nil, config_id: 25999954, restarted_at: nil]
+# [id: 517659,    repository_id: 115741,   commit_id: 238904,    source_id: 517658,    source_type: "Build", queue: "builds.gce", type: "Job::Test", state: "canceled", number: "2.1",  worker: nil, started_at: "2020-06-19 14:51:22", finished_at: "2020-06-19 14:51:39", created_at: "2020-06-09 05:23:15", updated_at: "2020-06-19 14:51:39", tags: nil, allow_failure: false, owner_id: 124513, owner_type: "User",         result: nil, queued_at: "2020-06-19 14:51:03", canceled_at: "2020-06-19 14:51:39", received_at: "2020-06-19 14:51:04", debug_options: nil, private: false, stage_id: 12710,        stage_number: "1.1", org_id: nil, com_id: nil, config_id: 29124,    restarted_at: "2020-06-19 14:51:03", priority: nil, job_state_id: 14420805]
+#
+# [id: 345950651, repository_id: 14546540, commit_id: 358808928, source_id: 170274253, source_type: "Build", queue: "builds.gce", type: "Job::Test", state: "errored",  number: "2.1", worker: nil, started_at: "2020-06-22 07:05:35", finished_at: "2020-06-22 07:06:10", created_at: "2020-06-08 11:24:17", updated_at: "2020-06-22 07:06:10", tags: nil, allow_failure: nil,   owner_id: 3610043,owner_type: "User",         result: nil, queued_at: "2020-06-22 07:05:16", canceled_at: nil,                   received_at: "2020-06-22 07:05:16", debug_options: nil, private: false, stage_id: 24590152,     stage_number: "1.1", org_id: nil, com_id: nil, config_id: 25698549, restarted_at: "2020-06-22 07:05:16"]
+# [id: 345950652, repository_id: 14546540, commit_id: 358808928, source_id: 170274253, source_type: "Build", queue: "builds.gce", type: "Job::Test", state: "canceled", number: "2.2", worker: nil, started_at: nil,                   finished_at: "2020-06-22 07:06:10", created_at: "2020-06-08 11:24:17", updated_at: "2020-06-22 07:06:10", tags: nil, allow_failure: nil,   owner_id: 3610043,owner_type: "User",         result: nil, queued_at: nil,                   canceled_at: nil,                   received_at: nil,                   debug_options: nil, private: false, stage_id: 24590153,     stage_number: "2.1", org_id: nil, com_id: nil, config_id: 25698550, restarted_at: "2020-06-22 07:05:16"]
+#
+# [id: 351998454, repository_id: 14814673, commit_id: 365361545, source_id: 172426589, source_type: "Build", queue: "builds.gce", type: "Job::Test", state: "canceled", number: "9.1", worker: nil, started_at: "2020-06-22 05:25:30", finished_at: "2020-06-22 05:30:07", created_at: "2020-06-22 05:21:19", updated_at: "2020-06-22 05:30:07", tags: nil, allow_failure: nil,   owner_id: 3677846,owner_type: "User",         result: nil, queued_at: "2020-06-22 05:25:13", canceled_at: "2020-06-22 05:30:07", received_at: "2020-06-22 05:25:13", debug_options: nil, private: false, stage_id: nil,          stage_number: nil,   org_id: nil, com_id: nil, config_id: 25994436, restarted_at: "2020-06-22 05:25:13"]
+
 
   describe 'cancel event' do
     let(:state) { :created }

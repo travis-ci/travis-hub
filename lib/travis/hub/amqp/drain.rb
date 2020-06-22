@@ -13,6 +13,7 @@ module Travis
         end
 
         def handle(event, payload)
+          # Draining job:test:finish for id=518257 to sidekiq=hub
           info "Draining #{event} for id=#{payload['id']} to sidekiq=hub"
           publish(event, payload)
           meter('hub.drain')
