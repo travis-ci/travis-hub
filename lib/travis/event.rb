@@ -19,7 +19,7 @@ module Travis
       def dispatch(event, data)
         p 'debugging event subscriptions dispatch'
         subscriptions.each do |subscription|
-          p "subscription is #{subscription.name}"
+          p "#{subscription.name} is subscribing"
           subscription.notify(event, data)
         end
       end

@@ -17,6 +17,10 @@ module Travis
       end
 
       def notify(event, data)
+        p 'debugging subscription notify'
+        p event
+        p data
+        p patterns
         if matches?(event)
           subscriber.notify(event, data)
           # meter(event)
