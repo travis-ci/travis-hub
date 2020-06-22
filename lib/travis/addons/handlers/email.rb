@@ -6,7 +6,8 @@ module Travis
   module Addons
     module Handlers
       class Email < Notifiers
-        EVENTS = 'build:finished'
+        EVENTS = /build:(finished|canceled)/
+        # EVENTS = 'build:finished'
         KEY = :email
 
         class Notifier < Notifier
