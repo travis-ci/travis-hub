@@ -17,7 +17,8 @@ module Travis
             # p config.send_on?(:email, action), action
             # p recipients.present?
             # p recipients
-            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
+            # !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
+            true
           end
 
           def handle
