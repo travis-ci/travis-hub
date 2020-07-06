@@ -102,9 +102,9 @@ module Travis
 
         def connection
           @connection ||= Faraday.new(url: billing_url, ssl: { ca_path: '/usr/lib/ssl/certs' }) do |conn|
+            conn.basic_auth '_', billing_auth_key
+            conn.headers['X-Travis-User-Id'] = @user_id.to_s
             conn.headers['Content-Type'] = 'application/json'
-            conn.request :authorization, :token, billing_auth
-            conn.request :retry, max: 5, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2
             conn.request :json
             conn.response :json
             conn.adapter :net_http
