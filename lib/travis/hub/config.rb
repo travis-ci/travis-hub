@@ -38,8 +38,9 @@ module Travis
              repository:     { ssl_key: { size: 4096 } },
              queue:          'builds',
              limit:          { resets: { max: 50, after: 6 * 60 * 60 } },
-             notifications:  [],
-             auth:           { jwt_private_key: jwt_key(:private), jwt_public_key: jwt_key(:public), http_basic_auth: http_basic_auth }
+             notifications:  [ 'billing' ],
+             auth:           { jwt_private_key: jwt_key(:private), jwt_public_key: jwt_key(:public), http_basic_auth: http_basic_auth },
+             billing:        { url: ENV['BILLING_URL'] || 'http://localhost:9292', auth: ENV['BILLING_AUTH'] || 't0Ps3Cr3t' }
 
       def metrics
         # TODO cleanup keychain?
