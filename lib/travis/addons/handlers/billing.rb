@@ -5,8 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        
-        EVENTS = /job:(canceled|finished)/.freeze
+        EVENTS = ['job:finished', 'job:canceled'].freeze
         KEY = :billing
 
         MSGS = {
