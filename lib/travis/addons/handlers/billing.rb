@@ -5,7 +5,6 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        include Handlers::Task
         
         EVENTS = /job:(canceled|finished)/.freeze
         KEY = :billing
