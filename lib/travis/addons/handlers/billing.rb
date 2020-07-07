@@ -13,10 +13,7 @@ module Travis
         }
 
         def handle?
-          puts "Object: #{object.inspect}"
-          puts "billing_url: #{billing_url}"
-          puts "billing_auth_key: #{billing_auth_key}"
-          puts "event: #{event.inspect}"
+          puts `Object.config: #{object.config}`
           billing_url && billing_auth_key
         end
 
@@ -61,12 +58,12 @@ module Travis
         def job_data
           {
             id: object.id,
-            os: nil, # TODO
-            instance_size: nil, # TODO
-            arch: nil, # TODO
+            os: object.config.os || 'linux',
+            instance_size: nil,
+            arch: object.config.arch || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: nil, # TODO
+            virt_type: object.config[`#{object.config.language}_vm`] || object.config[`#{object.config.language}_lxd`],
             queue: object.queue
           }
         end
@@ -117,13 +114,13 @@ module Travis
         def handle_usage_executions_response(response)
           case response.status
           when 404
-            raise StandardError, `Not found #{response.body['error']}`
+            raise StandardError, `Not found #{response.body['error'] || response.body}`
           when 400
-            raise StandardError, `Client error #{response.body['error']}`
+            raise StandardError, `Client error #{response.body['error'] || response.body}`
           when 422
-            raise StandardError, `Unprocessable entity #{response.body['error']}`
+            raise StandardError, `Unprocessable entity #{response.body['error'] || response.body}`
           else
-            raise StandardError, `Server error #{response.body['error']}`
+            raise StandardError, `Server error #{response.body['error'] || response.body}`
           end
         end
 
