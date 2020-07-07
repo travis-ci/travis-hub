@@ -13,8 +13,6 @@ module Travis
         }
 
         def handle?
-          puts `Object.config: #{object.config.inspect}`
-          puts `Object: #{object.inspect}`
           billing_url && billing_auth_key
         end
 
@@ -33,6 +31,9 @@ module Travis
         end
 
         def publish
+          puts `Object.config: #{object.config.inspect}`
+          puts `Object: #{object.inspect}`
+          puts `billing_url: #{billing_url}`
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
