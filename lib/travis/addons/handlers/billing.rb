@@ -58,12 +58,12 @@ module Travis
         def job_data
           {
             id: object.id,
-            os: object.config.os || 'linux',
+            os: object.config[:os] || 'linux',
             instance_size: nil,
-            arch: object.config.arch || 'amd64',
+            arch: object.config[:arch] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: object.config.virt || object.config.vm,
+            virt_type: object.config[:virt] || object.config[:vm],
             queue: object.queue
           }
         end
