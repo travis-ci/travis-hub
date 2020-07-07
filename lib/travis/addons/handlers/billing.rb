@@ -42,6 +42,7 @@ module Travis
         end
 
         def data
+          puts "Object: #{object.inspect}"
           @data ||= serialize_data
         end
 
