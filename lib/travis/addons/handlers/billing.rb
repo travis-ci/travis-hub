@@ -63,7 +63,7 @@ module Travis
             arch: object.config.arch || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: object.config[`#{object.config.language}_vm`] || object.config[`#{object.config.language}_lxd`],
+            virt_type: object.config.vm || object.config.lxd,
             queue: object.queue
           }
         end
