@@ -13,7 +13,7 @@ module Travis
         }
 
         def handle?
-          puts `Object.config: #{object.config}`
+          puts `Object.config: #{object.config.inspect}`
           billing_url && billing_auth_key
         end
 
