@@ -5,6 +5,8 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
+        include Handlers::Task
+        
         EVENTS = /job:(canceled|finished)/.freeze
         KEY = :billing
 
@@ -13,6 +15,9 @@ module Travis
         }
 
         def handle?
+          puts "Object: #{object.inspect}"
+          puts "billing_url: #{billing_url}"
+          puts "billing_auth: #{billing_auth}"
           billing_url && billing_auth
         end
 
@@ -42,7 +47,6 @@ module Travis
         end
 
         def data
-          puts "Object: #{object.inspect}"
           @data ||= serialize_data
         end
 
