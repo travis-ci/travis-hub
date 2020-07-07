@@ -16,9 +16,7 @@ module Travis
           puts "Object: #{object.inspect}"
           puts "billing_url: #{billing_url}"
           puts "billing_auth: #{billing_auth}"
-          puts "request: #{request.inspect}"
           puts "event: #{event.inspect}"
-          puts "payload: #{payload.inspect}"
           billing_url && billing_auth
         end
 
