@@ -15,9 +15,9 @@ module Travis
         def handle?
           puts "Object: #{object.inspect}"
           puts "billing_url: #{billing_url}"
-          puts "billing_auth: #{billing_auth}"
+          puts "billing_auth_key: #{billing_auth_key}"
           puts "event: #{event.inspect}"
-          billing_url && billing_auth
+          billing_url && billing_auth_key
         end
 
         def handle
@@ -30,8 +30,8 @@ module Travis
           @billing_url ||= Travis::Hub.context.config.billing.url if Travis::Hub.context.config.billing
         end
 
-        def billing_auth
-          @billing_auth ||= Travis::Hub.context.config.billing.auth if Travis::Hub.context.config.billing
+        def billing_auth_key
+          @billing_auth_key ||= Travis::Hub.context.config.billing.auth_key if Travis::Hub.context.config.billing
         end
 
         def publish
@@ -106,7 +106,7 @@ module Travis
 
         def connection
           @connection ||= Faraday.new(url: billing_url, ssl: { ca_path: '/usr/lib/ssl/certs' }) do |conn|
-            conn.basic_auth '_', billing_auth
+            conn.basic_auth '_', billing_auth_key
             conn.headers['Content-Type'] = 'application/json'
             conn.request :json
             conn.response :json
