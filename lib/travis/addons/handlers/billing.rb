@@ -101,7 +101,7 @@ module Travis
         end
 
         def config
-          @config ||= JobConfig.find(object.config_id).config if object.config_id
+          @config ||= object.config_id ? JobConfig.find(object.config_id).config : {}
         end
 
         def connection
