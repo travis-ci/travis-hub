@@ -33,7 +33,7 @@ module Travis
         def publish
           puts "DEBUG data: #{data.inspect}"
           puts "DEBUG config: #{config.inspect}"
-          puts "DEBUG config[os]: #{config[:os]}"
+          puts "DEBUG config[os]: #{config['os']}"
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
@@ -60,12 +60,12 @@ module Travis
         def job_data
           {
             id: object.id,
-            os: config[:os] || 'linux',
+            os: config['os'] || 'linux',
             instance_size: nil,
-            arch: config[:arch] || 'amd64',
+            arch: config['arch'] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: config[:virt] || config[:vm],
+            virt_type: config['virt'] || config['vm'],
             queue: object.queue
           }
         end

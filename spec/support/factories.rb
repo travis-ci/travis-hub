@@ -63,7 +63,7 @@ FactoryGirl.define do
 
   factory :job_config do
     key             'key'
-    config          'foo=bar'
+    config          { { arch: 'amd64', os: 'linux', virt: 'vm' } }
   end
 
   factory :user do
