@@ -31,8 +31,7 @@ module Travis
         end
 
         def publish
-          puts "object: #{object.inspect}"
-          puts "billing_url: #{billing_url}"
+          puts "DEBUG data: #{data.inspect}"
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
