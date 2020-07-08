@@ -32,6 +32,8 @@ module Travis
 
         def publish
           puts "DEBUG data: #{data.inspect}"
+          puts "DEBUG config: #{config.inspect}"
+          puts "DEBUG config[os]: #{config[:os]}"
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
