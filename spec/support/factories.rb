@@ -61,6 +61,11 @@ FactoryGirl.define do
     state       :created
   end
 
+  factory :job_config do
+    key             'key'
+    config          'foo=bar'
+  end
+
   factory :user do
   end
 

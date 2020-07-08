@@ -31,9 +31,8 @@ module Travis
         end
 
         def publish
-          puts `Object.config: #{object.config.inspect}`
-          puts `Object: #{object.inspect}`
-          puts `billing_url: #{billing_url}`
+          puts "object: #{object.inspect}"
+          puts "billing_url: #{billing_url}"
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
@@ -60,12 +59,12 @@ module Travis
         def job_data
           {
             id: object.id,
-            os: object.config[:os] || 'linux',
+            os: config[:os] || 'linux',
             instance_size: nil,
-            arch: object.config[:arch] || 'amd64',
+            arch: config[:arch] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: object.config[:virt] || object.config[:vm],
+            virt_type: config[:virt] || config[:vm],
             queue: object.queue
           }
         end
@@ -101,6 +100,10 @@ module Travis
             id: object.build.sender_id,
             type: object.build.sender_type
           }
+        end
+
+        def config
+          @config ||= JobConfig.find(object.config_id) if object.config_id
         end
 
         def connection
