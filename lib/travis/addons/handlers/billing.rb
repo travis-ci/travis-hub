@@ -38,7 +38,7 @@ module Travis
 
         def send_usage(data)
           response = connection.post('/usage/executions', data)
-          handle_usage_executions_response(response)
+          handle_usage_executions_response(response) unless response.success?
         end
 
         def data
