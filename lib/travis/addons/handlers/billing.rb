@@ -117,13 +117,13 @@ module Travis
         def handle_usage_executions_response(response)
           case response.status
           when 404
-            raise StandardError, `Not found #{response.body['error'] || response.body}`
+            raise StandardError, "Not found #{response.body['error'] || response.body}"
           when 400
-            raise StandardError, `Client error #{response.body['error'] || response.body}`
+            raise StandardError, "Client error #{response.body['error'] || response.body}"
           when 422
-            raise StandardError, `Unprocessable entity #{response.body['error'] || response.body}`
+            raise StandardError, "Unprocessable entity #{response.body['error'] || response.body}"
           else
-            raise StandardError, `Server error #{response.body['error'] || response.body}`
+            raise StandardError, "Server error #{response.body['error'] || response.body}"
           end
         end
 
