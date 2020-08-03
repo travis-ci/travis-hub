@@ -5,7 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        EVENTS = ['job:finished', 'job:canceled'].freeze
+        EVENTS = ['job:finished', 'job:canceled', 'build:finished'].freeze
         KEY = :billing
 
         MSGS = {
@@ -31,14 +31,15 @@ module Travis
         end
 
         def publish
-          send_usage(data)
+          send_usage(data) and return if object_type == 'job'
+
+          send_build_usage(build_usage_data)
         rescue => e
           logger.error MSGS[:failed] % e.message
         end
 
         def send_usage(data)
-          response = connection.post('/usage/executions', data)
-          handle_usage_executions_response(response) unless response.success?
+          handle_billing_response { connection.post('/usage/executions', data) }
         end
 
         def data
@@ -100,6 +101,17 @@ module Travis
           }
         end
 
+        def send_build_usage(data)
+          handle_billing_response { connection.post('/usage/build_users', data) }
+        end
+
+        def build_usage_data
+          {
+            owner: owner_data,
+            sender: build_data_sender
+          }
+        end
+
         def config
           @config ||= object.config_id ? JobConfig.find(object.config_id).config : {}
         end
@@ -114,7 +126,10 @@ module Travis
           end
         end
 
-        def handle_usage_executions_response(response)
+        def handle_billing_response(&block)
+          response = yield
+          return if response.success?
+
           case response.status
           when 404
             raise StandardError, "Not found #{response.body['error'] || response.body}"
