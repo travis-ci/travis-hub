@@ -16,7 +16,7 @@ module Travis
           canceled:     %(This job was cancelled because the "Auto Cancellation" feature is currently enabled, and a more recent build (#%{number}) for %{info} came in while this job was waiting to be processed.\n\n),
           push:         'branch %{branch}',
           pull_request: 'pull request #%{pull_request_number}',
-          api: 'This job was cancelled due to other priority builds'
+          api:          'This job was cancelled due to other priority builds'
         }
 
         def run
