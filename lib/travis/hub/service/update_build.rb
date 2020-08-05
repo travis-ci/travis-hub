@@ -45,6 +45,7 @@ module Travis
 
             build.jobs.each do |job|
               auto_cancel(job) if event == :cancel && auto_cancel?
+              logger.warn "auto cancel passed"
               job.reload.send(:"#{event}!", attrs)
             end
           end
@@ -81,6 +82,7 @@ module Travis
           end
 
           def cancel_log_via_http(job)
+            logger.warn "checking #{LOG_MSGS[meta[:event].to_sym]}"
             logs_api.append_log_part(
               job.id,
               LOG_MSGS[:canceled] % {
