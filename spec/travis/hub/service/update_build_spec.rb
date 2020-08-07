@@ -178,6 +178,25 @@ describe Travis::Hub::Service::UpdateBuild do
     end
   end
 
+  # cancel jobs from custom build request, ie: event: :api
+  describe 'cancel event (gator, api cancel)' do
+    let(:state) { :created }
+    let(:event) { :cancel }
+    let(:meta)  { { 'auto' => true, 'event' => 'api', 'number' => '2', 'branch' => 'master', 'pull_request_number' => nil } }
+    let(:data)  { { id: build.id, meta: meta } }
+    let(:now) { Time.now }
+
+    before do
+      subject.send(:logs_api).expects(:append_log_part)
+    end
+
+    it 'updates the job' do
+      subject.run
+      expect(job.reload.state).to eql(:canceled)
+      expect(job.reload.canceled_at).to eql(now)
+    end
+  end
+
   describe 'restart event' do
     let(:state) { :passed }
     let(:event) { :restart }
