@@ -6,12 +6,12 @@ module Travis
   module Addons
     module Handlers
       class Email < Notifiers
-        EVENTS = 'build:finished'
+        EVENTS = /build:(finished|canceled)/
         KEY = :email
 
         class Notifier < Notifier
           def handle?
-            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present?
+            !pull_request? && config.enabled? && config.send_on?(:email, action) && recipients.present? && !config[:auto_canceled?]
           end
 
           def handle
