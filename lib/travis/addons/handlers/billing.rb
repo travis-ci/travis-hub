@@ -5,19 +5,28 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        EVENTS = ['job:finished', 'job:canceled'].freeze
+        EVENTS = ['build:finished', 'job:finished', 'job:canceled'].freeze
         KEY = :billing
 
         MSGS = {
           failed: 'Failed to push stats to billing-v2: %s'
         }
 
+        def initialize(event, params = {})
+          super
+          @event_type = event.split(':').first
+        end
+
         def handle?
           billing_url && billing_auth_key
         end
 
         def handle
-          publish
+          if @event_type == 'job'
+            publish_job
+          else
+            publish_build
+          end
         end
 
         private
@@ -30,13 +39,24 @@ module Travis
           @billing_auth_key ||= Travis::Hub.context.config.billing.auth_key if Travis::Hub.context.config.billing
         end
 
-        def publish
+        def publish_build
+          send_user_usage(build_data)
+        rescue => e
+          logger.error MSGS[:failed] % e.message
+        end
+
+        def publish_job
           send_usage(data)
         rescue => e
           logger.error MSGS[:failed] % e.message
         end
 
-        def send_usage(data)
+        def send_user_usage(data)
+          response = connection.post('/v2/subscriptions/user_usage', user_usage_data)
+          handle_usage_executions_response(response) unless response.success?
+        end
+
+        def send_job_usage(data)
           response = connection.post('/usage/executions', data)
           handle_usage_executions_response(response) unless response.success?
         end
@@ -45,9 +65,21 @@ module Travis
           @data ||= serialize_data
         end
 
+        def user_usage_data
+          @user_usage_data ||= serialize_user_usage
+        end
+
         def serialize_data
           {
             job: job_data,
+            repository: repository_data,
+            owner: owner_data,
+            build: build_data
+          }
+        end
+
+        def serialize_user_usage
+          {
             repository: repository_data,
             owner: owner_data,
             build: build_data
