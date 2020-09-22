@@ -7,7 +7,7 @@ describe Travis::Addons::Handlers::Billing do
   before do
     stub_request(:post, 'http://localhost:9292/usage/executions')
       .to_return(status: 200, body: '', headers: {})
-    stub_request(:post, 'http://localhost:9292/v2/subscriptions/user_usage')
+    stub_request(:post, 'http://localhost:9292/usage/user_usage')
       .to_return(status: 200, body: '', headers: {})
   end
 
