@@ -52,7 +52,7 @@ module Travis
         end
 
         def send_user_usage(data)
-          response = connection.post('/v2/subscriptions/user_usage', data)
+          response = connection.post('/usage/user_usage', data)
           handle_usage_executions_response(response) unless response.success?
         end
 
