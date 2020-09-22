@@ -40,29 +40,29 @@ module Travis
         end
 
         def publish_build
-          send_user_usage(build_data)
+          send_user_usage(user_usage_data)
         rescue => e
           logger.error MSGS[:failed] % e.message
         end
 
         def publish_job
-          send_usage(data)
+          send_usage_executions(usage_executions_data)
         rescue => e
           logger.error MSGS[:failed] % e.message
         end
 
         def send_user_usage(data)
-          response = connection.post('/v2/subscriptions/user_usage', user_usage_data)
+          response = connection.post('/v2/subscriptions/user_usage', data)
           handle_usage_executions_response(response) unless response.success?
         end
 
-        def send_job_usage(data)
+        def send_usage_executions(data)
           response = connection.post('/usage/executions', data)
           handle_usage_executions_response(response) unless response.success?
         end
 
-        def data
-          @data ||= serialize_data
+        def usage_executions_data
+          @usage_executions_data ||= serialize_data
         end
 
         def user_usage_data
@@ -74,7 +74,7 @@ module Travis
             job: job_data,
             repository: repository_data,
             owner: owner_data,
-            build: build_data
+            build: build_data(object.build)
           }
         end
 
@@ -82,7 +82,7 @@ module Travis
           {
             repository: repository_data,
             owner: owner_data,
-            build: build_data
+            build: build_data(object)
           }
         end
 
@@ -115,20 +115,20 @@ module Travis
           }
         end
 
-        def build_data
+        def build_data(obj)
           {
-            id: object.build.id,
-            type: object.build.event_type,
-            number: object.build.number,
-            branch: object.build.branch,
-            sender: build_data_sender
+            id: obj.id,
+            type: obj.event_type,
+            number: obj.number,
+            branch: obj.branch,
+            sender: build_data_sender(obj)
           }
         end
 
-        def build_data_sender
+        def build_data_sender(obj)
           {
-            id: object.build.sender_id,
-            type: object.build.sender_type
+            id: obj.sender_id,
+            type: obj.sender_type
           }
         end
 
