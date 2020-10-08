@@ -33,6 +33,26 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'handle?' do
+    context "when auto-canceling build" do
+      let(:config) { { recipients: 'one@email.com', auto_canceled?: true } }
+      let(:handler) { described_class::Notifier.new('build:canceled', id: build.id, config: config) }
+
+      it 'is false if the build is auto-canceled' do
+        build.update_attributes(event_type: 'push', state: 'canceled')
+        expect(handler.handle?).to eql(false)
+      end
+    end
+
+    context "when manually canceling build" do
+      let(:config) { { recipients: 'one@email.com', auto_canceled?: false } }
+      let(:handler) { described_class::Notifier.new('build:canceled', id: build.id, config: config) }
+
+      it 'is true' do
+        build.update_attributes(event_type: 'push', state: 'canceled')
+        expect(handler.handle?).to eql(true)
+      end
+    end
+
     it 'is true if the build is a push request' do
       build.update_attributes(event_type: 'push')
       expect(handler.handle?).to eql(true)
