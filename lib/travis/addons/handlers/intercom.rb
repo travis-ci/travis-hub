@@ -14,6 +14,9 @@ module Travis
         end
 
         def handle
+          puts "=============== intercom ========================="
+          puts payload.inspect
+          puts "=============== intercom ========================="
           run_task(:intercom, payload)
         end
 
