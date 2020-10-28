@@ -14,10 +14,15 @@ module Travis
         end
 
         def handle
-          puts "=============== intercom ========================="
-          puts payload.inspect
-          puts "=============== intercom ========================="
-          run_task(:intercom, payload)
+          params = {
+            event: :report_build,
+            owner_id: owner.id,
+            last_build_at: build.started_at
+          }
+          puts '============== intercom debug ================'
+          puts params.inspect
+          puts '============== intercom debug ================'
+          run_task(:intercom, params)
         end
 
         class Instrument < Addons::Instrument
@@ -29,8 +34,15 @@ module Travis
 
         private
 
+        def build
+          object.build || {}
+        end
+
+        def owner
+          object.owner || {}
+        end
+
         def owner_type
-          owner = object.owner || {}
           owner.class.name || ''
         end
 
