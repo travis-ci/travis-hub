@@ -19,9 +19,6 @@ module Travis
             owner_id: owner_id,
             last_build_at: last_build_at
           }
-          puts '============== intercom debug ================'
-          puts params.inspect
-          puts '============== intercom debug ================'
           run_task(:intercom, params)
         end
 
