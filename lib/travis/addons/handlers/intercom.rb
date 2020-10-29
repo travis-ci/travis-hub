@@ -10,6 +10,7 @@ module Travis
         EVENTS = /(build):(created|started|restarted)/
 
         def handle?
+          puts '============== intercom debug ================'
           owner_type.downcase == 'user'
         end
 
@@ -39,10 +40,16 @@ module Travis
         end
 
         def owner
+          puts '============== intercom debug ================'
+          puts object
+          puts '============== intercom debug ================'
           object.owner || {}
         end
 
         def owner_type
+          puts '============== intercom debug ================'
+          puts owner
+          puts '============== intercom debug ================'
           owner.class.name || ''
         end
 
