@@ -28,14 +28,6 @@ module Travis
       )
     end
 
-    def intercom(params)
-      default_client.push(
-        'queue'   => 'intercom',
-        'class'   => 'Travis::Async::Sidekiq::Worker',
-        'args'    => [nil, 'Travis::Addons::Intercom::Task', 'perform', {}, params]
-      )
-    end
-
     def live(*args)
       default_client.push(
         'queue'   => 'pusher-live',
