@@ -1,5 +1,6 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/handlers/task'
+require 'sidekiq'
 
 module Travis
   module Addons
@@ -19,7 +20,11 @@ module Travis
             owner_id: owner_id,
             last_build_at: last_build_at
           }
-          run_task(:intercom, params)
+          run_task(params)
+        end
+
+        def run_task(params)
+          Travis::Sidekiq.intercom(params)
         end
 
         class Instrument < Addons::Instrument
