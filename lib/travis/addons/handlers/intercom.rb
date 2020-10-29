@@ -10,15 +10,14 @@ module Travis
         EVENTS = /(build):(created|started|restarted)/
 
         def handle?
-          puts '============== intercom debug ================'
           owner_type.downcase == 'user'
         end
 
         def handle
           params = {
             event: :report_build,
-            owner_id: owner.id,
-            last_build_at: build.started_at
+            owner_id: owner_id,
+            last_build_at: last_build_at
           }
           puts '============== intercom debug ================'
           puts params.inspect
@@ -36,21 +35,23 @@ module Travis
         private
 
         def build
-          object.build || {}
+          object.build || nil
+        end
+
+        def last_build_at
+          build.started_at if build && build.started_at
         end
 
         def owner
-          puts '============== intercom debug ================'
-          puts object
-          puts '============== intercom debug ================'
-          object.owner || {}
+          object.owner || nil
+        end
+
+        def owner_id
+          owner.id if owner
         end
 
         def owner_type
-          puts '============== intercom debug ================'
-          puts owner
-          puts '============== intercom debug ================'
-          owner.class.name || ''
+          owner ? owner.class.name : ''
         end
 
       end
