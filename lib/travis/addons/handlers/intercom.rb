@@ -40,7 +40,7 @@ module Travis
         end
 
         def owner_id
-          owner.id if owner
+          owner.id.to_s if owner
         end
 
         def owner_type
