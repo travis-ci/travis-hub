@@ -60,7 +60,20 @@ module Travis
         end
 
         def config
-          @config ||= Config.new(object, params[:config])
+          @config ||= begin
+            params[:config][:auto_canceled?] = true if auto_canceled?
+            Config.new(object, params[:config])
+          end
+        end
+
+        private
+
+        def meta
+          @meta ||= (params[:meta] || {}).symbolize_keys
+        end
+
+        def auto_canceled?
+          !!meta[:auto]
         end
       end
     end
