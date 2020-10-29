@@ -39,6 +39,9 @@ module Travis
         end
 
         def last_build_at
+          puts '============== intercom debug ================'
+          puts build.inspect
+          puts '============== intercom debug ================'
           build.started_at if build && build.started_at
         end
 
