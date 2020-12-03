@@ -113,13 +113,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
-    gh (0.15.1)
-      addressable (~> 2.4.0)
-      backports
-      faraday (~> 0.8)
-      multi_json (~> 1.0)
-      net-http-persistent (~> 2.9)
-      net-http-pipeline
     hashdiff (0.3.0)
     hashr (2.0.0)
     hitimes (1.2.6)
@@ -147,8 +140,6 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.12.1)
     multipart-post (2.0.0)
-    net-http-persistent (2.9.4)
-    net-http-pipeline (1.0.1)
     nio4r (2.5.2)
     pg (0.19.0)
     pry (0.11.3)
@@ -231,7 +222,6 @@ DEPENDENCIES
   factory_girl
   faraday
   faraday_middleware
-  gh
   jemalloc
   jwt
   keen
