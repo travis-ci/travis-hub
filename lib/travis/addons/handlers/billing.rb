@@ -5,7 +5,7 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        EVENTS = ['job:finished', 'job:canceled'].freeze
+        EVENTS = ['job:started', 'job:finished', 'job:canceled'].freeze
         KEY = :billing
 
         MSGS = {
@@ -37,7 +37,7 @@ module Travis
         end
 
         def send_usage(data)
-          response = connection.post('/usage/executions', data)
+          response = connection.put('/usage/executions', data)
           handle_usage_executions_response(response) unless response.success?
         end
 
@@ -63,7 +63,8 @@ module Travis
             started_at: object.started_at,
             finished_at: object.finished_at,
             virt_type: config['virt'] || config['vm'],
-            queue: object.queue
+            queue: object.queue,
+            finished: finished?
           }
         end
 
@@ -129,6 +130,10 @@ module Travis
 
         def logger
           Addons.logger
+        end
+
+        def finished?
+          event != 'job:started'
         end
 
         # EventHandler
