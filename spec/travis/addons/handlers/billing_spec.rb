@@ -37,14 +37,5 @@ describe Travis::Addons::Handlers::Billing do
         expect(request).to have_been_made
       end
     end
-
-    context 'job:created' do
-      let(:event_name) { 'job:created' }
-
-      it 'does not publish event to billing' do
-        handler.handle
-        expect(request).to_not have_been_made
-      end
-    end
   end
 end
