@@ -47,7 +47,7 @@ describe Travis::Hub::Service::UpdateJob do
       end
 
       it 'broadcasts a cancel message' do
-        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
         subject.run
       end
     end
@@ -77,7 +77,7 @@ describe Travis::Hub::Service::UpdateJob do
       end
 
       it 'broadcasts a cancel message' do
-        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
         subject.run
       end
     end
@@ -112,7 +112,7 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     it 'notifies workers' do
-      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
       subject.run
     end
 
