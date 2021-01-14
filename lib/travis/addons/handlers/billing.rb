@@ -102,7 +102,7 @@ module Travis
         end
 
         def meta(value)
-          params[:meta][0][value] if params.has_key?(:meta) && params[:meta].is_a?(Array) && params[:meta].first.respond_to?(:keys)
+          params[:worker_meta][0][value] if params.has_key?(:worker_meta) && params[:worker_meta].is_a?(Array) && params[:worker_meta].first.respond_to?(:keys)
         end
 
         def vm_size
