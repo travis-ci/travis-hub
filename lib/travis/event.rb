@@ -33,7 +33,7 @@ module Travis
     def notify(event, *args)
       prefix = Underscore.new(self.class.name).string
       event  = PastTense.new(event).string
-      Event.dispatch("#{prefix}:#{event}", id: id, attrs: attributes, meta: args)
+      Event.dispatch("#{prefix}:#{event}", id: id, attrs: attributes, worker_meta: args)
     end
   end
 end
