@@ -1,5 +1,6 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/config'
+require 'raven'
 
 module Travis
   module Addons
@@ -37,10 +38,13 @@ module Travis
         end
 
         def send_usage(data)
-          # logger.info "HUB usage #{data}"
+          logger.info "Hub usage #{data}"
           response = connection.put('/usage/executions', data)
-          # logger.info "HUB usage repsonse #{response.success?} => #{response.inspect}"
-          handle_usage_executions_response(response) unless response.success?
+          logger.info "Hub usage repsonse #{response.success?} => #{response.inspect}"
+          return true if response.success?
+
+          Raven.capture_exception BillingError.new("Data: #{data.inpect} => #{response.inspect}")
+          handle_usage_executions_response(response) if Travis::Hub.context.config.sentry.dsn
         end
 
         def data
@@ -145,6 +149,8 @@ module Travis
           end
         end
         EventHandler.attach_to(self)
+
+        class BillingError < StandardError; end
       end
     end
   end
