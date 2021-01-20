@@ -37,10 +37,9 @@ module Travis
         end
 
         def send_usage(data)
-          logger.info "XXXXXXXXX HUB usage #{data}"
-
+          logger.info "HUB usage #{data}"
           response = connection.put('/usage/executions', data)
-          logger.info "XXXXXXXXX HUB usage resonse #{response.success?} #{response}"
+          logger.info "HUB usage repsonse #{response.success?} => #{response.inspect}"
           handle_usage_executions_response(response) unless response.success?
         end
 
