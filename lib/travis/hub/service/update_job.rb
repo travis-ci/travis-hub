@@ -109,7 +109,7 @@ module Travis
           end
 
           def notify
-            NotifyWorkers.new(context).cancel(job) if job.reload.state == :canceled
+            NotifyWorkers.new(context).cancel(job, data[:reason]) if job.reload.state == :canceled
             NotifyTraceProcessor.new(context).notify(job, data) if event == :finish
           end
 

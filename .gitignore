@@ -16,3 +16,4 @@ tmp
 #IDEs folders
 .idea
 .vscode
+.history
