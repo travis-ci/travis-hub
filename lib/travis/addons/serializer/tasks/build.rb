@@ -64,7 +64,7 @@ module Travis
             def repository_data
               {
                 id: repository.id,
-                github_id: repository.github_id,
+                github_id: repository.vcs_id.to_i,
                 vcs_id: repository.vcs_id,
                 vcs_type: repository.vcs_type,
                 key: repository.key.try(:public_key),

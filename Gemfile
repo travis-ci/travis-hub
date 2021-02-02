@@ -31,7 +31,6 @@ gem 'activerecord'
 gem 'faraday'
 gem 'faraday_middleware'
 
-gem 'gh'
 gem 'keen'
 gem 'sentry-raven'
 gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states'
