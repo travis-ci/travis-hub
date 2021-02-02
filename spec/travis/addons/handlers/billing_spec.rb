@@ -3,17 +3,39 @@ describe Travis::Addons::Handlers::Billing do
   let(:job_config)   { FactoryGirl.create(:job_config, repository_id: build.repository_id) }
   let(:job)          { FactoryGirl.create(:job, owner: owner, config_id: job_config.id) }
   let(:owner)        { FactoryGirl.create(:user) }
-
-  before do
-    stub_request(:post, 'http://localhost:9292/usage/executions')
+  let!(:request) do
+    stub_request(:put, 'http://localhost:9292/usage/executions')
       .to_return(status: 200, body: '', headers: {})
   end
 
   describe 'handle' do
-    let(:handler) { described_class.new('job:finished', id: job.id) }
+    let(:handler) { described_class.new(event_name, id: job.id) }
 
-    it 'publishes to billing' do
-      handler.handle
+    context 'job:finished' do
+      let(:event_name) { 'job:finished' }
+
+      it 'publishes event to billing' do
+        handler.handle
+        expect(request).to have_been_made
+      end
+    end
+
+    context 'job:canceled' do
+      let(:event_name) { 'job:canceled' }
+
+      it 'publishes event to billing' do
+        handler.handle
+        expect(request).to have_been_made
+      end
+    end
+
+    context 'job:started' do
+      let(:event_name) { 'job:started' }
+
+      it 'publishes event to billing' do
+        handler.handle
+        expect(request).to have_been_made
+      end
     end
   end
 end
