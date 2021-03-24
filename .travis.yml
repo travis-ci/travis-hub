@@ -24,15 +24,12 @@ services:
 
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
-  - 'gem install bundler:1.16.2'
+  - 'gem install bundler'
 
 jobs:
   include:
     - stage: "testing time"
       script: bundle exec rspec
-      before_install:
-        - "gem update --system"
-        - "gem install bundler -v 1.16.2"
     - stage: ":ship: it to quay.io"
       dist: bionic
       ruby:
@@ -46,3 +43,4 @@ jobs:
       before_sript: skip
       script: make ship
       if: (branch = master and type = push ) OR commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true
+
