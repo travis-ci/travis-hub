@@ -64,12 +64,13 @@ module Travis
           {
             id: object.id,
             os: config['os'] || 'linux',
-            instance_size: nil,
+            instance_size: meta(:vm_size) || vm_size,
             arch: config['arch'] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
             virt_type: config['virt'] || config['vm'],
             queue: object.queue,
+            vm_size: vm_size,
             finished: finished?
           }
         end
@@ -105,6 +106,14 @@ module Travis
             id: object.build.sender_id,
             type: object.build.sender_type
           }
+        end
+
+        def meta(value)
+          params[:worker_meta][0][value] if params.has_key?(:worker_meta) && params[:worker_meta].is_a?(Array) && params[:worker_meta].first.respond_to?(:keys)
+        end
+
+        def vm_size
+          config.dig('vm', 'size')
         end
 
         def config
