@@ -1,11 +1,12 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/config'
+require 'raven'
 
 module Travis
   module Addons
     module Handlers
       class Billing < Base
-        EVENTS = ['job:finished', 'job:canceled'].freeze
+        EVENTS = ['job:started', 'job:finished', 'job:canceled'].freeze
         KEY = :billing
 
         MSGS = {
@@ -37,8 +38,13 @@ module Travis
         end
 
         def send_usage(data)
-          response = connection.post('/usage/executions', data)
-          handle_usage_executions_response(response) unless response.success?
+          logger.info "Hub usage #{data}"
+          response = connection.put('/usage/executions', data)
+          logger.info "Hub usage repsonse #{response.success?} => #{response.inspect}"
+          return true if response.success?
+
+          Raven.capture_exception BillingError.new("Data: #{data.inpect} => #{response.inspect}")
+          handle_usage_executions_response(response) if Travis::Hub.context.config.sentry.dsn
         end
 
         def data
@@ -62,9 +68,10 @@ module Travis
             arch: config['arch'] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: config['virt'],
+            virt_type: config['virt'] || config['vm'],
+            queue: object.queue,
             vm_size: vm_size,
-            queue: object.queue
+            finished: finished?
           }
         end
 
@@ -140,6 +147,10 @@ module Travis
           Addons.logger
         end
 
+        def finished?
+          event != 'job:started'
+        end
+
         # EventHandler
         class EventHandler < Addons::Instrument
           def notify_completed
@@ -147,6 +158,8 @@ module Travis
           end
         end
         EventHandler.attach_to(self)
+
+        class BillingError < StandardError; end
       end
     end
   end
