@@ -68,7 +68,7 @@ module Travis
             arch: config['arch'] || 'amd64',
             started_at: object.started_at,
             finished_at: object.finished_at,
-            virt_type: config['virt'] || config['vm'],
+            virt_type: config['virt'],
             queue: object.queue,
             vm_size: vm_size,
             finished: finished?
