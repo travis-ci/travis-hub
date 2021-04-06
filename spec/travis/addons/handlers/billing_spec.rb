@@ -15,7 +15,11 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:finished' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receive(:billing)
+        ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq('billing')
+          expect(payload['class']).to   eq('Travis::Billing::Worker')
+          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+        end
         handler.handle
       end
     end
@@ -24,7 +28,11 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:canceled' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receive(:billing)
+        ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq('billing')
+          expect(payload['class']).to   eq('Travis::Billing::Worker')
+          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+        end
         handler.handle
       end
     end
@@ -33,7 +41,11 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:started' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receive(:billing)
+        ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
+          expect(payload['queue']).to   eq('billing')
+          expect(payload['class']).to   eq('Travis::Billing::Worker')
+          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+        end
         handler.handle
       end
     end
