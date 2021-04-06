@@ -15,7 +15,7 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:finished' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receieve(:billing)
+        expect(Travis::Sidekiq).to receive(:billing)
         handler.handle
       end
     end
@@ -24,7 +24,7 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:canceled' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receieve(:billing)
+        expect(Travis::Sidekiq).to receive(:billing)
         handler.handle
       end
     end
@@ -33,7 +33,7 @@ describe Travis::Addons::Handlers::Billing do
       let(:event_name) { 'job:started' }
 
       it 'publishes event to billing' do
-        expect(Travis::Sidekiq).to receieve(:billing)
+        expect(Travis::Sidekiq).to receive(:billing)
         handler.handle
       end
     end
