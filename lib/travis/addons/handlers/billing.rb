@@ -39,12 +39,7 @@ module Travis
 
         def send_usage(data)
           logger.info "Hub usage #{data}"
-          response = connection.put('/usage/executions', data)
-          logger.info "Hub usage repsonse #{response.success?} => #{response.inspect}"
-          return true if response.success?
-
-          Raven.capture_exception BillingError.new("Data: #{data.inpect} => #{response.inspect}")
-          handle_usage_executions_response(response) if Travis::Hub.context.config.sentry.dsn
+          Travis::Sidekiq.billing(data)
         end
 
         def data
