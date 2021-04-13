@@ -27,7 +27,7 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'rollout', '~> 1.1.0'
 gem 'dalli'
-gem 'activerecord'
+gem 'activerecord', '~> 5'
 gem 'faraday'
 gem 'faraday_middleware'
 
