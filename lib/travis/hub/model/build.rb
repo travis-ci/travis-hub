@@ -22,7 +22,7 @@ class Build < ActiveRecord::Base
 
   belongs_to :repository
   belongs_to :owner, polymorphic: true
-  belongs_to :config, foreign_key: :config_id, class_name: BuildConfig
+  belongs_to :config, foreign_key: :config_id, class_name: 'BuildConfig'
   belongs_to :sender, polymorphic: true
   has_many   :jobs, -> { order(:id) }, as: :source
   has_many   :stages, -> { order(:id) }
