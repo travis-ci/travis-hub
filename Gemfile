@@ -40,8 +40,9 @@ gem 'coder'
 gem 'redlock'
 
 gem 'puma'
+gem 'rack', '>= 2.1.4'
 gem 'rack-ssl'
-gem 'sinatra'
+gem 'sinatra', '>= 2.0'
 gem 'jwt'
 gem 'libhoney'
 
