@@ -133,7 +133,7 @@ describe Travis::Addons::Handlers::Email do
       end
 
       it 'does not return users who have the no emails global preference' do
-        user.update_attributes!(preferences: JSON.dump(build_emails: false))
+        user.update_attributes(preferences: {:build_emails => false})
         Email.create(user: user, email: committer)
         expect(handler.recipients).to be_empty
       end
@@ -186,7 +186,7 @@ describe Travis::Addons::Handlers::Email do
     describe 'observes user-level no emails preference' do
       let(:config) { address }
       before { Email.create(user: user, email: address) }
-      before { user.update_attributes!(preferences: JSON.dump(build_emails: false)) }
+      before { user.update_attributes!(preferences: {:build_emails => false}) }
       it { expect(handler.recipients).to be_empty }
     end
   end
