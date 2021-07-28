@@ -39,7 +39,7 @@ gem 'multi_json'
 gem 'coder'
 gem 'redlock'
 
-gem 'puma'
+gem 'puma', '~> 4'
 gem 'rack', '~> 2'
 gem 'rack-ssl'
 gem 'sinatra', '~> 2'
