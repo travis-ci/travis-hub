@@ -31,7 +31,7 @@ gem 'activerecord', '~> 5'
 gem 'faraday'
 gem 'faraday_middleware'
 
-gem 'gh'
+gem 'gh', git: 'https://github.com/travis-ci/gh', ref: 'tcie3-0_15_1'
 gem 'keen'
 gem 'sentry-raven'
 gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states'
