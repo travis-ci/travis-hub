@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.9'
+ruby '2.7.5'
 
 gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
 gem 'sidekiq', '~> 6.4'
