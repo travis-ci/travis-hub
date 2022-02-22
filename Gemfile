@@ -54,7 +54,7 @@ group :test do
   gem 'bourne'
   gem 'database_cleaner'
   gem 'factory_girl'
-  gem 'webmock'
+  gem 'webmock', '~> 2.3.2'
   gem 'sinatra-contrib'
   gem 'rack-test'
   gem 'pry'
