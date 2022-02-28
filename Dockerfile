@@ -17,6 +17,8 @@ RUN ( \
    rm -f yq_3.1-2_amd64.deb; \
 )
 
+RUN gem install bundler -v '2.3.7'
+
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
