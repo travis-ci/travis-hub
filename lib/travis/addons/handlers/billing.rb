@@ -6,7 +6,7 @@ module Travis
   module Addons
     module Handlers
       class Billing < Base
-        EVENTS = ['job:started', 'job:finished', 'job:canceled'].freeze
+        EVENTS = ['job:started', 'job:finished', 'job:canceled', 'job:reset'].freeze
         KEY = :billing
 
         MSGS = {
@@ -38,6 +38,8 @@ module Travis
         end
 
         def send_usage(data)
+          # Return if handling reset before start
+          return if reset? && object.started_at.nil?
           logger.info "Hub usage #{data}"
           Travis::Sidekiq.billing(data)
         end
@@ -62,7 +64,7 @@ module Travis
             instance_size: meta(:vm_size) || vm_size,
             arch: config['arch'] || 'amd64',
             started_at: object.started_at,
-            finished_at: object.finished_at,
+            finished_at: reset? && object.finished_at.nil? ? Time.now : object.finished_at,
             virt_type: config['virt'],
             queue: object.queue,
             vm_size: vm_size,
@@ -144,6 +146,10 @@ module Travis
 
         def finished?
           event != 'job:started'
+        end
+
+        def reset?
+          event == 'job:reset'
         end
 
         # EventHandler
