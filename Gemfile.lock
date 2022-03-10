@@ -18,6 +18,13 @@ GIT
       net-http-pipeline
 
 GIT
+  remote: https://github.com/travis-ci/jemalloc-rb
+  revision: 9f5f6c050d30f47e1ed71248e52f9964a588fb87
+  branch: jemalloc-v-3-new-rake
+  specs:
+    jemalloc (1.1.2)
+
+GIT
   remote: https://github.com/travis-ci/marginalia
   revision: 07f19a9ee5869a4557437a9f24608c7b1c4275bf
   branch: 5.x
@@ -166,7 +173,6 @@ GEM
     http_parser.rb (0.6.0)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
-    jemalloc (1.0.1)
     jwt (1.5.4)
     keen (0.7.8)
       multi_json (~> 1.0)
@@ -266,7 +272,7 @@ DEPENDENCIES
   faraday
   faraday_middleware (~> 1.0)
   gh!
-  jemalloc
+  jemalloc!
   jwt
   keen
   libhoney

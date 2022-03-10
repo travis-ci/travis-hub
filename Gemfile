@@ -21,7 +21,7 @@ gem 'metriks-librato_metrics', git: 'https://github.com/travis-ci/metriks-librat
 gem 'marginalia', git: 'https://github.com/travis-ci/marginalia', branch: '5.x'
 
 gem 'rake'
-gem 'jemalloc'
+gem 'jemalloc', git: 'https://github.com/travis-ci/jemalloc-rb', branch: 'jemalloc-v-3-new-rake'
 gem 'pg'
 gem 'bunny'
 gem 'redis', '~> 4.2.0'
