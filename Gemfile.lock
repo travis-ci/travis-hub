@@ -19,10 +19,10 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/jemalloc-rb
-  revision: 9f5f6c050d30f47e1ed71248e52f9964a588fb87
+  revision: af46aa864c867dbd2ad62b036401dba7b16dffd5
   branch: jemalloc-v-3-new-rake
   specs:
-    jemalloc (1.1.2)
+    jemalloc (1.1.3)
 
 GIT
   remote: https://github.com/travis-ci/marginalia
