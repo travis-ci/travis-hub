@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.7.5'
 
-gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
+gem 'sidekiq-pro', '~> 5.1.1', source: 'https://gems.contribsys.com'
 gem 'sidekiq', '~> 6.4'
 
 gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'

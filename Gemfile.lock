@@ -91,8 +91,9 @@ GIT
 GEM
   remote: https://gems.contribsys.com/
   specs:
-    sidekiq-pro (3.5.3)
-      sidekiq (>= 4.1.5)
+    sidekiq-pro (5.1.1)
+      connection_pool (>= 2.2.3)
+      sidekiq (>= 6.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -295,7 +296,7 @@ DEPENDENCIES
   rspec
   sentry-raven (~> 3.1.2)
   sidekiq (~> 6.4)
-  sidekiq-pro!
+  sidekiq-pro (~> 5.1.1)!
   simple_states!
   sinatra (~> 2)
   sinatra-contrib
