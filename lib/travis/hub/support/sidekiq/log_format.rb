@@ -15,7 +15,8 @@ module Travis
 
           def context
             c = Thread.current[:sidekiq_context]
-            c.join(' ') if c && c.any?
+            c = c.join(' ') if c.respond_to?(:join)
+            c
           end
       end
     end
