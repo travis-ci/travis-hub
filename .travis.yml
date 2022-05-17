@@ -4,9 +4,7 @@ group: edge
 import:
   - travis-ci/build-configs:db-setup.yml@postgres-9.6
 
-rvm: 2.4.9
-
-cache: bundler
+rvm: 2.5.9
 
 env:
   global:
@@ -24,8 +22,9 @@ services:
   - rabbitmq
 
 before_install:
+  - gem uninstall -v '>=2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '2.3.7'
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
-  - 'gem install bundler'
 
 jobs:
   include:

@@ -1,4 +1,4 @@
-FROM ruby:2.4.9-slim
+FROM ruby:2.5.9-slim
 
 LABEL maintainer Travis CI GmbH <support+travis-hub-docker-images@travis-ci.com>
 
@@ -16,6 +16,8 @@ RUN ( \
    dpkg -i yq_3.1-2_amd64.deb && \
    rm -f yq_3.1-2_amd64.deb; \
 )
+
+RUN gem install bundler -v '2.3.7'
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
