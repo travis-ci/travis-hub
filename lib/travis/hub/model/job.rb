@@ -71,7 +71,7 @@ class Job < ActiveRecord::Base
     create_version
     clear
     self.restarted_at = Time.now
-    pp args
+    puts args
     self.restarted_by = args.try(:attrs).try(:user_id)
   end
 
