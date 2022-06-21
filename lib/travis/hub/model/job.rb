@@ -67,10 +67,12 @@ class Job < ActiveRecord::Base
     set_queueable
   end
 
-  def restart(*)
+  def restart(*args)
     create_version
     clear
     self.restarted_at = Time.now
+    pp args
+    self.restarted_by = args.try(:attrs).try(:user_id)
   end
 
   def reset(*)
