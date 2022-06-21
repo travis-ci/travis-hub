@@ -45,6 +45,8 @@ module Travis
 
             build.jobs.each do |job|
               auto_cancel(job) if event == :cancel && auto_cancel?
+              puts data
+              puts attrs
               job.reload.send(:"#{event}!", attrs)
             end
           end
