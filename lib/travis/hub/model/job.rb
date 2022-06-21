@@ -72,7 +72,7 @@ class Job < ActiveRecord::Base
     clear
     self.restarted_at = Time.now
     puts args
-    self.restarted_by = args.try(:attrs).try(:user_id)
+    #self.restarted_by = args.try(:attrs).try(:user_id)
   end
 
   def reset(*)
