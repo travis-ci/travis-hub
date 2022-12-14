@@ -45,3 +45,6 @@ development:
 
 test:
   domain: test.travis-ci.local
+  billing:
+    url: 'http://localhost:9292'
+    auth_key: 't0Ps3Cr3t'

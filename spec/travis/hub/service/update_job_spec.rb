@@ -47,7 +47,7 @@ describe Travis::Hub::Service::UpdateJob do
       end
 
       it 'broadcasts a cancel message' do
-        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
         subject.run
       end
     end
@@ -77,7 +77,7 @@ describe Travis::Hub::Service::UpdateJob do
       end
 
       it 'broadcasts a cancel message' do
-        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+        amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
         subject.run
       end
     end
@@ -102,7 +102,7 @@ describe Travis::Hub::Service::UpdateJob do
   describe 'cancel event' do
     let(:state) { :created }
     let(:event) { :cancel }
-    let(:data)  { { id: job.id } }
+    let(:data)  { { id: job.id, reason: 'Insufficient funds' } }
     let(:now) { Time.now }
 
     it 'updates the job' do
@@ -112,7 +112,7 @@ describe Travis::Hub::Service::UpdateJob do
     end
 
     it 'notifies workers' do
-      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub')
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: 'Insufficient funds')
       subject.run
     end
 
