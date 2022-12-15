@@ -25,6 +25,7 @@ RUN ( \
    rm -f yq_3.1-2_amd64.deb; \
    gem install bundler -v '2.3.14'; \
    bundle config https://gems.contribsys.com/ $bundle_gems__contribsys__com \
+      && bundle config set without 'development test' \
       && bundle install --deployment \
       && bundle config --delete https://gems.contribsys.com/; \
    apt-get remove -y gcc g++ make git perl && apt-get -y autoremove; \
