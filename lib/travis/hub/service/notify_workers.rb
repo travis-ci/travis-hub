@@ -7,7 +7,7 @@ module Travis
         include Helper::Context
 
         MSGS = {
-          amqp_cancel: 'Broadcasting cancelation message for <Job id=%s state=%s>',
+          amqp_cancel: 'Broadcasting cancelation message for <Job id=%s state=%s reason=%s>',
           job_board_cancel: 'Canceling via Job Board delete for <Job id=%s state=%s>'
         }
 
@@ -26,7 +26,7 @@ module Travis
           end
 
           def cancel_via_amqp(job, reason)
-            info :amqp_cancel, job.id, job.state
+            info :amqp_cancel, job.id, job.state, reason
 
             context.amqp.fanout(
               'worker.commands',

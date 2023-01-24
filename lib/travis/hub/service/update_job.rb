@@ -41,7 +41,7 @@ module Travis
         private
 
           def with_state_update_count_check
-            unless data[:meta] && data[:meta]['uuid'] && data[:meta]['uuid'] != '' && data[:meta]['state_update_count']
+            unless meta && meta['uuid'] && meta['uuid'] != '' && meta['state_update_count']
               yield
               return
             end
@@ -58,8 +58,8 @@ module Travis
             end
 
             # uuid is unique to the worker job run
-            uuid = data[:meta]['uuid']
-            state_update_count = data[:meta]['state_update_count']
+            uuid = meta['uuid']
+            state_update_count = meta['state_update_count']
             key = "hub:state_update_count:#{job.id}:#{uuid}"
 
             # if the last event we received from this job run had a higher
@@ -83,9 +83,9 @@ module Travis
           end
 
           def store_instance_id
-            return unless data[:meta] && data[:meta]['instance_id'] && data[:meta]['instance_id'] != '{unidentified}'
+            return unless meta && meta['instance_id'] && meta['instance_id'] != '{unidentified}'
 
-            instance_id = data[:meta]['instance_id']
+            instance_id = meta['instance_id']
             key = "hub:instance_id_job:#{instance_id}"
             ttl = 60*60*24*3 # 3 days
             context.redis.setex(key, ttl, job.id)
@@ -108,8 +108,16 @@ module Travis
             ErrorJob.new(context, id: job.id, reason: :resets_limited, resets: resets.to_s).run
           end
 
+          def meta
+            @meta ||= (data[:meta] || {}).symbolize_keys
+          end
+
+          def reason
+            data[:reason] || meta[:reason] || "Job Cancelled: Reason unknown"
+          end
+
           def notify
-            NotifyWorkers.new(context).cancel(job, data[:reason]) if job.reload.state == :canceled
+            NotifyWorkers.new(context).cancel(job, reason) if job.reload.state == :canceled
             NotifyTraceProcessor.new(context).notify(job, data) if event == :finish
           end
 
@@ -126,7 +134,7 @@ module Travis
           end
 
           def recancel
-            NotifyWorkers.new(context).cancel(job)
+            NotifyWorkers.new(context).cancel(job, reason)
           end
 
           def skipped
