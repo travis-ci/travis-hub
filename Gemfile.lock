@@ -149,12 +149,12 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    nio4r (2.5.2)
+    nio4r (2.5.9)
     pg (0.19.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    puma (4.3.5)
+    puma (4.3.12)
       nio4r (~> 2.0)
     rack (1.6.12)
     rack-protection (1.5.5)
@@ -268,7 +268,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 2.4.9p362
+   ruby 2.4.10p364
 
 BUNDLED WITH
    1.17.3
