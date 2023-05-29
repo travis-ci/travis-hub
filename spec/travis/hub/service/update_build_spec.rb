@@ -135,7 +135,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
 
     it 'notifies workers' do
-      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: 'Build Cancelled: Reason unknown')
       subject.run
     end
 
@@ -168,7 +168,7 @@ describe Travis::Hub::Service::UpdateBuild do
     end
 
     it 'notifies workers' do
-      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: '')
+      amqp.expects(:fanout).with('worker.commands', type: 'cancel_job', job_id: job.id, source: 'hub', reason: 'Build Cancelled: Reason unknown')
       subject.run
     end
 

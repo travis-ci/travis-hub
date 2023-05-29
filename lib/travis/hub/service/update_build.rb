@@ -68,8 +68,12 @@ module Travis
             data.reject { |key, _| key == :id || key == :meta }
           end
 
+          def reason
+            data[:reason] || meta[:reason] || "Build Cancelled: Reason unknown"
+          end
+
           def notify
-            build.jobs.each { |job| NotifyWorkers.new(context).cancel(job) } if event == :cancel
+            build.jobs.each { |job| NotifyWorkers.new(context).cancel(job, reason) } if event == :cancel
           end
 
           def exclusive(&block)
