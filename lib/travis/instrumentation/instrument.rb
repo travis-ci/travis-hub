@@ -49,6 +49,16 @@ module Travis
         payload = meta.merge(message: message, data: data)
         payload[:result] = data.delete(:result) if data.key?(:result)
         payload[:exception] = exception if exception
+
+        puts "##############################"
+        puts "##############################"
+        puts "##############################"
+        puts "##############################"
+        puts "Travis::Instrumentation::Instrument.publish"
+        puts "message IS: #{message}"
+        puts "payload IS: #{payload}"
+
+
         Instrumentation.publish(payload)
       end
 
