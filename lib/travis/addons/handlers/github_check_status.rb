@@ -16,6 +16,13 @@ module Travis
         end
 
         def handle
+          puts "##############################"
+          puts "##############################"
+          puts "##############################"
+          puts "##############################"
+          puts "Travis::Addons::Handlers.handle"
+          puts "payload IS: #{payload}"
+          puts "-------------------------------"
           run_task(:github_check_status, payload, installation: installation.github_id)
         end
 
