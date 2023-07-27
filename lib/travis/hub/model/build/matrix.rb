@@ -28,7 +28,7 @@ class Build < ActiveRecord::Base
       elsif required.jobs.all?(&:passed?)
         :passed
       else
-        raise InvalidMatrixState.new(jobs)
+        raise InvalidMatrixState, jobs
       end
     end
 
@@ -38,18 +38,18 @@ class Build < ActiveRecord::Base
 
     private
 
-      def required
-        @required ||= Matrix.new(jobs.reject(&:allow_failure?))
-      end
+    def required
+      @required ||= Matrix.new(jobs.reject(&:allow_failure?))
+    end
 
-      def fast_finish?
-        config = [self.config || {}].flatten.first
-        !!config[:fast_finish] if config.is_a?(Hash) # TODO travis-yaml
-      end
+    def fast_finish?
+      config = [self.config || {}].flatten.first
+      !!config[:fast_finish] if config.is_a?(Hash) # TODO: travis-yaml
+    end
   end
 
   class InvalidMatrixState < StandardError
-    ATTRS = %w(id state allow_failure created_at queued_at started_at finished_at canceled_at)
+    ATTRS = %w[id state allow_failure created_at queued_at started_at finished_at canceled_at]
 
     attr_reader :jobs
 
@@ -63,8 +63,8 @@ class Build < ActiveRecord::Base
 
     private
 
-      def format(job)
-        ATTRS.map { |name| "#{name}: #{job.send(name).inspect}" }.join(', ')
-      end
+    def format(job)
+      ATTRS.map { |name| "#{name}: #{job.send(name).inspect}" }.join(', ')
+    end
   end
 end

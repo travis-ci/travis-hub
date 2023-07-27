@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:campfire, payload, targets: targets, template: template)
+            run_task(:campfire, payload, targets:, template:)
           end
 
           def targets

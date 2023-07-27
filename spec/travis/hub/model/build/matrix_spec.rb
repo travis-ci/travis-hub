@@ -21,12 +21,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq false }
         it { expect { matrix.state }.to raise_error(Build::InvalidMatrixState) }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq false }
         it { expect { matrix.state }.to raise_error(Build::InvalidMatrixState) }
       end
@@ -37,12 +39,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
@@ -53,12 +57,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :failed }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :failed }
       end
@@ -71,12 +77,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq false }
         it { expect(matrix.state).to eq :passed }
       end
@@ -87,12 +95,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
@@ -103,12 +113,14 @@ describe Build::Matrix do
 
       describe 'with fast_finish being true' do
         let(:config) { { fast_finish: true } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end
 
       describe 'with fast_finish being false' do
         let(:config) { { fast_finish: false } }
+
         it { expect(matrix.finished?).to eq true }
         it { expect(matrix.state).to eq :passed }
       end

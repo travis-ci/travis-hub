@@ -5,9 +5,11 @@ describe Travis::Addons::Handlers::Merge do
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:cache)   { described_class.states_cache }
 
-  before { Travis::Event.setup([:merge]) }
-  before { ENV['MERGE_API_TOKEN'] = '1234' }
-  before { stub_request(:any, /.*/) }
+  before do
+    Travis::Event.setup([:merge])
+    ENV['MERGE_API_TOKEN'] = '1234'
+    stub_request(:any, /.*/)
+  end
 
   def notifies(event, args)
     described_class.expects(:notify)

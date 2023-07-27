@@ -30,7 +30,7 @@ class SslKey < ActiveRecord::Base
 
   private
 
-    def key
-      @key ||= OpenSSL::PKey::RSA.new(private_key)
-    end
+  def key
+    @key ||= OpenSSL::PKey::RSA.new(private_key)
+  end
 end

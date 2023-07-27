@@ -19,7 +19,7 @@ module Travis
           end
 
           def data
-            { queue: queue, args: args }
+            { queue:, args: }
           end
 
           def tags

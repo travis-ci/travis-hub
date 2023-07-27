@@ -1,5 +1,5 @@
 describe Travis::Addons::Handlers::Slack do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
   let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { slack: config } }) }
   let(:config)  { 'room' }
 
@@ -51,17 +51,21 @@ describe Travis::Addons::Handlers::Slack do
 
     describe 'is false if the build is a pull request and config opts out' do
       let(:config) { { rooms: 'room', on_pull_requests: false } }
+
       before { build.update(event_type: 'pull_request') }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
     describe 'is true if rooms are present' do
       let(:config) { 'room' }
+
       it { expect(handler.handle?).to eql(true) }
     end
 
     describe 'is false if no rooms are present' do
       let(:config) { [] }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
@@ -89,31 +93,37 @@ describe Travis::Addons::Handlers::Slack do
 
     describe 'returns an array of rooms when given a string' do
       let(:config) { room }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms when given an array' do
       let(:config) { [room] }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms when given a comma separated string' do
       let(:config) { "#{room}, #{other}" }
+
       it { expect(handler.targets).to eql [room, other] }
     end
 
     describe 'returns an array of rooms given a string within a hash' do
       let(:config) { { rooms: room, on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms given an array within a hash' do
       let(:config) { { rooms: [room], on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms given a comma separated string within a hash' do
       let(:config) { { rooms: "#{room}, #{other}", on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room, other] }
     end
   end

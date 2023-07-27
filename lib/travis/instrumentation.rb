@@ -23,7 +23,8 @@ module Travis
       def meter(event, options = {})
         return if options[:level] == :debug
 
-        started_at, finished_at = options[:started_at], options[:finished_at]
+        started_at = options[:started_at]
+        finished_at = options[:finished_at]
 
         if finished_at
           Metriks.timer(event).update(finished_at - started_at)
@@ -51,15 +52,15 @@ module Travis
 
     private
 
-      def instrumentation_template(name, scope, wrapped, level, status)
-        status ||= [:received, :completed, :failed]
-        status   = Array(status) unless status.is_a?(Array)
+    def instrumentation_template(name, scope, wrapped, level, status)
+      status ||= %i[received completed failed]
+      status   = Array(status) unless status.is_a?(Array)
 
-        options  = 'target: self, args: args, started_at: started_at, level: ' + level.inspect
-        meter    = 'Travis::Instrumentation.meter "#{event}:%s", ' + options
-        publish  = 'ActiveSupport::Notifications.publish "#{event}:%s", ' + options
+      options  = 'target: self, args: args, started_at: started_at, level: ' + level.inspect
+      meter    = 'Travis::Instrumentation.meter "#{event}:%s", ' + options
+      publish  = 'ActiveSupport::Notifications.publish "#{event}:%s", ' + options
 
-        <<-RUBY
+      <<-RUBY
           def #{name}(*args, &block)
             started_at = Time.now.to_f
             event = self.class.instrumentation_key.dup #{"<< '.' << #{scope}" if scope} << ".#{name}"
@@ -73,7 +74,7 @@ module Travis
             #{"#{publish % 'failed'}, exception: [e.class.name, e.message]" if status.include?(:failed)}
             raise
           end
-        RUBY
-      end
+      RUBY
+    end
   end
 end

@@ -4,7 +4,7 @@ describe Travis::Addons::Serializer::Pusher::Build do
   let(:user)   { FactoryBot.create(:user, login: 'svenfuchs', name: 'Sven Fuchs', avatar_url: 'https://avatars2.githubusercontent.com/u/2208') }
   let(:build)  { FactoryBot.create(:build, repository: repo, stages: [stage], jobs: [job], sender: user) }
   let(:stage)  { FactoryBot.create(:stage, jobs: [job], number: 1, name: 'test') }
-  let!(:branch){ FactoryBot.create(:branch, repository: repo, name: 'master', last_build: build) }
+  let!(:branch) { FactoryBot.create(:branch, repository: repo, name: 'master', last_build: build) }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 

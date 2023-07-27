@@ -1,15 +1,16 @@
 describe Travis::Hub::Service::UpdateBuild do
+  subject     { described_class.new(context, event, data) }
+
   let(:now)   { Time.now }
-  let(:build) { FactoryBot.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
-  let(:job)   { FactoryBot.create(:job, state ? { state: state } : {}) }
+  let(:build) { FactoryBot.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: } : {})) }
+  let(:job)   { FactoryBot.create(:job, state ? { state: } : {}) }
   let(:amqp)  { Travis::Amqp.any_instance }
   let(:events)  { Travis::Event }
 
-  subject     { described_class.new(context, event, data) }
-  before      { amqp.stubs(:fanout) }
-  before      { context.metrics.stubs(:meter) }
-  before      { events.stubs(:dispatch) }
   before do
+    amqp.stubs(:fanout)
+    context.metrics.stubs(:meter)
+    events.stubs(:dispatch)
     stub_request(:delete, %r{https://job-board\.travis-ci\.com/jobs/\d+\?source=hub})
       .to_return(status: 204)
   end
@@ -149,7 +150,7 @@ describe Travis::Hub::Service::UpdateBuild do
     let(:state) { :created }
     let(:event) { :cancel }
     let(:meta)  { { 'auto' => true, 'event' => 'pull_request', 'number' => '2', 'branch' => 'master', 'pull_request_number' => '1' } }
-    let(:data)  { { id: build.id, meta: meta } }
+    let(:data)  { { id: build.id, meta: } }
     let(:now) { Time.now }
 
     before do
@@ -183,7 +184,7 @@ describe Travis::Hub::Service::UpdateBuild do
     let(:state) { :created }
     let(:event) { :cancel }
     let(:meta)  { { 'auto' => true, 'event' => 'api', 'number' => '2', 'branch' => 'master', 'pull_request_number' => nil } }
-    let(:data)  { { id: build.id, meta: meta } }
+    let(:data)  { { id: build.id, meta: } }
     let(:now) { Time.now }
 
     before do

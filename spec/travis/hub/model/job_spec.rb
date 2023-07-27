@@ -1,8 +1,8 @@
 describe Job do
   let(:params) { {} }
   let(:repo)   { FactoryBot.create(:repository) }
-  let(:build)  { FactoryBot.create(:build, repository: repo, state: [:received, :queued].include?(state) ? :created : state) }
-  let(:job)    { FactoryBot.create(:job, repository: repo, build: build, state: state) }
+  let(:build)  { FactoryBot.create(:build, repository: repo, state: %i[received queued].include?(state) ? :created : state) }
+  let(:job)    { FactoryBot.create(:job, repository: repo, build:, state:) }
   let(:now)    { Time.now }
 
   before do
@@ -68,7 +68,7 @@ describe Job do
     end
 
     describe 'it denormalizes to the repository' do
-      %w(id number state duration started_at finished_at).each do |attr|
+      %w[id number state duration started_at finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -112,12 +112,12 @@ describe Job do
 
       describe 'with other jobs being pending' do
         before do
-          FactoryBot.create(:job, build: build, state: :started)
+          FactoryBot.create(:job, build:, state: :started)
         end
 
         it 'does not set :state to :passed' do
           receive
-          expect(job.build.reload.state).to_not eql(:passed)
+          expect(job.build.reload.state).not_to eql(:passed)
         end
 
         it 'does not set :finished_at' do
@@ -128,19 +128,19 @@ describe Job do
 
       describe 'with one job failed and other jobs being pending' do
         before do
-          FactoryBot.create(:job, build: build, state: :started)
-          FactoryBot.create(:job, build: build, state: :failed)
+          FactoryBot.create(:job, build:, state: :started)
+          FactoryBot.create(:job, build:, state: :failed)
         end
 
         it 'does not set :state to :failed' do
           receive
-          expect(job.build.reload.state).to_not eql(:failed)
+          expect(job.build.reload.state).not_to eql(:failed)
         end
       end
     end
 
     describe 'it denormalizes to the repository' do
-      %w(state duration finished_at).each do |attr|
+      %w[state duration finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -183,17 +183,17 @@ describe Job do
 
     describe 'with other jobs being pending' do
       before do
-        FactoryBot.create(:job, build: build, state: :started)
+        FactoryBot.create(:job, build:, state: :started)
       end
 
       it 'does not set the build to :canceled' do
         receive
-        expect(job.build.reload.state).to_not eql(:canceled)
+        expect(job.build.reload.state).not_to eql(:canceled)
       end
     end
 
     describe 'it denormalizes to the repository' do
-      %w(state duration finished_at).each do |attr|
+      %w[state duration finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -276,7 +276,7 @@ describe Job do
     end
 
     describe 'it denormalizes to the repository' do
-      %w(state duration started_at finished_at).each do |attr|
+      %w[state duration started_at finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -293,7 +293,7 @@ describe Job do
 
     it 'does not change the job `[state]ed_at` time' do
       attr = "#{state}_ed".sub(/eed$/, 'ed')
-      expect { receive }.to_not change { job.reload.send(attr) } if job.respond_to?(attr)
+      expect { receive }.not_to(change { job.reload.send(attr) }) if job.respond_to?(attr)
     end
 
     it 'does not change the build :state' do
@@ -303,7 +303,7 @@ describe Job do
 
     it 'does not change the build `[state]ed_at` time' do
       attr = "#{state}_ed".sub(/eed$/, 'ed')
-      expect { receive }.to_not change { build.reload.send(attr) } if build.respond_to?(attr)
+      expect { receive }.not_to(change { build.reload.send(attr) }) if build.respond_to?(attr)
     end
   end
 
@@ -316,15 +316,14 @@ describe Job do
 
     let(:job) do
       FactoryBot.create(:job,
-        repository: repo,
-        build: build,
-        state: state,
-        created_at: created_at,
-        queued_at: queued_at,
-        received_at: received_at,
-        started_at: started_at,
-        finished_at: finished_at
-      )
+                        repository: repo,
+                        build:,
+                        state:,
+                        created_at:,
+                        queued_at:,
+                        received_at:,
+                        started_at:,
+                        finished_at:)
     end
 
     let(:version) { job.versions.first }
@@ -343,41 +342,49 @@ describe Job do
 
     describe 'received by a :created job' do
       let(:state) { :created }
+
       include_examples 'sets the job to :received'
     end
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
+
       include_examples 'sets the job to :received'
     end
 
     describe 'received by a :received job' do
       let(:state) { :received }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :started job' do
       let(:state) { :started }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :passed job' do
       let(:state) { :passed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :failed job' do
       let(:state) { :failed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by an :errored job' do
       let(:state) { :errored }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :canceled job' do
       let(:state) { :canceled }
+
       include_examples 'does not apply'
     end
   end
@@ -388,41 +395,49 @@ describe Job do
 
     describe 'received by a :created job' do
       let(:state) { :created }
+
       include_examples 'sets the job to :started'
     end
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
+
       include_examples 'sets the job to :started'
     end
 
     describe 'received by a :received job' do
       let(:state) { :received }
+
       include_examples 'sets the job to :started'
     end
 
     describe 'received by a :started job' do
       let(:state) { :started }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :passed job' do
       let(:state) { :passed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :failed job' do
       let(:state) { :failed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by an :errored job' do
       let(:state) { :errored }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :canceled job' do
       let(:state) { :canceled }
+
       include_examples 'does not apply'
     end
   end
@@ -433,86 +448,102 @@ describe Job do
 
     describe 'received by a :created job' do
       let(:state) { :created }
+
       include_examples 'sets the job to :passed'
     end
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
+
       include_examples 'sets the job to :passed'
     end
 
     describe 'received by a :received job' do
       let(:state) { :received }
+
       include_examples 'sets the job to :passed'
     end
 
     describe 'received by a :started job' do
       let(:state) { :started }
+
       include_examples 'sets the job to :passed'
     end
 
     describe 'received by a :passed job' do
       let(:state) { :passed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :failed job' do
       let(:state) { :failed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by an :errored job' do
       let(:state) { :errored }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :canceled job' do
       let(:state) { :canceled }
+
       include_examples 'does not apply'
     end
   end
 
-  [:reset, :restart].each do |event|
+  %i[reset restart].each do |event|
     describe "a #{event} event" do
-      let(:event)  { event }
+      let(:event) { event }
 
       describe 'received by a :created job' do
         let(:state) { :created }
+
         include_examples 'does not apply'
       end
 
       describe 'received by a :queued job' do
         let(:state) { :queued }
+
         include_examples 'resets the job'
       end
 
       describe 'received by a :received job' do
         let(:state) { :received }
+
         include_examples 'resets the job'
       end
 
       describe 'received by a :started job' do
         let(:state) { :started }
+
         include_examples 'resets the job'
       end
 
       describe 'received by a :passed job' do
         let(:state) { :passed }
+
         include_examples 'resets the job'
       end
 
       describe 'received by a :failed job' do
         let(:state) { :failed }
+
         include_examples 'resets the job'
       end
 
       describe 'received by an :errored job' do
         let(:state) { :errored }
+
         include_examples 'resets the job'
       end
 
       describe 'received by a :canceled job' do
         let(:state) { :canceled }
+
         include_examples 'resets the job'
       end
     end
@@ -524,50 +555,59 @@ describe Job do
 
     before { receive }
 
-    it { expect(job.reload.restarted_at).to_not be_nil }
+    it { expect(job.reload.restarted_at).not_to be_nil }
+
     include_examples 'creates a job version'
   end
 
   describe 'a :cancel event' do
-    let(:event)  { :cancel }
+    let(:event) { :cancel }
 
     describe 'received by a :created job' do
       let(:state) { :created }
+
       include_examples 'cancels the job'
     end
 
     describe 'received by a :queued job' do
       let(:state) { :queued }
+
       include_examples 'cancels the job'
     end
 
     describe 'received by a :received job' do
       let(:state) { :received }
+
       include_examples 'cancels the job'
     end
 
     describe 'received by a :started job' do
       let(:state) { :started }
+
       include_examples 'cancels the job'
     end
 
     describe 'received by a :passed job' do
       let(:state) { :passed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :failed job' do
       let(:state) { :failed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by an :errored job' do
       let(:state) { :errored }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :canceled job' do
       let(:state) { :canceled }
+
       include_examples 'does not apply'
     end
   end

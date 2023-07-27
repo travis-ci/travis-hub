@@ -15,13 +15,13 @@ module Travis
 
     def initialize(config, enterprise = false)
       @connection = Bunny.new(config.to_h).tap { |connection| connection.start }
-      # TODO channels must not be shared across threads, set this to Thread.current?
+      # TODO: channels must not be shared across threads, set this to Thread.current?
       @channel = connection.create_channel
       @enterprise = enterprise
     end
 
     def setup
-      # TODO required on enterprise. move details to config?
+      # TODO: required on enterprise. move details to config?
       if @enterprise
         channel.exchange('reporting', durable: true, auto_delete: false, type: :topic)
         channel.queue('builds.linux', durable: true, exclusive: false)
@@ -33,7 +33,7 @@ module Travis
       queue = channel.queue(key, durable: true).bind('reporting', routing_key: key)
       queue.subscribe(options, &handler)
       sleep
-    rescue => e
+    rescue StandardError => e
       Raven.capture_exception(e)
     end
 
@@ -44,8 +44,8 @@ module Travis
     def publish(key, type, payload)
       payload = MultiJson.encode(payload)
       exchange = channel.topic('reporting', durable: true, auto_delete: false)
-      exchange.publish(payload, type: type, routing_key: "reporting.jobs.#{key}")
-    rescue => e
+      exchange.publish(payload, type:, routing_key: "reporting.jobs.#{key}")
+    rescue StandardError => e
       Raven.capture_exception(e)
     end
 
@@ -53,7 +53,7 @@ module Travis
       payload = MultiJson.encode(payload)
       exchange = channel.exchange(key, type: :fanout)
       exchange.publish(payload)
-    rescue => e
+    rescue StandardError => e
       Raven.capture_exception(e)
     end
   end

@@ -11,9 +11,10 @@ class JobVersion < ActiveRecord::Base
 end
 
 class Job < ActiveRecord::Base
-  include SimpleStates, Travis::Event
+  include Travis::Event
+  include SimpleStates
 
-  FINISHED_STATES = [:passed, :failed, :errored, :canceled]
+  FINISHED_STATES = %i[passed failed errored canceled]
 
   Job.inheritance_column = :unused
 
@@ -26,12 +27,12 @@ class Job < ActiveRecord::Base
   has_many   :versions, class_name: 'JobVersion'
   has_one    :queueable
 
-  self.initial_state = :persisted # TODO go away once there's `queueable`
+  self.initial_state = :persisted # TODO: go away once there's `queueable`
 
-  event :create,  after: :propagate
+  event :create, after: :propagate
   event :receive
   event :start,   after: :propagate
-  event :finish,  after: :propagate , to: FINISHED_STATES
+  event :finish,  after: :propagate, to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate
   event :reset,   after: :propagate
@@ -81,7 +82,7 @@ class Job < ActiveRecord::Base
     !finished?
   end
 
-  def cancel(msg)
+  def cancel(_msg)
     self.finished_at = Time.now
     unset_queueable
   end
@@ -93,57 +94,58 @@ class Job < ActiveRecord::Base
 
   private
 
-    CLEAR_ATTRS   = %w(queued_at received_at started_at finished_at canceled_at)
-    VERSION_ATTRS = %w(created_at queued_at received_at started_at finished_at restarted_at)
+  CLEAR_ATTRS   = %w[queued_at received_at started_at finished_at canceled_at]
+  VERSION_ATTRS = %w[created_at queued_at received_at started_at finished_at restarted_at]
 
-    def create_version
-      attrs = attributes.slice(*VERSION_ATTRS)
-      attrs = attrs.merge(number: next_version_number, state: state_was, restarted_at: restarted_at_was)
-      versions.create!(attrs)
-    end
+  def create_version
+    attrs = attributes.slice(*VERSION_ATTRS)
+    attrs = attrs.merge(number: next_version_number, state: state_was, restarted_at: restarted_at_was)
+    versions.create!(attrs)
+  end
 
-    def next_version_number
-      versions.maximum(:number).try(:+, 1) || 1
-    end
+  def next_version_number
+    versions.maximum(:number).try(:+, 1) || 1
+  end
 
-    def clear
-      self.state = :created
-      clear_attrs
-      clear_log
-      save!
-      set_queueable
-    end
+  def clear
+    self.state = :created
+    clear_attrs
+    clear_log
+    save!
+    set_queueable
+  end
 
-    def clear_attrs
-      CLEAR_ATTRS.each { |attr| write_attribute(attr, nil) }
-    end
+  def clear_attrs
+    CLEAR_ATTRS.each { |attr| write_attribute(attr, nil) }
+  end
 
-    def clear_log
-      logs_api.update(id, '', clear: true)
-    end
+  def clear_log
+    logs_api.update(id, '', clear: true)
+  end
 
-    def set_queueable
-      queueable || create_queueable
-    end
+  def set_queueable
+    queueable || create_queueable
+  end
 
-    def unset_queueable
-      Queueable.where(job_id: id).delete_all
-    end
+  def unset_queueable
+    Queueable.where(job_id: id).delete_all
+  end
 
-    def ensure_positive_queue_time
-      # TODO should ideally sit on Handler, but Worker does not yet include `queued_at`
-      return unless queued_at && received_at && queued_at > received_at
-      self.received_at = queued_at
-    end
+  def ensure_positive_queue_time
+    # TODO: should ideally sit on Handler, but Worker does not yet include `queued_at`
+    return unless queued_at && received_at && queued_at > received_at
 
-    def propagate(event, *args)
-      target = stage && stage.respond_to?(:"#{event}!") ? stage : build
-      target.send(:"#{event}!", *args)
-    end
+    self.received_at = queued_at
+  end
 
-    def logs_api
-      @logs_api ||= Travis::Hub::Support::Logs.new(
-        Travis::Hub.context.config.logs_api
-      )
-    end
+  def propagate(event, *args)
+    target = stage && stage.respond_to?(:"#{event}!") ? stage : build
+    target.send(:"#{event}!", *args)
+  end
+
+  def logs_api
+    @logs_api ||= Travis::Hub::Support::Logs.new(
+      Travis::Hub.context.config.logs_api
+    )
+  end
 end

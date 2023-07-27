@@ -5,7 +5,7 @@ require 'travis/event/error'
 module Travis
   module Event
     class Handler
-      extend  Instrumentation
+      extend Instrumentation
 
       class << self
         def register(name, const)
@@ -32,9 +32,9 @@ module Travis
       def notify
         handle
       rescue Exception => e
-        Exceptions.handle(Error.new(e, event, params)) # TODO pass in
+        Exceptions.handle(Error.new(e, event, params)) # TODO: pass in
       end
-      instrument :notify, on: [:completed, :failed]
+      instrument :notify, on: %i[completed failed]
 
       def object
         @object ||= begin
@@ -46,17 +46,17 @@ module Travis
 
       private
 
-        def object_type
-          event.split(':').first
-        end
+      def object_type
+        event.split(':').first
+      end
 
-        def action
-          event.split(':').last.to_sym
-        end
+      def action
+        event.split(':').last.to_sym
+      end
 
-        def symbolize_keys(hash)
-          Hash[hash.map { |key, value| [key.to_sym, value] }]
-        end
+      def symbolize_keys(hash)
+        Hash[hash.map { |key, value| [key.to_sym, value] }]
+      end
     end
   end
 end

@@ -1,5 +1,5 @@
 describe Travis::Addons::Handlers::Webhook do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
   let(:repo)    { FactoryBot.create(:repository) }
   let(:build)   { FactoryBot.create(:build, repository: repo, state: :passed, config: { notifications: { webhooks: config } }) }
   let(:config)  { { urls: 'http://host.com/target' } }
@@ -44,11 +44,13 @@ describe Travis::Addons::Handlers::Webhook do
   describe 'handle?' do
     describe 'is true if targets are present' do
       let(:config) { { urls: 'http://host.com/target' } }
+
       it { expect(handler.handle?).to eql(true) }
     end
 
     describe 'is false if no targets are present' do
       let(:config) { false }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
@@ -76,41 +78,49 @@ describe Travis::Addons::Handlers::Webhook do
 
     describe 'returns an array of targets when given a string' do
       let(:config) { target }
+
       it { expect(handler.targets).to eql [target] }
     end
 
     describe 'returns an array of targets when given an array' do
       let(:config) { [target] }
+
       it { expect(handler.targets).to eql [target] }
     end
 
     describe 'returns an array of targets when given a comma separated string' do
       let(:config) { "#{target}, #{other}" }
+
       it { expect(handler.targets).to eql [target, other] }
     end
 
     describe 'returns an array of targets given a string within a hash' do
       let(:config) { { urls: target, on_success: 'change' } }
+
       it { expect(handler.targets).to eql [target] }
     end
 
     describe 'returns an array of targets given an array within a hash' do
       let(:config) { { urls: [target], on_success: 'change' } }
+
       it { expect(handler.targets).to eql [target] }
     end
 
     describe 'returns an array of targets given a comma separated string within a hash' do
       let(:config) { { urls: "#{target}, #{other}", on_success: 'change' } }
+
       it { expect(handler.targets).to eql [target, other] }
     end
 
     describe 'returns an array of targets given a string within a hash on_cancel' do
       let(:config) { { urls: target, on_cancel: 'change' } }
+
       it { expect(handler.targets).to eql [target] }
     end
 
     describe 'returns an array of targets given a string within a hash on_errored' do
       let(:config) { { urls: target, on_error: 'change' } }
+
       it { expect(handler.targets).to eql [target] }
     end
   end

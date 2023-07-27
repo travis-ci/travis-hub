@@ -5,7 +5,8 @@ module Travis
         attr_reader :context
 
         def initialize(context, *args)
-          fail "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(Hub::Context)
+          raise "First argument to #{self.class.name}.new must be an instance of Context. #{context.class.name} given." unless context.is_a?(Hub::Context)
+
           @context = context
           super(*args)
         end
@@ -26,7 +27,7 @@ module Travis
           context.redis
         end
 
-        [:info, :warn, :debug, :error, :fatal].each do |level|
+        %i[info warn debug error fatal].each do |level|
           define_method(level) { |msg, *args| log(level, msg, *args) }
         end
 

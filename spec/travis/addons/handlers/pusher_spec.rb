@@ -36,6 +36,7 @@ describe Travis::Addons::Handlers::Pusher do
 
     describe 'a job event' do
       let(:event) { 'job:finished' }
+
       before do
         user.permissions.create!(repository: repo)
       end
@@ -57,7 +58,7 @@ describe Travis::Addons::Handlers::Pusher do
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(JSON.parse(payload['args'][3])).to be_a(Hash)
-          expect(JSON.parse(payload['args'][4])).to eq('event'=> event, 'user_ids'=> [user.id])
+          expect(JSON.parse(payload['args'][4])).to eq('event' => event, 'user_ids' => [user.id])
         end
         handler.handle
       end
@@ -71,7 +72,7 @@ describe Travis::Addons::Handlers::Pusher do
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
           expect(JSON.parse(payload['args'][3])).to be_a(Hash)
-          expect(JSON.parse(payload['args'][4])).to eq('event'=> event, 'user_ids' => [])
+          expect(JSON.parse(payload['args'][4])).to eq('event' => event, 'user_ids' => [])
         end
         handler.handle
       end

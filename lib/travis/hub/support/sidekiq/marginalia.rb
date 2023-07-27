@@ -10,7 +10,7 @@ module Travis
           @options = options
         end
 
-        def call(worker, job, queue)
+        def call(_worker, _job, _queue)
           ::Marginalia.set('app', @options[:app])
           yield
         ensure

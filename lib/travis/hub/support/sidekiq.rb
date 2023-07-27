@@ -8,7 +8,6 @@ require 'travis/hub/support/sidekiq/marginalia'
 module Travis
   module Sidekiq
     def setup(config)
-
       ::Sidekiq.configure_server do |c|
         c.redis = {
           url: config.redis.url,

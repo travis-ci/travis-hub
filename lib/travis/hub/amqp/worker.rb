@@ -11,23 +11,23 @@ module Travis
 
         private
 
-          def queue
-            "#{super}.#{number}"
-          end
+        def queue
+          "#{super}.#{number}"
+        end
 
-          def handle(event, payload)
-            payload.delete('worker_count') == count ? super : requeue(event, payload)
-          end
+        def handle(event, payload)
+          payload.delete('worker_count') == count ? super : requeue(event, payload)
+        end
 
-          def requeue(event, payload)
-            # hub worker count has changed, send this back to the original queue
-            context.amqp.publish('builds', event, payload)
-            meter("hub.#{name}.requeue")
-          end
+        def requeue(event, payload)
+          # hub worker count has changed, send this back to the original queue
+          context.amqp.publish('builds', event, payload)
+          meter("hub.#{name}.requeue")
+        end
 
-          def missing_argument(name)
-            fail ArgumentError, "missing worker #{name}"
-          end
+        def missing_argument(name)
+          raise ArgumentError, "missing worker #{name}"
+        end
       end
     end
   end

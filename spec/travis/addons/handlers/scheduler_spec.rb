@@ -42,7 +42,7 @@ describe Travis::Addons::Handlers::Scheduler do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'scheduler',
         'class' => 'Travis::Scheduler::Worker',
-        'args'  => [:event, 'job:finished', id: job.id].map! { |arg| arg.to_json }
+        'args' => [:event, 'job:finished', { id: job.id }].map! { |arg| arg.to_json }
       )
       handler.handle
     end

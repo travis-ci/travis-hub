@@ -2,7 +2,7 @@ require 'factory_bot'
 
 Build.class_eval do
   def config=(config)
-    super(build_config(repository_id: repository_id, key: 'key', config: config))
+    super(build_config(repository_id:, key: 'key', config:))
   end
 end
 

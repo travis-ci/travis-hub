@@ -15,7 +15,7 @@ module Travis
           end
 
           def handle
-            run_task(:email, payload, recipients: recipients, broadcasts: broadcasts)
+            run_task(:email, payload, recipients:, broadcasts:)
           end
 
           def recipients
@@ -30,44 +30,44 @@ module Travis
 
           private
 
-            def no_build_emails(emails)
-              ::Email.joins(:user).where(email: emails).select do |obj|
-                user = User.find(obj.user_id)
-                JSON.parse(user.preferences.to_s)['build_emails'] == false
-              end.map!(&:email)
-            end
+          def no_build_emails(emails)
+            ::Email.joins(:user).where(email: emails).select do |obj|
+              user = User.find(obj.user_id)
+              JSON.parse(user.preferences.to_s)['build_emails'] == false
+            end.map!(&:email)
+          end
 
-            def configured_emails
-              emails = config.values(:recipients)
-              emails.try(:any?) && emails
-            end
+          def configured_emails
+            emails = config.values(:recipients)
+            emails.try(:any?) && emails
+          end
 
-            def default_emails
-              emails = [commit.author_email, commit.committer_email]
-              user_ids = object.repository.permissions.pluck(:user_id)
-              ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
-            end
+          def default_emails
+            emails = [commit.author_email, commit.committer_email]
+            user_ids = object.repository.permissions.pluck(:user_id)
+            ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
+          end
 
-            def unsubscribed_emails
-              user_ids = object.repository.email_unsubscribes.pluck(:user_id)
-              ::Email.where(user_id: user_ids).pluck(:email).uniq
-            end
+          def unsubscribed_emails
+            user_ids = object.repository.email_unsubscribes.pluck(:user_id)
+            ::Email.where(user_id: user_ids).pluck(:email).uniq
+          end
 
-            def broadcasts
-              msgs = Broadcast.by_repo(object.repository).pluck(:message, :category)
-              msgs.map { |msg, cat| { message: msg, category: cat } }
-            end
+          def broadcasts
+            msgs = Broadcast.by_repo(object.repository).pluck(:message, :category)
+            msgs.map { |msg, cat| { message: msg, category: cat } }
+          end
 
-            def normalize_array(array)
-              Array(array).join(',').split(',').map(&:strip).select(&:present?).uniq
-            end
+          def normalize_array(array)
+            Array(array).join(',').split(',').map(&:strip).select(&:present?).uniq
+          end
 
-            class EventHandler < Addons::Instrument
-              def notify_completed
-                publish(recipients: handler.recipients)
-              end
+          class EventHandler < Addons::Instrument
+            def notify_completed
+              publish(recipients: handler.recipients)
             end
-            EventHandler.attach_to(self)
+          end
+          EventHandler.attach_to(self)
         end
       end
     end

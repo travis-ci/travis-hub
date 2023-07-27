@@ -17,7 +17,7 @@ module Travis
         end
 
         def check_queueuable
-          expected = action == :created ? true : false
+          expected = action == :created
           queueable = !!object.reload.queueable
           level = expected == queueable ? :info : :warn
           msg = "[notify-scheduler] job=#{object.id} event=#{event} state=#{object.state} queueable=#{!!queueable} (#{'NOT ' if level == :warn}expected)"

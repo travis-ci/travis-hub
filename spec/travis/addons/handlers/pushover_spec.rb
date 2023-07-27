@@ -1,5 +1,5 @@
 describe Travis::Addons::Handlers::Pushover do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
   let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { pushover: config } }) }
   let(:config)  { { users: 'user', api_key: 'api_key' } }
 
@@ -25,7 +25,7 @@ describe Travis::Addons::Handlers::Pushover do
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
     it { expect(jobs.size).to eq 2 }
-    it { expect(keys).to eq ['one', 'two'] }
+    it { expect(keys).to eq %w[one two] }
   end
 
   describe 'handle?' do

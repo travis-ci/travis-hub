@@ -26,39 +26,38 @@ module Travis
 
         private
 
-          def cache
-            self.class.states_cache || fail('States cache not set up.')
-          end
+        def cache
+          self.class.states_cache || raise('States cache not set up.')
+        end
 
-          def repository_id
-            object.repository_id
-          end
+        def repository_id
+          object.repository_id
+        end
 
-          def build_id
-            object.source_id
-          end
+        def build_id
+          object.source_id
+        end
 
-          def branch
-            object.commit.branch
-          end
+        def branch
+          object.commit.branch
+        end
 
+        # TODO: This logic is here to verify if we ever see builds being
+        # finished before they had been started. If so, this should be rolled
+        # back. Eventually the worker should send all known timestamps with all
+        # state update messages, solving this problem.
 
-          # TODO This logic is here to verify if we ever see builds being
-          # finished before they had been started. If so, this should be rolled
-          # back. Eventually the worker should send all known timestamps with all
-          # state update messages, solving this problem.
+        MSGS = {
+          missing_duration: 'Missing duration for <%s id=%s> is: %s'
+        }
 
-          MSGS = {
-            missing_duration: 'Missing duration for <%s id=%s> is: %s'
-          }
+        def validate_duration
+          warn_missing_duration if object.duration == 0 || object.duration.nil?
+        end
 
-          def validate_duration
-            warn_missing_duration if object.duration == 0 || object.duration.nil?
-          end
-
-          def warn_missing_duration
-            Addons.logger.warn(MSGS[:missing_duration] % [object.class.name, object.id, object.duration.inspect])
-          end
+        def warn_missing_duration
+          Addons.logger.warn(MSGS[:missing_duration] % [object.class.name, object.id, object.duration.inspect])
+        end
       end
     end
   end

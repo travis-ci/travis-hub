@@ -1,11 +1,14 @@
 describe Stage do
   let(:build)  { FactoryBot.create(:build, state: :started) }
-  let(:stages) { [1, 2].map { |num| FactoryBot.create(:stage, build: build, number: num) } }
-  let(:jobs)   { ['1.1', '1.2', '2.1'].map { |num| FactoryBot.create(:job, stage_number: num, stage: stages[num.to_i - 1], build: build) } }
+  let(:stages) { [1, 2].map { |num| FactoryBot.create(:stage, build:, number: num) } }
+  let(:jobs)   { ['1.1', '1.2', '2.1'].map { |num| FactoryBot.create(:job, stage_number: num, stage: stages[num.to_i - 1], build:) } }
   let(:now)    { Time.now }
 
-  before { jobs.map(&:reload) } # hmm? why do i need this here??
-  before { Travis::Event.stubs(:dispatch) }
+  # hmm? why do i need this here??
+  before do
+    jobs.map(&:reload)
+    Travis::Event.stubs(:dispatch)
+  end
 
   def reload
     build.reload
@@ -14,10 +17,12 @@ describe Stage do
   end
 
   describe 'success' do
-    before { jobs[0].finish!(state: :passed, finished_at: now) }
-    before { jobs[1].finish!(state: :passed, finished_at: now) }
-    before { jobs[2].finish!(state: :passed, finished_at: now) }
-    before { reload }
+    before do
+      jobs[0].finish!(state: :passed, finished_at: now)
+      jobs[1].finish!(state: :passed, finished_at: now)
+      jobs[2].finish!(state: :passed, finished_at: now)
+      reload
+    end
 
     it { expect(build.state).to eq :passed }
     it { expect(stages[0].state).to eq :passed }
@@ -30,9 +35,11 @@ describe Stage do
   end
 
   describe 'failure' do
-    before { jobs[0].finish!(state: :failed, finished_at: now) }
-    before { jobs[1].finish!(state: :passed, finished_at: now) }
-    before { reload }
+    before do
+      jobs[0].finish!(state: :failed, finished_at: now)
+      jobs[1].finish!(state: :passed, finished_at: now)
+      reload
+    end
 
     it { expect(build.state).to eq :failed }
     it { expect(stages[0].state).to eq :failed }
@@ -45,9 +52,11 @@ describe Stage do
   end
 
   describe 'error' do
-    before { jobs[0].finish!(state: :errored, finished_at: now) }
-    before { jobs[1].finish!(state: :passed, finished_at: now) }
-    before { reload }
+    before do
+      jobs[0].finish!(state: :errored, finished_at: now)
+      jobs[1].finish!(state: :passed, finished_at: now)
+      reload
+    end
 
     it { expect(build.state).to eq :errored }
     it { expect(stages[0].state).to eq :errored }
@@ -58,10 +67,12 @@ describe Stage do
   end
 
   describe 'with allow_failure' do
-    before { jobs[0].update!(allow_failure: true) }
-    before { jobs[0].finish!(state: :failed, finished_at: now) }
-    before { jobs[1].finish!(state: :passed, finished_at: now) }
-    before { reload }
+    before do
+      jobs[0].update!(allow_failure: true)
+      jobs[0].finish!(state: :failed, finished_at: now)
+      jobs[1].finish!(state: :passed, finished_at: now)
+      reload
+    end
 
     it { expect(build.state).to eq :started }
     it { expect(stages[0].state).to eq :passed }
@@ -72,10 +83,12 @@ describe Stage do
   end
 
   describe 'with allow_failure and fast_finish' do
-    before { build.update!(config: { matrix: { fast_finish: true } }) }
-    before { jobs[1].update!(allow_failure: true) }
-    before { jobs[0].finish!(state: :failed, finished_at: now) }
-    before { reload }
+    before do
+      build.update!(config: { matrix: { fast_finish: true } })
+      jobs[1].update!(allow_failure: true)
+      jobs[0].finish!(state: :failed, finished_at: now)
+      reload
+    end
 
     # i.e. the one `allow_failure` job will still be run (as it does with
     # normal matrix builds) but jobs in later stages have been canceled
@@ -88,10 +101,12 @@ describe Stage do
   end
 
   describe 'cancel and fail' do
-    before { jobs[0].cancel! }
-    before { jobs[2].cancel! }
-    before { jobs[1].finish!(state: :failed, finished_at: now) }
-    before { reload }
+    before do
+      jobs[0].cancel!
+      jobs[2].cancel!
+      jobs[1].finish!(state: :failed, finished_at: now)
+      reload
+    end
 
     it { expect(build.state).to eq :canceled }
     it { expect(stages[0].state).to eq :canceled }

@@ -1,7 +1,7 @@
 describe Travis::Addons::Serializer::Keen::Job do
   let(:owner) { FactoryBot.create(:user, login: 'login') }
-  let(:times) { %i(created_at queued_at received_at started_at finished_at).map.with_index { |attr, ix| [attr, Time.now + 60 * ix] }.to_h }
-  let(:job)   { FactoryBot.create(:job, times.merge(state: :passed, owner: owner, queue: 'gce')) }
+  let(:times) { %i[created_at queued_at received_at started_at finished_at].map.with_index { |attr, ix| [attr, Time.now + 60 * ix] }.to_h }
+  let(:job)   { FactoryBot.create(:job, times.merge(state: :passed, owner:, queue: 'gce')) }
   let(:repo)  { job.repository }
   let(:build) { job.build }
   let(:data)  { described_class.new(job).data[:jobs].first }

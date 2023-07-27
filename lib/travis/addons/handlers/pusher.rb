@@ -26,7 +26,7 @@ module Travis
           # Record doesn't always refresh the updated_at column
           object.reload
 
-          params = { event: event, user_ids: user_ids }
+          params = { event:, user_ids: }
           Travis::Sidekiq.live(deep_clean_strings(payload), params)
         end
 

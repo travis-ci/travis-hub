@@ -28,7 +28,7 @@ module Travis
             end
 
             def status?
-              %w(dev alpha beta).include?(data[:status])
+              %w[dev alpha beta].include?(data[:status])
             end
 
             def update_status?
@@ -75,69 +75,70 @@ module Travis
 
         private
 
-          def notify_slack?
-            success? && edge? && provider&.update_status? && slug != 'travis-ci/dpl'
-          end
-
-          def notify_slack
-            Faraday.post(slack_url, JSON.dump(text: msg)) if slack_url
-          end
-
-          def msg
-            MSG % provider.data.merge(url: job_url)
-          end
-
-          def job_url
-            [config.host, job.repository.slug, 'jobs', job_id].join('/')
-          end
-
-          def job_id
-            data[:job_id]
-          end
-
-          def slug
-            job.repository.slug
-          end
-
-          def provider
-            @provider ||= Dpl.providers[provider_name].tap do |provider|
-              error "Unable to find provider #{provider_name}" if provider.nil?
-            end
-          end
-
-          def provider_name(strategy = data[:strategy])
-            [data[:provider], strategy].compact.join(':')
-          end
-
-          def success?
-            data[:status] == '0'
-          end
-
-          def edge?
-            return unless edge = data[:edge]
-            return edge.is_a?(TrueClass) unless edge.is_a?(Hash)
-            !edge.key?(:repo) || edge[:repo] == 'travis-ci/dpl'
-          end
-
-          def config
-            Hub.context.config
-          end
-
-          def slack_url
-            ENV['SLACK_DPL_LOGS_URL']
-          end
-
-          class Instrument < Instrumentation::Instrument
-            def run_received
-              publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
-            end
-
-            def run_completed
-              publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
-            end
-          end
-          Instrument.attach_to(self)
+        def notify_slack?
+          success? && edge? && provider&.update_status? && slug != 'travis-ci/dpl'
         end
+
+        def notify_slack
+          Faraday.post(slack_url, JSON.dump(text: msg)) if slack_url
+        end
+
+        def msg
+          MSG % provider.data.merge(url: job_url)
+        end
+
+        def job_url
+          [config.host, job.repository.slug, 'jobs', job_id].join('/')
+        end
+
+        def job_id
+          data[:job_id]
+        end
+
+        def slug
+          job.repository.slug
+        end
+
+        def provider
+          @provider ||= Dpl.providers[provider_name].tap do |provider|
+            error "Unable to find provider #{provider_name}" if provider.nil?
+          end
+        end
+
+        def provider_name(strategy = data[:strategy])
+          [data[:provider], strategy].compact.join(':')
+        end
+
+        def success?
+          data[:status] == '0'
+        end
+
+        def edge?
+          return unless edge = data[:edge]
+          return edge.is_a?(TrueClass) unless edge.is_a?(Hash)
+
+          !edge.key?(:repo) || edge[:repo] == 'travis-ci/dpl'
+        end
+
+        def config
+          Hub.context.config
+        end
+
+        def slack_url
+          ENV['SLACK_DPL_LOGS_URL']
+        end
+
+        class Instrument < Instrumentation::Instrument
+          def run_received
+            publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
+          end
+
+          def run_completed
+            publish msg: "event: #{target.event} for repo=#{target.job.repository.slug} #{to_pairs(target.data)}"
+          end
+        end
+        Instrument.attach_to(self)
+      end
     end
   end
 end

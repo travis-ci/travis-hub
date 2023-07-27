@@ -16,9 +16,11 @@ class BuildConfig < ActiveRecord::Base
 end
 
 class Build < ActiveRecord::Base
-  include Denormalize, SimpleStates, Travis::Event
+  include Travis::Event
+  include SimpleStates
+  include Denormalize
 
-  FINISHED_STATES = [:passed, :failed, :errored, :canceled]
+  FINISHED_STATES = %i[passed failed errored canceled]
 
   belongs_to :repository
   belongs_to :owner, polymorphic: true
@@ -29,11 +31,11 @@ class Build < ActiveRecord::Base
 
   event :create
   event :start,   if: :start?
-  event :finish,  if: :finish? , to: FINISHED_STATES
+  event :finish,  if: :finish?, to: FINISHED_STATES
   event :cancel,  if: :cancel?
   event :restart, if: :restart?
   event :reset
-  event :all, after: [:denormalize, :notify]
+  event :all, after: %i[denormalize notify]
 
   serialize :config
 
@@ -90,22 +92,22 @@ class Build < ActiveRecord::Base
 
   private
 
-    def clear
-      %w(duration started_at finished_at canceled_at).each { |attr| write_attribute(attr, nil) }
-      self.state = :created
-    end
+  def clear
+    %w[duration started_at finished_at canceled_at].each { |attr| write_attribute(attr, nil) }
+    self.state = :created
+  end
 
-    def matrix_state
-      stage = stages.reject(&:passed?).first
-      stage ? stage.state : matrix.state
-    end
+  def matrix_state
+    stage = stages.reject(&:passed?).first
+    stage ? stage.state : matrix.state
+  end
 
-    def matrix
-      # merging jobs and matrix can be removed once all configs go through travis-yml
-      Matrix.new(jobs, config.values_at(:jobs, :matrix).select { |obj| obj.is_a?(Hash) }.inject(&:merge))
-    end
+  def matrix
+    # merging jobs and matrix can be removed once all configs go through travis-yml
+    Matrix.new(jobs, config.values_at(:jobs, :matrix).select { |obj| obj.is_a?(Hash) }.inject(&:merge))
+  end
 
-    def config_valid?
-      not config[:'.result'].to_s.include?('error')
-    end
+  def config_valid?
+    !config[:'.result'].to_s.include?('error')
+  end
 end

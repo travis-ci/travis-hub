@@ -1,7 +1,38 @@
 describe Travis::Addons::Handlers::Insights do
-  let(:build)   { FactoryBot.create(:build, repository: repository) }
-  let(:job)     { FactoryBot.create(:job, owner_id: 1, owner_type: 'User', repository: repository) }
+  let(:build)   { FactoryBot.create(:build, repository:) }
+  let(:handler) { described_class.new(event, id: job.id) }
+  let(:data) do
+    {
+      type: 'Job',
+      id: job.id,
+      owner_type: job.owner_type,
+      owner_id: job.owner_id,
+      repository_id: job.repository_id,
+      private: !!job.private?,
+      state: :created,
+      created_at: job.created_at,
+      started_at: nil,
+      finished_at: nil
+    }
+  end
+  let(:job) { FactoryBot.create(:job, owner_id: 1, owner_type: 'User', repository:) }
   let(:repository) { FactoryBot.create(:repository) }
+
+  let(:data) do
+    {
+      type: 'Job',
+      id: job.id,
+      owner_type: job.owner_type,
+      owner_id: job.owner_id,
+      repository_id: job.repository_id,
+      private: !!job.private?,
+      state: :created,
+      created_at: job.created_at,
+      started_at: nil,
+      finished_at: nil
+    }
+  end
+  let(:handler) { described_class.new(event, id: job.id) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:insights]) }
@@ -52,31 +83,15 @@ describe Travis::Addons::Handlers::Insights do
     end
   end
 
-  let(:handler) { described_class.new(event, id: job.id) }
-
-  let(:data) do
-    {
-      type: 'Job',
-      id: job.id,
-      owner_type: job.owner_type,
-      owner_id: job.owner_id,
-      repository_id: job.repository_id,
-      private: !!job.private?,
-      state: :created,
-      created_at: job.created_at,
-      started_at: nil,
-      finished_at: nil
-    }
-  end
-
   describe 'job:created' do
     let(:event) { 'job:created' }
+
     it 'handle' do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data].map! { |arg| arg.to_json },
-        'dead'  => false
+        'args' => [:event, { event: 'job:created', data: }].map! { |arg| arg.to_json },
+        'dead' => false
       )
       handler.handle
     end
@@ -84,12 +99,13 @@ describe Travis::Addons::Handlers::Insights do
 
   describe 'job:canceled' do
     let(:event) { 'job:canceled' }
+
     it 'handle' do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:finished', data: data].map! { |arg| arg.to_json },
-        'dead'  => false
+        'args' => [:event, { event: 'job:finished', data: }].map! { |arg| arg.to_json },
+        'dead' => false
       )
       handler.handle
     end
@@ -97,14 +113,16 @@ describe Travis::Addons::Handlers::Insights do
 
   describe 'sends restarted_at if present' do
     let(:event) { 'job:created' }
-    let(:restarted_at) { Time.now + 120  }
-    before { job.update(restarted_at: restarted_at) }
+    let(:restarted_at) { Time.now + 120 }
+
+    before { job.update(restarted_at:) }
+
     it 'handle' do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)].map! { |arg| arg.to_json },
-        'dead'  => false
+        'args' => [:event, { event: 'job:created', data: data.merge(created_at: restarted_at) }].map! { |arg| arg.to_json },
+        'dead' => false
       )
       handler.handle
     end

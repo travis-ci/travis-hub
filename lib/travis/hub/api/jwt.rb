@@ -4,7 +4,7 @@ module Jwt
   class Refresh < Struct.new(:config, :token, :redis)
     include Base64
 
-    MAX_DURATION = 10800
+    MAX_DURATION = 10_800
     ALG = 'RS512'
 
     def run
@@ -14,6 +14,7 @@ module Jwt
     def valid?
       return false unless refresh_token.valid?
       return false unless redis.exists?(refresh_key)
+
       redis.del(refresh_key)
       true
     end
@@ -72,9 +73,9 @@ module Jwt
         {
           iss: 'hub',
           typ: 'access',
-          sub: sub,
+          sub:,
           exp: expires.to_i,
-          site: site
+          site:
         }
       end
 

@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Billing do
   let(:build)        { FactoryBot.create(:build) }
   let(:job_config)   { FactoryBot.create(:job_config, repository_id: build.repository_id) }
-  let(:job)          { FactoryBot.create(:job, owner: owner, config_id: job_config.id) }
+  let(:job)          { FactoryBot.create(:job, owner:, config_id: job_config.id) }
   let(:owner)        { FactoryBot.create(:user) }
   let!(:request) do
     stub_request(:put, 'http://localhost:9292/usage/executions')

@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::Keenio do
   let(:build) { FactoryBot.create(:build) }
-  let(:job)   { FactoryBot.create(:job, owner: owner) }
+  let(:job)   { FactoryBot.create(:job, owner:) }
   let(:owner) { FactoryBot.create(:user) }
 
   describe 'subscription' do

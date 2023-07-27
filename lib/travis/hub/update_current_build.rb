@@ -2,7 +2,7 @@ module Travis
   module Hub
     class UpdateCurrentBuild < Struct.new(:build)
       MSGS = {
-        update: 'Setting current_build_id to %s on repo %s',
+        update: 'Setting current_build_id to %s on repo %s'
       }
 
       def update!
@@ -14,23 +14,22 @@ module Travis
 
       private
 
-        def is_current?
-          states = ['started', 'passed', 'failed', 'errored', 'canceled']
+      def is_current?
+        states = %w[started passed failed errored canceled]
 
-          # the build is not current if there're any newer builds that
-          # are being run or finshed already
-          !repository.builds.where(["id > ?", build.id]).
-                      where(state: states).exists?
-        end
+        # the build is not current if there're any newer builds that
+        # are being run or finshed already
+        !repository.builds.where(['id > ?', build.id])
+                   .where(state: states).exists?
+      end
 
-        def repository
-          build.repository
-        end
+      def repository
+        build.repository
+      end
 
-        def logger
-          Travis::Hub.context.logger
-        end
+      def logger
+        Travis::Hub.context.logger
+      end
     end
   end
 end
-

@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:webhook, payload, targets: targets, token: request.token)
+            run_task(:webhook, payload, targets:, token: request.token)
           end
 
           def targets

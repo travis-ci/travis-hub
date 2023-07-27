@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::GithubStatus do
   let(:handler)     { described_class.new('build:finished', id: build.id) }
-  let(:build)       { FactoryBot.create(:build, repository: repository) }
+  let(:build)       { FactoryBot.create(:build, repository:) }
   let(:permissions) { build.repository.permissions }
   let(:repository)  { FactoryBot.create(:repository) }
   let(:admin)       { FactoryBot.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
@@ -33,7 +33,7 @@ describe Travis::Addons::Handlers::GithubStatus do
   end
 
   describe 'handle?' do
-    before do 
+    before do
       build.repository.update(owner: admin)
     end
 
@@ -68,13 +68,13 @@ describe Travis::Addons::Handlers::GithubStatus do
       it 'is false if a repo flag use_commit_status doesn"t exist' do
         expect(handler.handle?).to eql(false)
       end
-      
-      it 'is false if repo flag use_commit_status is false' do 
+
+      it 'is false if repo flag use_commit_status is false' do
         Travis::Features.deactivate_repository(:use_commit_status, repository.id)
         expect(handler.handle?).to eql(false)
       end
 
-      it 'is false if the owner flag use_commit_status is false' do 
+      it 'is false if the owner flag use_commit_status is false' do
         Travis::Features.deactivate_repository(:use_commit_status, repository.owner)
         expect(handler.handle?).to eql(false)
       end
@@ -98,23 +98,23 @@ describe Travis::Addons::Handlers::GithubStatus do
           managed_by_installation_at: Time.now
         )
       end
-      
-      it 'is true if repo flag use_commit_status is true' do 
+
+      after do
+        Travis::Features.disable_for_all(:use_commit_status)
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
+        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
+        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
+      end
+
+      it 'is true if repo flag use_commit_status is true' do
         Travis::Features.activate_repository(:use_commit_status, repository.id)
         expect(handler.handle?).to eql(true)
       end
 
-      after do
-        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
-      end
-
-      it 'is true if the owner flag use_commit_status is true' do 
+      it 'is true if the owner flag use_commit_status is true' do
         Travis::Features.activate_owner(:use_commit_status, repository.owner)
         expect(handler.handle?).to eql(true)
-      end
-
-      after do
-        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
       end
 
       it 'is true if both owner and repo flag use_commit_status is true' do
@@ -123,18 +123,9 @@ describe Travis::Addons::Handlers::GithubStatus do
         expect(handler.handle?).to eql(true)
       end
 
-      after do 
-        Travis::Features.deactivate_repository(:use_commit_status, repository.id)
-        Travis::Features.deactivate_owner(:use_commit_status, repository.owner)
-      end 
-
-      it 'is true if the use_commit_status feature flag is enabled globally' do 
+      it 'is true if the use_commit_status feature flag is enabled globally' do
         Travis::Features.enable_for_all(:use_commit_status)
         expect(handler.handle?).to eql(true)
-      end 
-
-      after do
-        Travis::Features.disable_for_all(:use_commit_status)
       end
     end
   end
@@ -154,7 +145,7 @@ describe Travis::Addons::Handlers::GithubStatus do
     before do
       build.commit.update!(committer_email: 'committer@email.com')
       Email.create(user: committer, email: 'committer@email.com')
-      permissions.create(user: user, push: true)
+      permissions.create(user:, push: true)
       permissions.create(user: admin, admin: true)
       permissions.create(user: committer, push: true)
     end
