@@ -22,8 +22,8 @@ class Job < ActiveRecord::Base
   belongs_to :build, polymorphic: true, foreign_key: :source_id, foreign_type: :source_type
   belongs_to :commit
   belongs_to :stage
-  belongs_to :config, foreign_key: :config_id, class_name: JobConfig
-  has_many   :versions, class_name: JobVersion
+  belongs_to :config, foreign_key: :config_id, class_name: 'JobConfig'
+  has_many   :versions, class_name: 'JobVersion'
   has_one    :queueable
 
   self.initial_state = :persisted # TODO go away once there's `queueable`
@@ -31,7 +31,7 @@ class Job < ActiveRecord::Base
   event :create,  after: :propagate
   event :receive
   event :start,   after: :propagate
-  event :finish,  after: :propagate, to: FINISHED_STATES
+  event :finish,  after: :propagate , to: FINISHED_STATES
   event :cancel,  after: :propagate, if: :cancel?
   event :restart, after: :propagate
   event :reset,   after: :propagate

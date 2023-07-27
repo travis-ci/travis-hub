@@ -1,7 +1,7 @@
 describe Travis::Hub::Service::UpdateJob do
   let(:redis)       { Travis::Hub.context.redis }
   let(:amqp)        { Travis::Amqp.any_instance }
-  let(:job)         { FactoryGirl.create(:job, state: state, queued_at: queued_at, received_at: received_at) }
+  let(:job)         { FactoryBot.create(:job, state: state, queued_at: queued_at, received_at: received_at) }
   let(:queued_at)   { now - 20 }
   let(:received_at) { now - 10 }
   let(:now)         { Time.now.utc }
@@ -192,7 +192,7 @@ describe Travis::Hub::Service::UpdateJob do
   end
 
   describe 'unordered messages' do
-    let(:job)     { FactoryGirl.create(:job, state: :created) }
+    let(:job)     { FactoryBot.create(:job, state: :created) }
     let(:start)   { [:start,   { id: job.id, started_at: Time.now }] }
     let(:receive) { [:receive, { id: job.id, received_at: Time.now }] }
     let(:finish)  { [:finish,  { id: job.id, state: 'passed', finished_at: Time.now }] }

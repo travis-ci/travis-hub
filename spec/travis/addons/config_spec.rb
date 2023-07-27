@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Travis::Addons::Config do
-  let(:build) { FactoryGirl.build(:build) }
+  let(:build) { FactoryBot.build(:build) }
 
   subject { described_class.new(build, config) }
 

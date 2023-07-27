@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Travis::Addons::Config, 'for emails' do
-  let(:build) { FactoryGirl.build(:build) }
+  let(:build) { FactoryBot.build(:build) }
   let(:type)  { :email }
 
   subject { described_class.new(build, config) }

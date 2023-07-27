@@ -1,4 +1,4 @@
-FROM ruby:2.4.10-slim
+FROM ruby:3.2.2-slim
 
 LABEL maintainer Travis CI GmbH <support+travis-hub-docker-images@travis-ci.com>
 

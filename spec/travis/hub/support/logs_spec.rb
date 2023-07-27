@@ -37,7 +37,7 @@ describe Travis::Hub::Support::Logs do
   end
 
   it 'puts a body' do
-    expect(subject.update(1, msg: 'flee flah floof')).to be_success
+    expect(subject.update(1, 'flee flah floof')).to be_success
   end
 
   it 'appends a log part' do

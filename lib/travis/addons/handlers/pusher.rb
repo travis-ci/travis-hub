@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require 'travis/addons/handlers/base'
 require 'travis/addons/serializer/pusher/build'
 require 'travis/addons/serializer/pusher/job'

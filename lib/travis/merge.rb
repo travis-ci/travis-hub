@@ -1,4 +1,4 @@
-require 'faraday_middleware'
+require 'faraday/retry'
 
 module Travis
   module Merge

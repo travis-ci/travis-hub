@@ -1,12 +1,12 @@
 describe Travis::Addons::Handlers::GithubStatus do
   let(:handler)     { described_class.new('build:finished', id: build.id) }
-  let(:build)       { FactoryGirl.create(:build, repository: repository) }
+  let(:build)       { FactoryBot.create(:build, repository: repository) }
   let(:permissions) { build.repository.permissions }
-  let(:repository)  { FactoryGirl.create(:repository) }
-  let(:admin)       { FactoryGirl.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
-  let(:committer)   { FactoryGirl.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installation: nil) }
-  let(:user)        { FactoryGirl.create(:user, login: 'user', github_oauth_token: 'user-token', installation: nil) }
-  let(:gh_apps_installation) { FactoryGirl.create(:installation) }
+  let(:repository)  { FactoryBot.create(:repository) }
+  let(:admin)       { FactoryBot.create(:user, login: 'admin', github_oauth_token: 'admin-token') }
+  let(:committer)   { FactoryBot.create(:user, login: 'committer', github_oauth_token: 'committer-token', email: 'committer@email.com', installation: nil) }
+  let(:user)        { FactoryBot.create(:user, login: 'user', github_oauth_token: 'user-token', installation: nil) }
+  let(:gh_apps_installation) { FactoryBot.create(:installation) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:github_status]) }
@@ -34,7 +34,7 @@ describe Travis::Addons::Handlers::GithubStatus do
 
   describe 'handle?' do
     before do 
-      build.repository.update_attributes(owner: admin)
+      build.repository.update(owner: admin)
     end
 
     context 'when repo is not managed by GitHub Apps' do
@@ -50,8 +50,8 @@ describe Travis::Addons::Handlers::GithubStatus do
 
     context 'when a repo is managed by GitHub Apps' do
       before do
-        admin.update_attributes(installation: gh_apps_installation)
-        build.repository.update_attributes(
+        admin.update(installation: gh_apps_installation)
+        build.repository.update(
           managed_by_installation_at: Time.now
         )
       end
@@ -93,8 +93,8 @@ describe Travis::Addons::Handlers::GithubStatus do
 
     context 'when a repo is managed by GitHub Apps' do
       before do
-        admin.update_attributes(installation: gh_apps_installation)
-        build.repository.update_attributes(
+        admin.update(installation: gh_apps_installation)
+        build.repository.update(
           managed_by_installation_at: Time.now
         )
       end
@@ -152,7 +152,7 @@ describe Travis::Addons::Handlers::GithubStatus do
     let(:tokens) { handler.send(:tokens) }
 
     before do
-      build.commit.update_attributes!(committer_email: 'committer@email.com')
+      build.commit.update!(committer_email: 'committer@email.com')
       Email.create(user: committer, email: 'committer@email.com')
       permissions.create(user: user, push: true)
       permissions.create(user: admin, admin: true)

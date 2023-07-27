@@ -22,14 +22,14 @@ class Build < ActiveRecord::Base
 
   belongs_to :repository
   belongs_to :owner, polymorphic: true
-  belongs_to :config, foreign_key: :config_id, class_name: BuildConfig
+  belongs_to :config, foreign_key: :config_id, class_name: 'BuildConfig'
   belongs_to :sender, polymorphic: true
   has_many   :jobs, -> { order(:id) }, as: :source
   has_many   :stages, -> { order(:id) }
 
   event :create
   event :start,   if: :start?
-  event :finish,  if: :finish?, to: FINISHED_STATES
+  event :finish,  if: :finish? , to: FINISHED_STATES
   event :cancel,  if: :cancel?
   event :restart, if: :restart?
   event :reset
@@ -59,7 +59,7 @@ class Build < ActiveRecord::Base
   end
 
   def finish(*)
-    update_attributes!(state: matrix_state, duration: matrix.duration)
+    update!(state: matrix_state, duration: matrix.duration)
   end
 
   def finished?

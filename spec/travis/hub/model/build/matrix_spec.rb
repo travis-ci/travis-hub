@@ -1,6 +1,6 @@
 describe Build::Matrix do
   let(:config) { {} }
-  let(:jobs)   { attrs.map { |attrs| FactoryGirl.create(:job, attrs) } }
+  let(:jobs)   { attrs.map { |attrs| FactoryBot.create(:job, attrs) } }
   let(:matrix) { described_class.new(jobs, config) }
 
   describe 'duration' do

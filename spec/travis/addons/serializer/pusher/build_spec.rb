@@ -1,10 +1,10 @@
 describe Travis::Addons::Serializer::Pusher::Build do
-  let(:repo)   { FactoryGirl.create(:repository, active: true) }
-  let(:job)    { FactoryGirl.create(:job) }
-  let(:user)   { FactoryGirl.create(:user, login: 'svenfuchs', name: 'Sven Fuchs', avatar_url: 'https://avatars2.githubusercontent.com/u/2208') }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, stages: [stage], jobs: [job], sender: user) }
-  let(:stage)  { FactoryGirl.create(:stage, jobs: [job], number: 1, name: 'test') }
-  let!(:branch){ FactoryGirl.create(:branch, repository: repo, name: 'master', last_build: build) }
+  let(:repo)   { FactoryBot.create(:repository, active: true) }
+  let(:job)    { FactoryBot.create(:job) }
+  let(:user)   { FactoryBot.create(:user, login: 'svenfuchs', name: 'Sven Fuchs', avatar_url: 'https://avatars2.githubusercontent.com/u/2208') }
+  let(:build)  { FactoryBot.create(:build, repository: repo, stages: [stage], jobs: [job], sender: user) }
+  let(:stage)  { FactoryBot.create(:stage, jobs: [job], number: 1, name: 'test') }
+  let!(:branch){ FactoryBot.create(:branch, repository: repo, name: 'master', last_build: build) }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 

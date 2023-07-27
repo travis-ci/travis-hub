@@ -25,12 +25,13 @@ module Travis
         end
 
         def add(time)
-          redis.lpush(key(:all), time || Time.now)
+          redis.lpush(key(:all), (time || Time.now).to_s)
           redis.expire(key(:all), 24 * 60 * 60)
         end
 
         def start(time)
-          redis.set(key(:started), time || Time.now, ex: 24 * 60 * 60)
+          redis.set(key(:started), (time || Time.now).to_s)
+          redis.expire(key(:started),  24 * 60 * 60)
         end
 
         def started

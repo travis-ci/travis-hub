@@ -18,7 +18,7 @@ class Build < ActiveRecord::Base
     }
 
     def denormalize(event, *args)
-      repository.update_attributes!(denormalize_attributes_for(event)) if denormalize?(event)
+      repository.update!(denormalize_attributes_for(event)) if denormalize?(event)
     end
 
     def denormalize?(event)

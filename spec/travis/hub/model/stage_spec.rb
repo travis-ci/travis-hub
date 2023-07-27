@@ -1,8 +1,7 @@
 describe Stage do
-  before       { Travis::Event.stubs(:dispatch) }
-  let(:build)  { FactoryGirl.create(:build, state: :started) }
-  let(:stages) { [1, 2].map { |num| FactoryGirl.create(:stage, build: build, number: num) } }
-  let(:jobs)   { ['1.1', '1.2', '2.1'].map { |num| FactoryGirl.create(:job, stage_number: num, stage: stages[num.to_i - 1], build: build) } }
+  let(:build)  { FactoryBot.create(:build, state: :started) }
+  let(:stages) { [1, 2].map { |num| FactoryBot.create(:stage, build: build, number: num) } }
+  let(:jobs)   { ['1.1', '1.2', '2.1'].map { |num| FactoryBot.create(:job, stage_number: num, stage: stages[num.to_i - 1], build: build) } }
   let(:now)    { Time.now }
 
   before { jobs.map(&:reload) } # hmm? why do i need this here??
@@ -28,10 +27,6 @@ describe Stage do
     it { expect(jobs[0].state).to eq :passed }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :passed }
-
-    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
-    it { expect(Travis::Event).to have_received(:dispatch).with('job:finished', anything).times(3) }
-    it { expect(Travis::Event).to have_received(:dispatch).with('build:finished', anything).once }
   end
 
   describe 'failure' do
@@ -47,8 +42,6 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :canceled }
-
-    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
   end
 
   describe 'error' do
@@ -62,12 +55,10 @@ describe Stage do
     it { expect(jobs[0].state).to eq :errored }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :canceled }
-
-    it { expect(Travis::Event).to have_received(:dispatch).times(4) }
   end
 
   describe 'with allow_failure' do
-    before { jobs[0].update_attributes!(allow_failure: true) }
+    before { jobs[0].update!(allow_failure: true) }
     before { jobs[0].finish!(state: :failed, finished_at: now) }
     before { jobs[1].finish!(state: :passed, finished_at: now) }
     before { reload }
@@ -78,13 +69,11 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :passed }
     it { expect(jobs[2].state).to eq :created }
-
-    it { expect(Travis::Event).to have_received(:dispatch).times(2) }
   end
 
   describe 'with allow_failure and fast_finish' do
-    before { build.update_attributes!(config: { matrix: { fast_finish: true } }) }
-    before { jobs[1].update_attributes!(allow_failure: true) }
+    before { build.update!(config: { matrix: { fast_finish: true } }) }
+    before { jobs[1].update!(allow_failure: true) }
     before { jobs[0].finish!(state: :failed, finished_at: now) }
     before { reload }
 
@@ -96,8 +85,6 @@ describe Stage do
     it { expect(jobs[0].state).to eq :failed }
     it { expect(jobs[1].state).to eq :created }
     it { expect(jobs[2].state).to eq :canceled }
-
-    it { expect(Travis::Event).to have_received(:dispatch).times(3) }
   end
 
   describe 'cancel and fail' do

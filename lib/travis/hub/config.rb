@@ -16,7 +16,7 @@ module Travis
 
         def jwt_key(type)
           return unless key = ENV["JWT_RSA_#{type.upcase}_KEY"]
-          key.starts_with?('--') ? key : Base64.decode64(key)
+          key.start_with?('--') ? key : Base64.decode64(key)
         end
       end
 
@@ -24,8 +24,9 @@ module Travis
              database:       { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10000 } },
              logs_api:       { url: 'https://travis-logs-notset.example.com:1234', token: 'notset', retries: { max: 5, interval: 3, max_interval: 60, interval_randomness: 0.5, backoff_factor: 2 } },
              job_board:      { url: 'https://not:set@job-board.travis-ci.com', site: 'org' },
-             redis:          { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379', insights_url: ENV['INSIGHTS_REDIS_URL'] || 'redis://localhost:6379' },
-             sidekiq:        { namespace: 'sidekiq', pool_size: 1 },
+             redis:          { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379' },
+             redis_insights:  { url: ENV['INSIGHTS_REDIS_URL'] || 'redis://localhost:6379'},
+             sidekiq:        { pool_size: 1 },
              lock:           { strategy: :redis, ttl: 30000 },
              states_cache:   { memcached_servers: 'localhost:11211', memcached_options: {} },
              name:           'hub',

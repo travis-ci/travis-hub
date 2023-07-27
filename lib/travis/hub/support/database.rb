@@ -19,7 +19,7 @@ module Travis
 
     def connect
       log_connection_info if logger
-      const.default_timezone = :utc
+      ActiveRecord.default_timezone = :utc
       const.establish_connection(config.to_h)
       # const.logger = logger
     end

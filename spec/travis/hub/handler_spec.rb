@@ -4,9 +4,9 @@ describe Travis::Hub::Handler do
   let(:started_at)   { '2015-12-01T10:20:40Z' }
   let(:finished_at)  { '2015-12-01T10:20:50Z' }
 
-  let!(:build)       { FactoryGirl.create(:build, id: 1, state: :created, jobs: [job]) }
-  let(:job)          { FactoryGirl.create(:job, id: 1, state: :created, owner: owner) }
-  let(:owner)        { FactoryGirl.create(:user) }
+  let!(:build)       { FactoryBot.create(:build, id: 1, state: :created, jobs: [job]) }
+  let(:job)          { FactoryBot.create(:job, id: 1, state: :created, owner: owner) }
+  let(:owner)        { FactoryBot.create(:user) }
 
   subject            { described_class.new(context, event, payload) }
   before             { subject.run }

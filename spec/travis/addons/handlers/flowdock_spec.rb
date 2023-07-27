@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::Flowdock do
   let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { flowdock: config } }) }
+  let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { flowdock: config } }) }
   let(:config)  { 'room' }
 
   before { Travis::Event.setup([:flowdock]) }
@@ -20,7 +20,7 @@ describe Travis::Addons::Handlers::Flowdock do
   describe 'multiple configs' do
     let(:config)  { [{ rooms: 'one' }, { rooms: 'two' }] }
     let(:jobs)    { Sidekiq::Queues.jobs_by_queue['flowdock'] }
-    let(:targets) { jobs.map { |job| job['args'].last['targets'] } }
+    let(:targets) { jobs.map { |job| JSON.parse(job['args'].last)['targets'] } }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
@@ -30,12 +30,12 @@ describe Travis::Addons::Handlers::Flowdock do
 
   describe 'handle?' do
     it 'is true if the build is a push request' do
-      build.update_attributes(event_type: 'push')
+      build.update(event_type: 'push')
       expect(handler.handle?).to eql(true)
     end
 
     it 'is false if the build is a pull request' do
-      build.update_attributes(event_type: 'pull_request')
+      build.update(event_type: 'pull_request')
       expect(handler.handle?).to eql(false)
     end
 

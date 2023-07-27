@@ -1,9 +1,9 @@
 describe Build do
   let(:state)  { :created }
   let(:params) { {} }
-  let(:repo)   { FactoryGirl.create(:repository) }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, state: state) }
-  let(:job)    { FactoryGirl.create(:job) }
+  let(:repo)   { FactoryBot.create(:repository) }
+  let(:build)  { FactoryBot.create(:build, repository: repo, state: state) }
+  let(:job)    { FactoryBot.create(:job) }
   let(:now)    { Time.now }
   # before       { Travis::Event.stubs(:dispatch) }
 
@@ -33,7 +33,7 @@ describe Build do
     end
 
     describe 'with all other jobs being finished' do
-      let(:job) { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
+      let(:job) { FactoryBot.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
 
       it 'sets the build to :canceled' do
         receive
@@ -53,7 +53,7 @@ describe Build do
     end
 
     describe 'with jobs pending' do
-      before { FactoryGirl.create(:job, build: build, state: :started) }
+      before { FactoryBot.create(:job, build: build, state: :started) }
 
       it 'does not set the build to :canceled' do
         receive
@@ -247,7 +247,7 @@ describe Build do
     let(:event) { :start }
 
     describe 'a pull request' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
+      let!(:build) { FactoryBot.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
       it 'sets the build as current build' do
         receive
         expect(repo.reload.current_build_id).to eq build.id
@@ -255,10 +255,10 @@ describe Build do
     end
 
     describe 'a push build' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
+      let!(:build) { FactoryBot.create(:build, repository: repo, state: :created, event_type: 'push') }
 
       it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
-        FactoryGirl.create(:build, repository: repo, number: 2, state: :started, event_type: 'api')
+        FactoryBot.create(:build, repository: repo, number: 2, state: :started, event_type: 'api')
         receive
         expect(repo.reload.current_build_id).to_not eq build.id
       end
@@ -280,8 +280,8 @@ describe Build do
   end
 
   describe 'timestamps' do
-    let(:job)   { FactoryGirl.create(:job, build: build) }
-    let(:other) { FactoryGirl.create(:job, build: build) }
+    let(:job)   { FactoryBot.create(:job, build: build) }
+    let(:other) { FactoryBot.create(:job, build: build) }
     let(:started_at) { Time.now - 6 }
 
     it 'a build with a matrix, starting multiple jobs' do

@@ -24,7 +24,7 @@ class Stage < ActiveRecord::Base
   end
 
   def finish(*)
-    update_attributes!(state: matrix.state)
+    update!(state: matrix.state)
     cancel_pending_jobs unless passed?
   end
 
@@ -71,11 +71,11 @@ class Stage < ActiveRecord::Base
       # also cancel them, but it seems better to not notify Scheduler early.)
       # It would be nice to change Hub's design so that we collect notifications
       # and send them only after all DB state has been updated properly.
-      to_cancel.each { |job| job.update_attributes!(attrs) }
+      to_cancel.each { |job| job.update!(attrs) }
       to_cancel.each { |job| job.notify(:finish) }
 
       stages = Stage.where(id: to_cancel.map(&:stage_id))
-      stages.each { |stage| stage.update_attributes!(attrs) }
+      stages.each { |stage| stage.update!(attrs) }
     end
 
     def propagate(event, *args)

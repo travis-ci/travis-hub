@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Insights do
-  let(:build)   { FactoryGirl.create(:build, repository: repository) }
-  let(:job)     { FactoryGirl.create(:job, owner_id: 1, owner_type: 'User', repository: repository) }
-  let(:repository) { FactoryGirl.create(:repository) }
+  let(:build)   { FactoryBot.create(:build, repository: repository) }
+  let(:job)     { FactoryBot.create(:job, owner_id: 1, owner_type: 'User', repository: repository) }
+  let(:repository) { FactoryBot.create(:repository) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:insights]) }
@@ -75,7 +75,7 @@ describe Travis::Addons::Handlers::Insights do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data],
+        'args'  => [:event, event: 'job:created', data: data].map! { |arg| arg.to_json },
         'dead'  => false
       )
       handler.handle
@@ -88,7 +88,7 @@ describe Travis::Addons::Handlers::Insights do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:finished', data: data],
+        'args'  => [:event, event: 'job:finished', data: data].map! { |arg| arg.to_json },
         'dead'  => false
       )
       handler.handle
@@ -98,12 +98,12 @@ describe Travis::Addons::Handlers::Insights do
   describe 'sends restarted_at if present' do
     let(:event) { 'job:created' }
     let(:restarted_at) { Time.now + 120  }
-    before { job.update_attributes(restarted_at: restarted_at) }
+    before { job.update(restarted_at: restarted_at) }
     it 'handle' do
       ::Sidekiq::Client.any_instance.expects(:push).with(
         'queue' => 'insights',
         'class' => 'Travis::Insights::Worker',
-        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)],
+        'args'  => [:event, event: 'job:created', data: data.merge(created_at: restarted_at)].map! { |arg| arg.to_json },
         'dead'  => false
       )
       handler.handle

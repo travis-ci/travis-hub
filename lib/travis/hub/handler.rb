@@ -50,6 +50,7 @@ module Travis
         end
 
         def normalize_payload(payload)
+          payload = JSON.parse(payload) if payload.is_a?(String)
           payload = payload.symbolize_keys
           payload = normalize_state(payload)
           normalize_timestamps(payload)

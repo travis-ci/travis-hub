@@ -1,6 +1,5 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/config'
-require 'raven'
 
 module Travis
   module Addons

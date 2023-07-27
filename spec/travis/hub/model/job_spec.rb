@@ -1,8 +1,8 @@
 describe Job do
   let(:params) { {} }
-  let(:repo)   { FactoryGirl.create(:repository) }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, state: [:received, :queued].include?(state) ? :created : state) }
-  let(:job)    { FactoryGirl.create(:job, repository: repo, build: build, state: state) }
+  let(:repo)   { FactoryBot.create(:repository) }
+  let(:build)  { FactoryBot.create(:build, repository: repo, state: [:received, :queued].include?(state) ? :created : state) }
+  let(:job)    { FactoryBot.create(:job, repository: repo, build: build, state: state) }
   let(:now)    { Time.now }
 
   before do
@@ -112,7 +112,7 @@ describe Job do
 
       describe 'with other jobs being pending' do
         before do
-          FactoryGirl.create(:job, build: build, state: :started)
+          FactoryBot.create(:job, build: build, state: :started)
         end
 
         it 'does not set :state to :passed' do
@@ -128,8 +128,8 @@ describe Job do
 
       describe 'with one job failed and other jobs being pending' do
         before do
-          FactoryGirl.create(:job, build: build, state: :started)
-          FactoryGirl.create(:job, build: build, state: :failed)
+          FactoryBot.create(:job, build: build, state: :started)
+          FactoryBot.create(:job, build: build, state: :failed)
         end
 
         it 'does not set :state to :failed' do
@@ -183,7 +183,7 @@ describe Job do
 
     describe 'with other jobs being pending' do
       before do
-        FactoryGirl.create(:job, build: build, state: :started)
+        FactoryBot.create(:job, build: build, state: :started)
       end
 
       it 'does not set the build to :canceled' do
@@ -269,7 +269,7 @@ describe Job do
       end
 
       it 'does not reset other jobs on the matrix' do
-        other = FactoryGirl.create(:job, build: job.build, state: :passed)
+        other = FactoryBot.create(:job, build: job.build, state: :passed)
         receive
         expect(other.reload.state).to eql(:passed)
       end
@@ -315,7 +315,7 @@ describe Job do
     let(:finished_at) { Time.now }
 
     let(:job) do
-      FactoryGirl.create(:job,
+      FactoryBot.create(:job,
         repository: repo,
         build: build,
         state: state,

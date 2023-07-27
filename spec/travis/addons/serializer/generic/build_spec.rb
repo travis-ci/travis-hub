@@ -1,11 +1,11 @@
 describe Travis::Addons::Serializer::Tasks::Build do
-  let(:owner)  { FactoryGirl.create(:user, login: 'login') }
-  let(:repo)   { FactoryGirl.create(:repository, github_id: 12345, vcs_id: '12345', vcs_type: 'GithubRepository') }
-  let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
-  let(:stage)  { FactoryGirl.create(:stage, number: 1, name: 'example') }
-  let(:job)    { FactoryGirl.create(:job, repository: repo, stage: stage) }
-  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
-  let(:tag)    { FactoryGirl.create(:tag, repository: repo, name: 'v1.0.0') }
+  let(:owner)  { FactoryBot.create(:user, login: 'login') }
+  let(:repo)   { FactoryBot.create(:repository, github_id: 12345, vcs_id: '12345', vcs_type: 'GithubRepository') }
+  let(:build)  { FactoryBot.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
+  let(:stage)  { FactoryBot.create(:stage, number: 1, name: 'example') }
+  let(:job)    { FactoryBot.create(:job, repository: repo, stage: stage) }
+  let(:pull)   { FactoryBot.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
+  let(:tag)    { FactoryBot.create(:tag, repository: repo, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 

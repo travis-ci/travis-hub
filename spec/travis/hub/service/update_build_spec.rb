@@ -1,7 +1,7 @@
 describe Travis::Hub::Service::UpdateBuild do
   let(:now)   { Time.now }
-  let(:build) { FactoryGirl.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
-  let(:job)   { FactoryGirl.create(:job, state ? { state: state } : {}) }
+  let(:build) { FactoryBot.create(:build, { jobs: [job], received_at: now - 10 }.merge(state ? { state: state } : {})) }
+  let(:job)   { FactoryBot.create(:job, state ? { state: state } : {}) }
   let(:amqp)  { Travis::Amqp.any_instance }
   let(:events)  { Travis::Event }
 
@@ -20,7 +20,7 @@ describe Travis::Hub::Service::UpdateBuild do
     let(:event) { :create }
     let(:data)  { { id: build.id, started_at: now } }
 
-    before { build.reload.update_attributes!(state: nil) }
+    before { build.reload.update!(state: nil) }
 
     it 'updates the build state' do
       subject.run

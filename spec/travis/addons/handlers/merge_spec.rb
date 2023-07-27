@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Merge do
-  let(:repo)    { FactoryGirl.create(:repository, migration_status: 'migrated', migrated_at: Time.now) }
-  let(:job)     { FactoryGirl.create(:job, state: :created, repository: repo) }
-  let(:build)   { FactoryGirl.create(:build, state: :created, repository: repo) }
+  let(:repo)    { FactoryBot.create(:repository, migration_status: 'migrated', migrated_at: Time.now) }
+  let(:job)     { FactoryBot.create(:job, state: :created, repository: repo) }
+  let(:build)   { FactoryBot.create(:build, state: :created, repository: repo) }
   let(:handler) { described_class.new('build:finished', id: build.id) }
   let(:cache)   { described_class.states_cache }
 

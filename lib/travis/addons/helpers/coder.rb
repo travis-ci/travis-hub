@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'coder'
 
 module Travis
@@ -11,7 +13,7 @@ module Travis
           when Array
             obj.map { |obj| deep_clean_strings(obj) }
           when String
-            ::Coder.clean(obj)
+            obj.dup.force_encoding(Encoding::UTF_8)
           else
             obj
           end

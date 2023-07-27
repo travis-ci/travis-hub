@@ -22,11 +22,20 @@ module Travis
             @recipients ||= begin
               emails = configured_emails || default_emails
               emails -= unsubscribed_emails
-              emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference(:build_emails, false)).pluck(:email).uniq
+              # emails - ::Email.joins(:user).where(email: emails).merge(User.with_preference('build_emails', false)).pluck(:email).uniq
+              emails -= no_build_emails(emails)
+              emails
             end
           end
 
           private
+
+            def no_build_emails(emails)
+              ::Email.joins(:user).where(email: emails).select do |obj|
+                user = User.find(obj.user_id)
+                JSON.parse(user.preferences.to_s)['build_emails'] == false
+              end.map!(&:email)
+            end
 
             def configured_emails
               emails = config.values(:recipients)

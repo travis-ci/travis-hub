@@ -8,8 +8,6 @@ module Travis
 
     def initialize(options = {})
       pool_options = options.delete(:pool) || {}
-      pool_options[:size] ||= 10
-      pool_options[:timeout] ||= 10
       @pool = ConnectionPool.new(pool_options) do
         ::Redis.new(options)
       end

@@ -1,8 +1,8 @@
 describe Travis::Addons::Handlers::Email do
   let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
-  let(:repo)    { FactoryGirl.create(:repository) }
-  let(:build)   { FactoryGirl.create(:build, repository: repo, commit: commit, config: { notifications: { email: config } }) }
-  let(:commit)  { FactoryGirl.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
+  let(:repo)    { FactoryBot.create(:repository) }
+  let(:build)   { FactoryBot.create(:build, repository: repo, commit: commit, config: { notifications: { email: config } }) }
+  let(:commit)  { FactoryBot.create(:commit, author_email: 'author@email.com', committer_email: 'committer@email.com') }
   let!(:email)  { Email.create(email: address) }
   let(:config)  { address }
   let(:address) { 'me@email.com' }
@@ -24,7 +24,7 @@ describe Travis::Addons::Handlers::Email do
   describe 'multiple configs' do
     let(:config) { [{ recipients: 'one@email.com' }, { recipients: 'two@email.com' }] }
     let(:jobs)   { Sidekiq::Queues.jobs_by_queue['email'] }
-    let(:recipients) { jobs.map { |job| job['args'].last['recipients'] } }
+    let(:recipients) { jobs.map { |job| JSON.parse(job['args'].last)['recipients'] } }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
@@ -38,7 +38,7 @@ describe Travis::Addons::Handlers::Email do
       let(:handler) { described_class::Notifier.new('build:canceled', id: build.id, config: config) }
 
       it 'is false if the build is auto-canceled' do
-        build.update_attributes(event_type: 'push', state: 'canceled')
+        build.update(event_type: 'push', state: 'canceled')
         expect(handler.handle?).to eql(false)
       end
     end
@@ -48,18 +48,18 @@ describe Travis::Addons::Handlers::Email do
       let(:handler) { described_class::Notifier.new('build:canceled', id: build.id, config: config) }
 
       it 'is true' do
-        build.update_attributes(event_type: 'push', state: 'canceled')
+        build.update(event_type: 'push', state: 'canceled')
         expect(handler.handle?).to eql(true)
       end
     end
 
     it 'is true if the build is a push request' do
-      build.update_attributes(event_type: 'push')
+      build.update(event_type: 'push')
       expect(handler.handle?).to eql(true)
     end
 
     it 'is false if the build is a pull request' do
-      build.update_attributes(event_type: 'pull_request')
+      build.update(event_type: 'pull_request')
       expect(handler.handle?).to eql(false)
     end
 
@@ -100,8 +100,8 @@ describe Travis::Addons::Handlers::Email do
   end
 
   describe 'recipients' do
-    let(:user)      { FactoryGirl.create(:user) }
-    let(:user2)     { FactoryGirl.create(:user) }
+    let(:user)      { FactoryBot.create(:user) }
+    let(:user2)     { FactoryBot.create(:user) }
     let(:address)   { 'me@email.com' }
     let(:other)     { 'other@email.com' }
     let(:author)    { 'author@email.com' }
@@ -133,7 +133,7 @@ describe Travis::Addons::Handlers::Email do
       end
 
       it 'does not return users who have the no emails global preference' do
-        user.update_attributes!(preferences: JSON.dump(build_emails: false))
+        user.update!(preferences: JSON.dump(build_emails: false))
         Email.create(user: user, email: committer)
         expect(handler.recipients).to be_empty
       end
@@ -186,7 +186,7 @@ describe Travis::Addons::Handlers::Email do
     describe 'observes user-level no emails preference' do
       let(:config) { address }
       before { Email.create(user: user, email: address) }
-      before { user.update_attributes!(preferences: JSON.dump(build_emails: false)) }
+      before { user.update!(preferences: JSON.dump(build_emails: false)) }
       it { expect(handler.recipients).to be_empty }
     end
   end

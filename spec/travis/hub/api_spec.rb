@@ -3,7 +3,7 @@ require 'travis/hub/sidekiq/worker'
 
 describe Travis::Hub::Api, :include_sinatra_helpers do
   let(:logs)    { Travis::Hub::Support::Logs }
-  let(:job)     { FactoryGirl.create(:job, state: state) }
+  let(:job)     { FactoryBot.create(:job, state: state) }
   let(:key)     { OpenSSL::PKey.read(Base64.decode64(JWT_RSA_PRIVATE_KEY)) }
   let(:token)   { JWT.encode(payload, key, 'RS512') }
   let(:auth)    { "Bearer #{token}" }

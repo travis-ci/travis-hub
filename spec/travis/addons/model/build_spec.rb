@@ -1,6 +1,6 @@
 describe Build do
-  let(:build)  { FactoryGirl.create(:build, repository: repo, config: config) }
-  let(:repo)   { FactoryGirl.create(:repository, key: repo_key) }
+  let(:build)  { FactoryBot.create(:build, repository: repo, config: config) }
+  let(:repo)   { FactoryBot.create(:repository, key: repo_key) }
   let(:secure) { Travis::SecureConfig.new(repo.key) }
 
   def repo_key
