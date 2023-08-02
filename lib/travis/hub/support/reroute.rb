@@ -77,7 +77,7 @@ module Travis
         percent = ENV['REROUTE_PERCENT'] || context.redis.get(:"#{name}_percent") || -1
         Metriks.gauge('hub.reroute.percent').set(percent.to_i)
       rescue StandardError => e
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
         percent ? percent.to_i : -1
       end
 

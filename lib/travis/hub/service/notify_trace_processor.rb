@@ -30,7 +30,7 @@ module Travis
           end
         rescue StandardError => e
           info :notify_failed, job.id, e
-          Raven.capture_exception(e)
+          Sentry.capture_exception(e)
         end
 
         private

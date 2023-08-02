@@ -56,7 +56,7 @@ module Travis
           super(Error.new(e, nil, payload))
         rescue StandardError => e
           info "!!!FAILSAFE!!! #{e.message}"
-          Raven.capture_exception(e)
+          Sentry.capture_exception(e)
         end
       end
     end

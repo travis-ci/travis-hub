@@ -34,7 +34,7 @@ module Travis
       queue.subscribe(options, &handler)
       sleep
     rescue StandardError => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
 
     def ack(info)
@@ -46,7 +46,7 @@ module Travis
       exchange = channel.topic('reporting', durable: true, auto_delete: false)
       exchange.publish(payload, type:, routing_key: "reporting.jobs.#{key}")
     rescue StandardError => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
 
     def fanout(key, payload)
@@ -54,7 +54,7 @@ module Travis
       exchange = channel.exchange(key, type: :fanout)
       exchange.publish(payload)
     rescue StandardError => e
-      Raven.capture_exception(e)
+      Sentry.capture_exception(e)
     end
   end
 end

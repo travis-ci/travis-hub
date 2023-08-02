@@ -100,7 +100,6 @@ PATH
   remote: ../travis-metrics
   specs:
     travis-metrics (2.0.0)
-      metriks-librato_metrics (~> 1.0)
 
 GEM
   remote: https://gems.contribsys.com/

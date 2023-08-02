@@ -83,7 +83,7 @@ module Travis
         end
       rescue StandardError => e
         logger.info "[states-cache] Exception while checking cache freshness: #{e.message}"
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
       end
 
       def key(id, branch = nil)
