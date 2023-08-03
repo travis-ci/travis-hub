@@ -56,6 +56,7 @@ class Stage < ActiveRecord::Base
     end
 
     def cancel_pending_jobs
+      puts "inside cancel_pending_jobs"
       # This would cancel the build several times, because `build.finish?` only
       # rejects based on `canceled?` which is because of the way how we error
       # builds in Gatekeeper (and a race'ish condition between Gatekeeper and
