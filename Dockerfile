@@ -5,7 +5,7 @@ LABEL maintainer Travis CI GmbH <support+travis-hub-docker-images@travis-ci.com>
 # packages required for bundle install
 RUN ( \
    apt-get update ; \
-   apt-get install -y --no-install-recommends git make gcc g++ libpq-dev curl \
+   apt-get install -y --no-install-recommends git make gcc g++ libpq-dev curl libjemalloc-dev\
    && rm -rf /var/lib/apt/lists/* \
 )
 
