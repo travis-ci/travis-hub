@@ -10,7 +10,8 @@ module Travis
 
         def perform(event, payload)
           event.delete!('"')
-          Handler.new(Hub.context, event, JSON.parse(payload)).run
+          payload = JSON.parse(payload) is payload.is_a?(String)
+          Handler.new(Hub.context, event, payload).run
         end
       end
     end
