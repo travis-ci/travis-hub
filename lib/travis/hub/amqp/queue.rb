@@ -28,7 +28,6 @@ module Travis
         def receive(info, properties, payload)
           failsafe(info, properties, payload) do
             event = properties[:type] || raise("No type given on #{properties.inspect} (payload: #{payload.inspect})")
-            payload = JSON.parse(payload) if payload.is_a?(String)
             payload = decode(payload) || raise("No payload given: #{payload.inspect}")
             payload.delete('uuid') # TODO: seems useless atm, and pollutes the log. decide what to do with these.
             handler.call(event, payload)
