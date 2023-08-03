@@ -17,7 +17,7 @@ module Travis
 
         def client
           @client ||= Faraday.new(url:) do |c|
-            c.basic_auth(*basic_auth)
+            c.request :authorization, :basic, *basic_auth
             c.request :retry, max: 3, interval: 0.1, backoff_factor: 2
             c.adapter :net_http
           end

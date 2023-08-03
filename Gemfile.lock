@@ -71,7 +71,7 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-exceptions
-  revision: 1fe4d9b9c4e917108eb60e7169a2a889e9500346
+  revision: 9bcf5989b9a6444a8a954540c26ba9fd4fd2ee85
   branch: prd-ruby-upgrade-dev
   specs:
     travis-exceptions (0.0.2)
