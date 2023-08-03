@@ -110,6 +110,7 @@ module Travis
 
           def notify
             puts "Inside #UpdateJob.notify state of the job is #{job.reload.state} and event is #{event}"
+            puts "context is #{context} and data is #{data}"
             NotifyWorkers.new(context).cancel(job, data[:reason]) if job.reload.state == :canceled
             NotifyTraceProcessor.new(context).notify(job, data) if event == :finish
           end
