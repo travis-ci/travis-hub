@@ -71,11 +71,18 @@ class Stage < ActiveRecord::Base
       # also cancel them, but it seems better to not notify Scheduler early.)
       # It would be nice to change Hub's design so that we collect notifications
       # and send them only after all DB state has been updated properly.
-      to_cancel.each { |job| job.update_attributes!(attrs) }
+      to_cancel.each do |job|
+        puts "updating attributes for job #{ job.id }"
+        job.update_attributes!(attrs)
+      end
       to_cancel.each { |job| job.notify(:finish) }
 
       stages = Stage.where(id: to_cancel.map(&:stage_id))
-      stages.each { |stage| stage.update_attributes!(attrs) }
+      stages.each do |stage|
+        puts "updating attributes for stage #{ stage.id }"
+        stage.update_attributes!(attrs)
+        puts "after updating staging attributes #{stage.inspect}"
+      end
     end
 
     def propagate(event, *args)

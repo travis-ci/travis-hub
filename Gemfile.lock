@@ -5,19 +5,6 @@ GIT
     simple_states (2.0.1)
 
 GIT
-  remote: https://github.com/travis-ci/gh
-  revision: 7c4a4707dfbd060e93576eb1fa21cd2b7ba3e3ae
-  branch: tcie3-0_15_2
-  specs:
-    gh (0.15.1)
-      addressable (~> 2.8.0)
-      backports
-      faraday (~> 1.0)
-      multi_json (~> 1.0)
-      net-http-persistent (~> 2.9)
-      net-http-pipeline
-
-GIT
   remote: https://github.com/travis-ci/jemalloc-rb
   revision: af46aa864c867dbd2ad62b036401dba7b16dffd5
   branch: jemalloc-v-3-new-rake
@@ -77,14 +64,14 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-metrics
-  revision: ce620aecdf179ea82280872ec56aa3095a2e59a5
+  revision: 5beacbbf767ae487c0097403c822952068f26f94
   specs:
     travis-metrics (2.0.0)
       metriks-librato_metrics (~> 1.0)
 
 GIT
   remote: https://github.com/travis-ci/travis-support
-  revision: 113cff17fe383bb72fcfae3a97a8ce98c228342f
+  revision: 77f8dad236002e6103cfdb796308e1a11d8d441e
   specs:
     travis-support (0.0.1)
 
@@ -110,14 +97,13 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
     amq-protocol (2.3.0)
     arel (9.0.0)
     atomic (1.1.99)
     avl_tree (1.2.1)
       atomic (~> 1.1)
-    backports (3.23.0)
     bourne (1.6.0)
       mocha (~> 1.1)
     bunny (2.9.2)
@@ -135,7 +121,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
-    faraday (1.10.0)
+    faraday (1.10.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -151,8 +137,8 @@ GEM
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.3)
-      multipart-post (>= 1.2, < 3)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
@@ -160,6 +146,14 @@ GEM
     faraday-retry (1.0.3)
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
+    gh (0.18.0)
+      activesupport (~> 5.0)
+      addressable (~> 2.4)
+      faraday (~> 1.0)
+      faraday_middleware (~> 1.0)
+      multi_json (~> 1.0)
+      net-http-persistent (~> 2.9)
+      net-http-pipeline
     hashdiff (1.0.1)
     hashr (2.0.0)
     hitimes (1.2.6)
@@ -185,7 +179,7 @@ GEM
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.15.0)
-    multipart-post (2.1.1)
+    multipart-post (2.3.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     net-http-persistent (2.9.4)
@@ -195,7 +189,7 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (4.0.6)
+    public_suffix (5.0.3)
     puma (5.6.4)
       nio4r (~> 2.0)
     rack (2.2.4)
@@ -272,7 +266,7 @@ DEPENDENCIES
   factory_girl
   faraday
   faraday_middleware (~> 1.0)
-  gh!
+  gh
   jemalloc!
   jwt
   keen
@@ -311,7 +305,7 @@ DEPENDENCIES
   webmock (~> 2.3.2)
 
 RUBY VERSION
-   ruby 2.5.9p362
+   ruby 2.6.10p210
 
 BUNDLED WITH
-   2.3.14
+   2.4.13

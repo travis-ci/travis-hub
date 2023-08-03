@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.9'
+ruby '2.6.10'
 
 gem 'sidekiq-pro', '~> 5.1.1', source: 'https://gems.contribsys.com'
 gem 'sidekiq', '~> 6.4'
@@ -33,7 +33,7 @@ gem 'faraday'
 gem 'faraday_middleware', '~> 1.0'
 gem 'addressable', '~> 2.8.0'
 
-gem 'gh', git: 'https://github.com/travis-ci/gh', branch: 'tcie3-0_15_2'
+gem 'gh'
 gem 'keen'
 gem 'sentry-raven', '~> 3.1.2'
 gem 'simple_states', git: 'https://github.com/svenfuchs/simple_states'
