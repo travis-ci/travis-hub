@@ -13,6 +13,7 @@ module Travis
 
         def handle
           check_queueuable
+          puts "sending data to scheduler event: #{event.inspect}, payload: #{payload.inspect}"
           Travis::Sidekiq.scheduler(event, payload)
         end
 
