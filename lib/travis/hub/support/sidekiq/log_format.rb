@@ -15,6 +15,7 @@ module Travis
 
         def context
           c = Thread.current[:sidekiq_context]
+          return c[:jid] if c.is_a?(Hash)
           c.join(' ') if c && c.any?
         end
       end

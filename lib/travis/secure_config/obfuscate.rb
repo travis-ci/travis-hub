@@ -8,7 +8,8 @@ module Travis
       ENV_VAR_PATTERN = /(?<=\=)(?:(?<q>['"]).*?[^\\]\k<q>|(.*?)(?= \w+=|$))/
 
       def run
-        config = self.config.except(:source_key)
+        return unless self.config
+        config = self.config.try(:except, :source_key)
         config[:env] = obfuscate(config[:env]) if config[:env]
         config[:global_env] = obfuscate(config[:global_env]) if config[:global_env]
         config
