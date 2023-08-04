@@ -33,7 +33,8 @@ module Travis
           def no_build_emails(emails)
             ::Email.joins(:user).where(email: emails).select do |obj|
               user = User.find(obj.user_id)
-              JSON.parse(user.preferences.to_s)['build_emails'] == false
+              preferences = JSON.parse(user.preferences) if user.preferences.is_a?(String)
+              preferences['build_emails'] == false
             end.map!(&:email)
           end
 
