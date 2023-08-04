@@ -45,6 +45,7 @@ class Build < ActiveRecord::Base
 
   def config
     config = super&.config || has_attribute?(:config) && read_attribute(:config) || {}
+    config = JSON.parse(config) if config.is_a?(String)
     config.deep_symbolize_keys! if config.respond_to?(:deep_symbolize_keys!)
   end
 
