@@ -107,15 +107,14 @@ module Travis
         end
 
         def vm_size
-          puts "OBJ: #{object.inspect}"
-          puts "CID: #{object.config_id}"
-          puts "JC: #{JobConfig.find(object.config_id).inspect}"
-          puts "CONFIG: #{config.inspect}"
           config.dig('vm', 'size')
         end
 
         def config
-          @config ||= object.config_id ? JobConfig.find(object.config_id).config : {}
+          @config ||= begin
+            cfg = object.config_id ? JobConfig.find(object.config_id).config : {}
+            cfg.is_a?(String) && cfg.length > 0 ? JSON.parse(cfg) : cfg
+          end
         end
 
         def connection
