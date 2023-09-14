@@ -64,7 +64,7 @@ module Travis
             finished_at: object.finished_at,
             virt_type: config['virt'],
             queue: object.queue,
-            vm_size:,
+            vm_size: vm_size,
             finished: finished?
           }
         end
