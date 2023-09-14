@@ -107,6 +107,7 @@ module Travis
         end
 
         def vm_size
+          puts "CONFIG: #{config.inspect}"
           config.dig('vm', 'size')
         end
 
