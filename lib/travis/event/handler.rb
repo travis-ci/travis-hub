@@ -39,7 +39,11 @@ module Travis
       def object
         @object ||= begin
           obj = Kernel.const_get(object_type.camelize).find(params[:id])
-          obj.assign_attributes(params[:attrs]) if params[:attrs]
+          if params[:attrs]
+            params[:attrs].each do |k,v|
+              obj.assign_attributes(k => v) if v
+            end
+          end
           obj
         end
       end
