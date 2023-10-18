@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/gh
-  revision: 7c4a4707dfbd060e93576eb1fa21cd2b7ba3e3ae
+  revision: 3319c500df8b8bdde82ee7c330cc7f971fee2c20
   branch: tcie3-0_15_2
   specs:
     gh (0.15.1)
@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/jemalloc-rb
-  revision: af46aa864c867dbd2ad62b036401dba7b16dffd5
+  revision: 1568ca3fefcfff2a0f9094c0e3ffbaba7f73c0ad
   branch: jemalloc-v-3-new-rake
   specs:
     jemalloc (1.1.3)
