@@ -23,7 +23,7 @@ services:
   - rabbitmq
 
 before_install:
-  - gem install rubygems-update -v 3.4.22
+  - gem install rubygems-update -v 3.3.27
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
   - gem install bundler -v 2.3.26
 
