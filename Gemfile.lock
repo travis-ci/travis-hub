@@ -1,10 +1,9 @@
 GIT
   remote: https://github.com/travis-ci/gh
-  revision: f2fbfbca425f4dea7f80ddb412c30e3367135558
-  branch: prd-ruby-upgrade-dev
+  revision: e1fcd75786ffa75667e47d3d824b54d1bd0017fe
   specs:
-    gh (0.20.0)
-      activesupport (>= 5, < 8)
+    gh (0.21.0)
+      activesupport (~> 7.0.8)
       addressable (~> 2.8)
       faraday (~> 2)
       faraday-retry
@@ -15,16 +14,14 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/marginalia
-  revision: af24f2a6d2c5da19626bfc469194aecf058e7b3f
-  branch: prd-ruby-upgrade-dev
+  revision: d7c711abd60517b435e50b499fc8997ab67ababe
   specs:
-    marginalia (1.5.0)
+    marginalia (1.6.0)
       pg
 
 GIT
   remote: https://github.com/travis-ci/metriks
-  revision: 6292ce11b8d22888bd9947b9f38d104834268fa7
-  branch: prd-ruby-upgrade-dev
+  revision: ca03449b2928962e41c8389283bd092053e91670
   specs:
     metriks (0.9.9.8)
       HDRHistogram (~> 0.1)
@@ -34,18 +31,16 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/metriks-librato_metrics
-  revision: 41aca2ed2ab40ecdc1dbebabf70e35a38377d101
-  branch: prd-ruby-upgrade-dev
+  revision: e876ca2f0e1abcc745260c3772118e63fb946c8a
   specs:
     metriks-librato_metrics (1.0.6)
 
 GIT
   remote: https://github.com/travis-ci/rollout
-  revision: 3907bb9cf1774e81b38ee434624b0402bc93f2ff
-  branch: prd-ruby-upgrade-dev
+  revision: 4a7a0b96dc038f7ca057ca771693d8f5a7c90583
   specs:
     rollout (2.5.0)
-      redis (~> 5.0)
+      redis (~> 4.0)
 
 GIT
   remote: https://github.com/travis-ci/simple_states
@@ -56,77 +51,70 @@ GIT
 
 GIT
   remote: https://github.com/travis-ci/travis-config
-  revision: 78218b276d4d39ec078675ba3d55d6afbc643405
-  branch: prd-ruby-upgrade-dev
+  revision: 601e9a6dcb799dc14944c40153c60aaf935629ee
   specs:
-    travis-config (1.1.5)
+    travis-config (2.0.0)
       hashr (~> 2.0)
 
 GIT
   remote: https://github.com/travis-ci/travis-encrypt
-  revision: a89ad8a7e723cf95ba28051cb624b3d78b8cbaf0
-  branch: prd-ruby-upgrade-dev
+  revision: 71c202ac2bcabd772f31f5904f8ab06c911e9389
   specs:
-    travis-encrypt (0.0.5)
+    travis-encrypt (0.0.6)
 
 GIT
   remote: https://github.com/travis-ci/travis-exceptions
-  revision: 9bcf5989b9a6444a8a954540c26ba9fd4fd2ee85
-  branch: prd-ruby-upgrade-dev
+  revision: 7da3ea3b38349d66ea8f27c33d643e4af5087599
   specs:
-    travis-exceptions (0.0.2)
+    travis-exceptions (0.1.0)
       sentry-ruby
 
 GIT
   remote: https://github.com/travis-ci/travis-lock
-  revision: 46950a25cca6c3e4626bf7304787c02ce96eb5c6
-  branch: prd-ruby-upgrade-dev
+  revision: aeee7b5d11e3d44f19d0a113c2e54ec54756f20f
   specs:
-    travis-lock (0.1.1)
+    travis-lock (0.2.0)
 
 GIT
   remote: https://github.com/travis-ci/travis-logger
-  revision: 6f0627028d027a6ae9b74bbb654c9b5c37c76ee5
-  branch: prd-ruby-upgrade-dev
+  revision: c754e91f959015ac9ebe98e5082efdaf3754863d
   specs:
-    travis-logger (0.0.1)
+    travis-logger (0.1.0)
 
 GIT
   remote: https://github.com/travis-ci/travis-metrics
-  revision: c776366d7182829da5abf9e48b42c416249a0043
-  branch: prd-ruby-upgrade-dev
+  revision: 0b6a8accc70685a1cb65f1ec5305bceab41ad777
   specs:
-    travis-metrics (2.0.0)
+    travis-metrics (3.0.0)
       metriks-librato_metrics (~> 1.0)
 
 GIT
   remote: https://github.com/travis-ci/travis-support
-  revision: 77f8dad236002e6103cfdb796308e1a11d8d441e
-  branch: prd-ruby-upgrade-dev
+  revision: 8b566a94502267b3115c901f8409dc2165b6539b
   specs:
-    travis-support (0.0.1)
+    travis-support (0.1.0)
 
 GEM
   remote: https://gems.contribsys.com/
   specs:
-    sidekiq-pro (7.1.3)
-      sidekiq (>= 7.1.0, < 8)
+    sidekiq-pro (7.2.0)
+      sidekiq (>= 7.2.0, < 8)
 
 GEM
   remote: https://rubygems.org/
   specs:
     HDRHistogram (0.1.11)
-    activemodel (7.0.6)
-      activesupport (= 7.0.6)
-    activerecord (7.0.6)
-      activemodel (= 7.0.6)
-      activesupport (= 7.0.6)
-    activesupport (7.0.6)
+    activemodel (7.0.8.1)
+      activesupport (= 7.0.8.1)
+    activerecord (7.0.8.1)
+      activemodel (= 7.0.8.1)
+      activesupport (= 7.0.8.1)
+    activesupport (7.0.8.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.4)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     amq-protocol (2.3.2)
     ansi (1.5.0)
@@ -134,59 +122,63 @@ GEM
     atomic (1.1.101)
     avl_tree (1.2.1)
       atomic (~> 1.1)
+    base64 (0.2.0)
+    bigdecimal (3.1.6)
     bunny (2.22.0)
       amq-protocol (~> 2.3, >= 2.3.1)
       sorted_set (~> 1, >= 1.0.2)
     coder (0.4.0)
     coderay (1.1.3)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
-    crack (0.4.5)
+    crack (1.0.0)
+      bigdecimal
       rexml
-    dalli (3.2.5)
+    dalli (3.2.8)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.1.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    diff-lcs (1.5.0)
+    diff-lcs (1.5.1)
     docile (1.4.0)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
+    domain_name (0.6.20240107)
     ethon (0.16.0)
       ffi (>= 1.15.0)
-    excon (0.100.0)
-    factory_bot (6.2.1)
+    excon (0.109.0)
+    factory_bot (6.4.6)
       activesupport (>= 5.0.0)
-    faraday (2.7.10)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     faraday-retry (2.2.0)
       faraday (~> 2.0)
-    faraday-typhoeus (1.0.0)
+    faraday-typhoeus (1.1.0)
       faraday (~> 2.0)
       typhoeus (~> 1.4)
-    ffi (1.15.5)
+    ffi (1.16.3)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    hashdiff (1.0.1)
+    hashdiff (1.1.0)
     hashr (2.0.1)
     hitimes (1.3.1)
-    http (5.1.1)
+    http (5.2.0)
       addressable (~> 2.8)
+      base64 (~> 0.1)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
-      llhttp-ffi (~> 0.4.0)
+      llhttp-ffi (~> 0.5.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    json (2.6.3)
-    jwt (2.7.1)
+    json (2.7.1)
+    jwt (2.8.0)
+      base64
     keen (1.1.1)
       addressable (~> 2.5)
       multi_json (~> 1.12)
@@ -195,97 +187,99 @@ GEM
       addressable (~> 2.0)
       excon
       http (>= 2.0, < 6.0)
-    llhttp-ffi (0.4.0)
+    llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     method_source (1.0.0)
-    minitest (5.19.0)
+    minitest (5.22.2)
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    net-http (0.4.1)
+      uri
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
-    nio4r (2.5.9)
-    parallel (1.23.0)
-    parser (3.2.2.3)
+    nio4r (2.7.0)
+    parallel (1.24.0)
+    parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
-    pg (1.5.3)
+    pg (1.5.5)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (5.0.3)
-    puma (6.3.0)
+    public_suffix (5.0.4)
+    puma (6.4.2)
       nio4r (~> 2.0)
-    racc (1.7.1)
-    rack (2.2.8)
-    rack-protection (3.0.6)
-      rack
+    racc (1.7.3)
+    rack (2.2.8.1)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-ssl (1.4.1)
       rack
     rack-test (2.1.0)
       rack (>= 1.3)
     rainbow (3.1.1)
-    rake (13.0.6)
+    rake (13.1.0)
     rbtree (0.4.6)
-    redis (5.0.6)
-      redis-client (>= 0.9.0)
-    redis-client (0.14.1)
+    redis (4.8.1)
+    redis-client (0.20.0)
       connection_pool
-    redlock (2.0.2)
-      redis-client (~> 0.14.1)
-    regexp_parser (2.8.1)
+    redlock (2.0.6)
+      redis-client (>= 0.14.1, < 1.0.0)
+    regexp_parser (2.9.0)
     rexml (3.2.6)
-    rspec (3.12.0)
-      rspec-core (~> 3.12.0)
-      rspec-expectations (~> 3.12.0)
-      rspec-mocks (~> 3.12.0)
-    rspec-core (3.12.2)
-      rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.3)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.6)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-support (3.12.1)
-    rubocop (1.55.1)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
+    rubocop (1.60.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
-      parser (>= 3.2.2.3)
+      parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.28.1, < 2.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.29.0)
+    rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
-    rubocop-capybara (2.18.0)
+    rubocop-capybara (2.20.0)
       rubocop (~> 1.41)
-    rubocop-factory_bot (2.23.1)
-      rubocop (~> 1.33)
-    rubocop-performance (1.18.0)
-      rubocop (>= 1.7.0, < 2.0)
-      rubocop-ast (>= 0.4.0)
-    rubocop-rspec (2.23.0)
-      rubocop (~> 1.33)
+    rubocop-factory_bot (2.25.1)
+      rubocop (~> 1.41)
+    rubocop-performance (1.20.2)
+      rubocop (>= 1.48.1, < 2.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
+    rubocop-rspec (2.26.1)
+      rubocop (~> 1.40)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sentry-ruby (5.10.0)
+    sentry-ruby (5.16.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    set (1.0.3)
-    sidekiq (7.1.2)
+    set (1.1.0)
+    sidekiq (7.2.2)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
-      redis-client (>= 0.14.0)
+      redis-client (>= 0.19.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -296,39 +290,36 @@ GEM
       terminal-table
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    sinatra (3.0.6)
+    sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.6)
+      rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sinatra-contrib (3.0.6)
-      multi_json
+    sinatra-contrib (3.2.0)
+      multi_json (>= 0.0.2)
       mustermann (~> 3.0)
-      rack-protection (= 3.0.6)
-      sinatra (= 3.0.6)
+      rack-protection (= 3.2.0)
+      sinatra (= 3.2.0)
       tilt (~> 2.0)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
-    tilt (2.2.0)
-    travis-rollout (0.0.2)
-    typhoeus (1.4.0)
+    tilt (2.3.0)
+    typhoeus (1.4.1)
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.8.2)
-    unicode-display_width (2.4.2)
-    webmock (3.18.1)
+    unicode-display_width (2.5.0)
+    uri (0.13.0)
+    webmock (3.23.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
-  x86_64-linux
+  x86_64-darwin-23
 
 DEPENDENCIES
   activerecord (~> 7)
@@ -353,7 +344,7 @@ DEPENDENCIES
   rack-ssl
   rack-test
   rake
-  redis (~> 5)
+  redis
   redlock
   rollout!
   rspec (~> 3.12)
@@ -373,7 +364,6 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
-  travis-rollout (~> 0.0.2)
   travis-support!
   webmock
 
@@ -381,4 +371,4 @@ RUBY VERSION
    ruby 3.2.2p53
 
 BUNDLED WITH
-   2.4.17
+   2.4.19
