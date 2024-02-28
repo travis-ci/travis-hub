@@ -55,7 +55,7 @@ end
 
 group :development, :test do
   gem 'rubocop', require: false
-  gem 'rubocop-performance', require: false
+  gem 'rubocop-performance'
   gem 'rubocop-rspec', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
