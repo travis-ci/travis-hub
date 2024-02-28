@@ -24,7 +24,7 @@ class Stage < ActiveRecord::Base
   end
 
   def finish(*)
-    update_attributes!(state: matrix.state)
+    update!(state: matrix.state)
     cancel_pending_jobs unless passed?
   end
 
@@ -46,39 +46,39 @@ class Stage < ActiveRecord::Base
 
   private
 
-    def matrix
-      @matrix ||= Build::Matrix.new(jobs, build.config[:matrix])
-    end
+  def matrix
+    @matrix ||= Build::Matrix.new(jobs, build.config[:matrix])
+  end
 
-    def clear
-      %w(started_at finished_at).each { |attr| write_attribute(attr, nil) }
-      self.state = :created
-    end
+  def clear
+    %w[started_at finished_at].each { |attr| write_attribute(attr, nil) }
+    self.state = :created
+  end
 
-    def cancel_pending_jobs
-      # This would cancel the build several times, because `build.finish?` only
-      # rejects based on `canceled?` which is because of the way how we error
-      # builds in Gatekeeper (and a race'ish condition between Gatekeeper and
-      # Hub, see https://github.com/travis-pro/team-teal/issues/1167 and
-      # https://github.com/travis-pro/team-teal/issues/1247)
-      # jobs.pending.each(&:cancel!)
+  def cancel_pending_jobs
+    # This would cancel the build several times, because `build.finish?` only
+    # rejects based on `canceled?` which is because of the way how we error
+    # builds in Gatekeeper (and a race'ish condition between Gatekeeper and
+    # Hub, see https://github.com/travis-pro/team-teal/issues/1167 and
+    # https://github.com/travis-pro/team-teal/issues/1247)
+    # jobs.pending.each(&:cancel!)
 
-      to_cancel = build.jobs.pending - jobs
-      attrs = { state: :canceled, finished_at: Time.now }
+    to_cancel = build.jobs.pending - jobs
+    attrs = { state: :canceled, finished_at: Time.now }
 
-      # If we notify early then Scheduler might receive an event and queue jobs
-      # that are supposed to be canceled. (Hub could then tell the workers to
-      # also cancel them, but it seems better to not notify Scheduler early.)
-      # It would be nice to change Hub's design so that we collect notifications
-      # and send them only after all DB state has been updated properly.
-      to_cancel.each { |job| job.update_attributes!(attrs) }
-      to_cancel.each { |job| job.notify(:finish) }
+    # If we notify early then Scheduler might receive an event and queue jobs
+    # that are supposed to be canceled. (Hub could then tell the workers to
+    # also cancel them, but it seems better to not notify Scheduler early.)
+    # It would be nice to change Hub's design so that we collect notifications
+    # and send them only after all DB state has been updated properly.
+    to_cancel.each { |job| job.update!(attrs) }
+    to_cancel.each { |job| job.notify(:finish) }
 
-      stages = Stage.where(id: to_cancel.map(&:stage_id))
-      stages.each { |stage| stage.update_attributes!(attrs) }
-    end
+    stages = Stage.where(id: to_cancel.map(&:stage_id))
+    stages.each { |stage| stage.update!(attrs) }
+  end
 
-    def propagate(event, *args)
-      build.send(:"#{event}!", *args)
-    end
+  def propagate(event, *args)
+    build.send(:"#{event}!", *args)
+  end
 end

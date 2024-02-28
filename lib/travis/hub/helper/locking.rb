@@ -14,10 +14,11 @@ module Travis
             logger.debug "Releasing #{key}"
           end
 
-        # TODO move this to travis-locks
+        # TODO: move this to travis-locks
         rescue Redis::TimeoutError => e
           count ||= 0
           raise e if count > 10
+
           count += 1
           error "Redis::TimeoutError while trying to acquire lock for #{key}. Retrying #{count}/10."
           sleep 1

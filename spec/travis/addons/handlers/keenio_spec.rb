@@ -1,7 +1,7 @@
 describe Travis::Addons::Handlers::Keenio do
-  let(:build) { FactoryGirl.create(:build) }
-  let(:job)   { FactoryGirl.create(:job, owner: owner) }
-  let(:owner) { FactoryGirl.create(:user) }
+  let(:build) { FactoryBot.create(:build) }
+  let(:job)   { FactoryBot.create(:job, owner:) }
+  let(:owner) { FactoryBot.create(:user) }
 
   describe 'subscription' do
     before { Travis::Event.setup([:keenio]) }

@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:slack, payload, targets: targets, template: template)
+            run_task(:slack, payload, targets:, template:)
           end
 
           def targets

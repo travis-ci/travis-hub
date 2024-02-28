@@ -1,11 +1,12 @@
-require 'raven'
+require 'sentry-ruby'
 
 module Travis
   module Hub
     class Sentry < Sinatra::Base
       configure do
-        Raven.configure { |c| c.tags = { environment: environment } }
-        use Raven::Rack
+        ::Sentry.with_scope do |s|
+          s&.set_tags(environment:)
+        end
       end
     end
   end

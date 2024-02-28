@@ -8,12 +8,12 @@ module Support
       let(:stdout)  { StringIO.new }
       let(:logger)  { Travis::Logger.new(stdout) }
       let(:metrics) { Travis::Metrics.setup({}, logger) }
-      let(:context) {
+      let(:context) do
         Travis::Hub::Context.new(
-          logger: logger,
-          metrics: metrics
+          logger:,
+          metrics:
         )
-      }
+      end
       before        { Travis::Hub.context = context }
       before        { Travis::Instrumentation.setup(context.logger) }
     end

@@ -19,11 +19,11 @@ module Travis
 
           # random uid to sample randomly (not tied to user)
           Rollout.matches?(:logsearch, {
-            uid:   SecureRandom.hex,
-            owner: object.repository.owner.login,
-            repo:  object.repository.slug,
-            redis: Travis::Hub.context.redis
-          })
+                             uid: SecureRandom.hex,
+                             owner: object.repository.owner.login,
+                             repo: object.repository.slug,
+                             redis: Travis::Hub.context.redis
+                           })
         end
 
         def handle
@@ -32,16 +32,16 @@ module Travis
 
         private
 
-          def payload
-            object.id
-          end
+        def payload
+          object.id
+        end
 
-          class EventHandler < Addons::Instrument
-            def notify_completed
-              publish
-            end
+        class EventHandler < Addons::Instrument
+          def notify_completed
+            publish
           end
-          EventHandler.attach_to(self)
+        end
+        EventHandler.attach_to(self)
       end
     end
   end

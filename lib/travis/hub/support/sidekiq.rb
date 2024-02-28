@@ -8,12 +8,9 @@ require 'travis/hub/support/sidekiq/marginalia'
 module Travis
   module Sidekiq
     def setup(config)
-      ::Sidekiq::Logging.logger.level = Logger::WARN
-
       ::Sidekiq.configure_server do |c|
         c.redis = {
           url: config.redis.url,
-          namespace: config.sidekiq.namespace,
           id: nil
         }
 
@@ -35,7 +32,6 @@ module Travis
       ::Sidekiq.configure_client do |c|
         c.redis = {
           url: config.redis.url,
-          namespace: config.sidekiq.namespace,
           id: nil
         }
 

@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:pushover, payload, users: users, api_key: api_key, template: template)
+            run_task(:pushover, payload, users:, api_key:, template:)
           end
 
           def users

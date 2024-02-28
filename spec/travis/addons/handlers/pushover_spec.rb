@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::Pushover do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { pushover: config } }) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
+  let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { pushover: config } }) }
   let(:config)  { { users: 'user', api_key: 'api_key' } }
 
   before { Travis::Event.setup([:pushover]) }
@@ -20,22 +20,22 @@ describe Travis::Addons::Handlers::Pushover do
   describe 'multiple configs' do
     let(:config) { [{ api_key: 'one', users: 'one' }, { api_key: 'two', users: 'two' }] }
     let(:jobs)   { Sidekiq::Queues.jobs_by_queue['pushover'] }
-    let(:keys)   { jobs.map { |job| job['args'].last['api_key'] } }
+    let(:keys)   { jobs.map { |job| JSON.parse(job['args'].last)['api_key'] } }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
     it { expect(jobs.size).to eq 2 }
-    it { expect(keys).to eq ['one', 'two'] }
+    it { expect(keys).to eq %w[one two] }
   end
 
   describe 'handle?' do
     it 'is true if the build is a push request' do
-      build.update_attributes(event_type: 'push')
+      build.update(event_type: 'push')
       expect(handler.handle?).to eql(true)
     end
 
     it 'is false if the build is a pull request' do
-      build.update_attributes(event_type: 'pull_request')
+      build.update(event_type: 'pull_request')
       expect(handler.handle?).to eql(false)
     end
 

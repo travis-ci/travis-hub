@@ -8,7 +8,7 @@ require 'travis/hub'
 Job.class_eval do
   class << self
     def running
-      where(state: [:queued, :received, :started]).order('jobs.id')
+      where(state: %i[queued received started]).order('jobs.id')
     end
 
     def since(time)

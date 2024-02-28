@@ -1,12 +1,12 @@
 describe Travis::Hub::Service::UpdateJob do
+  subject { described_class.new(context, event, data) }
+
   let(:redis)       { Travis::Hub.context.redis }
   let(:amqp)        { Travis::Amqp.any_instance }
-  let(:job)         { FactoryGirl.create(:job, state: state, queued_at: queued_at, received_at: received_at) }
+  let(:job)         { FactoryBot.create(:job, state:, queued_at:, received_at:) }
   let(:queued_at)   { now - 20 }
   let(:received_at) { now - 10 }
   let(:now)         { Time.now.utc }
-
-  subject     { described_class.new(context, event, data) }
 
   before do
     amqp.stubs(:fanout)
@@ -175,24 +175,28 @@ describe Travis::Hub::Service::UpdateJob do
       let(:limit)   { Travis::Hub::Limit.new(redis, :resets, job.id) }
       let(:state)   { :queued }
 
-      before { context.config[:logs_api] = { url: url, token: '1234' } }
-      before { stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}?source=hub") }
-      before { 50.times { limit.record(started) } }
+      before do
+        context.config[:logs_api] = { url:, token: '1234' }
+        stub_request(:put, "http://logs.travis-ci.org/logs/#{job.id}?source=hub")
+        50.times { limit.record(started) }
+      end
 
       describe 'sets the job to :errored' do
         before { subject.run }
+
         it { expect(job.reload.state).to eql(:errored) }
       end
 
       describe 'logs a message' do
         before { subject.run }
-        it { expect(stdout.string).to include "Resets limited: 50 resets between 2010-12-31 15:02:00 UTC and #{Time.now.to_s} (max: 50, after: 21600)" }
+
+        it { expect(stdout.string).to include "Resets limited: 50 resets between 2010-12-31 15:02:00 UTC and #{Time.now} (max: 50, after: 21600)" }
       end
     end
   end
 
   describe 'unordered messages' do
-    let(:job)     { FactoryGirl.create(:job, state: :created) }
+    let(:job)     { FactoryBot.create(:job, state: :created) }
     let(:start)   { [:start,   { id: job.id, started_at: Time.now }] }
     let(:receive) { [:receive, { id: job.id, received_at: Time.now }] }
     let(:finish)  { [:finish,  { id: job.id, state: 'passed', finished_at: Time.now }] }

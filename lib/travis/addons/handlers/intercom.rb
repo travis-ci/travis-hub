@@ -16,8 +16,8 @@ module Travis
         def handle
           params = {
             event: :report_build,
-            owner_id: owner_id,
-            last_build_at: last_build_at
+            owner_id:,
+            last_build_at:
           }
           run_task(:intercom, {}, params)
         end
@@ -46,7 +46,6 @@ module Travis
         def owner_type
           owner ? owner.class.name : ''
         end
-
       end
     end
   end

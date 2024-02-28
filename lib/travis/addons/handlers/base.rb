@@ -11,7 +11,7 @@ module Travis
         include Helpers::Coder
 
         def event
-          # TODO can this be moved to clients?
+          # TODO: can this be moved to clients?
           super.to_s.gsub('restarted', 'created')
         end
 

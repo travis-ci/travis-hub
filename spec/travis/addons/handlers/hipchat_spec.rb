@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::Hipchat do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { hipchat: config } }) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
+  let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { hipchat: config } }) }
   let(:config)  { 'room' }
 
   before { Travis::Event.setup([:hipchat]) }
@@ -20,7 +20,7 @@ describe Travis::Addons::Handlers::Hipchat do
   describe 'multiple configs' do
     let(:config)  { [{ rooms: 'one' }, { rooms: 'two' }] }
     let(:jobs)    { Sidekiq::Queues.jobs_by_queue['hipchat'] }
-    let(:targets) { jobs.map { |job| job['args'].last['targets'] } }
+    let(:targets) { jobs.map { |job| JSON.parse(job['args'].last)['targets'] } }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
@@ -29,7 +29,7 @@ describe Travis::Addons::Handlers::Hipchat do
   end
 
   describe 'given a plain string' do
-    let(:params) { Sidekiq::Queues.jobs_by_queue['hipchat'][0]['args'].last }
+    let(:params) { JSON.parse(Sidekiq::Queues.jobs_by_queue['hipchat'][0]['args'].last) }
     let(:config) { 'room' }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
@@ -40,28 +40,32 @@ describe Travis::Addons::Handlers::Hipchat do
 
   describe 'handle?' do
     it 'is true if the build is a push request' do
-      build.update_attributes(event_type: 'push')
+      build.update(event_type: 'push')
       expect(handler.handle?).to eql(true)
     end
 
     it 'is true by default if the build is a pull request' do
-      build.update_attributes(event_type: 'pull_request')
+      build.update(event_type: 'pull_request')
       expect(handler.handle?).to eql(true)
     end
 
     describe 'is false if the build is a pull request and config opts out' do
       let(:config) { { rooms: 'room', on_pull_requests: false } }
-      before { build.update_attributes(event_type: 'pull_request') }
+
+      before { build.update(event_type: 'pull_request') }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
     describe 'is true if rooms are present' do
       let(:config) { 'room' }
+
       it { expect(handler.handle?).to eql(true) }
     end
 
     describe 'is false if no rooms are present' do
       let(:config) { [] }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
@@ -89,31 +93,37 @@ describe Travis::Addons::Handlers::Hipchat do
 
     describe 'returns an array of rooms when given a string' do
       let(:config) { room }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms when given an array' do
       let(:config) { [room] }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms when given a comma separated string' do
       let(:config) { "#{room}, #{other}" }
+
       it { expect(handler.targets).to eql [room, other] }
     end
 
     describe 'returns an array of rooms given a string within a hash' do
       let(:config) { { rooms: room, on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms given an array within a hash' do
       let(:config) { { rooms: [room], on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room] }
     end
 
     describe 'returns an array of rooms given a comma separated string within a hash' do
       let(:config) { { rooms: "#{room}, #{other}", on_success: 'change' } }
+
       it { expect(handler.targets).to eql [room, other] }
     end
   end

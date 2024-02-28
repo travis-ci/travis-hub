@@ -2,7 +2,7 @@ module Travis
   module Support
     module Sidekiq
       class Logging < Struct.new(:config)
-        def call(severity, time, progname, message)
+        def call(severity, time, _progname, message)
           time      = config[:time_format] ? "#{time.strftime(config[:time_format])} " : nil
           proc_name = ENV['TRAVIS_PROCESS_NAME'] ? "#{severity[0, 1]} " : nil
           pid       = config[:process_id] ? "PID=#{Process.pid} " : nil
@@ -13,10 +13,11 @@ module Travis
 
         private
 
-          def context
-            c = Thread.current[:sidekiq_context]
-            c.join(' ') if c && c.any?
-          end
+        def context
+          c = Thread.current[:sidekiq_context]
+          return c[:jid] if c.is_a?(Hash)
+          c.join(' ') if c && c.any?
+        end
       end
     end
   end

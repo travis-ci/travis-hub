@@ -13,7 +13,6 @@ require 'travis/hub/support/redis_pool'
 require 'travis/hub/support/sidekiq'
 require 'travis/marginalia'
 
-
 module Travis
   module Hub
     class Context
@@ -42,7 +41,7 @@ module Travis
           Travis::Marginalia.setup
         end
 
-        # TODO remove Hub.context
+        # TODO: remove Hub.context
         Hub.context = self
 
         # test_exception_reporting
@@ -50,24 +49,24 @@ module Travis
 
       private
 
-        def addons
-          # TODO move keen to the keychain? it isn't required on enterprise.
-          # then again, it's not active, unless the keen credentials are
-          # present in the env.
-          addons = config.notifications.flatten + ['insights', 'logsearch', 'scheduler', 'keenio', 'metrics']
-          addons << 'merge' if ENV['NOTIFY_MERGE']
-          addons
-        end
+      def addons
+        # TODO: move keen to the keychain? it isn't required on enterprise.
+        # then again, it's not active, unless the keen credentials are
+        # present in the env.
+        addons = config.notifications.flatten + %w[insights logsearch scheduler keenio metrics]
+        addons << 'merge' if ENV['NOTIFY_MERGE']
+        addons
+      end
 
-        def pluralize_addons(addons, names)
-          names.each do |name|
-            addons << "#{name}s" if addons.delete(name)
-          end
+      def pluralize_addons(addons, names)
+        names.each do |name|
+          addons << "#{name}s" if addons.delete(name)
         end
+      end
 
-        def test_exception_reporting
-          exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
-        end
+      def test_exception_reporting
+        exceptions.info(StandardError.new('Testing Sentry'), tags: { app: :hub, testing: true })
+      end
     end
   end
 end

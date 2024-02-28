@@ -1,9 +1,9 @@
 describe Travis::Addons::Serializer::Pusher::Job do
-  let(:repo)   { FactoryGirl.create(:repository) }
-  let(:job)    { FactoryGirl.create(:job, repository: repo, build: build, commit: commit, stage: stage) }
-  let(:commit) { FactoryGirl.create(:commit) }
-  let(:build)  { FactoryGirl.create(:build) }
-  let(:stage)  { FactoryGirl.create(:stage, build: build, number: 1, name: 'test', state: :created) }
+  let(:repo)   { FactoryBot.create(:repository) }
+  let(:job)    { FactoryBot.create(:job, repository: repo, build:, commit:, stage:) }
+  let(:commit) { FactoryBot.create(:commit) }
+  let(:build)  { FactoryBot.create(:build) }
+  let(:stage)  { FactoryBot.create(:stage, build:, number: 1, name: 'test', state: :created) }
   let(:data)   { described_class.new(job).data }
 
   it 'data' do
@@ -35,7 +35,7 @@ describe Travis::Addons::Serializer::Pusher::Job do
       committer_name: 'Sven Fuchs',
       author_name: 'Sven Fuchs',
       author_email: 'me@svenfuchs.com',
-      compare_url: 'https://github.com/travis-ci/travis-core/compare/master...develop',
+      compare_url: 'https://github.com/travis-ci/travis-core/compare/master...develop'
     )
   end
 

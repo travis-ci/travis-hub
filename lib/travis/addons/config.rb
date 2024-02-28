@@ -26,7 +26,8 @@ module Travis
         return false unless config
         return true unless config.respond_to?(:key?)
         return false if config.key?(:enabled) && !config[:enabled]
-        [:disabled, :disable].each { |key| return !config[key] if config.key?(key) } # TODO deprecate disabled and disable
+
+        %i[disabled disable].each { |key| return !config[key] if config.key?(key) } # TODO: deprecate disabled and disable
         true
       end
 
@@ -42,15 +43,15 @@ module Travis
 
       private
 
-        def normalize_strings(values)
-          values = Array(values).compact
-          values = values.map { |value| value.split(',') if value.is_a?(String) }
-          values.compact.flatten.map(&:strip).reject(&:blank?)
-        end
+      def normalize_strings(values)
+        values = Array(values).compact
+        values = values.map { |value| value.split(',') if value.is_a?(String) }
+        values.compact.flatten.map(&:strip).reject(&:blank?)
+      end
 
-        def blank?(object)
-          object.is_a?(NilClass) ? true : object.empty?
-        end
+      def blank?(object)
+        object.is_a?(NilClass) ? true : object.empty?
+      end
     end
   end
 end

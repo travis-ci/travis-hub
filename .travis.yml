@@ -3,7 +3,7 @@ language: ruby
 import:
   - travis-ci/build-configs:db-setup.yml@postgres-9.6
 
-rvm: 2.4.10
+rvm: 3.2.2
 
 cache: bundler
 
@@ -24,7 +24,7 @@ services:
 
 before_install:
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
-  - gem install bundler -v 2.3.26
+  - gem install bundler -v 2.4.14
 
 jobs:
   include:

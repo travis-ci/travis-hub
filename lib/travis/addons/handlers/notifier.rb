@@ -22,7 +22,7 @@ module Travis
 
         def handler(config)
           const = self.class.const_get(:Notifier)
-          const.new(event, params.merge(config: config))
+          const.new(event, params.merge(config:))
         end
 
         def configs
@@ -40,6 +40,7 @@ module Travis
 
         def decrypt(config)
           return config unless config.is_a?(Hash) || config.is_a?(String)
+
           Travis::SecureConfig.decrypt(config, secure_key)
         end
 

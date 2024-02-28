@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'base64'
 require 'rack/auth/abstract/handler'
 require 'rack/auth/abstract/request'
@@ -8,7 +9,7 @@ module Travis
     class Auth < Rack::Auth::AbstractHandler
       include Base64
 
-      attr_reader :tokens
+      attr_reader :tokens, :alg, :key
 
       def initialize(app, config = {}, alg = 'RS512')
         @app = app
@@ -16,8 +17,6 @@ module Travis
         @key = OpenSSL::PKey::RSA.new(config[:jwt_public_key])
         @tokens = config[:http_basic_auth]
       end
-
-      attr_reader :alg, :key
 
       def call(env)
         auth = Request.new(env)
@@ -48,6 +47,7 @@ module Travis
       def basic_valid?(auth)
         user, password = auth.basic_credentials
         return unless user && password
+
         tokens[user.to_sym] == password
       end
 
@@ -55,6 +55,7 @@ module Travis
         return false if auth.job_id.nil?
         return false if auth.params.empty?
         return false if auth.jwt_header.nil? || auth.jwt_payload.nil?
+
         true
       end
 
@@ -91,7 +92,7 @@ module Travis
         end
 
         def basic_credentials
-          @basic_credentials ||= params.unpack('m*').first.split(/:/, 2)
+          @basic_credentials ||= params.unpack1('m*').split(/:/, 2)
         end
 
         def basic_username

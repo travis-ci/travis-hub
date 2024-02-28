@@ -7,10 +7,11 @@ module Travis
   module Hub
     module Service
       class HandleStaleJobs
-        include Helper::Context, Helper::Locking
+        include Helper::Locking
+        include Helper::Context
         extend Instrumentation
 
-        STALE_STATES = %w(queued received started)
+        STALE_STATES = %w[queued received started]
         OFFSET       = 6 * 3600
         MSGS         = {
           run_stale_job: 'Cleanup stale job started.',
@@ -24,14 +25,14 @@ module Travis
 
         private
 
-          def stale_jobs
-            Job.where('updated_at <= ?', Time.now - OFFSET).where(state: STALE_STATES)
-          end
+        def stale_jobs
+          Job.where('updated_at <= ?', Time.now - OFFSET).where(state: STALE_STATES)
+        end
 
-          def error(job)
-            logger.info(MSGS[:stale_job] % [job.id, job.state, job.updated_at])
-            job.finish!(state: :errored, finished_at: Time.now)
-          end
+        def error(job)
+          logger.info(MSGS[:stale_job] % [job.id, job.state, job.updated_at])
+          job.finish!(state: :errored, finished_at: Time.now)
+        end
       end
     end
   end

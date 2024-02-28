@@ -1,9 +1,9 @@
 describe Build do
   let(:state)  { :created }
   let(:params) { {} }
-  let(:repo)   { FactoryGirl.create(:repository) }
-  let(:build)  { FactoryGirl.create(:build, repository: repo, state: state) }
-  let(:job)    { FactoryGirl.create(:job) }
+  let(:repo)   { FactoryBot.create(:repository) }
+  let(:build)  { FactoryBot.create(:build, repository: repo, state:) }
+  let(:job)    { FactoryBot.create(:job) }
   let(:now)    { Time.now }
   # before       { Travis::Event.stubs(:dispatch) }
 
@@ -33,7 +33,7 @@ describe Build do
     end
 
     describe 'with all other jobs being finished' do
-      let(:job) { FactoryGirl.create(:job, build: build, state: :canceled, finished_at: now, started_at: now - 2.minute) }
+      let(:job) { FactoryBot.create(:job, build:, state: :canceled, finished_at: now, started_at: now - 2.minute) }
 
       it 'sets the build to :canceled' do
         receive
@@ -53,16 +53,16 @@ describe Build do
     end
 
     describe 'with jobs pending' do
-      before { FactoryGirl.create(:job, build: build, state: :started) }
+      before { FactoryBot.create(:job, build:, state: :started) }
 
       it 'does not set the build to :canceled' do
         receive
-        expect(build.reload.state).to_not eql(:canceled)
+        expect(build.reload.state).not_to eql(:canceled)
       end
     end
 
     describe 'it denormalizes to the repository' do
-      %w(state duration finished_at).each do |attr|
+      %w[state duration finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -99,7 +99,7 @@ describe Build do
 
     it 'sets :restarted_at' do
       receive
-      expect(build.reload.restarted_at).to_not be_nil
+      expect(build.reload.restarted_at).not_to be_nil
     end
 
     it 'dispatches a build:restarted event' do
@@ -108,7 +108,7 @@ describe Build do
     end
 
     describe 'it denormalizes to the repository' do
-      %w(state duration started_at finished_at).each do |attr|
+      %w[state duration started_at finished_at].each do |attr|
         it "sets last_build_#{attr}" do
           receive
           expect(repo.reload.send(:"last_build_#{attr}").to_s).to eql(build.reload.send(attr).to_s)
@@ -124,9 +124,9 @@ describe Build do
     end
 
     it 'does not change the build `[state]ed_at` time' do
-      state = [:passed, :failed, :errored].include?(self.state) ? :finished : self.state
+      state = %i[passed failed errored].include?(self.state) ? :finished : self.state
       attr = "#{state}_ed".sub(/eed$/, 'ed')
-      expect { receive }.to_not change { build.reload.send(attr) } if build.respond_to?(attr)
+      expect { receive }.not_to(change { build.reload.send(attr) }) if build.respond_to?(attr)
     end
 
     it 'does not change the build :state' do
@@ -136,7 +136,7 @@ describe Build do
 
     it 'does not change the build `[state]ed_at` time' do
       attr = "#{state}_ed".sub(/eed$/, 'ed')
-      expect { receive }.to_not change { build.reload.send(attr) } if build.respond_to?(attr)
+      expect { receive }.not_to(change { build.reload.send(attr) }) if build.respond_to?(attr)
     end
   end
 
@@ -145,85 +145,101 @@ describe Build do
 
     describe 'received by a :created build' do
       let(:state) { :created }
+
       include_examples 'cancels the build'
     end
 
     describe 'received by a :queued build' do
       let(:state) { :queued }
+
       include_examples 'cancels the build'
     end
 
     describe 'received by a :received build' do
       let(:state) { :received }
+
       include_examples 'cancels the build'
     end
 
     describe 'received by a :started build' do
       let(:state) { :started }
+
       include_examples 'cancels the build'
     end
 
     describe 'received by a :passed build' do
       let(:state) { :passed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :failed build' do
       let(:state) { :failed }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :errored build' do
       let(:state) { :errored }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :canceled build' do
       let(:state) { :canceled }
+
       include_examples 'does not apply'
     end
   end
 
   describe 'a :restart event' do
-    let(:event)  { :restart }
+    let(:event) { :restart }
 
     describe 'received by a :created build' do
       let(:state) { :created }
+
       include_examples 'does not apply'
     end
 
     describe 'received by a :queued build' do
       let(:state) { :queued }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by a :received build' do
       let(:state) { :received }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by a :started build' do
       let(:state) { :started }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by a :passed build' do
       let(:state) { :passed }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by a :failed build' do
       let(:state) { :failed }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by an :errored build' do
       let(:state) { :errored }
+
       include_examples 'restarts the build'
     end
 
     describe 'received by a :canceled build' do
       let(:state) { :canceled }
+
       include_examples 'restarts the build'
     end
   end
@@ -247,7 +263,8 @@ describe Build do
     let(:event) { :start }
 
     describe 'a pull request' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
+      let!(:build) { FactoryBot.create(:build, repository: repo, state: :created, event_type: 'pull_request') }
+
       it 'sets the build as current build' do
         receive
         expect(repo.reload.current_build_id).to eq build.id
@@ -255,43 +272,43 @@ describe Build do
     end
 
     describe 'a push build' do
-      let!(:build) { FactoryGirl.create(:build, repository: repo, state: :created, event_type: 'push') }
+      let!(:build) { FactoryBot.create(:build, repository: repo, state: :created, event_type: 'push') }
 
       it 'does not set the build as current build if any newer builds exist in started of one of the finished states' do
-        FactoryGirl.create(:build, repository: repo, number: 2, state: :started, event_type: 'api')
+        FactoryBot.create(:build, repository: repo, number: 2, state: :started, event_type: 'api')
         receive
-        expect(repo.reload.current_build_id).to_not eq build.id
+        expect(repo.reload.current_build_id).not_to eq build.id
       end
     end
   end
 
   describe 'a :finish event' do
-    let(:event)  { :finish }
+    let(:event) { :finish }
 
     describe 'with a :canceled state' do
       let(:state) { :canceled }
 
       it 'does not change its current state' do
-        receive_event = build.send(:"#{event}!", { state: state })
-        expect { receive_event }.to_not change { build.reload.state }
+        receive_event = build.send(:"#{event}!", { state: })
+        expect { receive_event }.not_to(change { build.reload.state })
         described_class.expects(:notify).never
       end
     end
   end
 
   describe 'timestamps' do
-    let(:job)   { FactoryGirl.create(:job, build: build) }
-    let(:other) { FactoryGirl.create(:job, build: build) }
+    let(:job)   { FactoryBot.create(:job, build:) }
+    let(:other) { FactoryBot.create(:job, build:) }
     let(:started_at) { Time.now - 6 }
 
     it 'a build with a matrix, starting multiple jobs' do
-      job.start!(started_at: started_at, state: 'started')
+      job.start!(started_at:, state: 'started')
       other.start!(started_at: Time.now, state: 'started')
       expect(build.reload.started_at).to eq started_at
     end
 
     it 'worker sending started_at for the finish event' do
-      job.start!(started_at: started_at, state: 'started')
+      job.start!(started_at:, state: 'started')
       job.finish!(started_at: Time.now - 60, finished_at: Time.now, state: 'passed')
       expect(build.reload.started_at).to eq started_at
     end

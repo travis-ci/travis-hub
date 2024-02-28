@@ -18,7 +18,7 @@ module Travis
         Hub.context = Hub::Context.new
         use Sentry if Hub.context.config.sentry.dsn
         use Hub::Auth, Hub.context.config.auth.to_h
-        fail 'jwt rsa key is not set' unless Hub.context.config.auth.jwt_public_key
+        raise 'jwt rsa key is not set' unless Hub.context.config.auth.jwt_public_key
       end
 
       configure :production, :staging do
@@ -61,70 +61,71 @@ module Travis
 
       private
 
-        EVENTS = {
-          created:   :reset,
-          received:  :receive,
-          started:   :start,
-          passed:    :finish,
-          failed:    :finish,
-          errored:   :finish,
-          cancelled: :cancel
-        }
+      EVENTS = {
+        created: :reset,
+        received: :receive,
+        started: :start,
+        passed: :finish,
+        failed: :finish,
+        errored: :finish,
+        cancelled: :cancel
+      }
 
-        def update_state
-          state = job.state
-          return false if state == :canceled
-          Service::UpdateJob.new(context, event, payload).run
-          state != job.reload.state
-        end
+      def update_state
+        state = job.state
+        return false if state == :canceled
 
-        def refresh_token?
-          request.env[:jwt_auth].refresh?
-        end
+        Service::UpdateJob.new(context, event, payload).run
+        state != job.reload.state
+      end
 
-        def access_token?
-          request.env[:jwt_auth].access?
-        end
+      def refresh_token?
+        request.env[:jwt_auth].refresh?
+      end
 
-        def validate_jwt!
-          ids = [request.env[:jwt_payload]['sub'], params[:id]]
-          halt 403 unless ids.map(&:to_i).uniq.size == 1
-        end
+      def access_token?
+        request.env[:jwt_auth].access?
+      end
 
-        def job
-          @job ||= Job.find(params[:id])
-        rescue ActiveRecord::RecordNotFound => e
-          halt 404
-        end
+      def validate_jwt!
+        ids = [request.env[:jwt_payload]['sub'], params[:id]]
+        halt 403 unless ids.map(&:to_i).uniq.size == 1
+      end
 
-        def data
-          @data ||= JSON.parse(request.body.read).map { |key, value| [key.to_sym, value] }.to_h
-        end
+      def job
+        @job ||= Job.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        halt 404
+      end
 
-        def event
-          EVENTS[data[:new].to_s.to_sym] || fail("No :new state given")
-        end
+      def data
+        @data ||= JSON.parse(request.body.read).map { |key, value| [key.to_sym, value] }.to_h
+      end
 
-        def payload
-          data.merge(id: params[:id], state: data[:new])
-        end
+      def event
+        EVENTS[data[:new].to_s.to_sym] || raise('No :new state given')
+      end
 
-        def uptime
-          sec = Time.now - STARTED_AT
-          sec.round
-        end
+      def payload
+        data.merge(id: params[:id], state: data[:new])
+      end
 
-        def config
-          context.config
-        end
+      def uptime
+        sec = Time.now - STARTED_AT
+        sec.round
+      end
 
-        def redis
-          context.redis
-        end
+      def config
+        context.config
+      end
 
-        def context
-          Travis::Hub.context
-        end
+      def redis
+        context.redis
+      end
+
+      def context
+        Travis::Hub.context
+      end
     end
   end
 end

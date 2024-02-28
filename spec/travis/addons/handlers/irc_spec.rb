@@ -1,6 +1,6 @@
 describe Travis::Addons::Handlers::Irc do
-  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config: config) }
-  let(:build)   { FactoryGirl.create(:build, state: :passed, config: { notifications: { irc: config } }) }
+  let(:handler) { described_class::Notifier.new('build:finished', id: build.id, config:) }
+  let(:build)   { FactoryBot.create(:build, state: :passed, config: { notifications: { irc: config } }) }
   let(:config)  { 'channel' }
 
   before { Travis::Event.setup([:irc]) }
@@ -20,7 +20,7 @@ describe Travis::Addons::Handlers::Irc do
   describe 'multiple configs' do
     let(:config)   { [{ channels: 'one' }, { channels: 'two' }] }
     let(:jobs)     { Sidekiq::Queues.jobs_by_queue['irc'] }
-    let(:channels) { jobs.map { |job| job['args'].last['channels'] } }
+    let(:channels) { jobs.map { |job| JSON.parse(job['args'].last)['channels'] } }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
 
@@ -29,7 +29,7 @@ describe Travis::Addons::Handlers::Irc do
   end
 
   describe 'given a plain string' do
-    let(:params) { Sidekiq::Queues.jobs_by_queue['irc'][0]['args'].last }
+    let(:params) { JSON.parse(Sidekiq::Queues.jobs_by_queue['irc'][0]['args'].last) }
     let(:config) { 'channel' }
 
     before { Travis::Event.dispatch('build:finished', id: build.id) }
@@ -40,22 +40,24 @@ describe Travis::Addons::Handlers::Irc do
 
   describe 'handle?' do
     it 'is true if the build is a push request' do
-      build.update_attributes(event_type: 'push')
+      build.update(event_type: 'push')
       expect(handler.handle?).to eql(true)
     end
 
     it 'is false if the build is a pull request' do
-      build.update_attributes(event_type: 'pull_request')
+      build.update(event_type: 'pull_request')
       expect(handler.handle?).to eql(false)
     end
 
     describe 'is true if channels are present' do
       let(:config) { 'channel' }
+
       it { expect(handler.handle?).to eql(true) }
     end
 
     describe 'is false if no channels are present' do
       let(:config) { [] }
+
       it { expect(handler.handle?).to eql(false) }
     end
 
@@ -83,31 +85,37 @@ describe Travis::Addons::Handlers::Irc do
 
     describe 'returns an array of channels when given a string' do
       let(:config) { channel }
+
       it { expect(handler.channels).to eql [channel] }
     end
 
     describe 'returns an array of channels when given an array' do
       let(:config) { [channel] }
+
       it { expect(handler.channels).to eql [channel] }
     end
 
     describe 'returns an array of channels when given a comma separated string' do
       let(:config) { "#{channel}, #{other}" }
+
       it { expect(handler.channels).to eql [channel, other] }
     end
 
     describe 'returns an array of channels given a string within a hash' do
       let(:config) { { channels: channel, on_success: 'change' } }
+
       it { expect(handler.channels).to eql [channel] }
     end
 
     describe 'returns an array of channels given an array within a hash' do
       let(:config) { { channels: [channel], on_success: 'change' } }
+
       it { expect(handler.channels).to eql [channel] }
     end
 
     describe 'returns an array of channels given a comma separated string within a hash' do
       let(:config) { { channels: "#{channel}, #{other}", on_success: 'change' } }
+
       it { expect(handler.channels).to eql [channel, other] }
     end
   end

@@ -17,18 +17,19 @@ module Travis
       end
 
       class Sidekiq
-        def publish(context, queue, event, payload)
+        def publish(_context, queue, event, payload)
           ::Sidekiq::Client.push(
             'queue' => queue,
             'class' => 'Travis::Hub::Sidekiq::Worker',
-            'args'  => [event, payload]
+            'args' => [event, payload]
           )
         end
       end
 
-      include Helper::Context, Helper::String
+      include Helper::String
+      include Helper::Context
 
-      OWNERS = %w(travis-ci travis-pro travis-repos svenfuchs)
+      OWNERS = %w[travis-ci travis-pro travis-repos svenfuchs]
       QUEUES = { amqp: 'builds.next', sidekiq: 'hub' }
 
       def run
@@ -49,44 +50,44 @@ module Travis
 
       private
 
-        def dyno?
-          ENV['REROUTE'] && ENV['DYNO'].to_s.include?(ENV['REROUTE'])
-        end
+      def dyno?
+        ENV['REROUTE'] && ENV['DYNO'].to_s.include?(ENV['REROUTE'])
+      end
 
-        def enabled?
-          context.redis.get("feature:#{name}:disabled") == '1'
-        end
+      def enabled?
+        context.redis.get("feature:#{name}:disabled") == '1'
+      end
 
-        def by_owner?
-          owners.include?(object.repository.owner_name)
-        end
+      def by_owner?
+        owners.include?(object.repository.owner_name)
+      end
 
-        def by_percent?
-          object.id.to_i % 100 < percent
-        end
+      def by_percent?
+        object.id.to_i % 100 < percent
+      end
 
-        def owners
-          @owners ||= begin
-            owners = context.redis.smembers(:"#{name}_owners")
-            owners.any? ? owners : OWNERS
-          end
+      def owners
+        @owners ||= begin
+          owners = context.redis.smembers(:"#{name}_owners")
+          owners.any? ? owners : OWNERS
         end
+      end
 
-        def percent
-          percent = ENV['REROUTE_PERCENT'] || context.redis.get(:"#{name}_percent") || -1
-          Metriks.gauge('hub.reroute.percent').set(percent.to_i)
-        rescue => e
-          Raven.capture_exception(e)
-          percent ? percent.to_i : -1
-        end
+      def percent
+        percent = ENV['REROUTE_PERCENT'] || context.redis.get(:"#{name}_percent") || -1
+        Metriks.gauge('hub.reroute.percent').set(percent.to_i)
+      rescue StandardError => e
+        Sentry.capture_exception(e)
+        percent ? percent.to_i : -1
+      end
 
-        def object
-          @object ||= Kernel.const_get(camelize(type)).find(payload.fetch(:id))
-        end
+      def object
+        @object ||= Kernel.const_get(camelize(type)).find(payload.fetch(:id))
+      end
 
-        def name
-          "#{config.name}_next"
-        end
+      def name
+        "#{config.name}_next"
+      end
     end
   end
 end
