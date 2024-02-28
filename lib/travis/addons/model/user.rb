@@ -9,11 +9,11 @@ class User < ActiveRecord::Base
     end
 
     def with_permissions(permissions)
-      where(:permissions => permissions).includes(:permissions)
+      where(permissions:).includes(:permissions)
     end
 
     def with_preference(preference, value)
-      where(["preferences->>? = ?", preference.to_s, value.to_s])
+      where(['preferences->>? = ?', preference.to_s, value.to_s])
     end
   end
 

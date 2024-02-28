@@ -12,8 +12,8 @@ describe Travis::Hub::Config do
       it { expect(config.database.port).to eq 1234 }
       it { expect(config.database.database).to eq 'database' }
       it { expect(config.database.encoding).to eq 'unicode' }
-      it { expect(config.database.variables.application_name).to_not be_empty }
-      it { expect(config.database.variables.statement_timeout).to eq 10000 }
+      it { expect(config.database.variables.application_name).not_to be_empty }
+      it { expect(config.database.variables.statement_timeout).to eq 10_000 }
     end
 
     describe 'with a DATABASE_URL set' do
@@ -26,8 +26,8 @@ describe Travis::Hub::Config do
       it { expect(config.database.port).to eq 1234 }
       it { expect(config.database.database).to eq 'database' }
       it { expect(config.database.encoding).to eq 'unicode' }
-      it { expect(config.database.variables.application_name).to_not be_empty }
-      it { expect(config.database.variables.statement_timeout).to eq 10000 }
+      it { expect(config.database.variables.application_name).not_to be_empty }
+      it { expect(config.database.variables.statement_timeout).to eq 10_000 }
     end
 
     describe 'with a TRAVIS_LOGS_DATABASE_URL set' do
@@ -40,8 +40,8 @@ describe Travis::Hub::Config do
       it { expect(config.logs_database.port).to eq 1234 }
       it { expect(config.logs_database.database).to eq 'database' }
       it { expect(config.logs_database.encoding).to eq 'unicode' }
-      it { expect(config.logs_database.variables.application_name).to_not be_empty }
-      it { expect(config.logs_database.variables.statement_timeout).to eq 10000 }
+      it { expect(config.logs_database.variables.application_name).not_to be_empty }
+      it { expect(config.logs_database.variables.statement_timeout).to eq 10_000 }
     end
 
     describe 'with a LOGS_DATABASE_URL set' do
@@ -54,8 +54,8 @@ describe Travis::Hub::Config do
       it { expect(config.logs_database.port).to eq 1234 }
       it { expect(config.logs_database.database).to eq 'database' }
       it { expect(config.logs_database.encoding).to eq 'unicode' }
-      it { expect(config.logs_database.variables.application_name).to_not be_empty }
-      it { expect(config.logs_database.variables.statement_timeout).to eq 10000 }
+      it { expect(config.logs_database.variables.application_name).not_to be_empty }
+      it { expect(config.logs_database.variables.statement_timeout).to eq 10_000 }
     end
 
     describe 'with a TRAVIS_RABBITMQ_URL set' do

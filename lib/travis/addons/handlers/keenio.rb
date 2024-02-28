@@ -22,26 +22,26 @@ module Travis
 
         private
 
-          def publish
-            ::Keen.publish_batch(data)
-          rescue ::Keen::HttpError => e
-            logger.error MSGS[:failed] % e.message
-          end
+        def publish
+          ::Keen.publish_batch(data)
+        rescue ::Keen::HttpError => e
+          logger.error MSGS[:failed] % e.message
+        end
 
-          def data
-            @data ||= Serializer::Keen::Job.new(object).data
-          end
+        def data
+          @data ||= Serializer::Keen::Job.new(object).data
+        end
 
-          def logger
-            Addons.logger
-          end
+        def logger
+          Addons.logger
+        end
 
-          class EventHandler < Addons::Instrument
-            def notify_completed
-              publish
-            end
+        class EventHandler < Addons::Instrument
+          def notify_completed
+            publish
           end
-          EventHandler.attach_to(self)
+        end
+        EventHandler.attach_to(self)
       end
     end
   end

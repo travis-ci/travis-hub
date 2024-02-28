@@ -1,19 +1,20 @@
 describe Travis::Hub::Handler do
+  subject            { described_class.new(context, event, payload) }
+
   let(:queued_at)    { '2015-12-01T10:20:20Z' }
   let(:received_at)  { '2015-12-01T10:20:30Z' }
   let(:started_at)   { '2015-12-01T10:20:40Z' }
   let(:finished_at)  { '2015-12-01T10:20:50Z' }
 
-  let!(:build)       { FactoryGirl.create(:build, id: 1, state: :created, jobs: [job]) }
-  let(:job)          { FactoryGirl.create(:job, id: 1, state: :created, owner: owner) }
-  let(:owner)        { FactoryGirl.create(:user) }
+  let!(:build)       { FactoryBot.create(:build, id: 1, state: :created, jobs: [job]) }
+  let(:job)          { FactoryBot.create(:job, id: 1, state: :created, owner:) }
+  let(:owner)        { FactoryBot.create(:user) }
 
-  subject            { described_class.new(context, event, payload) }
   before             { subject.run }
 
   describe 'a job:finish event' do
     let(:event)      { 'job:finish' }
-    let(:payload)    { { id: 1, state: 'passed', queued_at: queued_at, received_at: received_at, started_at: started_at, finished_at: finished_at } }
+    let(:payload)    { { id: 1, state: 'passed', queued_at:, received_at:, started_at:, finished_at: } }
 
     it { expect(job.reload.state).to eql(:passed) }
     it { expect(job.reload.started_at).to eql(Time.parse(started_at)) }
@@ -24,7 +25,7 @@ describe Travis::Hub::Handler do
       let(:started_at)  { '0001-01-01T00:00:00Z' }
       let(:received_at) { '0001-01-01T00:00:00Z' }
 
-      it { expect { job.reload.started_at }.to_not raise_error }
+      it { expect { job.reload.started_at }.not_to raise_error }
       it { expect(job.reload.started_at).to be_nil }
       it { expect(job.reload.duration).to eql(nil) }
     end
@@ -37,6 +38,6 @@ describe Travis::Hub::Handler do
   end
 
   def except(hash, *keys)
-    hash.reject { |key, value| keys.include?(key) }
+    hash.reject { |key, _value| keys.include?(key) }
   end
 end

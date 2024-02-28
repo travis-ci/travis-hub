@@ -25,37 +25,36 @@ module Travis
 
         private
 
-          def payload
-            {
-              type: object.class.name,
-              id: object.id,
-              owner_type: object.owner_type,
-              owner_id: object.owner_id,
-              repository_id: object.repository_id,
-              private: !!object.private?,
-              state: state,
-              created_at: object.restarted_at || object.created_at,
-              started_at: object.started_at,
-              finished_at: object.finished_at
-            }
-          end
+        def payload
+          {
+            type: object.class.name,
+            id: object.id,
+            owner_type: object.owner_type,
+            owner_id: object.owner_id,
+            repository_id: object.repository_id,
+            private: !!object.private?,
+            state:,
+            created_at: object.restarted_at || object.created_at,
+            started_at: object.started_at,
+            finished_at: object.finished_at
+          }
+        end
 
-          def state
-            case event
-            when 'job:created' then :created
-            when 'job:started' then :started
-            else object.state
-            end
+        def state
+          case event
+          when 'job:created' then :created
+          when 'job:started' then :started
+          else object.state
           end
+        end
 
-          class EventHandler < Addons::Instrument
-            def notify_completed
-              publish
-            end
+        class EventHandler < Addons::Instrument
+          def notify_completed
+            publish
           end
-          EventHandler.attach_to(self)
+        end
+        EventHandler.attach_to(self)
       end
     end
   end
 end
-

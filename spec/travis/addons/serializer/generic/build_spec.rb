@@ -1,11 +1,11 @@
 describe Travis::Addons::Serializer::Tasks::Build do
-  let(:owner)  { FactoryGirl.create(:user, login: 'login') }
-  let(:repo)   { FactoryGirl.create(:repository, github_id: 12345, vcs_id: '12345', vcs_type: 'GithubRepository') }
-  let(:build)  { FactoryGirl.create(:build, owner: owner, repository: repo, pull_request: pull, tag: tag, jobs: [job]) }
-  let(:stage)  { FactoryGirl.create(:stage, number: 1, name: 'example') }
-  let(:job)    { FactoryGirl.create(:job, repository: repo, stage: stage) }
-  let(:pull)   { FactoryGirl.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
-  let(:tag)    { FactoryGirl.create(:tag, repository: repo, name: 'v1.0.0') }
+  let(:owner)  { FactoryBot.create(:user, login: 'login') }
+  let(:repo)   { FactoryBot.create(:repository, github_id: 12_345, vcs_id: '12345', vcs_type: 'GithubRepository') }
+  let(:build)  { FactoryBot.create(:build, owner:, repository: repo, pull_request: pull, tag:, jobs: [job]) }
+  let(:stage)  { FactoryBot.create(:stage, number: 1, name: 'example') }
+  let(:job)    { FactoryBot.create(:job, repository: repo, stage:) }
+  let(:pull)   { FactoryBot.create(:pull_request, number: 1, title: 'title', head_ref: 'svenfuchs-patch-1') }
+  let(:tag)    { FactoryBot.create(:tag, repository: repo, name: 'v1.0.0') }
   let(:commit) { build.commit }
   let(:data)   { described_class.new(build).data }
 
@@ -39,7 +39,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
   it 'repository data' do
     expect(data[:repository]).to eql(
       id: repo.id,
-      github_id: 12345,
+      github_id: 12_345,
       vcs_id: '12345',
       vcs_type: 'GithubRepository',
       key: nil,
@@ -72,7 +72,7 @@ describe Travis::Addons::Serializer::Tasks::Build do
       committer_email: 'me@svenfuchs.com',
       author_name: 'Sven Fuchs',
       author_email: 'me@svenfuchs.com',
-      compare_url: 'https://github.com/travis-ci/travis-core/compare/master...develop',
+      compare_url: 'https://github.com/travis-ci/travis-core/compare/master...develop'
     )
   end
 
@@ -106,8 +106,8 @@ describe Travis::Addons::Serializer::Tasks::Build do
         name: 'example',
         state: 'created',
         started_at: nil,
-        finished_at: nil,
-      },
+        finished_at: nil
+      }
     )
   end
 

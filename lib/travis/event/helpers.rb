@@ -8,7 +8,7 @@ module Travis
 
     class Underscore < Struct.new(:string)
       def string
-        super.gsub(/([a-z\d])([A-Z])/,'\1_\2').downcase.tr('/', ':')
+        super.gsub(/([a-z\d])([A-Z])/, '\1_\2').downcase.tr('/', ':')
       end
     end
   end

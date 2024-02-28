@@ -22,7 +22,7 @@ module Travis
         end
 
         def data
-          { event: event, payload: payload }
+          { event:, payload: }
         end
 
         def tags

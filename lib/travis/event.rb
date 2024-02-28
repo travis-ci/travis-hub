@@ -13,7 +13,7 @@ module Travis
       end
 
       def handlers
-        @handlers || fail('Call Travis::Event.setup to set event handlers')
+        @handlers || raise('Call Travis::Event.setup to set event handlers')
       end
 
       def dispatch(event, data)
@@ -33,7 +33,7 @@ module Travis
     def notify(event, *args)
       prefix = Underscore.new(self.class.name).string
       event  = PastTense.new(event).string
-      Event.dispatch("#{prefix}:#{event}", id: id, attrs: attributes, worker_meta: args)
+      Event.dispatch("#{prefix}:#{event}", id:, attrs: attributes, worker_meta: args)
     end
   end
 end

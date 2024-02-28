@@ -23,8 +23,8 @@ describe SslKey do
 
   describe 'encrypt' do
     it 'encrypts something' do
-      expect(key.encrypt('hello')).to_not be_nil
-      expect(key.encrypt('hello')).to_not eql 'hello'
+      expect(key.encrypt('hello')).not_to be_nil
+      expect(key.encrypt('hello')).not_to eql 'hello'
     end
 
     it 'is decryptable' do
@@ -36,8 +36,8 @@ describe SslKey do
   describe 'decrypt' do
     it 'decrypts something' do
       encrypted_string = key.encrypt('hello world')
-      expect(key.decrypt(encrypted_string)).to_not be_nil
-      expect(key.decrypt(encrypted_string)).to_not eql 'hello'
+      expect(key.decrypt(encrypted_string)).not_to be_nil
+      expect(key.decrypt(encrypted_string)).not_to eql 'hello'
     end
   end
 end

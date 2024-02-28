@@ -24,21 +24,21 @@ module Travis
 
         private
 
-          def subscribe
-            Queue.new(context, queue, &method(:handle)).subscribe
-          end
+        def subscribe
+          Queue.new(context, queue, &method(:handle)).subscribe
+        end
 
-          def handle(event, payload)
-            Handler.new(context, event, payload).run
-          end
+        def handle(event, payload)
+          Handler.new(context, event, payload).run
+        end
 
-          def queue
-            config.queue
-          end
+        def queue
+          config.queue
+        end
 
-          def threads
-            config.threads
-          end
+        def threads
+          config.threads
+        end
       end
     end
   end

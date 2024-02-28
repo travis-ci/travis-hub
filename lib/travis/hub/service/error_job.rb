@@ -9,12 +9,12 @@ module Travis
         include Helper::Context
 
         MSGS = {
-          error:          'Erroring <Job id=%s>. Reason: %s',
+          error: 'Erroring <Job id=%s>. Reason: %s',
           resets_limited: 'Resets limited: %{resets}'
         }
 
         LOGS = {
-          resets_limited: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.',
+          resets_limited: 'Automatic restarts limited: Please try restarting this job later or contact support@travis-ci.com.'
         }
 
         def run
@@ -25,30 +25,30 @@ module Travis
 
         private
 
-          def error
-            job.finish!(state: :errored)
-          end
+        def error
+          job.finish!(state: :errored)
+        end
 
-          def update_log
-            logs.update(id, LOGS[:resets_limited])
-          end
+        def update_log
+          logs.update(id, LOGS[:resets_limited])
+        end
 
-          def job
-            @job ||= Job.find(id)
-          end
+        def job
+          @job ||= Job.find(id)
+        end
 
-          def id
-            data[:id]
-          end
+        def id
+          data[:id]
+        end
 
-          def reason
-            msg = MSGS[data[:reason]] || raise('No reason given.')
-            msg % data
-          end
+        def reason
+          msg = MSGS[data[:reason]] || raise('No reason given.')
+          msg % data
+        end
 
-          def logs
-            Travis::Hub::Support::Logs.new(config[:logs_api])
-          end
+        def logs
+          Travis::Hub::Support::Logs.new(config[:logs_api])
+        end
       end
     end
   end

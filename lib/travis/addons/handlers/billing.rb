@@ -1,6 +1,5 @@
 require 'travis/addons/handlers/base'
 require 'travis/addons/config'
-require 'raven'
 
 module Travis
   module Addons
@@ -33,7 +32,7 @@ module Travis
 
         def publish
           send_usage(data)
-        rescue => e
+        rescue StandardError => e
           logger.error MSGS[:failed] % e.message
         end
 
@@ -112,12 +111,15 @@ module Travis
         end
 
         def config
-          @config ||= object.config_id ? JobConfig.find(object.config_id).config : {}
+          @config ||= begin
+            cfg = object.config_id ? JobConfig.find(object.config_id).config : {}
+            cfg.is_a?(String) && cfg.length > 0 ? JSON.parse(cfg) : cfg
+          end
         end
 
         def connection
           @connection ||= Faraday.new(url: billing_url, ssl: { ca_path: '/usr/lib/ssl/certs' }) do |conn|
-            conn.basic_auth '_', billing_auth_key
+            conn.request :authorization, :basic, '_', billing_auth_key
             conn.headers['Content-Type'] = 'application/json'
             conn.request :json
             conn.response :json

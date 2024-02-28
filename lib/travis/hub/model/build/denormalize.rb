@@ -10,15 +10,15 @@ class Build < ActiveRecord::Base
   # These attributes are used in the repositories list and thus read frequently.
   module Denormalize
     DENORMALIZE = {
-      start:   %w(id number state duration started_at finished_at),
-      finish:  %w(state duration finished_at),
-      restart: %w(state duration started_at finished_at),
-      reset:   %w(state duration started_at finished_at),
-      cancel:  %w(state duration finished_at)
+      start: %w[id number state duration started_at finished_at],
+      finish: %w[state duration finished_at],
+      restart: %w[state duration started_at finished_at],
+      reset: %w[state duration started_at finished_at],
+      cancel: %w[state duration finished_at]
     }
 
-    def denormalize(event, *args)
-      repository.update_attributes!(denormalize_attributes_for(event)) if denormalize?(event)
+    def denormalize(event, *_args)
+      repository.update!(denormalize_attributes_for(event)) if denormalize?(event)
     end
 
     def denormalize?(event)
@@ -27,7 +27,7 @@ class Build < ActiveRecord::Base
 
     def denormalize_attributes_for(event)
       DENORMALIZE[event].inject({}) do |result, key|
-        result.merge(:"last_build_#{key}" => send(key))
+        result.merge("last_build_#{key}": send(key))
       end
     end
   end

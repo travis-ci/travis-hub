@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:flowdock, payload, targets: targets)
+            run_task(:flowdock, payload, targets:)
           end
 
           def targets

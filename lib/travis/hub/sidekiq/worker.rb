@@ -1,4 +1,3 @@
-require 'sidekiq/worker'
 require 'travis/hub'
 
 module Travis
@@ -10,6 +9,8 @@ module Travis
         sidekiq_options queue: :hub
 
         def perform(event, payload)
+          event.delete!('"')
+          payload = JSON.parse(payload) if payload.is_a?(String)
           Handler.new(Hub.context, event, payload).run
         end
       end

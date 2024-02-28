@@ -14,7 +14,7 @@ module Travis
           end
 
           def handle
-            run_task(:hipchat, payload, targets: targets, template: template, format: format)
+            run_task(:hipchat, payload, targets:, template:, format:)
           end
 
           def targets

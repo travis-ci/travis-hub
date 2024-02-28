@@ -20,13 +20,13 @@ module Travis
 
         private
 
-          def publish(event, payload)
-            ::Sidekiq::Client.push(
-              'queue'   => 'hub',
-              'class'   => 'Travis::Hub::Sidekiq::Worker',
-              'args'    => [event, payload]
-            )
-          end
+        def publish(event, payload)
+          ::Sidekiq::Client.push(
+            'queue' => 'hub',
+            'class' => 'Travis::Hub::Sidekiq::Worker',
+            'args' => [event, payload]
+          )
+        end
       end
     end
   end

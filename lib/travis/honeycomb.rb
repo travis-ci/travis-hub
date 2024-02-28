@@ -1,8 +1,8 @@
 # frozen_string_literal: true
+
 require 'travis/hub/context'
 
 require 'libhoney'
-require 'thread'
 
 module Travis
   class Honeycomb
@@ -81,7 +81,7 @@ module Travis
             event = event.merge(
               event: name,
               duration_ms: ((finish - start) * 1000).to_i,
-              id: id,
+              id:
             )
 
             rpc.send(event)
@@ -97,14 +97,14 @@ module Travis
             event = event.merge(
               event: name,
               duration_ms: ((finish - start) * 1000).to_i,
-              id: id,
+              id:,
               method: env[:method],
               url: env[:url].to_s,
               host: env[:url].host,
               request_uri: env[:url].request_uri,
               request_headers: env[:request_headers].to_h,
               status: env[:status],
-              response_headers: env[:response_headers].to_h,
+              response_headers: env[:response_headers].to_h
             )
 
             rpc.send(event)
@@ -158,6 +158,7 @@ module Travis
 
       def enabled?
         return @enabled unless @enabled.nil?
+
         @enabled = (
           env('ENABLED') == 'true' ||
           env('ENABLED_FOR_DYNOS')&.split(' ')&.include?(ENV['DYNO'])

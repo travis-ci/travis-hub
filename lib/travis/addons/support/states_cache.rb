@@ -4,7 +4,7 @@ require 'json'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/numeric/time'
 
-# TODO extract
+# TODO: extract
 
 module Travis
   class << self
@@ -20,7 +20,7 @@ module Travis
 
     attr_reader :adapter
 
-    delegate :fetch, :to => :adapter
+    delegate :fetch, to: :adapter
 
     def initialize(config, logger)
       @adapter = Memcached.new(config, logger)
@@ -38,12 +38,11 @@ module Travis
 
     class Memcached
       attr_reader :logger, :pool
-      attr_accessor :jitter
-      attr_accessor :ttl
+      attr_accessor :jitter, :ttl
 
       def initialize(config, logger)
         @logger = logger
-        @pool = ConnectionPool.new(:size => 10, :timeout => 3) do
+        @pool = ConnectionPool.new(size: 10, timeout: 3) do
           config[:client] || new_dalli_connection(config)
         end
         @jitter = 0.5
@@ -71,7 +70,7 @@ module Travis
           last_id = data['id'].to_i
           stale   = build_id.to_i >= last_id
           logger.info(
-            "[states-cache] cache is #{stale ? 'stale' : 'fresh' }: repo id=#{id} branch=#{branch}, " \
+            "[states-cache] cache is #{stale ? 'stale' : 'fresh'}: repo id=#{id} branch=#{branch}, " \
             "last cached build id=#{last_id}, checked build id=#{build_id}"
           )
           stale
@@ -82,9 +81,9 @@ module Travis
           )
           true
         end
-      rescue => e
+      rescue StandardError => e
         logger.info "[states-cache] Exception while checking cache freshness: #{e.message}"
-        Raven.capture_exception(e)
+        Sentry.capture_exception(e)
       end
 
       def key(id, branch = nil)
@@ -106,7 +105,7 @@ module Travis
           pool.with { |client| client.get(key) }
         end
       rescue Dalli::RingError => e
-        Metriks.meter("memcached.connect-errors").mark
+        Metriks.meter('memcached.connect-errors').mark
         raise CacheError, "Couldn't connect to a memcached server: #{e.message}"
       end
 
@@ -116,7 +115,7 @@ module Travis
           logger.info("[states-cache] Setting cache for key=#{key} data=#{data}")
         end
       rescue Dalli::RingError => e
-        Metriks.meter("memcached.connect-errors").mark
+        Metriks.meter('memcached.connect-errors').mark
         logger.info("[states-cache] Writing cache key failed key=#{key} data=#{data}")
         raise CacheError, "Couldn't connect to a memcached server: #{e.message}"
       end
@@ -129,7 +128,7 @@ module Travis
         if retries <= 3
           # Sleep for up to 1/2 * (2^retries - 1) seconds
           # For retries <= 3, this means up to 3.5 seconds
-          sleep(jitter * (rand(2 ** retries - 1) + 1))
+          sleep(jitter * (rand(2**retries - 1) + 1))
           retry
         else
           raise

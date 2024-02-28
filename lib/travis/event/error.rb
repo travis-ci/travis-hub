@@ -21,7 +21,7 @@ module Travis
       end
 
       def data
-        { event: event, params: params }
+        { event:, params: }
       end
 
       def tags

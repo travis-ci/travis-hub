@@ -1,8 +1,8 @@
 describe Travis::Addons::Handlers::Billing do
-  let(:build)        { FactoryGirl.create(:build) }
-  let(:job_config)   { FactoryGirl.create(:job_config, repository_id: build.repository_id) }
-  let(:job)          { FactoryGirl.create(:job, owner: owner, config_id: job_config.id) }
-  let(:owner)        { FactoryGirl.create(:user) }
+  let(:build)        { FactoryBot.create(:build) }
+  let(:job_config)   { FactoryBot.create(:job_config, repository_id: build.repository_id) }
+  let(:job)          { FactoryBot.create(:job, owner:, config_id: job_config.id) }
+  let(:owner)        { FactoryBot.create(:user) }
   let!(:request) do
     stub_request(:put, 'http://localhost:9292/usage/executions')
       .to_return(status: 200, body: '', headers: {})
@@ -18,7 +18,7 @@ describe Travis::Addons::Handlers::Billing do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('billing')
           expect(payload['class']).to   eq('Travis::Billing::Worker')
-          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+          expect(JSON.parse(payload['args'][1])).to eq('Travis::Billing::Services::UsageTracker')
         end
         handler.handle
       end
@@ -31,7 +31,7 @@ describe Travis::Addons::Handlers::Billing do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('billing')
           expect(payload['class']).to   eq('Travis::Billing::Worker')
-          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+          expect(JSON.parse(payload['args'][1])).to eq('Travis::Billing::Services::UsageTracker')
         end
         handler.handle
       end
@@ -44,7 +44,7 @@ describe Travis::Addons::Handlers::Billing do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('billing')
           expect(payload['class']).to   eq('Travis::Billing::Worker')
-          expect(payload['args'][1]).to eq('Travis::Billing::Services::UsageTracker')
+          expect(JSON.parse(payload['args'][1])).to eq('Travis::Billing::Services::UsageTracker')
         end
         handler.handle
       end

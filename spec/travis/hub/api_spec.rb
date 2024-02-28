@@ -3,7 +3,7 @@ require 'travis/hub/sidekiq/worker'
 
 describe Travis::Hub::Api, :include_sinatra_helpers do
   let(:logs)    { Travis::Hub::Support::Logs }
-  let(:job)     { FactoryGirl.create(:job, state: state) }
+  let(:job)     { FactoryBot.create(:job, state:) }
   let(:key)     { OpenSSL::PKey.read(Base64.decode64(JWT_RSA_PRIVATE_KEY)) }
   let(:token)   { JWT.encode(payload, key, 'RS512') }
   let(:auth)    { "Bearer #{token}" }
@@ -64,7 +64,7 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
     describe 'with a queued job' do
       let(:state) { :queued }
 
-      [:received, :created, :started, :passed, :failed, :errored].each do |state|
+      %i[received created started passed failed errored].each do |state|
         include_examples 'successfully updates the state', state
       end
     end
@@ -72,7 +72,7 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
     describe 'with a canceled job' do
       let(:state) { :canceled }
 
-      [:received, :created, :started, :passed, :failed, :errored].each do |state|
+      %i[received created started passed failed errored].each do |state|
         include_examples 'responds with a cancelation', state
       end
     end
@@ -116,21 +116,25 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
 
     describe 'with a missing token' do
       let(:auth) { nil }
+
       it { expect(resp.status).to eq 401 }
     end
 
     describe 'with an invalid token' do
       let(:token) { 'invalid' }
+
       it { expect(resp.status).to eq 403 }
     end
 
     describe 'with a different job_id' do
       let(:id) { 0 }
+
       it { expect(resp.status).to eq 403 }
     end
 
     describe 'with a missing jwt key in redis' do
       before { context.redis.del(jwt_key) }
+
       it { expect(resp.status).to eq 403 }
     end
   end
@@ -151,16 +155,19 @@ describe Travis::Hub::Api, :include_sinatra_helpers do
 
     describe 'with a missing token' do
       let(:auth) { nil }
+
       it { expect(resp.status).to eq 401 }
     end
 
     describe 'with an invalid token' do
       let(:token) { 'invalid' }
+
       it { expect(resp.status).to eq 403 }
     end
 
     describe 'with a different job_id' do
       let(:id) { 0 }
+
       it { expect(resp.status).to eq 403 }
     end
   end

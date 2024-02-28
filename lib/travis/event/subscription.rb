@@ -1,4 +1,4 @@
-require 'active_support/inflector/inflections.rb'
+require 'active_support/inflector/inflections'
 # require 'metriks'
 
 module Travis
@@ -7,7 +7,7 @@ module Travis
       attr_reader :name, :logger
 
       def initialize(name, logger)
-        name = 'github_status' if name == 'github_commit_status' # TODO compat, remove once configs have been updated
+        name = 'github_status' if name == 'github_commit_status' # TODO: compat, remove once configs have been updated
         @name = name
         @logger = logger
       end
@@ -25,23 +25,22 @@ module Travis
 
       private
 
-        def patterns
-          subscriber ? Array(subscriber::EVENTS) : []
-        end
+      def patterns
+        subscriber ? Array(subscriber::EVENTS) : []
+      end
 
-        def matches?(event)
-          patterns.any? { |pattern| pattern.is_a?(Regexp) ? pattern.match(event) : pattern == event }
-        end
+      def matches?(event)
+        patterns.any? { |pattern| pattern.is_a?(Regexp) ? pattern.match(event) : pattern == event }
+      end
 
-        # def meter(event)
-        #   metric = "travis.notifications.#{name}.#{event.gsub(/:/, '.')}"
-        #   Metriks.meter(metric).mark
-        # end
+      # def meter(event)
+      #   metric = "travis.notifications.#{name}.#{event.gsub(/:/, '.')}"
+      #   Metriks.meter(metric).mark
+      # end
 
-        def missing_handler
-          logger.error("Could not find event handler #{name.inspect}, ignoring.")
-        end
+      def missing_handler
+        logger.error("Could not find event handler #{name.inspect}, ignoring.")
+      end
     end
   end
 end
-

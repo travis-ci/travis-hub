@@ -1,8 +1,10 @@
+# frozen_string_literal: false
+
 describe Travis::Addons::Handlers::Pusher do
-  let(:user)    { FactoryGirl.create(:user) }
-  let(:repo)    { FactoryGirl.create(:repository, owner: user) }
-  let(:build)   { FactoryGirl.create(:build, repository: repo, config: { notifications: config }) }
-  let(:job)     { FactoryGirl.create(:job, repository: repo) }
+  let(:user)    { FactoryBot.create(:user) }
+  let(:repo)    { FactoryBot.create(:repository, owner: user) }
+  let(:build)   { FactoryBot.create(:build, repository: repo, config: { notifications: config }) }
+  let(:job)     { FactoryBot.create(:job, repository: repo) }
   let(:config)  { { pusher: 'room' } }
 
   describe 'subscription' do
@@ -34,6 +36,7 @@ describe Travis::Addons::Handlers::Pusher do
 
     describe 'a job event' do
       let(:event) { 'job:finished' }
+
       before do
         user.permissions.create!(repository: repo)
       end
@@ -42,8 +45,8 @@ describe Travis::Addons::Handlers::Pusher do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
-          expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
+          expect(JSON.parse(payload['args'][3])).to be_a(Hash)
+          expect(JSON.parse(payload['args'][4])).to eq('event' => event, 'user_ids' => [user.id])
         end
         handler.handle
       end
@@ -54,8 +57,8 @@ describe Travis::Addons::Handlers::Pusher do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
-          expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event, user_ids: [user.id])
+          expect(JSON.parse(payload['args'][3])).to be_a(Hash)
+          expect(JSON.parse(payload['args'][4])).to eq('event' => event, 'user_ids' => [user.id])
         end
         handler.handle
       end
@@ -68,8 +71,8 @@ describe Travis::Addons::Handlers::Pusher do
         ::Sidekiq::Client.any_instance.expects(:push).with do |payload|
           expect(payload['queue']).to   eq('pusher-live')
           expect(payload['class']).to   eq('Travis::Async::Sidekiq::Worker')
-          expect(payload['args'][3]).to be_a(Hash)
-          expect(payload['args'][4]).to eq(event: event, user_ids: [])
+          expect(JSON.parse(payload['args'][3])).to be_a(Hash)
+          expect(JSON.parse(payload['args'][4])).to eq('event' => event, 'user_ids' => [])
         end
         handler.handle
       end

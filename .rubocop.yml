@@ -1,0 +1,81 @@
+require: rubocop-performance
+require: rubocop-rspec
+
+Documentation:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 40
+Metrics/CyclomaticComplexity:
+  Max: 20
+Metrics/PerceivedComplexity:
+  Max: 16
+Style/AsciiComments:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/FormatStringToken:
+  Enabled: false
+Lint/AssignmentInCondition:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
+Style/MultilineBlockChain:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Lint/ImplicitStringConcatenation:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Style/StructInheritance:
+  Enabled: false
+Lint/RescueException:
+  Enabled: false
+Lint/SuppressedException:
+  Enabled: false
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+Style/SymbolProc:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/FilePath:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
+Style/FormatString:
+  Enabled: false
+Style/ModuleFunction:
+  Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/LetSetup:
+  Enabled: false
+RSpec/InstanceVariable:
+  Enabled: false
+RSpec/MissingExampleGroupArgument:
+  Enabled: false

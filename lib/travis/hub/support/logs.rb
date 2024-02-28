@@ -30,34 +30,34 @@ module Travis
 
         private
 
-          def client
-            @client ||= Faraday.new(http_options.merge(url: url)) do |c|
-              c.request :authorization, :token, token
-              c.request :retry, retry_config
-              c.response :raise_error
-              c.adapter :net_http
-            end
+        def client
+          @client ||= Faraday.new(http_options.merge(url:)) do |c|
+            c.request :authorization, :token, token
+            c.request :retry, retry_config
+            c.response :raise_error
+            c.adapter :net_http
           end
+        end
 
-          def url
-            config[:url] || raise('Logs URL not set.')
-          end
+        def url
+          config[:url] || raise('Logs URL not set.')
+        end
 
-          def token
-            config[:token] || raise('Logs token not set.')
-          end
+        def token
+          config[:token] || raise('Logs token not set.')
+        end
 
-          def retry_config
-            config[:retries]
-          end
+        def retry_config
+          config[:retries]
+        end
 
-          def http_options
-            if Travis::Hub.context.config.ssl
-              { ssl: Travis::Hub.context.config.ssl.to_h }
-            else
-              {}
-            end
+        def http_options
+          if Travis::Hub.context.config.ssl
+            { ssl: Travis::Hub.context.config.ssl.to_h }
+          else
+            {}
           end
+        end
       end
     end
   end

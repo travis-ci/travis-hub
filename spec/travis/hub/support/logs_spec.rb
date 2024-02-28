@@ -3,19 +3,19 @@ describe Travis::Hub::Support::Logs do
 
   let :request_stubs do
     Faraday::Adapter::Test::Stubs.new do |stub|
-      stub.put '/logs/1' do |env|
+      stub.put '/logs/1' do |_env|
         [200, {}, '{}']
       end
 
-      stub.put '/log-parts/2/last' do |env|
+      stub.put '/log-parts/2/last' do |_env|
         [200, {}, '{}']
       end
 
-      stub.put '/logs/4' do |env|
+      stub.put '/logs/4' do |_env|
         [404, {}, '{}']
       end
 
-      stub.put '/log-parts/3/last' do |env|
+      stub.put '/log-parts/3/last' do |_env|
         [404, {}, '{}']
       end
     end
@@ -30,14 +30,14 @@ describe Travis::Hub::Support::Logs do
 
   let(:url) { 'http://loggo.example.com/' }
   let(:token) { 'fafafaf' }
-  let(:config) { { url: url, token: token } }
+  let(:config) { { url:, token: } }
 
   before do
     subject.instance_variable_set(:@client, client)
   end
 
   it 'puts a body' do
-    expect(subject.update(1, msg: 'flee flah floof')).to be_success
+    expect(subject.update(1, 'flee flah floof')).to be_success
   end
 
   it 'appends a log part' do

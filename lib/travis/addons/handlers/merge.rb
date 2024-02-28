@@ -13,7 +13,7 @@ module Travis
         end
 
         def handle
-          Travis::Merge.import(type, object.id, event: event, src: :hub)
+          Travis::Merge.import(type, object.id, event:, src: :hub)
         end
 
         def type
