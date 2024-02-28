@@ -89,6 +89,12 @@ GIT
       metriks-librato_metrics (~> 1.0)
 
 GIT
+  remote: https://github.com/travis-ci/travis-rollout
+  revision: 4e89a17a4b5ca1f6269fb8bc1d067faabc49ac92
+  specs:
+    travis-rollout (0.1.0)
+
+GIT
   remote: https://github.com/travis-ci/travis-support
   revision: 8b566a94502267b3115c901f8409dc2165b6539b
   specs:
@@ -364,6 +370,7 @@ DEPENDENCIES
   travis-lock!
   travis-logger!
   travis-metrics!
+  travis-rollout!
   travis-support!
   webmock
 
