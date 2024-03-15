@@ -66,6 +66,11 @@ FactoryBot.define do
     config          { { arch: 'amd64', os: 'linux', virt: 'vm' } }
   end
 
+  factory :job_config do
+    key             'key'
+    config          { { arch: 'amd64', os: 'linux', virt: 'vm' } }
+  end
+
   factory :user do
   end
 

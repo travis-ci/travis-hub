@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 ruby '3.2.2'
 
-gem 'sidekiq-pro', source: 'https://gems.contribsys.com'
+gem 'sidekiq-pro', '~> 5.1.1', source: 'https://gems.contribsys.com'
+gem 'sidekiq', '~> 6.4'
 
 gem 'travis-exceptions',      git: 'https://github.com/travis-ci/travis-exceptions'
 gem 'travis-logger',          git: 'https://github.com/travis-ci/travis-logger'
@@ -16,7 +17,7 @@ gem 'travis-support', git: 'https://github.com/travis-ci/travis-support'
 gem 'metriks',                 git: 'https://github.com/travis-ci/metriks'
 gem 'metriks-librato_metrics', git: 'https://github.com/travis-ci/metriks-librato_metrics'
 
-gem 'marginalia', git: 'https://github.com/travis-ci/marginalia'
+gem 'marginalia', git: 'https://github.com/travis-ci/marginalia', branch: '5.x'
 
 gem 'activerecord', '~> 7'
 gem 'bunny'
@@ -25,15 +26,16 @@ gem 'faraday'
 gem 'pg', '~> 1'
 gem 'rake'
 gem 'redis'
-gem 'rollout', git: 'https://github.com/travis-ci/rollout'
+gem 'rollout', git: 'https://github.com/travis-ci/rollout', '~> 1.0'
+gem 'addressable', '~> 2.8.0'
 
 gem 'coder'
-gem 'gh', git: 'https://github.com/travis-ci/gh'
+gem 'gh', git: 'https://github.com/travis-ci/gh', git: 'https://github.com/travis-ci/gh', branch: 'tcie3-0_15_2'
 gem 'keen'
 gem 'multi_json'
 gem 'redlock'
 gem 'sentry-ruby'
-gem 'simple_states', git: 'https://github.com/travis-ci/simple_states', branch: 'master'
+gem 'simple_states', git: 'https://github.com/travis-ci/simple_states', branch: 'master', '~> 1.2.2'
 
 gem 'jwt'
 gem 'libhoney'
@@ -47,7 +49,7 @@ group :test do
   gem 'mocha', '~> 2'
   gem 'pry'
   gem 'rack-test'
-  gem 'rspec', '~> 3.12'
+  gem 'rspec', '~> 3.12', '~> 2.3.2'
   gem 'sinatra-contrib'
   gem 'webmock'
 end

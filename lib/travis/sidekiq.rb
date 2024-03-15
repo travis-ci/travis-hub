@@ -62,6 +62,14 @@ module Travis
       )
     end
 
+    def billing(*args)
+      default_client.push(
+        'queue' => 'billing',
+        'class' => 'Travis::Billing::Worker',
+        'args'  => [nil, "Travis::Billing::Services::UsageTracker", 'perform', *args]
+      )
+    end
+
     private
 
     def default_client
