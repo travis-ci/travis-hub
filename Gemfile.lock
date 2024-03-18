@@ -283,10 +283,11 @@ GEM
     sentry-ruby (5.16.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.0)
-    sidekiq (6.5.12)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.2.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.19.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -361,7 +362,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rspec
   sentry-ruby
-  sidekiq (~> 6.4)
+  sidekiq (~> 7.2.0)
   sidekiq-pro!
   simple_states!
   simplecov
