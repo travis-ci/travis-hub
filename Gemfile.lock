@@ -1,23 +1,21 @@
 GIT
   remote: https://github.com/travis-ci/gh
-  revision: e1fcd75786ffa75667e47d3d824b54d1bd0017fe
+  revision: 3319c500df8b8bdde82ee7c330cc7f971fee2c20
   specs:
-    gh (0.21.0)
-      activesupport (~> 7.0.8)
-      addressable (~> 2.8)
-      faraday (~> 2)
-      faraday-retry
-      faraday-typhoeus
-      multi_json (~> 1)
-      net-http-persistent (~> 4)
+    gh (0.15.1)
+      addressable (~> 2.8.0)
+      backports
+      faraday (~> 1.0)
+      multi_json (~> 1.0)
+      net-http-persistent (~> 2.9)
       net-http-pipeline
 
 GIT
   remote: https://github.com/travis-ci/marginalia
-  revision: d7c711abd60517b435e50b499fc8997ab67ababe
+  revision: 07f19a9ee5869a4557437a9f24608c7b1c4275bf
   specs:
     marginalia (1.6.0)
-      pg
+      pg (~> 1.3)
 
 GIT
   remote: https://github.com/travis-ci/metriks
@@ -103,8 +101,9 @@ GIT
 GEM
   remote: https://gems.contribsys.com/
   specs:
-    sidekiq-pro (7.2.0)
-      sidekiq (>= 7.2.0, < 8)
+    sidekiq-pro (5.1.1)
+      connection_pool (>= 2.2.3)
+      sidekiq (>= 6.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -128,6 +127,7 @@ GEM
     atomic (1.1.101)
     avl_tree (1.2.1)
       atomic (~> 1.1)
+    backports (3.25.0)
     base64 (0.2.0)
     bigdecimal (3.1.6)
     bunny (2.22.0)
@@ -150,20 +150,12 @@ GEM
     diff-lcs (1.5.1)
     docile (1.4.0)
     domain_name (0.6.20240107)
-    ethon (0.16.0)
-      ffi (>= 1.15.0)
     excon (0.109.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
-    faraday (2.9.0)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
-      net-http
-    faraday-retry (2.2.0)
-      faraday (~> 2.0)
-    faraday-typhoeus (1.1.0)
-      faraday (~> 2.0)
-      typhoeus (~> 1.4)
+    faraday (1.2.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords
     ffi (1.16.3)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -201,12 +193,10 @@ GEM
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
+    multipart-post (2.4.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    net-http (0.4.1)
-      uri
-    net-http-persistent (4.0.2)
-      connection_pool (~> 2.2)
+    net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     nio4r (2.7.0)
     parallel (1.24.0)
@@ -281,11 +271,10 @@ GEM
     sentry-ruby (5.16.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.0)
-    sidekiq (7.2.2)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      rack (>= 2.2.4)
-      redis-client (>= 0.19.0)
+    sidekiq (6.5.12)
+      connection_pool (>= 2.2.5, < 3)
+      rack (~> 2.0)
+      redis (>= 4.5.0, < 5)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -313,22 +302,21 @@ GEM
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     tilt (2.3.0)
-    typhoeus (1.4.1)
-      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
-    uri (0.13.0)
     webmock (3.23.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
   activerecord (~> 7)
+  addressable (~> 2.8.6)
   bunny
   coder
   dalli
@@ -358,6 +346,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rspec
   sentry-ruby
+  sidekiq (~> 6.4)
   sidekiq-pro!
   simple_states!
   simplecov

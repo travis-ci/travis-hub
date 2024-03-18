@@ -31,7 +31,7 @@ DOCKER ?= docker
 
 .PHONY: docker-build
 docker-build:
-	$(DOCKER) build --pull --no-cache --build-arg bundle_gems__contribsys__com=$(BUNDLE_GEMS__CONTRIBSYS__COM) -t $(DOCKER_DEST) . -f Dockerfile.tcie
+	$(DOCKER) build --pull --no-cache --build-arg bundle_gems__contribsys__com=$(BUNDLE_GEMS__CONTRIBSYS__COM) -t $(DOCKER_DEST) . -f Dockerfile
 
 .PHONY: docker-login
 docker-login:
