@@ -198,9 +198,8 @@ describe Travis::Addons::Handlers::Email do
 
       before do
         Email.create(user:, email: address)
-        user.update!(preferences: JSON.dump(build_emails: false))
+        user.update!(preferences: {:build_emails => false})
       end
-
       it { expect(handler.recipients).to be_empty }
     end
   end

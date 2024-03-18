@@ -14,7 +14,6 @@ module Jwt
     def valid?
       return false unless refresh_token.valid?
       return false unless redis.exists?(refresh_key)
-
       redis.del(refresh_key)
       true
     end

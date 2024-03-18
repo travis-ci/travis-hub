@@ -1,6 +1,5 @@
 #!/bin/bash
 
-index=$(echo ${DYNO:-1} | sed 's/.*\.//')
 threads=$1
 shift
 queues=$@
