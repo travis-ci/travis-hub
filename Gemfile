@@ -30,7 +30,7 @@ gem 'rollout', git: 'https://github.com/travis-ci/rollout'
 gem 'addressable', '~> 2.8.6'
 
 gem 'coder'
-gem 'gh', git: 'https://github.com/travis-ci/gh'
+gem 'gh', git: 'https://github.com/travis-ci/gh', branch: 'master'
 gem 'keen'
 gem 'multi_json'
 gem 'redlock'
