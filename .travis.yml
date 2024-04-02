@@ -34,7 +34,7 @@ jobs:
     - stage: "testing time"
       script: bundle exec rspec
     - stage: ":ship: it to quay.io"
-      dist: bionic
+      dist: focal
       ruby:
       services:
       before_install: echo "skipping"
