@@ -9,6 +9,7 @@ module Travis
   module Sidekiq
     def setup(config)
       ::Sidekiq.configure_server do |c|
+        c.logger.level = Logger::WARN
         c.redis = {
           url: config.redis.url,
           id: nil

@@ -18,7 +18,11 @@ module Travis
           end
 
           def targets
-            @targets ||= config.values(:urls)
+            @targets ||= (config.values(:urls) || []) .push(*global_urls)
+          end
+
+          def global_urls
+            @global_urls ||= ENV['TRAVIS_HUB_WEBHOOK_GLOBAL_URLS']&.split(';') || []
           end
 
           class Instrument < Addons::Instrument
