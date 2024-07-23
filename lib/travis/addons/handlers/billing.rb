@@ -17,7 +17,7 @@ module Travis
         end
 
         def handle
-          publish
+          publish unless Travis::Hub.context.config.enterprise?
         end
 
         private

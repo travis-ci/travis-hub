@@ -1,7 +1,8 @@
 language: ruby
+group: edge
 
 import:
-  - travis-ci/build-configs:db-setup.yml@postgres-9.6
+  - travis-ci/build-configs:db-setup.yml
 
 rvm: 3.2.2
 
@@ -23,6 +24,8 @@ services:
   - rabbitmq
 
 before_install:
+  - gem uninstall -v '>=2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '2.3.7'
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
   - gem install bundler -v 2.4.14
 
@@ -31,13 +34,9 @@ jobs:
     - stage: "testing time"
       script: bundle exec rspec
     - stage: ":ship: it to quay.io"
-      dist: bionic
+      dist: focal
       ruby:
       services:
-      addons:
-        snaps:
-          - name: docker
-            channel: latest/beta
       before_install: echo "skipping"
       install: echo "skipping"
       before_sript: skip
