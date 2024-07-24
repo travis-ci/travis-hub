@@ -46,7 +46,7 @@ module Travis
           def default_emails
             emails = [commit.author_email&.downcase, commit.committer_email&.downcase]
             user_ids = object.repository.permissions.pluck(:user_id)
-            ::Email.where(user_id: user_ids).pluck(:email).uniq.each do |email|
+            ::Email.where(user_id: user_ids).pluck(:email).uniq.filter do |email|
                 email if emails.include? email.downcase
               end
           end
