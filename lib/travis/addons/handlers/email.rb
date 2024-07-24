@@ -44,9 +44,11 @@ module Travis
           end
 
           def default_emails
-            emails = [commit.author_email, commit.committer_email]
+            emails = [commit.author_email&.downcase, commit.committer_email&.downcase]
             user_ids = object.repository.permissions.pluck(:user_id)
-            ::Email.where(email: emails, user_id: user_ids).pluck(:email).uniq
+            ::Email.where(user_id: user_ids).pluck(:email).uniq.each do |email|
+                email if emails.include? email.downcase
+              end
           end
 
           def unsubscribed_emails
