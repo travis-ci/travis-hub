@@ -112,7 +112,7 @@ module Travis
 
         def config
           @config ||= begin
-            cfg = object.config_id ? JobConfig.find(object.config_id).config : {}
+            cfg = object.config_id ? ::JobConfig.find(object.config_id).config : {}
             cfg.is_a?(String) && cfg.length > 0 ? JSON.parse(cfg) : cfg
           end
         end
