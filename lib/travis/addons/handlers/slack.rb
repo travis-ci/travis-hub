@@ -18,7 +18,14 @@ module Travis
           end
 
           def targets
+            Addons.logger.info "config inspect: #{config.inspect}"
             @targets ||= config.values(:rooms)
+            if @targets.empty?
+              Addons.logger.info "No Slack rooms found for #{object.repository.slug}"
+            else
+              Addons.logger.info "Sending Slack notification to rooms: #{@targets.join(', ')}"
+            end
+            @targets
           end
 
           class Instrument < Addons::Instrument
