@@ -71,7 +71,9 @@ module Travis
     def default_pool
       ::Sidekiq::RedisConnection.create(
         url: config.redis.url,
-        id: nil
+        id: nil,
+        ssl: config.redis.ssl || false,
+        ssl_params: redis_ssl_params(config)
       )
     end
 
@@ -85,8 +87,23 @@ module Travis
 
     def insights_pool
       ::Sidekiq::RedisConnection.create(
-        url: config.redis_insights.url
+        url: config.redis_insights.url,
+        ssl: config.redis.ssl || false,
+        ssl_params: redis_insights_ssl_params
       )
+    end
+
+    def redis_insights_ssl_params
+      @redis_insights_ssl_params ||= begin
+        return nil unless config.redis.ssl
+
+        value = {}
+        value[:ca_path] = ENV['REDIS_INSIGHTS_SSL_CA_PATH'] if ENV['REDIS_INSIGHTS_SSL_CA_PATH']
+        value[:cert] = OpenSSL::X509::Certificate.new(File.read(ENV['REDIS_INSIGHTS_SSL_CERT_FILE'])) if ENV['REDIS_INSIGHTS_SSL_CERT_FILE']
+        value[:key] = OpenSSL::PKEY::RSA.new(File.read(ENV['REDIS_INSIGHTS_SSL_KEY_FILE'])) if ENV['REDIS_INSIGHTS_SSL_KEY_FILE']
+        value[:verify_mode] = OpenSSL::SSL::VERIFY_NONE if config.ssl_verify == false
+        value
+      end
     end
 
     def config
