@@ -11,7 +11,7 @@ gem 'travis-metrics',         git: 'https://github.com/travis-ci/travis-metrics'
 
 gem 'travis-config',          git: 'https://github.com/travis-ci/travis-config'
 gem 'travis-encrypt',         git: 'https://github.com/travis-ci/travis-encrypt'
-gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock'
+gem 'travis-lock',            git: 'https://github.com/travis-ci/travis-lock', branch: 'ga-tbt151-redistls'
 gem 'travis-rollout', git: 'https://github.com/travis-ci/travis-rollout'
 gem 'travis-support', git: 'https://github.com/travis-ci/travis-support'
 gem 'metriks',                 git: 'https://github.com/travis-ci/metriks'
