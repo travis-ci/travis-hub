@@ -43,6 +43,7 @@ module Travis
              notifications: ['billing'],
              auth: { jwt_private_key: jwt_key(:private), jwt_public_key: jwt_key(:public), http_basic_auth: },
              billing:        { url: ENV['BILLING_URL'] || 'http://localhost:9292', auth_key: ENV['BILLING_AUTH_KEY'] || 't0Ps3Cr3t' }
+             artifact_manager: { url: ENV['ARTIFACT_MANAGER_URL'] || 'http://artifact_manager:3000', auth_key: ENV['ARTIFACT_MANAGER_AUTH_KEY'] || 't0Ps3Cr3t' }
 
       def metrics
         # TODO: cleanup keychain?
