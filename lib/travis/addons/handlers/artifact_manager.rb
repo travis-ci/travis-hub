@@ -60,7 +60,7 @@ module Travis
 
         def failed?
           puts "STATE: #{object.state}"
-          object.state == 'failed' || object.state == 'errored'
+          object.state == 'failed' || object.state == 'errored' || object.state == 'canceled'
         end
 
         def config
