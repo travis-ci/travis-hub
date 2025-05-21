@@ -59,8 +59,7 @@ module Travis
         end
 
         def failed?
-          puts "STATE: #{object.state}"
-          object.state == 'failed' || object.state == 'errored' || object.state == 'canceled'
+          [:failed, :errored, :canceled].include?(object.state.to_sym)
         end
 
         def config
