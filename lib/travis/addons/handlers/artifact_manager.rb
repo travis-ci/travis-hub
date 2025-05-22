@@ -13,9 +13,7 @@ module Travis
         }
 
         def handle?
-          res = artifact_manager_url && artifact_manager_auth_key
-          puts "HANDLE: #{res.inspect}"
-          res
+          artifact_manager_url && artifact_manager_auth_key
         end
 
         def handle
@@ -33,7 +31,6 @@ module Travis
         end
 
         def publish
-          puts "PUBLISH1: ic: #{image_creation?} f: #{failed?}"
           send_data if image_creation? && failed?
         rescue StandardError => e
           logger.error MSGS[:failed] % e.message
@@ -42,10 +39,8 @@ module Travis
         def send_data
           owner_type = object.repository.owner_type.downcase
           owner_id = object.repository.owner_id
-
-          puts "PATCH!"
-          puts "IMGNAME: #{image_name}"
-          result = connection.patch("/image/#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' })
+          reason = object.state.to_sym == :canceled ? 'job cancel' : 'job error'
+          result = connection.patch("/image/#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' , reason: })
 
           logger.error "Artifact manager error: #{result.status} #{result.body}" unless result.success?
         end
