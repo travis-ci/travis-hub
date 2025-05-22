@@ -45,7 +45,7 @@ module Travis
 
           puts "PATCH!"
           puts "IMGNAME: #{image_name}"
-          result = connection.patch("/images/#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' })
+          result = connection.patch("/image/#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' })
 
           logger.error "Artifact manager error: #{result.status} #{result.body}" unless result.success?
         end
