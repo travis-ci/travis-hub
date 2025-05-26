@@ -68,7 +68,7 @@ module Travis
           @connection ||= Faraday.new(url: artifact_manager_url, ssl: { ca_path: '/usr/lib/ssl/certs' }) do |conn|
             conn.request :authorization, :basic, '_', artifact_manager_auth_key
             conn.headers['Content-Type'] = 'application/json'
-            conn.headers['X-Travis-User-Id'] = object.build.sender_id
+            conn.headers['X-Travis-User-Id'] = object.build&.sender_id&.to_s
             conn.request :json
             conn.response :json
             conn.adapter :net_http
