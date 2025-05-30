@@ -39,8 +39,8 @@ module Travis
         def send_data
           owner_type = object.repository.owner_type.downcase
           owner_id = object.repository.owner_id
-
-          result = connection.patch("#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' })
+          reason = object.state.to_sym == :canceled ? 'job cancel' : 'job error'
+          result = connection.patch("/image/#{owner_type}/#{owner_id}/#{image_name}", { state: 'error' , reason: })
 
           logger.error "Artifact manager error: #{result.status} #{result.body}" unless result.success?
         end
@@ -54,7 +54,7 @@ module Travis
         end
 
         def failed?
-          object.state == 'failed' || object.state == 'errored'
+          [:failed, :errored, :canceled].include?(object.state.to_sym)
         end
 
         def config
@@ -68,6 +68,7 @@ module Travis
           @connection ||= Faraday.new(url: artifact_manager_url, ssl: { ca_path: '/usr/lib/ssl/certs' }) do |conn|
             conn.request :authorization, :basic, '_', artifact_manager_auth_key
             conn.headers['Content-Type'] = 'application/json'
+            conn.headers['X-Travis-User-Id'] = object.build&.sender_id&.to_s
             conn.request :json
             conn.response :json
             conn.adapter :net_http
