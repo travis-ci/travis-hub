@@ -3,7 +3,7 @@ require 'travis/hub/helper/context'
 module Travis
   module Hub
     module Service
-      class UpdateCsv_export < Struct.new(:data)
+      class UpdateCsvExport
         include Helper::Context
 
         MSGS = {
@@ -13,6 +13,14 @@ module Travis
           error: 'Failed to process CSV export: %s'
         }
 
+        attr_reader :context, :event, :payload
+
+        def initialize(context, event, payload)
+          @context = context
+          @event = event
+          @payload = payload
+        end
+
         def run
           process_csv_export
         end
@@ -20,8 +28,8 @@ module Travis
         private
 
         def process_csv_export
-          owner_id = data['owner_id']
-          report_type = data['report_type']
+          owner_id = payload[:owner_id]
+          report_type = payload[:report_type]
 
           logger.info MSGS[:process] % [owner_id, report_type]
           logger.info MSGS[:forward]
@@ -30,7 +38,7 @@ module Travis
             nil,
             'Travis::Billing::Services::Executions::CsvExport',
             'perform',
-            data
+            payload
           )
 
           logger.info MSGS[:complete]
