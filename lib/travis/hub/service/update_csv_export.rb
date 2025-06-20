@@ -3,7 +3,7 @@ require 'travis/hub/helper/context'
 module Travis
   module Hub
     module Service
-      class UpdateCsvExport
+      class UpdateCsv_export
         include Helper::Context
 
         MSGS = {
