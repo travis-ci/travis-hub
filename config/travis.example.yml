@@ -1,6 +1,6 @@
 sentry: &sentry
   dsn: https://tok:en@app.getsentry.com/app_id
-    
+
 production:
   domain: travis-ci.local
   notifications:
@@ -47,4 +47,7 @@ test:
   domain: test.travis-ci.local
   billing:
     url: 'http://localhost:9292'
+    auth_key: 't0Ps3Cr3t'
+  artifact_manager:
+    url: 'http://artifact_manager:3000'
     auth_key: 't0Ps3Cr3t'
