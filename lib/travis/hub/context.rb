@@ -53,7 +53,7 @@ module Travis
         # TODO: move keen to the keychain? it isn't required on enterprise.
         # then again, it's not active, unless the keen credentials are
         # present in the env.
-        addons = config.notifications.flatten + %w[insights logsearch scheduler keenio metrics]
+        addons = config.notifications.flatten + %w[insights logsearch scheduler keenio metrics artifact_manager]
         addons << 'merge' if ENV['NOTIFY_MERGE']
         addons
       end
