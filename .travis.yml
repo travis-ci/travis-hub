@@ -25,13 +25,9 @@ services:
 
 before_install:
   - gem uninstall -v '>=2' -i $(rvm gemdir)@global -ax bundler || true
-  - gem install bundler -v '2.4.22'
+  - gem install bundler -v '2.3.7'
   - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
-
-install:
-  - bundle config set --local deployment 'true'
-  - bundle config set --local path "${BUNDLE_PATH:-vendor/bundle}"
-  - bundle install --jobs=3 --retry=3
+  - gem install bundler -v 2.4.14
 
 jobs:
   include:
