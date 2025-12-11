@@ -209,7 +209,7 @@ GEM
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
-    nio4r (2.7.0)
+    nio4r (2.7.5)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -284,7 +284,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.0)
-    sidekiq (7.2.4)
+    sidekiq (7.2.2)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
@@ -321,7 +321,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
-    uri (1.1.1)
+    uri (0.13.0)
     webmock (3.23.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -366,7 +366,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rspec
   sentry-ruby
-  sidekiq
+  sidekiq (~> 7.2.0)
   sidekiq-pro!
   simple_states!
   simplecov
