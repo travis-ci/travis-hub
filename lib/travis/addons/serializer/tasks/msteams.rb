@@ -587,8 +587,8 @@ module Travis
           end
 
           def build_url
-            # Construct build URL based on repository and build number
-            "https://app.travis-ci.com/#{repository.slug}/builds/#{build.id}"
+            host = Travis::Hub::Config.load.host
+            "https://#{host}/#{repository.slug}/builds/#{build.id}"
           end
 
           def time_ago
