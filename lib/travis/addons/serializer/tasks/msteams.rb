@@ -28,7 +28,6 @@ module Travis
               attachments: [
                 {
                   contentType: 'application/vnd.microsoft.card.adaptive',
-                  contentUrl: nil,
                   content: adaptive_card
                 }
               ]
