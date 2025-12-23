@@ -70,5 +70,15 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
       author_fact = facts.find { |f| f[:title] == 'Author' }
       expect(author_fact[:value]).to eq(commit.author_name)
     end
+
+    context 'when build errored' do
+      let(:state) { :errored }
+
+      it 'shows Errored status text' do
+        facts = metadata[:facts]
+        status_fact = facts.find { |f| f[:title] == 'Status' }
+        expect(status_fact[:value]).to eq('Errored')
+      end
+    end
   end
 end

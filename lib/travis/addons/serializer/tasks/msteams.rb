@@ -535,10 +535,11 @@ module Travis
 
           def status_text
             case build.state.to_s
-            when 'passed'
-              'Passed'
-            else
-              'Failed'
+            when 'passed' then 'Passed'
+            when 'failed' then 'Failed'
+            when 'errored' then 'Errored'
+            when 'canceled' then 'Canceled'
+            else build.state.to_s.capitalize
             end
           end
 
