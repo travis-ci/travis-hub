@@ -99,6 +99,7 @@ module Travis
 
           def format_duration
             return 'N/A' unless build.duration
+
             minutes = build.duration / 60
             seconds = build.duration % 60
             "#{minutes}m #{seconds}s"
@@ -114,20 +115,23 @@ module Travis
           end
 
           def simple_actions
+            actions = [{
+              type: 'Action.OpenUrl',
+              title: 'View Build',
+              url: build_url
+            }]
+
+            if commit.compare_url
+              actions << {
+                type: 'Action.OpenUrl',
+                title: 'View Commit',
+                url: commit.compare_url
+              }
+            end
+
             {
               type: 'ActionSet',
-              actions: [
-                {
-                  type: 'Action.OpenUrl',
-                  title: 'View Build',
-                  url: build_url
-                },
-                comparison_url ? {
-                  type: 'Action.OpenUrl',
-                  title: 'View Commit',
-                  url: comparison_url
-                } : nil
-              ].compact
+              actions:
             }
           end
 
