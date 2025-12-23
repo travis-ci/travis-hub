@@ -23,15 +23,7 @@ module Travis
 
           # Returns MS Teams webhook payload with Adaptive Card
           def data
-            {
-              type: 'message',
-              attachments: [
-                {
-                  contentType: 'application/vnd.microsoft.card.adaptive',
-                  content: adaptive_card
-                }
-              ]
-            }
+            adaptive_card
           end
 
           private
