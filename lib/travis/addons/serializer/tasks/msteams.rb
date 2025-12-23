@@ -76,11 +76,21 @@ module Travis
                 {
                   type: 'Column',
                   width: 'auto',
-                  items: [{
-                    type: 'TextBlock',
-                    text: status_emoji,
-                    size: 'ExtraLarge'
-                  }]
+                  items: [
+                    {
+                      type: 'TextBlock',
+                      text: status_emoji,
+                      size: 'ExtraLarge'
+                    },
+                    {
+                      type: 'TextBlock',
+                      text: status_text,
+                      size: 'Large',
+                      weight: 'Bolder',
+                      spacing: 'None'
+                    }
+                  ],
+                  spacing: 'Small'
                 },
                 {
                   type: 'Column',
