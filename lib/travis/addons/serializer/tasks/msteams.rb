@@ -92,9 +92,16 @@ module Travis
                 { title: 'Branch', value: build.branch || 'unknown' },
                 { title: 'Commit', value: commit.commit[0..6] },
                 { title: 'Author', value: commit.author_name || 'unknown' },
-                { title: 'Duration', value: duration_in_words }
+                { title: 'Duration', value: format_duration }
               ]
             }
+          end
+
+          def format_duration
+            return 'N/A' unless build.duration
+            minutes = build.duration / 60
+            seconds = build.duration % 60
+            "#{minutes}m #{seconds}s"
           end
 
           def commit_message_block
