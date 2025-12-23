@@ -54,30 +54,51 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
   end
 
   describe 'build information' do
-    let(:header) { data[:attachments][0][:content][:body][0] }
-    let(:metadata) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'FactSet' } }
+    let(:header) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.any? { |col| col[:items]&.any? { |i| i[:text]&.include?('**') } } } }
+    let(:metadata) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.all? { |col| col[:width] == 'auto' } } }
 
     it 'displays repository and commit details' do
       expect(header[:columns][1][:items][0][:text]).to eq("**#{repo.slug}**")
 
-      facts = metadata[:facts]
-      commit_fact = facts.find { |f| f[:title] == 'Commit' }
-      expect(commit_fact[:value]).to eq(commit.commit[0..6])
+      columns = metadata[:columns]
 
-      branch_fact = facts.find { |f| f[:title] == 'Branch' }
-      expect(branch_fact[:value]).to eq(commit.branch)
+      commit_column = columns.find { |col| col[:items].any? { |item| item[:text] == 'Commit' } }
+      expect(commit_column[:items][1][:text]).to eq(commit.commit[0..6])
 
-      author_fact = facts.find { |f| f[:title] == 'Author' }
-      expect(author_fact[:value]).to eq(commit.author_name)
+      branch_column = columns.find { |col| col[:items].any? { |item| item[:text] == 'Branch' } }
+      expect(branch_column[:items][1][:text]).to eq(commit.branch)
+
+      author_column = columns.find { |col| col[:items].any? { |item| item[:text] == 'Author' } }
+      expect(author_column[:items][1][:text]).to eq(commit.author_name)
     end
 
     context 'when build errored' do
       let(:state) { :errored }
 
-      it 'shows Errored status text' do
-        facts = metadata[:facts]
-        status_fact = facts.find { |f| f[:title] == 'Status' }
-        expect(status_fact[:value]).to eq('Errored')
+      it 'shows Errored emoji' do
+        emoji_block = data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.any? { |col| col[:items]&.any? { |i| i[:text] == '⚠️' } } }
+        expect(emoji_block[:columns][0][:items][0][:text]).to eq('⚠️')
+      end
+    end
+
+    context 'when build is a pull request' do
+      let(:pull) { FactoryBot.create(:pull_request, number: 123) }
+
+      it 'shows pull request information' do
+        body = data[:attachments][0][:content][:body]
+        pr_block = body.find { |item| item[:type] == 'TextBlock' && item[:text]&.include?('Pull request') }
+
+        expect(pr_block).not_to be_nil, 'PR block not found in body'
+        expect(pr_block[:text]).to eq('**Pull request #123**')
+      end
+    end
+
+    context 'when build is not a pull request' do
+      let(:pull) { nil }
+
+      it 'does not show pull request section' do
+        pr_block = data[:attachments][0][:content][:body].find { |item| item[:type] == 'TextBlock' && item[:text]&.include?('Pull request') }
+        expect(pr_block).to be_nil
       end
     end
   end

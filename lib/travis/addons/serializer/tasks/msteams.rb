@@ -48,11 +48,25 @@ module Travis
 
           def simple_card_body
             [
+              timestamp_block,
               simple_header,
+              pull_request_block,
               simple_metadata,
               commit_message_block,
               simple_actions
             ].compact
+          end
+
+          def timestamp_block
+            return nil unless build.finished_at
+
+            {
+              type: 'TextBlock',
+              text: time_ago_in_words(build.finished_at),
+              size: 'Small',
+              isSubtle: true,
+              spacing: 'Small'
+            }
           end
 
           def simple_header
@@ -83,32 +97,74 @@ module Travis
             }
           end
 
+          def pull_request_block
+            return nil unless pull_request
+
+            {
+              type: 'TextBlock',
+              text: "**Pull request ##{pull_request.number}**",
+              wrap: true,
+              spacing: 'Medium'
+            }
+          end
+
           def simple_metadata
             {
-              type: 'FactSet',
-              facts: [
-                { title: 'Status', value: status_text },
-                { title: 'Branch', value: build.branch || 'unknown' },
-                { title: 'Commit', value: commit.commit[0..6] },
-                { title: 'Author', value: commit.author_name || 'unknown' },
-                { title: 'Duration', value: format_duration }
+              type: 'ColumnSet',
+              columns: [
+                metadata_column('Commit', commit.commit[0..6]),
+                metadata_column('Branch', build.branch || 'unknown'),
+                metadata_column('Author', commit.author_name || 'unknown')
+              ].compact,
+              spacing: 'Medium'
+            }
+          end
+
+          def metadata_column(title, value)
+            {
+              type: 'Column',
+              width: 'auto',
+              items: [
+                {
+                  type: 'TextBlock',
+                  text: title,
+                  size: 'Small',
+                  weight: 'Bolder'
+                },
+                {
+                  type: 'TextBlock',
+                  text: value,
+                  size: 'Small',
+                  isSubtle: true,
+                  spacing: 'ExtraSmall'
+                }
               ]
             }
           end
 
-          def format_duration
-            return 'N/A' unless build.duration
-
-            minutes = build.duration / 60
-            seconds = build.duration % 60
-            "#{minutes}m #{seconds}s"
-          end
-
           def commit_message_block
             {
-              type: 'TextBlock',
-              text: commit.message&.split("\n")&.first || 'No commit message',
-              wrap: true,
+              type: 'ColumnSet',
+              columns: [{
+                type: 'Column',
+                width: 'stretch',
+                items: [
+                  {
+                    type: 'TextBlock',
+                    text: 'Commit Message',
+                    size: 'Small',
+                    isSubtle: true
+                  },
+                  {
+                    type: 'TextBlock',
+                    text: commit.message&.split("\n")&.first || 'No commit message',
+                    wrap: true,
+                    size: 'Small',
+                    weight: 'Bolder',
+                    spacing: 'ExtraSmall'
+                  }
+                ]
+              }],
               spacing: 'Medium'
             }
           end
@@ -117,21 +173,39 @@ module Travis
             actions = [{
               type: 'Action.OpenUrl',
               title: 'View Build',
-              url: build_url
+              url: build_url,
+              style: 'positive'
             }]
 
             if commit.compare_url
               actions << {
                 type: 'Action.OpenUrl',
-                title: 'View Commit',
+                title: 'Compare',
                 url: commit.compare_url
               }
             end
 
             {
               type: 'ActionSet',
-              actions:
+              actions:,
+              spacing: 'Medium'
             }
+          end
+
+          def time_ago_in_words(time)
+            return 'recently' unless time
+
+            seconds = (Time.now - time).to_i
+            return 'just now' if seconds < 60
+
+            minutes = seconds / 60
+            return "#{minutes} minute#{minutes == 1 ? '' : 's'} ago" if minutes < 60
+
+            hours = minutes / 60
+            return "#{hours} hour#{hours == 1 ? '' : 's'} ago" if hours < 24
+
+            days = hours / 24
+            "#{days} day#{days == 1 ? '' : 's'} ago"
           end
 
           def status_emoji
