@@ -23,7 +23,16 @@ module Travis
 
           # Returns MS Teams webhook payload with Adaptive Card
           def data
-            adaptive_card
+            {
+              type: 'message',
+              attachments: [
+                {
+                  contentType: 'application/vnd.microsoft.card.adaptive',
+                  contentUrl: nil,
+                  content: adaptive_card
+                }
+              ]
+            }
           end
 
           private
@@ -32,11 +41,97 @@ module Travis
           def adaptive_card
             {
               type: 'AdaptiveCard',
-              '$schema': 'https://adaptivecards.io/schemas/adaptive-card.json',
-              version: '1.5',
-              body: card_body,
-              lang: 'en'
+              '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json',
+              version: '1.2',
+              body: simple_card_body
             }
+          end
+
+          def simple_card_body
+            [
+              simple_header,
+              simple_metadata,
+              commit_message_block,
+              simple_actions
+            ].compact
+          end
+
+          def simple_header
+            {
+              type: 'ColumnSet',
+              columns: [
+                {
+                  type: 'Column',
+                  width: 'auto',
+                  items: [{
+                    type: 'TextBlock',
+                    text: status_emoji,
+                    size: 'ExtraLarge'
+                  }]
+                },
+                {
+                  type: 'Column',
+                  width: 'stretch',
+                  items: [{
+                    type: 'TextBlock',
+                    text: "**#{repository.slug}**",
+                    size: 'Large',
+                    weight: 'Bolder'
+                  }],
+                  verticalContentAlignment: 'Center'
+                }
+              ]
+            }
+          end
+
+          def simple_metadata
+            {
+              type: 'FactSet',
+              facts: [
+                { title: 'Status', value: status_text },
+                { title: 'Branch', value: build.branch || 'unknown' },
+                { title: 'Commit', value: commit.commit[0..6] },
+                { title: 'Author', value: commit.author_name || 'unknown' },
+                { title: 'Duration', value: duration_in_words }
+              ]
+            }
+          end
+
+          def commit_message_block
+            {
+              type: 'TextBlock',
+              text: commit.message&.split("\n")&.first || 'No commit message',
+              wrap: true,
+              spacing: 'Medium'
+            }
+          end
+
+          def simple_actions
+            {
+              type: 'ActionSet',
+              actions: [
+                {
+                  type: 'Action.OpenUrl',
+                  title: 'View Build',
+                  url: build_url
+                },
+                comparison_url ? {
+                  type: 'Action.OpenUrl',
+                  title: 'View Commit',
+                  url: comparison_url
+                } : nil
+              ].compact
+            }
+          end
+
+          def status_emoji
+            case build.state.to_s
+            when 'passed' then '✅'
+            when 'failed' then '❌'
+            when 'errored' then '⚠️'
+            when 'canceled' then '🚫'
+            else '❓'
+            end
           end
 
           def card_body
