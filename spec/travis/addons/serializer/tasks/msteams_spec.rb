@@ -40,7 +40,7 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
       let(:state) { :passed }
 
       it 'shows passed emoji and text' do
-        expect(status_block[:text]).to eq('✅ **Passed**')
+        expect(status_block[:text]).to eq('✅ Passed')
         expect(status_block[:color]).to eq('good')
       end
     end
@@ -49,7 +49,7 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
       let(:state) { :errored }
 
       it 'shows errored emoji and text' do
-        expect(status_block[:text]).to eq('❗ **Errored**')
+        expect(status_block[:text]).to eq('❗ Errored')
         expect(status_block[:color]).to eq('attention')
       end
     end
@@ -60,7 +60,7 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
     let(:metadata) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.all? { |col| col[:width] == 'auto' } } }
 
     it 'displays repository and commit details' do
-      expect(header[:columns][1][:items][0][:text]).to eq("**#{repo.slug}**")
+      expect(header[:columns][1][:items][0][:text]).to eq(repo.slug)
 
       columns = metadata[:columns]
 
@@ -93,8 +93,9 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
         pr_block = body.find { |item| item[:type] == 'TextBlock' && item[:text]&.include?('Pull request') }
 
         expect(pr_block).not_to be_nil, 'PR block not found in body'
-        expect(pr_block[:text]).to include('Pull request #123')
-        expect(pr_block[:text]).to include('pull_requests/123')
+        expect(pr_block[:text]).to include('Pull request')
+        expect(pr_block[:text]).to include('[#123]')
+        expect(pr_block[:text]).to include("github.com/#{repo.slug}/pull/123")
       end
     end
 

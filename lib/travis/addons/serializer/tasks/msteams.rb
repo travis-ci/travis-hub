@@ -63,9 +63,8 @@ module Travis
                 width: 'auto',
                 items: [{
                   type: 'TextBlock',
-                  text: "#{status_emoji} **#{status_text}**",
+                  text: "#{status_emoji} #{status_text}",
                   size: 'Medium',
-                  weight: 'Bolder',
                   color: status_color
                 }],
                 spacing: 'Small',
@@ -76,9 +75,8 @@ module Travis
                 width: 'stretch',
                 items: [{
                   type: 'TextBlock',
-                  text: "**#{repository.slug}**",
-                  size: 'Large',
-                  weight: 'Bolder'
+                  text: repository.slug,
+                  size: 'Large'
                 }],
                 verticalContentAlignment: 'Center'
               }
@@ -113,15 +111,14 @@ module Travis
 
             {
               type: 'TextBlock',
-              text: "**[Pull request ##{pull_request.number}](#{pull_request_url})**",
+              text: "**Pull request [##{pull_request.number}](#{pull_request_url})**",
               wrap: true,
               spacing: 'Medium'
             }
           end
 
           def pull_request_url
-            host = Travis::Hub::Config.load.host
-            "https://#{host}/#{repository.slug}/pull_requests/#{pull_request.number}"
+            "https://github.com/#{repository.slug}/pull/#{pull_request.number}"
           end
 
           def simple_metadata
@@ -193,11 +190,13 @@ module Travis
               style: 'positive'
             }]
 
-            if commit.compare_url
+            compare_url = pull_request ? "https://github.com/#{repository.slug}/pull/#{pull_request.number}/changes" : commit.compare_url
+
+            if compare_url
               actions << {
                 type: 'Action.OpenUrl',
                 title: 'Compare',
-                url: commit.compare_url
+                url: compare_url
               }
             end
 
