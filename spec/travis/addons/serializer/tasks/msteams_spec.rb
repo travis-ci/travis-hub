@@ -34,27 +34,29 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
 
   describe 'build state badges' do
     let(:header) { data[:attachments][0][:content][:body][0] }
-    let(:emoji) { header[:columns][0][:items][0] }
+    let(:status_block) { header[:columns][0][:items][0] }
 
     context 'when build passed' do
       let(:state) { :passed }
 
-      it 'shows passed emoji' do
-        expect(emoji[:text]).to eq('✅')
+      it 'shows passed emoji and text' do
+        expect(status_block[:text]).to eq('✅ **Passed**')
+        expect(status_block[:color]).to eq('good')
       end
     end
 
     context 'when build failed' do
       let(:state) { :errored }
 
-      it 'shows failed emoji' do
-        expect(emoji[:text]).to eq('⚠️')
+      it 'shows errored emoji and text' do
+        expect(status_block[:text]).to eq('❗ **Errored**')
+        expect(status_block[:color]).to eq('attention')
       end
     end
   end
 
   describe 'build information' do
-    let(:header) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.any? { |col| col[:items]&.any? { |i| i[:text]&.include?('**') } } } }
+    let(:header) { data[:attachments][0][:content][:body][0] }
     let(:metadata) { data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.all? { |col| col[:width] == 'auto' } } }
 
     it 'displays repository and commit details' do
@@ -75,9 +77,11 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
     context 'when build errored' do
       let(:state) { :errored }
 
-      it 'shows Errored emoji' do
-        emoji_block = data[:attachments][0][:content][:body].find { |item| item[:type] == 'ColumnSet' && item[:columns]&.any? { |col| col[:items]&.any? { |i| i[:text] == '⚠️' } } }
-        expect(emoji_block[:columns][0][:items][0][:text]).to eq('⚠️')
+      it 'shows Errored status with red color' do
+        status_block = header[:columns][0][:items][0]
+        expect(status_block[:text]).to include('Errored')
+        expect(status_block[:text]).to include('❗')
+        expect(status_block[:color]).to eq('attention')
       end
     end
 
@@ -89,7 +93,8 @@ describe Travis::Addons::Serializer::Tasks::Msteams do
         pr_block = body.find { |item| item[:type] == 'TextBlock' && item[:text]&.include?('Pull request') }
 
         expect(pr_block).not_to be_nil, 'PR block not found in body'
-        expect(pr_block[:text]).to eq('**Pull request #123**')
+        expect(pr_block[:text]).to include('Pull request #123')
+        expect(pr_block[:text]).to include('pull_requests/123')
       end
     end
 

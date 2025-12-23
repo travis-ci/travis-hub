@@ -48,7 +48,6 @@ module Travis
 
           def simple_card_body
             [
-              timestamp_block,
               simple_header,
               pull_request_block,
               simple_metadata,
@@ -57,53 +56,55 @@ module Travis
             ].compact
           end
 
-          def timestamp_block
-            return nil unless build.finished_at
-
-            {
-              type: 'TextBlock',
-              text: time_ago_in_words(build.finished_at),
-              size: 'Small',
-              isSubtle: true,
-              spacing: 'Small'
-            }
-          end
-
           def simple_header
+            columns = [
+              {
+                type: 'Column',
+                width: 'auto',
+                items: [{
+                  type: 'TextBlock',
+                  text: "#{status_emoji} **#{status_text}**",
+                  size: 'Medium',
+                  weight: 'Bolder',
+                  color: status_color
+                }],
+                spacing: 'Small',
+                verticalContentAlignment: 'Center'
+              },
+              {
+                type: 'Column',
+                width: 'stretch',
+                items: [{
+                  type: 'TextBlock',
+                  text: "**#{repository.slug}**",
+                  size: 'Large',
+                  weight: 'Bolder'
+                }],
+                verticalContentAlignment: 'Center'
+              }
+            ]
+
+            # Add timestamp column if available
+            if build.finished_at
+              columns << {
+                type: 'Column',
+                width: 'auto',
+                items: [{
+                  type: 'TextBlock',
+                  text: format_timestamp(build.finished_at),
+                  size: 'Small',
+                  isSubtle: true,
+                  horizontalAlignment: 'Right'
+                }],
+                verticalContentAlignment: 'Center',
+                horizontalAlignment: 'Right'
+              }
+            end
+
             {
               type: 'ColumnSet',
-              columns: [
-                {
-                  type: 'Column',
-                  width: 'auto',
-                  items: [
-                    {
-                      type: 'TextBlock',
-                      text: status_emoji,
-                      size: 'ExtraLarge'
-                    },
-                    {
-                      type: 'TextBlock',
-                      text: status_text,
-                      size: 'Large',
-                      weight: 'Bolder',
-                      spacing: 'None'
-                    }
-                  ],
-                  spacing: 'Small'
-                },
-                {
-                  type: 'Column',
-                  width: 'stretch',
-                  items: [{
-                    type: 'TextBlock',
-                    text: "**#{repository.slug}**",
-                    size: 'Large',
-                    weight: 'Bolder'
-                  }],
-                  verticalContentAlignment: 'Center'
-                }
-              ]
+              columns:,
+              spacing: 'Small'
             }
           end
 
@@ -112,10 +113,15 @@ module Travis
 
             {
               type: 'TextBlock',
-              text: "**Pull request ##{pull_request.number}**",
+              text: "**[Pull request ##{pull_request.number}](#{pull_request_url})**",
               wrap: true,
               spacing: 'Medium'
             }
+          end
+
+          def pull_request_url
+            host = Travis::Hub::Config.load.host
+            "https://#{host}/#{repository.slug}/pull_requests/#{pull_request.number}"
           end
 
           def simple_metadata
@@ -218,13 +224,29 @@ module Travis
             "#{days} day#{days == 1 ? '' : 's'} ago"
           end
 
+          def format_timestamp(time)
+            return '' unless time
+
+            time.strftime('%b %d, %l:%M %p').strip
+          end
+
           def status_emoji
             case build.state.to_s
             when 'passed' then '✅'
             when 'failed' then '❌'
-            when 'errored' then '⚠️'
+            when 'errored' then '❗'
             when 'canceled' then '🚫'
             else '❓'
+            end
+          end
+
+          def status_color
+            case build.state.to_s
+            when 'passed' then 'good'
+            when 'failed' then 'attention'
+            when 'errored' then 'attention'
+            when 'canceled' then 'default'
+            else 'default'
             end
           end
 
