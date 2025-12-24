@@ -4,10 +4,8 @@ require 'travis/addons/handlers/task'
 module Travis
   module Addons
     module Handlers
-      # MS Teams notification handler that sends Adaptive Cards
-      # Triggers when builds finish
       class Msteams < Notifiers
-        EVENTS = 'build:finished'
+        EVENTS = /build:(finished|canceled)/
         KEY = :msteams
 
         class Notifier < Notifier

@@ -4,7 +4,6 @@ module Travis
   module Addons
     module Serializer
       module Tasks
-        # Serializer for MS Teams Adaptive Cards
         # JSON payload according to MS Teams webhook format
         # https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using
         class Msteams
@@ -21,7 +20,6 @@ module Travis
             @tag = build.tag
           end
 
-          # Returns MS Teams webhook payload with Adaptive Card
           def data
             {
               type: 'message',
@@ -76,13 +74,13 @@ module Travis
                 items: [{
                   type: 'TextBlock',
                   text: repository.slug,
-                  size: 'Large'
+                  size: 'Large',
+                  weight: 'Bolder'
                 }],
                 verticalContentAlignment: 'Center'
               }
             ]
 
-            # Add timestamp column if available
             if build.finished_at
               columns << {
                 type: 'Column',
@@ -111,9 +109,10 @@ module Travis
 
             {
               type: 'TextBlock',
-              text: "**Pull request [##{pull_request.number}](#{pull_request_url})**",
+              text: "Pull request [##{pull_request.number}](#{pull_request_url})",
               wrap: true,
-              spacing: 'Medium'
+              spacing: 'Medium',
+              weight: 'Bolder'
             }
           end
 
@@ -234,7 +233,7 @@ module Travis
             when 'passed' then '✅'
             when 'failed' then '❌'
             when 'errored' then '❗'
-            when 'canceled' then '🚫'
+            when 'canceled' then '⊗'
             else '❓'
             end
           end
