@@ -14,7 +14,12 @@ module Travis
           end
 
           def handle
-            run_task(:webhook, payload, targets:, token: request.token, msteams: msteams_flags)
+            msteams_payload_data = nil
+            if msteams_flags.values.any?
+              msteams_payload_data = Travis::Addons::Serializer::Tasks::Msteams.new(object).data
+            end
+
+            run_task(:webhook, payload, targets:, token: request.token, msteams: msteams_flags, msteams_payload: msteams_payload_data)
           end
 
           def targets
