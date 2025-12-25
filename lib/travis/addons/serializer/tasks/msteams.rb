@@ -225,7 +225,7 @@ module Travis
           def format_timestamp(time)
             return '' unless time
 
-            time.strftime('%b %d, %l:%M %p').strip
+            time.strftime('%b %d, %H:%M UTC')
           end
 
           def status_emoji
