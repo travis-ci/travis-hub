@@ -67,8 +67,17 @@ describe Travis::Addons::Handlers::Webhook do
 
   describe 'handle' do
     it 'enqueues a task' do
-      handler.expects(:run_task).with(:webhook, is_a(Hash), targets: ['http://host.com/target'], token: 'token')
+      handler.expects(:run_task).with(:webhook, is_a(Hash), targets: ['http://host.com/target'], token: 'token', msteams: {})
       handler.handle
+    end
+
+    describe 'with MS Teams flag' do
+      let(:config) { { urls: [{ url: 'https://workflow.url', msteams: true }] } }
+
+      it 'includes msteams flags in task parameters' do
+        handler.expects(:run_task).with(:webhook, is_a(Hash), targets: ['https://workflow.url'], token: 'token', msteams: { 'https://workflow.url' => true })
+        handler.handle
+      end
     end
   end
 
@@ -122,6 +131,43 @@ describe Travis::Addons::Handlers::Webhook do
       let(:config) { { urls: target, on_error: 'change' } }
 
       it { expect(handler.targets).to eql [target] }
+    end
+
+    describe 'extracts URLs from hash format with msteams flag' do
+      let(:config) { { urls: [{ url: 'https://workflow.url', msteams: true }] } }
+
+      it { expect(handler.targets).to eql ['https://workflow.url'] }
+    end
+
+    describe 'handles mixed format with both plain URLs and hash URLs' do
+      let(:config) { { urls: [target, { url: 'https://workflow.url', msteams: true }] } }
+
+      it { expect(handler.targets).to eql [target, 'https://workflow.url'] }
+    end
+  end
+
+  describe 'msteams_flags' do
+    describe 'returns empty hash for plain URLs' do
+      let(:config) { { urls: 'http://host.com/target' } }
+
+      it { expect(handler.msteams_flags).to eq({}) }
+    end
+
+    describe 'returns flags for URLs with msteams enabled' do
+      let(:config) { { urls: [{ url: 'https://workflow.url', msteams: true }] } }
+
+      it { expect(handler.msteams_flags).to eq({ 'https://workflow.url' => true }) }
+    end
+
+    describe 'returns mixed flags' do
+      let(:config) { { urls: ['http://plain.url', { url: 'https://workflow.url', msteams: true }] } }
+
+      it do
+        expect(handler.msteams_flags).to eq({
+                                              'http://plain.url' => false,
+                                              'https://workflow.url' => true
+                                            })
+      end
     end
   end
 end

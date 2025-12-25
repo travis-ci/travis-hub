@@ -8,11 +8,11 @@ module Travis
         include Helpers::Hash
 
         DEFAULTS = {
-          start: { email: false, webhooks: false, campfire: false, hipchat: false, irc: false, flowdock: false, sqwiggle: false, slack: false, pushover: false, msteams: false },
-          success: { email: :change, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, billing: :always, msteams: :always },
-          failure: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, msteams: :always },
-          canceled: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, billing: :always, msteams: :always },
-          errored: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, msteams: :always }
+          start: { email: false, webhooks: false, campfire: false, hipchat: false, irc: false, flowdock: false, sqwiggle: false, slack: false, pushover: false },
+          success: { email: :change, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, billing: :always },
+          failure: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always },
+          canceled: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always, billing: :always },
+          errored: { email: :always, webhooks: :always, campfire: :always, hipchat: :always, irc: :always, flowdock: :always, sqwiggle: :always, slack: :always, pushover: :always }
         }
 
         attr_reader :build, :config

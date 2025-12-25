@@ -3,7 +3,6 @@ require 'travis/addons/config'
 require 'travis/addons/helpers/coder'
 require 'travis/addons/instrument'
 require 'travis/addons/serializer/tasks/build'
-require 'travis/addons/serializer/tasks/msteams'
 
 
 module Travis

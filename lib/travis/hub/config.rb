@@ -25,8 +25,8 @@ module Travis
              database: { adapter: 'postgresql', database: "travis_#{env}", encoding: 'unicode', min_messages: 'warning', pool: 25, reaping_frequency: 60, variables: { statement_timeout: 10_000 } },
              logs_api: { url: 'https://travis-logs-notset.example.com:1234', token: 'notset', retries: { max: 5, interval: 3, max_interval: 60, interval_randomness: 0.5, backoff_factor: 2 } },
              job_board: { url: 'https://not:set@job-board.travis-ci.com', site: 'org' },
-             redis: { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379', ssl: (ENV['REDIS_SSL'] == 'true') || false },
-             redis_insights: { url: ENV['INSIGHTS_REDIS_URL'] || 'redis://localhost:6379', ssl: (ENV['INSIGHTS_REDIS_SSL'] == 'true') || false },
+             redis: { url: ENV['TRAVIS_REDIS_URL'] || 'redis://localhost:6379', ssl: (ENV['REDIS_SSL'] == 'true') || false},
+             redis_insights: { url: ENV['INSIGHTS_REDIS_URL'] || 'redis://localhost:6379' , ssl: (ENV['INSIGHTS_REDIS_SSL'] == 'true') || false},
              sidekiq: { pool_size: 1 },
              lock: { strategy: :redis, ttl: 30_000 },
              states_cache: { memcached_servers: 'localhost:11211', memcached_options: {} },
@@ -40,9 +40,9 @@ module Travis
              repository: { ssl_key: { size: 4096 } },
              queue: 'builds',
              limit: { resets: { max: 50, after: 6 * 60 * 60 } },
-             notifications: %w[billing msteams],
+             notifications: ['billing'],
              auth: { jwt_private_key: jwt_key(:private), jwt_public_key: jwt_key(:public), http_basic_auth: },
-             billing: { url: ENV['BILLING_URL'] || 'http://localhost:9292', auth_key: ENV['BILLING_AUTH_KEY'] || 't0Ps3Cr3t' },
+             billing:        { url: ENV['BILLING_URL'] || 'http://localhost:9292', auth_key: ENV['BILLING_AUTH_KEY'] || 't0Ps3Cr3t' },
              artifact_manager: { url: ENV['ARTIFACT_MANAGER_URL'] || 'http://artifact_manager:3000', auth_key: ENV['ARTIFACT_MANAGER_AUTH_KEY'] || 't0Ps3Cr3t' }
 
       def metrics
