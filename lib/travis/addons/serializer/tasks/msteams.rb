@@ -111,7 +111,7 @@ module Travis
               type: 'TextBlock',
               text: "Pull request [##{pull_request.number}](#{pull_request_url})",
               wrap: true,
-              spacing: 'Medium',
+              spacing: 'Large',
               weight: 'Bolder'
             }
           end
@@ -128,7 +128,7 @@ module Travis
                 metadata_column('Branch', build.branch || 'unknown'),
                 metadata_column('Author', commit.author_name || 'unknown')
               ].compact,
-              spacing: 'Medium'
+              spacing: 'Large'
             }
           end
 
@@ -148,7 +148,7 @@ module Travis
                   text: value,
                   size: 'Small',
                   isSubtle: true,
-                  spacing: 'ExtraSmall'
+                  spacing: 'None'
                 }
               ]
             }
@@ -173,11 +173,11 @@ module Travis
                     wrap: true,
                     size: 'Small',
                     weight: 'Bolder',
-                    spacing: 'ExtraSmall'
+                    spacing: 'None'
                   }
                 ]
               }],
-              spacing: 'Medium'
+              spacing: 'Large'
             }
           end
 
@@ -202,7 +202,7 @@ module Travis
             {
               type: 'ActionSet',
               actions:,
-              spacing: 'Medium'
+              spacing: 'Large'
             }
           end
 
